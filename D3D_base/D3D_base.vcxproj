@@ -158,6 +158,7 @@
     <ClInclude Include="cGameScene.h" />
     <ClInclude Include="cGrid.h" />
     <ClInclude Include="cGroup.h" />
+    <ClInclude Include="cKeyManager.h" />
     <ClInclude Include="cMainGame.h" />
     <ClInclude Include="cMtlTex.h" />
     <ClInclude Include="cObjLoader.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="cPhysicsBody.h" />
     <ClInclude Include="cPhysicsNode.h" />
     <ClInclude Include="cSceneManager.h" />
+    <ClInclude Include="cSoundManager.h" />
     <ClInclude Include="cTestScene.h" />
     <ClInclude Include="cTextureManager.h" />
     <ClInclude Include="cTimeManager.h" />
@@ -191,6 +193,7 @@
     <ClCompile Include="cGameScene.cpp" />
     <ClCompile Include="cGrid.cpp" />
     <ClCompile Include="cGroup.cpp" />
+    <ClCompile Include="cKeyManager.cpp" />
     <ClCompile Include="cMainGame.cpp" />
     <ClCompile Include="cMtlTex.cpp" />
     <ClCompile Include="cObjLoader.cpp" />
@@ -198,6 +201,7 @@
     <ClCompile Include="cPhysicsBody.cpp" />
     <ClCompile Include="cPhysicsNode.cpp" />
     <ClCompile Include="cSceneManager.cpp" />
+    <ClCompile Include="cSoundManager.cpp" />
     <ClCompile Include="cTestScene.cpp" />
     <ClCompile Include="cTextureManager.cpp" />
     <ClCompile Include="cTimeManager.cpp" />

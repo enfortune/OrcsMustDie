@@ -85,6 +85,12 @@
     <Filter Include="Class\Scene\cTestScene">
       <UniqueIdentifier>{3fee7e1b-a715-4b6c-9203-60de87e02e52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\Manager\SoundManager">
+      <UniqueIdentifier>{ed4892b5-f7f3-439f-87f8-9ac23e95c363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Manager\KeyManager">
+      <UniqueIdentifier>{a67c4230-b245-4db8-bd53-864f1f332d23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -187,6 +193,12 @@
     <ClInclude Include="cTestScene.h">
       <Filter>Class\Scene\cTestScene</Filter>
     </ClInclude>
+    <ClInclude Include="cSoundManager.h">
+      <Filter>Framework\Manager\SoundManager</Filter>
+    </ClInclude>
+    <ClInclude Include="cKeyManager.h">
+      <Filter>Framework\Manager\KeyManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -269,6 +281,12 @@
     </ClCompile>
     <ClCompile Include="cTestScene.cpp">
       <Filter>Class\Scene\cTestScene</Filter>
+    </ClCompile>
+    <ClCompile Include="cSoundManager.cpp">
+      <Filter>Framework\Manager\SoundManager</Filter>
+    </ClCompile>
+    <ClCompile Include="cKeyManager.cpp">
+      <Filter>Framework\Manager\KeyManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
