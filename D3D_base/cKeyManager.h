@@ -8,22 +8,17 @@ class cKeyManager
 {
 	SINGLETONE(cKeyManager);
 private:
-	std::bitset<KEYMAX> _keyUp;
-	std::bitset<KEYMAX> _keyDown;
+	std::bitset<KEYMAX> m_bsOnceKeyUp;
+	std::bitset<KEYMAX> m_bsOnceKeyDown;
+	std::bitset<KEYMAX> m_bsStayKeyDown;
 
 public:
-	HRESULT init(void);
-	void release(void);
+	void Setup(void);
+	void Update(void);
 
-	bool isOnceKeyDown(int key);
-	bool isOnceKeyUp(int key);
-	bool isStayKeyDown(int key);
-	bool isToggleKey(int key);
-
-	bitset<KEYMAX> getKeyUp() { return _keyUp; }
-	bitset<KEYMAX> getKeyDown() { return _keyDown; }
-
-	void setKeyDown(int key, bool state) { _keyDown.set(key, state); }
-	void setKeyUp(int key, bool state) { _keyUp.set(key, state); }
+	bool IsOnceKeyDown(int key);
+	bool IsOnceKeyUp(int key);
+	bool IsStayKeyDown(int key);
+	bool IsToggleKey(int key);
 };
 
