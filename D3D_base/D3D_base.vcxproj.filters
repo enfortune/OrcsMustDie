@@ -31,35 +31,59 @@
     <Filter Include="Class\cGrid">
       <UniqueIdentifier>{e228d8a9-61f3-43eb-92a7-a34293fd2a57}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Manager">
-      <UniqueIdentifier>{7eaeb726-f46a-4e91-9c28-e1e7489ba71a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Framework">
       <UniqueIdentifier>{8da42663-6884-4ecf-87f0-e4d4ffe7e0a4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\cAction">
-      <UniqueIdentifier>{46066fd0-8e9d-45d6-a504-18f60a498623}</UniqueIdentifier>
+    <Filter Include="Framework\BaseClass">
+      <UniqueIdentifier>{e9425a44-8720-40d4-87de-95ffcfebfde3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\iMap">
-      <UniqueIdentifier>{878458ae-0cc7-41ba-9845-57df50162ed7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\cGameObject">
-      <UniqueIdentifier>{a593abd3-e16c-4881-af52-340f3b535367}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\cGameNode">
-      <UniqueIdentifier>{2c3142ac-b5d8-4c78-b764-a9ed4feb093f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\cPhysicsBody">
-      <UniqueIdentifier>{2c1ab3d8-f3b4-4581-abc9-ce537a67da0c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\cHeightMap">
-      <UniqueIdentifier>{3d719838-be1e-4499-8db9-497b6e7cd251}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\cPhysicsNode">
+    <Filter Include="Framework\BaseClass\cPhysicsNode">
       <UniqueIdentifier>{ed78d186-5365-4430-b7fc-850715abb2e4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\cGameScene">
+    <Filter Include="Framework\BaseClass\cAction">
+      <UniqueIdentifier>{46066fd0-8e9d-45d6-a504-18f60a498623}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\BaseClass\cGameNode">
+      <UniqueIdentifier>{2c3142ac-b5d8-4c78-b764-a9ed4feb093f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\BaseClass\cGameObject">
+      <UniqueIdentifier>{a593abd3-e16c-4881-af52-340f3b535367}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\BaseClass\cGameScene">
       <UniqueIdentifier>{7975e814-bcd1-4473-954e-4cd710bb5bd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\BaseClass\cHeightMap">
+      <UniqueIdentifier>{3d719838-be1e-4499-8db9-497b6e7cd251}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\BaseClass\cPhysicsBody">
+      <UniqueIdentifier>{2c1ab3d8-f3b4-4581-abc9-ce537a67da0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{9a881338-48a7-43d4-8689-565ddaa22706}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface\iMap">
+      <UniqueIdentifier>{878458ae-0cc7-41ba-9845-57df50162ed7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Manager">
+      <UniqueIdentifier>{7eaeb726-f46a-4e91-9c28-e1e7489ba71a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Manager\DeviceManager">
+      <UniqueIdentifier>{54366abf-0848-4260-a177-aaf507637023}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Manager\TextureManager">
+      <UniqueIdentifier>{22641429-4582-44c9-9460-2309ac639b3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Manager\TimeManager">
+      <UniqueIdentifier>{a467affe-fa50-4fe5-bc21-afbcd665831b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Manager\SceneManager">
+      <UniqueIdentifier>{1b38fd08-c288-48f1-b4b1-30d6383d7ce8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Class\Scene">
+      <UniqueIdentifier>{5036948f-0cd8-4af3-a721-df4c3562096f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Class\Scene\cTestScene">
+      <UniqueIdentifier>{3fee7e1b-a715-4b6c-9203-60de87e02e52}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -104,28 +128,19 @@
       <Filter>Class\cMainGame</Filter>
     </ClInclude>
     <ClInclude Include="cAction.h">
-      <Filter>Framework\cAction</Filter>
+      <Filter>Framework\BaseClass\cAction</Filter>
     </ClInclude>
     <ClInclude Include="cActionBezier.h">
-      <Filter>Framework\cAction</Filter>
+      <Filter>Framework\BaseClass\cAction</Filter>
     </ClInclude>
     <ClInclude Include="cActionLinear.h">
-      <Filter>Framework\cAction</Filter>
+      <Filter>Framework\BaseClass\cAction</Filter>
     </ClInclude>
     <ClInclude Include="cActionRepeat.h">
-      <Filter>Framework\cAction</Filter>
+      <Filter>Framework\BaseClass\cAction</Filter>
     </ClInclude>
     <ClInclude Include="cActionSeq.h">
-      <Filter>Framework\cAction</Filter>
-    </ClInclude>
-    <ClInclude Include="cTextureManager.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="cTimeManager.h">
-      <Filter>Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="cDeviceManager.h">
-      <Filter>Manager</Filter>
+      <Filter>Framework\BaseClass\cAction</Filter>
     </ClInclude>
     <ClInclude Include="cCamera.h">
       <Filter>Class\cCamera</Filter>
@@ -134,28 +149,43 @@
       <Filter>Class\cGrid</Filter>
     </ClInclude>
     <ClInclude Include="iMap.h">
-      <Filter>Framework\iMap</Filter>
+      <Filter>Interface\iMap</Filter>
     </ClInclude>
     <ClInclude Include="cGameObject.h">
-      <Filter>Framework\cGameObject</Filter>
+      <Filter>Framework\BaseClass\cGameObject</Filter>
     </ClInclude>
     <ClInclude Include="cGameNode.h">
-      <Filter>Framework\cGameNode</Filter>
+      <Filter>Framework\BaseClass\cGameNode</Filter>
     </ClInclude>
     <ClInclude Include="cPhysicsBody.h">
-      <Filter>Framework\cPhysicsBody</Filter>
+      <Filter>Framework\BaseClass\cPhysicsBody</Filter>
     </ClInclude>
     <ClInclude Include="enPhysicsBody.h">
-      <Filter>Framework\cPhysicsBody</Filter>
+      <Filter>Framework\BaseClass\cPhysicsBody</Filter>
     </ClInclude>
     <ClInclude Include="cPhysicsNode.h">
-      <Filter>Framework\cPhysicsNode</Filter>
+      <Filter>Framework\BaseClass\cPhysicsNode</Filter>
     </ClInclude>
     <ClInclude Include="cGameScene.h">
-      <Filter>Framework\cGameScene</Filter>
+      <Filter>Framework\BaseClass\cGameScene</Filter>
     </ClInclude>
     <ClInclude Include="OBJC_UTIL.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="cDeviceManager.h">
+      <Filter>Framework\Manager\DeviceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="cTextureManager.h">
+      <Filter>Framework\Manager\TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="cTimeManager.h">
+      <Filter>Framework\Manager\TimeManager</Filter>
+    </ClInclude>
+    <ClInclude Include="cSceneManager.h">
+      <Filter>Framework\Manager\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="cTestScene.h">
+      <Filter>Class\Scene\cTestScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -187,28 +217,19 @@
       <Filter>Class\cMainGame</Filter>
     </ClCompile>
     <ClCompile Include="cAction.cpp">
-      <Filter>Framework\cAction</Filter>
+      <Filter>Framework\BaseClass\cAction</Filter>
     </ClCompile>
     <ClCompile Include="cActionBezier.cpp">
-      <Filter>Framework\cAction</Filter>
+      <Filter>Framework\BaseClass\cAction</Filter>
     </ClCompile>
     <ClCompile Include="cActionLinear.cpp">
-      <Filter>Framework\cAction</Filter>
+      <Filter>Framework\BaseClass\cAction</Filter>
     </ClCompile>
     <ClCompile Include="cActionRepeat.cpp">
-      <Filter>Framework\cAction</Filter>
+      <Filter>Framework\BaseClass\cAction</Filter>
     </ClCompile>
     <ClCompile Include="cActionSeq.cpp">
-      <Filter>Framework\cAction</Filter>
-    </ClCompile>
-    <ClCompile Include="cTimeManager.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="cTextureManager.cpp">
-      <Filter>Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="cDeviceManager.cpp">
-      <Filter>Manager</Filter>
+      <Filter>Framework\BaseClass\cAction</Filter>
     </ClCompile>
     <ClCompile Include="cCamera.cpp">
       <Filter>Class\cCamera</Filter>
@@ -217,22 +238,37 @@
       <Filter>Class\cGrid</Filter>
     </ClCompile>
     <ClCompile Include="iMap.cpp">
-      <Filter>Framework\iMap</Filter>
+      <Filter>Interface\iMap</Filter>
     </ClCompile>
     <ClCompile Include="cGameObject.cpp">
-      <Filter>Framework\cGameObject</Filter>
+      <Filter>Framework\BaseClass\cGameObject</Filter>
     </ClCompile>
     <ClCompile Include="cGameNode.cpp">
-      <Filter>Framework\cGameNode</Filter>
+      <Filter>Framework\BaseClass\cGameNode</Filter>
     </ClCompile>
     <ClCompile Include="cPhysicsBody.cpp">
-      <Filter>Framework\cPhysicsBody</Filter>
+      <Filter>Framework\BaseClass\cPhysicsBody</Filter>
     </ClCompile>
     <ClCompile Include="cPhysicsNode.cpp">
-      <Filter>Framework\cPhysicsNode</Filter>
+      <Filter>Framework\BaseClass\cPhysicsNode</Filter>
     </ClCompile>
     <ClCompile Include="cGameScene.cpp">
-      <Filter>Framework\cGameScene</Filter>
+      <Filter>Framework\BaseClass\cGameScene</Filter>
+    </ClCompile>
+    <ClCompile Include="cDeviceManager.cpp">
+      <Filter>Framework\Manager\DeviceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="cTextureManager.cpp">
+      <Filter>Framework\Manager\TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="cTimeManager.cpp">
+      <Filter>Framework\Manager\TimeManager</Filter>
+    </ClCompile>
+    <ClCompile Include="cSceneManager.cpp">
+      <Filter>Framework\Manager\SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="cTestScene.cpp">
+      <Filter>Class\Scene\cTestScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

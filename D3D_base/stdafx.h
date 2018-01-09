@@ -127,5 +127,6 @@ struct ST_ROT_SAMPLE
 #include "cTimeManager.h"
 #include "cTextureManager.h"
 #include "cFontManager.h"
+#include "cSceneManager.h"
 
 /* UTIL */

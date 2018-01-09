@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "cMainGame.h"
 
+#include "cTestScene.h"
+
 cMainGame::cMainGame()
 {
 }
@@ -14,11 +16,13 @@ cMainGame::~cMainGame()
 
 void cMainGame::Setup()
 {
+	g_pSceneManager->Setup(new cTestScene);
 }
 
 void cMainGame::Update()
 {
 	g_pTimeManager->Update();
+	g_pSceneManager->Update();
 }
 
 void cMainGame::Render()
@@ -32,7 +36,7 @@ void cMainGame::Render()
 	g_pD3DDevice->BeginScene();
 	/////////////////////////////////
 
-
+	g_pSceneManager->Render();
 
 	/////////////////////////////////
 
@@ -43,7 +47,7 @@ void cMainGame::Render()
 
 void cMainGame::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-
+	g_pSceneManager->WndProc(hWnd, message, wParam, lParam);
 }
 
 

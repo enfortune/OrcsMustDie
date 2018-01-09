@@ -164,6 +164,8 @@
     <ClInclude Include="cObjMap.h" />
     <ClInclude Include="cPhysicsBody.h" />
     <ClInclude Include="cPhysicsNode.h" />
+    <ClInclude Include="cSceneManager.h" />
+    <ClInclude Include="cTestScene.h" />
     <ClInclude Include="cTextureManager.h" />
     <ClInclude Include="cTimeManager.h" />
     <ClInclude Include="D3D_base.h" />
@@ -195,6 +197,8 @@
     <ClCompile Include="cObjMap.cpp" />
     <ClCompile Include="cPhysicsBody.cpp" />
     <ClCompile Include="cPhysicsNode.cpp" />
+    <ClCompile Include="cSceneManager.cpp" />
+    <ClCompile Include="cTestScene.cpp" />
     <ClCompile Include="cTextureManager.cpp" />
     <ClCompile Include="cTimeManager.cpp" />
     <ClCompile Include="D3D_base.cpp" />

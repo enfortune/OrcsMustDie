@@ -3,9 +3,8 @@
 
 class cTimeManager
 {
-private:
 	SINGLETONE(cTimeManager);
-
+private:
 	DWORD	m_dwLastUpdateTime;
 	float	m_fEllapsedTime;
 

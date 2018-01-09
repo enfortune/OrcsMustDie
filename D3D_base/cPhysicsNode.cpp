@@ -32,8 +32,15 @@ void cPhysicsNode::Render()
 	cGameNode::Render();
 }
 
+void cPhysicsNode::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	cGameNode::WndProc(hWnd, message, wParam, lParam);
+}
+
+
 void cPhysicsNode::UpdatePhysics(float fDelta)
 {
 	cGameNode::UpdatePhysics(fDelta);
 
 }
+

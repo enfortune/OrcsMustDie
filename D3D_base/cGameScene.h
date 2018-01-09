@@ -3,8 +3,7 @@
 class cGameScene :
 	public cGameNode
 {
-	SYNTHESIZE_REF(bool, m_bUpdateEnable, UpdateEnable);
-	//SYNTHESIZE_REF(bool, m_bRenderEnable, RenderEnable);
+	SYNTHESIZE_REF(bool, m_bUpdateEnable, UpdateEnable); // 씬 매니져에서 사용하는 변수임.
 
 public:
 	cGameScene();
@@ -14,6 +13,6 @@ public:
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime());
 	virtual void Render();
 
-	//void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 };
 
