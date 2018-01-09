@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ObjLoader">
+      <UniqueIdentifier>{25f2c264-14ed-41b5-af1f-c10f021d4d3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ASELoader">
+      <UniqueIdentifier>{ec42ffbd-689f-4d31-ae02-2c26f36c2447}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Class">
+      <UniqueIdentifier>{08ba27d6-04b6-4a83-8548-cf96165b36da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Class\cMainGame">
+      <UniqueIdentifier>{641b5ae9-9b25-47a5-ba8b-4a67f6340c52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Class\cCamera">
+      <UniqueIdentifier>{a5d02c7d-b5ef-41db-a124-f50b4029fe48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Class\cGrid">
+      <UniqueIdentifier>{e228d8a9-61f3-43eb-92a7-a34293fd2a57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{7eaeb726-f46a-4e91-9c28-e1e7489ba71a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{8da42663-6884-4ecf-87f0-e4d4ffe7e0a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\cAction">
+      <UniqueIdentifier>{46066fd0-8e9d-45d6-a504-18f60a498623}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\iMap">
+      <UniqueIdentifier>{878458ae-0cc7-41ba-9845-57df50162ed7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\cGameObject">
+      <UniqueIdentifier>{a593abd3-e16c-4881-af52-340f3b535367}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\cGameNode">
+      <UniqueIdentifier>{2c3142ac-b5d8-4c78-b764-a9ed4feb093f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\cPhysicsBody">
+      <UniqueIdentifier>{2c1ab3d8-f3b4-4581-abc9-ce537a67da0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\cHeightMap">
+      <UniqueIdentifier>{3d719838-be1e-4499-8db9-497b6e7cd251}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\cPhysicsNode">
+      <UniqueIdentifier>{ed78d186-5365-4430-b7fc-850715abb2e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\cGameScene">
+      <UniqueIdentifier>{7975e814-bcd1-4473-954e-4cd710bb5bd8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D_base.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="cObjLoader.h">
+      <Filter>ObjLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cMtlTex.h">
+      <Filter>ObjLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cGroup.h">
+      <Filter>ObjLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cObjMap.h">
+      <Filter>ObjLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Asciitok.h">
+      <Filter>ASELoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cAseLoader.h">
+      <Filter>ASELoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cAseNode.h">
+      <Filter>ASELoader</Filter>
+    </ClInclude>
+    <ClInclude Include="cMainGame.h">
+      <Filter>Class\cMainGame</Filter>
+    </ClInclude>
+    <ClInclude Include="cAction.h">
+      <Filter>Framework\cAction</Filter>
+    </ClInclude>
+    <ClInclude Include="cActionBezier.h">
+      <Filter>Framework\cAction</Filter>
+    </ClInclude>
+    <ClInclude Include="cActionLinear.h">
+      <Filter>Framework\cAction</Filter>
+    </ClInclude>
+    <ClInclude Include="cActionRepeat.h">
+      <Filter>Framework\cAction</Filter>
+    </ClInclude>
+    <ClInclude Include="cActionSeq.h">
+      <Filter>Framework\cAction</Filter>
+    </ClInclude>
+    <ClInclude Include="cTextureManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="cTimeManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="cDeviceManager.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="cCamera.h">
+      <Filter>Class\cCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="cGrid.h">
+      <Filter>Class\cGrid</Filter>
+    </ClInclude>
+    <ClInclude Include="iMap.h">
+      <Filter>Framework\iMap</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameObject.h">
+      <Filter>Framework\cGameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameNode.h">
+      <Filter>Framework\cGameNode</Filter>
+    </ClInclude>
+    <ClInclude Include="cPhysicsBody.h">
+      <Filter>Framework\cPhysicsBody</Filter>
+    </ClInclude>
+    <ClInclude Include="enPhysicsBody.h">
+      <Filter>Framework\cPhysicsBody</Filter>
+    </ClInclude>
+    <ClInclude Include="cPhysicsNode.h">
+      <Filter>Framework\cPhysicsNode</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameScene.h">
+      <Filter>Framework\cGameScene</Filter>
+    </ClInclude>
+    <ClInclude Include="OBJC_UTIL.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D_base.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="cObjLoader.cpp">
+      <Filter>ObjLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cMtlTex.cpp">
+      <Filter>ObjLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cGroup.cpp">
+      <Filter>ObjLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cObjMap.cpp">
+      <Filter>ObjLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cAseLoader.cpp">
+      <Filter>ASELoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cAseNode.cpp">
+      <Filter>ASELoader</Filter>
+    </ClCompile>
+    <ClCompile Include="cMainGame.cpp">
+      <Filter>Class\cMainGame</Filter>
+    </ClCompile>
+    <ClCompile Include="cAction.cpp">
+      <Filter>Framework\cAction</Filter>
+    </ClCompile>
+    <ClCompile Include="cActionBezier.cpp">
+      <Filter>Framework\cAction</Filter>
+    </ClCompile>
+    <ClCompile Include="cActionLinear.cpp">
+      <Filter>Framework\cAction</Filter>
+    </ClCompile>
+    <ClCompile Include="cActionRepeat.cpp">
+      <Filter>Framework\cAction</Filter>
+    </ClCompile>
+    <ClCompile Include="cActionSeq.cpp">
+      <Filter>Framework\cAction</Filter>
+    </ClCompile>
+    <ClCompile Include="cTimeManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cTextureManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cDeviceManager.cpp">
+      <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="cCamera.cpp">
+      <Filter>Class\cCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="cGrid.cpp">
+      <Filter>Class\cGrid</Filter>
+    </ClCompile>
+    <ClCompile Include="iMap.cpp">
+      <Filter>Framework\iMap</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameObject.cpp">
+      <Filter>Framework\cGameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameNode.cpp">
+      <Filter>Framework\cGameNode</Filter>
+    </ClCompile>
+    <ClCompile Include="cPhysicsBody.cpp">
+      <Filter>Framework\cPhysicsBody</Filter>
+    </ClCompile>
+    <ClCompile Include="cPhysicsNode.cpp">
+      <Filter>Framework\cPhysicsNode</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameScene.cpp">
+      <Filter>Framework\cGameScene</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="D3D_base.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="D3D_base.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
