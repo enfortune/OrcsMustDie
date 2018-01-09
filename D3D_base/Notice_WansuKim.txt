@@ -1,0 +1,29 @@
+* 기본적인 구동 방식
+
+ 1. SceneManager의 "현재 씬(runningScene)" 이 cMainGame에서 구동된다.
+
+ 2. Scene은 cGameScene 클래스를 상속받아서 제작하며,
+   cGameScene은 cGameNode클래스를 상속받는다. (Scene과 Node의 기능은 큰 차이가 없음.)
+
+ 3. 노드는 "Update" 와 "Render" 기능을 사용할 모든 객체를 의미하며,
+   모든 노드는 cGameNode 클래스를 상속받아 사용해야 함.
+
+ 4. 각 노드는 "하나의 부모(Parent) 노드" 와 "여러개의 자식(Children) 노드" 를 가진다.
+
+ 5. 각 노드는 자신의 Update내용을 실행시킨 후 자식들의 Update를 실행시킨다.(cGameNode::Update 참고)
+   Render또한 마찬가지이다.
+
+ 6. cPhysicsNode는 물리를 처리하기 위한 노드이며, 이 노드에 추가된 자녀노드들은 
+   UpdatePhysics를 실행한 후 Update를 실행한다.
+   노드간 물리적인 상호작용이 필요할 경우, 그 노드들은 같은 cPhysicsNode 안에 포함되어있어야 한다.
+
+
+※ 주의 사항
+
+ 1. 이미 부모 노드가 존재하는 노드는 다른 노드의 자식으로 붙일 경우
+   부모노드가 바뀌는 것이 아니라 assert가 실행된다.(에러남)
+   그러니 자녀 노드의 RemoveFromParent함수를 사용하거나, 기존 부모의 RemoveChild함수를 사용해서
+   올바르게 노드의 연결을 끊은 후 사용하도록 하자.
+
+ 2. Framework 폴더 내부는 자유로운 추가는 가능하나, 자신이 추가한 파일이 아닐경우 반드시 수정 전 합의를 거쳐야 한다.
+   (대부분의 클래스가 다른 클래스들과 밀접한 연관이 되어있기 때문)

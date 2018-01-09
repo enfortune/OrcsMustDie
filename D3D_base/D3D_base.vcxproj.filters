@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
+    <Text Include="Notice_WansuKim.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="Notice_WansuKim.txt" />
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
