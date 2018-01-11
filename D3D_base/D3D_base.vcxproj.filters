@@ -106,6 +106,9 @@
     <Filter Include="Framework\BaseClass\cTimer">
       <UniqueIdentifier>{c1d7c14d-0f2e-41b4-a3cf-bcff23c2826f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="차종서">
+      <UniqueIdentifier>{9e0e1655-6a43-4f70-9492-25834f422057}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
