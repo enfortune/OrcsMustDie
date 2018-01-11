@@ -94,6 +94,18 @@
     <Filter Include="엄윤호">
       <UniqueIdentifier>{f338546e-50a9-4382-97a5-9ddfdcc0d7cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="김완수">
+      <UniqueIdentifier>{431bd652-6966-47f6-b9fc-b806f539a06e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\BaseInterface">
+      <UniqueIdentifier>{4114b3fd-3324-46af-b74a-4987fbfcc9d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\BaseInterface\iTimer">
+      <UniqueIdentifier>{03426a59-2232-48d5-bdf3-3313296a2210}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\BaseClass\cTimer">
+      <UniqueIdentifier>{c1d7c14d-0f2e-41b4-a3cf-bcff23c2826f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -202,6 +214,15 @@
     <ClInclude Include="cKeyManager.h">
       <Filter>Framework\Manager\KeyManager</Filter>
     </ClInclude>
+    <ClInclude Include="iTimer.h">
+      <Filter>Framework\BaseInterface\iTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="cTimer_GetTickCount.h">
+      <Filter>Framework\BaseClass\cTimer</Filter>
+    </ClInclude>
+    <ClInclude Include="cTimer_QueryPerformanceFrequency.h">
+      <Filter>Framework\BaseClass\cTimer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -290,6 +311,15 @@
     </ClCompile>
     <ClCompile Include="cKeyManager.cpp">
       <Filter>Framework\Manager\KeyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="iTimer.cpp">
+      <Filter>Framework\BaseInterface\iTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="cTimer_QueryPerformanceFrequency.cpp">
+      <Filter>Framework\BaseClass\cTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="cTimer_GetTickCount.cpp">
+      <Filter>Framework\BaseClass\cTimer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
