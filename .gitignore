@@ -1,4 +1,8 @@
 
+# project blocker
+*.sln
+*.vcxproj
+
 # Created by https://www.gitignore.io/api/c++,visualstudio,visualstudiocode
 
 ### C++ ###
