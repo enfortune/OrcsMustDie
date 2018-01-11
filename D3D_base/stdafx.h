@@ -31,6 +31,7 @@
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
 
+
 #define DRAW_GRID
 #define TEST_1
 //#define TEST_2

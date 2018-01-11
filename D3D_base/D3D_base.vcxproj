@@ -170,9 +170,12 @@
     <ClInclude Include="cTestScene.h" />
     <ClInclude Include="cTextureManager.h" />
     <ClInclude Include="cTimeManager.h" />
+    <ClInclude Include="cTimer_GetTickCount.h" />
+    <ClInclude Include="cTimer_QueryPerformanceFrequency.h" />
     <ClInclude Include="D3D_base.h" />
     <ClInclude Include="enPhysicsBody.h" />
     <ClInclude Include="iMap.h" />
+    <ClInclude Include="iTimer.h" />
     <ClInclude Include="OBJC_UTIL.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -205,8 +208,11 @@
     <ClCompile Include="cTestScene.cpp" />
     <ClCompile Include="cTextureManager.cpp" />
     <ClCompile Include="cTimeManager.cpp" />
+    <ClCompile Include="cTimer_GetTickCount.cpp" />
+    <ClCompile Include="cTimer_QueryPerformanceFrequency.cpp" />
     <ClCompile Include="D3D_base.cpp" />
     <ClCompile Include="iMap.cpp" />
+    <ClCompile Include="iTimer.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

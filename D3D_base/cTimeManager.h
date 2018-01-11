@@ -1,16 +1,21 @@
 #pragma once
 #define g_pTimeManager cTimeManager::GetInstance()
 
+class iTimer;
+
 class cTimeManager
 {
 	SINGLETONE(cTimeManager);
 private:
-	DWORD	m_dwLastUpdateTime;
-	float	m_fEllapsedTime;
-
+	iTimer* m_pTimer;
+	
 public:
-	void Update();
+	void Setup();
+	void Update(float FPS);
 	float GetEllapsedTime();
-	float GetLastUpdateTime();
-};
+	float GetWorldTime();
+	float GetTickFPSEllapsedTime();
+	unsigned long GetFrameRate();
+	bool GetTickFPS();
+}; 
 

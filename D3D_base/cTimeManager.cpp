@@ -1,30 +1,51 @@
 #include "stdafx.h"
 #include "cTimeManager.h"
 
+//#include "iTimer.h"
+#include "cTimer_QueryPerformanceFrequency.h"
 
 cTimeManager::cTimeManager()
+	: m_pTimer(NULL)
 {
-	m_dwLastUpdateTime = GetTickCount();
 }
 
 
 cTimeManager::~cTimeManager()
 {
+	SAFE_DELETE(m_pTimer);
 }
 
-void cTimeManager::Update()
+void cTimeManager::Setup()
 {
-	DWORD dwCurrentTime = GetTickCount();
-	m_fEllapsedTime = (dwCurrentTime - m_dwLastUpdateTime) / 1000.0f;
-	m_dwLastUpdateTime = dwCurrentTime;
+	m_pTimer = new cTimer_QueryPerformanceFrequency;
+	m_pTimer->Setup();
 }
-
+void cTimeManager::Update(float FPS)
+{
+	if (m_pTimer) m_pTimer->Update(FPS);
+}
 float cTimeManager::GetEllapsedTime()
 {
-	return m_fEllapsedTime;
+	if (m_pTimer) return m_pTimer->GetEllapsedTime();
+	else return 0.0f;
 }
-
-float cTimeManager::GetLastUpdateTime()
+float cTimeManager::GetWorldTime()
 {
-	return m_dwLastUpdateTime / 1000.0f;
+	if (m_pTimer) return m_pTimer->GetWorldTime();
+	else return 0.0f;
+}
+float cTimeManager::GetTickFPSEllapsedTime()
+{
+	if (m_pTimer) return m_pTimer->GetTickFPSEllapsedTime();
+	else return 0.0f;
+}
+unsigned long cTimeManager::GetFrameRate()
+{
+	if (m_pTimer) return m_pTimer->GetFrameRate();
+	return 0;
+}
+bool cTimeManager::GetTickFPS()
+{
+	if (m_pTimer) return m_pTimer->GetTickFPS();
+	return false;
 }

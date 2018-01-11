@@ -24,14 +24,14 @@ void cActionLinear::Start()
 	{
 		m_pOwner->SetPosition(m_vFrom);
 		m_fPassedTime = 0.0f;
-		m_fStartTime = g_pTimeManager->GetLastUpdateTime();
+		m_fStartTime = g_pTimeManager->GetWorldTime();
 		m_vPrevPosition = m_vFrom;
 	}
 }
 
 void cActionLinear::Update()
 {
-	m_fPassedTime = g_pTimeManager->GetLastUpdateTime() - m_fStartTime;
+	m_fPassedTime = g_pTimeManager->GetWorldTime() - m_fStartTime;
 	if (m_fPassedTime > m_fActionTime)
 	{
 		m_pOwner->SetPosition(m_vTo);

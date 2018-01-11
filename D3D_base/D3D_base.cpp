@@ -47,6 +47,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	g_pMainGame = new cMainGame;
 	g_pMainGame->Setup();
 
+	g_pTimeManager->Setup();
+
     MSG msg;
 
     // 기본 메시지 루프입니다.
@@ -64,9 +66,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 		else
 		{
+			g_pTimeManager->Update(60.0f);
 			// 업데이트, 그리기
 			g_pMainGame->Update();
-			g_pMainGame->Render();
+			if (g_pTimeManager->GetTickFPS())
+			{
+				g_pMainGame->Render();
+			}
 		}
     }
 
