@@ -1,3 +1,8 @@
+# project blocker
+
+*.[Ss][Ll][Nn]
+*.[Vv][Cc][Xx][Pp][Rr][Oo][Jj]
+
 # Created by https://www.gitignore.io/api/c++,visualstudio,visualstudiocode
 
 ### C++ ###
@@ -337,4 +342,3 @@ __pycache__/
 # should be stored in the .pubxml.user file.
 
 # End of https://www.gitignore.io/api/c++,visualstudio,visualstudiocode
-*.vcxproj
