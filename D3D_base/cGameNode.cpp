@@ -136,8 +136,13 @@ D3DXMATRIXA16 cGameNode::GetMatrixToWorld()
 	}
 	return matToWorld;
 }
-D3DXMATRIXA16 cGameNode::GetMatrixViewPort()
-{
-	// TODO: 만드세용
-	return D3DXMATRIXA16();
-}
+//D3DXMATRIXA16 cGameNode::GetMatrixToViewPort()
+//{
+//	D3DXMATRIXA16 matToWorld = this->GetMatrixToWorld();
+//	D3DXMATRIXA16 matView, matProjection, matViewport;
+//	g_pDeviceManager->GetDevice()->GetTransform(D3DTS_VIEW, &matView);
+//	g_pDeviceManager->GetDevice()->GetTransform(D3DTS_PROJECTION, &matProjection);
+//	g_pDeviceManager->GetDevice()->GetTransform(D3DTS_, &matProjection);
+//
+//	//return this-> 
+//}

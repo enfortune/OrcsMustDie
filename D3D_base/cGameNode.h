@@ -43,5 +43,5 @@ public:
 
 	D3DXMATRIXA16 GetMatirixToParent();
 	D3DXMATRIXA16 GetMatrixToWorld(); 
-	D3DXMATRIXA16 GetMatrixViewPort();
+	//D3DXMATRIXA16 GetMatrixToViewPort();
 };

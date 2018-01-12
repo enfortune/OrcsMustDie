@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "cActionLinear.h"
 #include "cGameNode.h"
-
+#include "cTransformData.h"
 
 cActionLinear::cActionLinear()
 	: m_fActionTime(0.0f)
@@ -22,7 +22,8 @@ void cActionLinear::Start()
 {
 	if (m_pOwner)
 	{
-		m_pOwner->SetPosition(m_vFrom);
+		assert(m_pOwner->GetTransformData() != nullptr && "TransformData 없이는 Action을 사용할 수 없다.");
+		m_pOwner->GetTransformData()->SetPosition(m_vFrom);
 		m_fPassedTime = 0.0f;
 		m_fStartTime = g_pTimeManager->GetWorldTime();
 		m_vPrevPosition = m_vFrom;
@@ -34,7 +35,7 @@ void cActionLinear::Update()
 	m_fPassedTime = g_pTimeManager->GetWorldTime() - m_fStartTime;
 	if (m_fPassedTime > m_fActionTime)
 	{
-		m_pOwner->SetPosition(m_vTo);
+		m_pOwner->GetTransformData()->SetPosition(m_vTo);
 		if (m_pDelegate)
 			m_pDelegate->OnActionFinish(this);
 	}
@@ -42,7 +43,7 @@ void cActionLinear::Update()
 	{
 		float t = m_fPassedTime / m_fActionTime;
 		D3DXVECTOR3 p = (1.0f - t) * m_vFrom + t * m_vTo;
-		m_pOwner->SetPosition(p);
+		m_pOwner->GetTransformData()->SetPosition(p);
 
 		// 방향 전환
 		/*D3DXVECTOR3 vDir = p - m_vPrevPosition;
