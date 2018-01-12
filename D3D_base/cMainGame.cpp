@@ -21,7 +21,7 @@ void cMainGame::Setup()
 
 void cMainGame::Update()
 {
-	g_pSceneManager->Update();
+	g_pSceneManager->Update(g_pTimeManager->GetEllapsedTime());
 }
 
 void cMainGame::Render()

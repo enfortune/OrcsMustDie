@@ -18,7 +18,7 @@ void cGameScene::Setup()
 }
 void cGameScene::Update(float fDelta)
 {
-	cGameNode::Setup();
+	cGameNode::Update(fDelta);
 }
 void cGameScene::Render()
 {

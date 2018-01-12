@@ -19,6 +19,7 @@ class cGameNode :
 	SYNTHESIZE_REF(std::set<cGameNode*>, m_setChild, Children);
 
 	/* physics */
+	SYNTHESIZE_REF(std::string, m_sPhysicsTag, PhysicsTag);
 	SYNTHESIZE_REF(cPhysicsBody*, m_pPhysicsBody, PhysicsBody);
 
 public:
