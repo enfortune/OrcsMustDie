@@ -118,3 +118,7 @@ D3DXMATRIXA16 cGameNode::GetMatrixToWorld()
 	}
 	return matToWorld;
 }
+D3DXMATRIXA16 cGameNode::GetMatrixViewPort()
+{
+	return D3DXMATRIXA16();
+}

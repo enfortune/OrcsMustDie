@@ -12,15 +12,22 @@ cMainGame::~cMainGame()
 {
 	g_pTextureManager->Destroy();
 	g_pDeviceManager->Destroy();
+	g_pSoundManager->Destroy();
 }
 
 void cMainGame::Setup()
 {
+	g_pSoundManager->Setup();
+	g_pKeyManager->Setup();
+
 	g_pSceneManager->Setup(new cTestScene);
 }
 
 void cMainGame::Update()
 {
+	g_pSoundManager->Update();
+	g_pKeyManager->Update();
+
 	g_pSceneManager->Update(g_pTimeManager->GetEllapsedTime());
 }
 

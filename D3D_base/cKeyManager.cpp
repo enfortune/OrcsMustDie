@@ -40,7 +40,6 @@ void cKeyManager::Update()
 		}
 	}
 }
-
 bool cKeyManager::IsOnceKeyDown(int key)
 {
 	return m_bsOnceKeyDown[key];

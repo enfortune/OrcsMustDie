@@ -10,7 +10,7 @@ cSceneManager::cSceneManager()
 
 cSceneManager::~cSceneManager()
 {
-	this->ClearScene();
+	this->Destroy();
 }
 
 
@@ -49,7 +49,10 @@ void cSceneManager::Render(void)
 	//렌더는 실행중인 씬에 대해서만 실행함. (씬을 alphablend로 여러개 동시송출을 하겠다면 추후 변경하겠음.)
 	if (m_pRunningScene != nullptr)
 		m_pRunningScene->Render();
-
+}
+void cSceneManager::Destroy()
+{
+	this->ClearScene();
 }
 void cSceneManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {

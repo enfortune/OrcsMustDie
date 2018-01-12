@@ -9,6 +9,7 @@ cTextureManager::cTextureManager()
 
 cTextureManager::~cTextureManager()
 {
+	this->Destroy();
 }
 
 LPDIRECT3DTEXTURE9 cTextureManager::GetTexture(std::string sFullPath)

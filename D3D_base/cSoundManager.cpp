@@ -9,6 +9,7 @@ cSoundManager::cSoundManager()
 
 cSoundManager::~cSoundManager()
 {
+	this->Destroy();
 }
 
 
@@ -30,7 +31,38 @@ HRESULT cSoundManager::Setup()
 
 void cSoundManager::Update()
 {
+	m_pSystem->update();
+}
 
+void cSoundManager::Destroy()
+{
+	//사운드 삭제
+	if (m_pChannel != NULL || m_ppSound != NULL)
+	{
+		for (int i = 0; i < TOTALSOUNDBUFFER; i++)
+		{
+			if (m_pChannel != NULL)
+			{
+				if (m_pChannel[i]) m_pChannel[i]->stop();
+			}
+
+			if (m_ppSound != NULL)
+			{
+				if (m_ppSound != NULL) m_ppSound[i]->release();
+			}
+		}
+	}
+
+	//메모리 지우기
+	SAFE_DELETE_ARRAY(m_pChannel);
+	SAFE_DELETE_ARRAY(m_ppSound);
+
+	//시스템 닫기 
+	if (m_pSystem != NULL)
+	{
+		m_pSystem->release();
+		m_pSystem->close();
+	}
 }
 
 

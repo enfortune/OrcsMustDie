@@ -16,6 +16,7 @@ public:
 	void Setup(cGameScene* startScene);
 	void Update(float fDelta = g_pTimeManager->GetEllapsedTime());
 	void Render(void);
+	void Destroy();
 
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 

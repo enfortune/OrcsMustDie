@@ -112,6 +112,18 @@
     <Filter Include="정현식">
       <UniqueIdentifier>{2214ae74-ca53-4168-9888-62cb17295cbe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\BaseClass\cRay">
+      <UniqueIdentifier>{918b86de-70d7-49d5-99f5-b278f0b3ee99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Manager\FileManager">
+      <UniqueIdentifier>{a0582764-31bc-4844-a6e5-7d0191dc1d67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Manager\FileManager\txtData">
+      <UniqueIdentifier>{ab49fdbc-43cc-4fd7-b173-849f03ad81de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Manager\FileManager\iniData">
+      <UniqueIdentifier>{8439efac-7667-4af5-a6c0-3cfb823ea4cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -232,6 +244,18 @@
     <ClInclude Include="PhysicsTagDefine.h">
       <Filter>Framework\BaseClass\cPhysicsNode</Filter>
     </ClInclude>
+    <ClInclude Include="cRay.h">
+      <Filter>Framework\BaseClass\cRay</Filter>
+    </ClInclude>
+    <ClInclude Include="cFileManager.h">
+      <Filter>Framework\Manager\FileManager</Filter>
+    </ClInclude>
+    <ClInclude Include="cDataTXT.h">
+      <Filter>Framework\Manager\FileManager\txtData</Filter>
+    </ClInclude>
+    <ClInclude Include="cDataINI.h">
+      <Filter>Framework\Manager\FileManager\iniData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -329,6 +353,18 @@
     </ClCompile>
     <ClCompile Include="cTimer_GetTickCount.cpp">
       <Filter>Framework\BaseClass\cTimer</Filter>
+    </ClCompile>
+    <ClCompile Include="cRay.cpp">
+      <Filter>Framework\BaseClass\cRay</Filter>
+    </ClCompile>
+    <ClCompile Include="cFileManager.cpp">
+      <Filter>Framework\Manager\FileManager</Filter>
+    </ClCompile>
+    <ClCompile Include="cDataTXT.cpp">
+      <Filter>Framework\Manager\FileManager\txtData</Filter>
+    </ClCompile>
+    <ClCompile Include="cDataINI.cpp">
+      <Filter>Framework\Manager\FileManager\iniData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

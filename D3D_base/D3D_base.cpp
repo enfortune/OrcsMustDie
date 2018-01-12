@@ -78,6 +78,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	delete g_pMainGame;
 
+	g_pTimeManager->Destroy();
+
     return (int) msg.wParam;
 }
 

@@ -12,7 +12,7 @@ cTimeManager::cTimeManager()
 
 cTimeManager::~cTimeManager()
 {
-	SAFE_DELETE(m_pTimer);
+	this->Destroy();
 }
 
 void cTimeManager::Setup()
@@ -48,4 +48,9 @@ bool cTimeManager::GetTickFPS()
 {
 	if (m_pTimer) return m_pTimer->GetTickFPS();
 	return false;
+}
+
+void cTimeManager::Destroy()
+{
+	SAFE_DELETE(m_pTimer);
 }

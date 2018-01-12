@@ -31,6 +31,7 @@ private:
 public:
 	HRESULT Setup();
 	void Update();
+	void Destroy();
 
 	HRESULT AddSound(std::string keyName, std::string soundName, bool bgm, bool loop);
 	void Play(std::string keyName, float volume = 1.0f); // 0.0 ~ 1.0f -> 0 ~ 255

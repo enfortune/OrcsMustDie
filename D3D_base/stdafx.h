@@ -41,6 +41,7 @@ extern HWND g_hWnd;
 
 #define SAFE_ADD(p) { if(p) p->AddRef(); }
 #define SAFE_DELETE(p) { if(p) { delete p; p = NULL; } }
+#define SAFE_DELETE_ARRAY(p) {if(p) { delete[](p); (p) = NULL;}}
 #define SAFE_RELEASE(p) { if(p) { p->Release(); p = NULL; } }
 
 #define SYNTHESIZE(varType, varName, funName) \
@@ -132,4 +133,6 @@ struct ST_ROT_SAMPLE
 #include "cFontManager.h"
 #include "cSceneManager.h"
 #include "cKeyManager.h"
+#include "cSoundManager.h"
+#include "cFileManager.h"
 /* UTIL */

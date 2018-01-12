@@ -17,5 +17,7 @@ public:
 	float GetTickFPSEllapsedTime();
 	unsigned long GetFrameRate();
 	bool GetTickFPS();
+
+	void Destroy();
 }; 
 
