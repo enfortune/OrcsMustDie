@@ -1,7 +1,6 @@
 #pragma once
 #include "cGameNode.h"
-class cGameScene :
-	public cGameNode
+class cGameScene : public cGameNode
 {
 	SYNTHESIZE_REF(bool, m_bUpdateEnable, UpdateEnable); // 씬 매니져에서 사용하는 변수임.
 

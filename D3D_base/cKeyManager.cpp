@@ -1,11 +1,9 @@
 #include "stdafx.h"
 #include "cKeyManager.h"
 
-
 cKeyManager::cKeyManager()
 {
 }
-
 
 cKeyManager::~cKeyManager()
 {
@@ -20,6 +18,7 @@ void cKeyManager::Setup()
 		m_bsStayKeyDown.set(i, false);
 	}
 }
+
 void cKeyManager::Update()
 {
 	for (int i = 0; i < KEYMAX; i++)

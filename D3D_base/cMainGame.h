@@ -5,6 +5,7 @@ class cMainGame
 {
 private:
 
+
 public:
 	cMainGame();
 	~cMainGame();

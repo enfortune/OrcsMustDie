@@ -1,13 +1,11 @@
 #include "stdafx.h"
 #include "cGameNode.h"
 
+#include "cTransformData.h"
 #include "cPhysicsBody.h"
 
 cGameNode::cGameNode()
-	: m_vPos(0.0f,0.0f,0.0f)
-	, m_vAxis(0.0f,1.0f,0.0f)
-	, m_fRotAngle(0.0f)
-	, m_vScale(0.0f,0.0f,0.0f)
+	: m_pTransformData(nullptr)
 	, m_pParent(nullptr)
 	, m_pPhysicsBody(nullptr)
 {
@@ -18,16 +16,16 @@ cGameNode::cGameNode()
 
 cGameNode::~cGameNode()
 {
-	for each (cGameNode* node in m_setChild)
-	{
-		node->RemoveFromParent();
-	}
+	this->Destroy();
 }
 
 
-void cGameNode::Setup()
+void cGameNode::Setup(bool bUseTransformData)
 {
-
+	if (bUseTransformData)
+	{
+		m_pTransformData = new cTransformData;
+	}
 }
 
 void cGameNode::Update(float fDelta)
@@ -44,6 +42,13 @@ void cGameNode::Render()
 		node->Render();
 	}
 }
+void cGameNode::Destroy()
+{
+	this->RemoveAllChildren();
+	SAFE_DELETE(m_pTransformData);
+	SAFE_DELETE(m_pPhysicsBody);
+	this->RemoveFromParent();
+}
 void cGameNode::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	for each (cGameNode* node in m_setChild)
@@ -57,9 +62,12 @@ void cGameNode::UpdatePhysics(float fDelta)
 	assert(m_pPhysicsBody != nullptr && "PhysicsBody 없이 PhysicsNode에 추가해선 안된다");
 
 	m_pPhysicsBody->UpdatePhysics();
-	m_vPos = m_pPhysicsBody->GetPosition();
-	m_vAxis = m_pPhysicsBody->GetAxis();
-	m_fRotAngle = m_pPhysicsBody->GetRotAngle();
+	if (m_pTransformData)
+	{
+		m_pTransformData->SetPosition(m_pPhysicsBody->GetPosition());
+		m_pTransformData->SetAxis(m_pPhysicsBody->GetAxis());
+		m_pTransformData->SetRotAngle(m_pPhysicsBody->GetRotAngle());
+	}
 }
 
 
@@ -83,6 +91,13 @@ void cGameNode::RemoveChild(cGameNode* node)
 	(*Iter)->SetParentNode(nullptr);
 	Iter = m_setChild.erase(Iter);
 }
+void cGameNode::RemoveAllChildren()
+{
+	for each (cGameNode* node in m_setChild)
+	{
+		node->RemoveFromParent();
+	}
+}
 void cGameNode::RemoveFromParent()
 {
 	if (m_pParent == nullptr) return;
@@ -94,15 +109,18 @@ void cGameNode::RemoveFromParent()
 }
 D3DXMATRIXA16 cGameNode::GetMatirixToParent()
 {
-	D3DXMATRIXA16 matToParent, matS, matR, matT;
-	D3DXMatrixIdentity(&matToParent);
-
-	D3DXMatrixScaling(&matS, m_vScale.x, m_vScale.y, m_vScale.z);
-	D3DXMatrixRotationAxis(&matR, &m_vAxis, m_fRotAngle);
-	D3DXMatrixTranslation(&matT, m_vPos.x, m_vPos.y, m_vPos.z);
-
-	matToParent = matS * matR * matT;
-	return matToParent;
+	
+	if (m_pTransformData)
+	{
+		return m_pTransformData->GetTransformMatrix();
+	}
+	else
+	{
+		D3DXMATRIXA16 matI;
+		D3DXMatrixIdentity(&matI);
+		return matI;
+	}
+	
 }
 
 D3DXMATRIXA16 cGameNode::GetMatrixToWorld()
@@ -111,7 +129,7 @@ D3DXMATRIXA16 cGameNode::GetMatrixToWorld()
 	D3DXMatrixIdentity(&matToWorld);
 	cGameNode* node = this;
 	
-	while (node->GetParentNode() != nullptr)
+	while (node != nullptr)
 	{
 		matToWorld *= node->GetMatirixToParent();
 		node = node->GetParentNode();
@@ -120,5 +138,6 @@ D3DXMATRIXA16 cGameNode::GetMatrixToWorld()
 }
 D3DXMATRIXA16 cGameNode::GetMatrixViewPort()
 {
+	// TODO: 만드세용
 	return D3DXMATRIXA16();
 }

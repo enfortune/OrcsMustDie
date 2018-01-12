@@ -134,5 +134,5 @@ struct ST_ROT_SAMPLE
 #include "cSceneManager.h"
 #include "cKeyManager.h"
 #include "cSoundManager.h"
-#include "cFileManager.h"
+
 /* UTIL */

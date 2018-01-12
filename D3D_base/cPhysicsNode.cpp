@@ -5,6 +5,9 @@
 
 cPhysicsNode::cPhysicsNode()
 {
+	long long currentTick {};
+
+	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER *> (&currentTick));
 }
 
 

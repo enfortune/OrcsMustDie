@@ -85,9 +85,6 @@
     <Filter Include="Class\Scene\cTestScene">
       <UniqueIdentifier>{3fee7e1b-a715-4b6c-9203-60de87e02e52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\Manager\SoundManager">
-      <UniqueIdentifier>{ed4892b5-f7f3-439f-87f8-9ac23e95c363}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Framework\Manager\KeyManager">
       <UniqueIdentifier>{a67c4230-b245-4db8-bd53-864f1f332d23}</UniqueIdentifier>
     </Filter>
@@ -115,14 +112,8 @@
     <Filter Include="Framework\BaseClass\cRay">
       <UniqueIdentifier>{918b86de-70d7-49d5-99f5-b278f0b3ee99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\Manager\FileManager">
-      <UniqueIdentifier>{a0582764-31bc-4844-a6e5-7d0191dc1d67}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Manager\FileManager\txtData">
-      <UniqueIdentifier>{ab49fdbc-43cc-4fd7-b173-849f03ad81de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Framework\Manager\FileManager\iniData">
-      <UniqueIdentifier>{8439efac-7667-4af5-a6c0-3cfb823ea4cc}</UniqueIdentifier>
+    <Filter Include="Framework\Manager\TextureManager\SoundManager">
+      <UniqueIdentifier>{ed4892b5-f7f3-439f-87f8-9ac23e95c363}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -227,7 +218,7 @@
       <Filter>Class\Scene\cTestScene</Filter>
     </ClInclude>
     <ClInclude Include="cSoundManager.h">
-      <Filter>Framework\Manager\SoundManager</Filter>
+      <Filter>Framework\Manager\TextureManager\SoundManager</Filter>
     </ClInclude>
     <ClInclude Include="cKeyManager.h">
       <Filter>Framework\Manager\KeyManager</Filter>
@@ -247,14 +238,11 @@
     <ClInclude Include="cRay.h">
       <Filter>Framework\BaseClass\cRay</Filter>
     </ClInclude>
-    <ClInclude Include="cFileManager.h">
-      <Filter>Framework\Manager\FileManager</Filter>
+    <ClInclude Include="cGridBox.h">
+      <Filter>Interface\iMap</Filter>
     </ClInclude>
-    <ClInclude Include="cDataTXT.h">
-      <Filter>Framework\Manager\FileManager\txtData</Filter>
-    </ClInclude>
-    <ClInclude Include="cDataINI.h">
-      <Filter>Framework\Manager\FileManager\iniData</Filter>
+    <ClInclude Include="cTransformData.h">
+      <Filter>Framework\BaseClass\cGameNode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -340,7 +328,7 @@
       <Filter>Class\Scene\cTestScene</Filter>
     </ClCompile>
     <ClCompile Include="cSoundManager.cpp">
-      <Filter>Framework\Manager\SoundManager</Filter>
+      <Filter>Framework\Manager\TextureManager\SoundManager</Filter>
     </ClCompile>
     <ClCompile Include="cKeyManager.cpp">
       <Filter>Framework\Manager\KeyManager</Filter>
@@ -357,14 +345,11 @@
     <ClCompile Include="cRay.cpp">
       <Filter>Framework\BaseClass\cRay</Filter>
     </ClCompile>
-    <ClCompile Include="cFileManager.cpp">
-      <Filter>Framework\Manager\FileManager</Filter>
+    <ClCompile Include="cGridBox.cpp">
+      <Filter>Interface\iMap</Filter>
     </ClCompile>
-    <ClCompile Include="cDataTXT.cpp">
-      <Filter>Framework\Manager\FileManager\txtData</Filter>
-    </ClCompile>
-    <ClCompile Include="cDataINI.cpp">
-      <Filter>Framework\Manager\FileManager\iniData</Filter>
+    <ClCompile Include="cTransformData.cpp">
+      <Filter>Framework\BaseClass\cGameNode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

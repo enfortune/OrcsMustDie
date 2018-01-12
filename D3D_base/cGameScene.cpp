@@ -14,7 +14,7 @@ cGameScene::~cGameScene()
 
 void cGameScene::Setup()
 {
-	cGameNode::Setup();
+	cGameNode::Setup(false); // not use TransformData
 }
 void cGameScene::Update(float fDelta)
 {
