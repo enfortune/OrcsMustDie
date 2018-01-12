@@ -1,10 +1,7 @@
 # project blocker
 
 *.sln
-*.vcxproj
-
-*.[Ss][Ll][Nn]
-*.[Vv][Cc][Xx][Pp][Rr][Oo][Jj]
+**/*.vcxproj
 
 # Created by https://www.gitignore.io/api/c++,visualstudio,visualstudiocode
 
