@@ -115,6 +115,9 @@
     <Filter Include="Framework\Manager\TextureManager\SoundManager">
       <UniqueIdentifier>{ed4892b5-f7f3-439f-87f8-9ac23e95c363}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\BaseClass\cSprite">
+      <UniqueIdentifier>{c687155a-9f41-451a-8338-d41f83947003}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -244,6 +247,9 @@
     <ClInclude Include="cTransformData.h">
       <Filter>Framework\BaseClass\cGameNode</Filter>
     </ClInclude>
+    <ClInclude Include="cSprite.h">
+      <Filter>Framework\BaseClass\cSprite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -350,6 +356,9 @@
     </ClCompile>
     <ClCompile Include="cTransformData.cpp">
       <Filter>Framework\BaseClass\cGameNode</Filter>
+    </ClCompile>
+    <ClCompile Include="cSprite.cpp">
+      <Filter>Framework\BaseClass\cSprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
