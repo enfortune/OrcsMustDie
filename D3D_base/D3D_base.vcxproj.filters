@@ -229,6 +229,9 @@
     <ClInclude Include="cTimer_QueryPerformanceFrequency.h">
       <Filter>Framework\BaseClass\cTimer</Filter>
     </ClInclude>
+    <ClInclude Include="PhysicsTagDefine.h">
+      <Filter>Framework\BaseClass\cPhysicsNode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
