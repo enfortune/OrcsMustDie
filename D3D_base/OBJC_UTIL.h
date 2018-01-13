@@ -1,6 +1,8 @@
 
 #pragma once
 
+// 현재는 사용하지 않는 헤더파일입니다.
+
 #ifndef YES
 #define YES true
 #endif

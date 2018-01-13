@@ -6,7 +6,7 @@ class cGameSprite /* RC 방식으로 관리하려면 cGameObject 상속받아서 사용*/
 	LPDIRECT3DTEXTURE9			m_pTexture;
 	D3DXIMAGE_INFO				m_stImageInfo;
 	SYNTHESIZE_REF(DWORD, m_dwSpriteFlags, SpriteFlag);
-	SYNTHESIZE_REF(D3DXCOLOR, m_stColor); // 0.f~ 1.f
+	SYNTHESIZE_REF(D3DXCOLOR, m_stColor, Color); // 0.f~ 1.f
 
 	/* basic data for matrix */
 protected:

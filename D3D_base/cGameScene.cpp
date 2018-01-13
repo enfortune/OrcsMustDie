@@ -10,6 +10,7 @@ cGameScene::cGameScene()
 
 cGameScene::~cGameScene()
 {
+	this->Destroy();
 }
 
 void cGameScene::Setup()
@@ -24,9 +25,19 @@ void cGameScene::Render()
 {
 	cGameNode::Render();
 }
+void cGameScene::Destroy()
+{
+	cGameNode::Destroy();
+}
 void cGameScene::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	cGameNode::WndProc(hWnd, message, wParam, lParam);
 }
 
+RECT cGameScene::GetScreenRect()
+{
+	RECT rcRet;
+	GetClientRect(g_hWnd, &rcRet);
+	return rcRet;
+}
 

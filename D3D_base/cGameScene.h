@@ -9,9 +9,12 @@ public:
 	virtual ~cGameScene();
 
 	virtual void Setup();
-	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime());
-	virtual void Render();
+	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime()) override;
+	virtual void Render() override;
+	virtual void Destroy() override;
 
-	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
+	
+	RECT GetScreenRect();
 };
 

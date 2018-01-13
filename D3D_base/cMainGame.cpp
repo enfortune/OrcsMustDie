@@ -11,8 +11,10 @@ cMainGame::cMainGame()
 cMainGame::~cMainGame()
 {
 	g_pTextureManager->Destroy();
-	g_pDeviceManager->Destroy();
+	g_pSceneManager->Destroy();
 	g_pSoundManager->Destroy();
+
+	g_pDeviceManager->Destroy(); // 마지막에 디스트로이할 것
 }
 
 void cMainGame::Setup()

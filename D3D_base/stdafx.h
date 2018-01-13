@@ -135,4 +135,8 @@ struct ST_ROT_SAMPLE
 #include "cKeyManager.h"
 #include "cSoundManager.h"
 
-/* UTIL */
+/* Utils*/
+#include "commonMacroFunction.h"
+#include "utils.h"
+#include "additionalUtils.h"
+using namespace THETA_UTIL;

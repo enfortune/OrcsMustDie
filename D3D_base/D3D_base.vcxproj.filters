@@ -100,9 +100,6 @@
     <Filter Include="Framework\BaseClass\cRay">
       <UniqueIdentifier>{918b86de-70d7-49d5-99f5-b278f0b3ee99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\BaseClass\cSprite">
-      <UniqueIdentifier>{c687155a-9f41-451a-8338-d41f83947003}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Framework\BaseClass\cTimer">
       <UniqueIdentifier>{c1d7c14d-0f2e-41b4-a3cf-bcff23c2826f}</UniqueIdentifier>
     </Filter>
@@ -117,6 +114,15 @@
     </Filter>
     <Filter Include="Framework\Parser\ObjLoader">
       <UniqueIdentifier>{25f2c264-14ed-41b5-af1f-c10f021d4d3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Util">
+      <UniqueIdentifier>{cbf41582-d496-4b2c-a3ee-f85c32d853a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\BaseClass\cGameSprite">
+      <UniqueIdentifier>{c687155a-9f41-451a-8338-d41f83947003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\BaseClass\cGameUI">
+      <UniqueIdentifier>{7f07d84d-cb4a-45e5-b31f-1fda312b77a4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -202,9 +208,6 @@
     <ClInclude Include="cGameScene.h">
       <Filter>Framework\BaseClass\cGameScene</Filter>
     </ClInclude>
-    <ClInclude Include="OBJC_UTIL.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="cDeviceManager.h">
       <Filter>Framework\Manager\DeviceManager</Filter>
     </ClInclude>
@@ -245,10 +248,22 @@
       <Filter>Framework\BaseClass\cGameNode</Filter>
     </ClInclude>
     <ClInclude Include="cGameSprite.h">
-      <Filter>Framework\BaseClass\cSprite</Filter>
+      <Filter>Framework\BaseClass\cGameSprite</Filter>
     </ClInclude>
     <ClInclude Include="cTestScene.h">
       <Filter>Class\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="additionalUtils.h">
+      <Filter>Framework\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>Framework\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="commonMacroFunction.h">
+      <Filter>Framework\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="OBJC_UTIL.h">
+      <Filter>Framework\Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -355,10 +370,16 @@
       <Filter>Framework\BaseClass\cGameNode</Filter>
     </ClCompile>
     <ClCompile Include="cGameSprite.cpp">
-      <Filter>Framework\BaseClass\cSprite</Filter>
+      <Filter>Framework\BaseClass\cGameSprite</Filter>
     </ClCompile>
     <ClCompile Include="cTestScene.cpp">
       <Filter>Class\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="additionalUtils.cpp">
+      <Filter>Framework\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>Framework\Util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

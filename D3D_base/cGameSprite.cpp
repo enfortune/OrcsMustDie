@@ -7,6 +7,9 @@ cGameSprite::cGameSprite()
 	, m_pTexture(NULL)
 	, m_stColor(1.0f, 1.0f, 1.0f, 1.0f)
 	, m_dwSpriteFlags(D3DXSPRITE_ALPHABLEND)
+	, m_vPos(0.0f, 0.0f)
+	, m_fRotAngle(0.0f)
+	, m_vScale(1.0f, 1.0f)
 {
 }
 
@@ -39,6 +42,7 @@ void cGameSprite::Setup(std::string sFileName)
 		&m_pTexture);
 
 	m_vecContentBox.resize(4);
+
 	m_vecContentBox[0] = D3DXVECTOR2(-m_stImageInfo.Width / 2, -m_stImageInfo.Height / 2); // LT
 	m_vecContentBox[1] = D3DXVECTOR2( m_stImageInfo.Width / 2, -m_stImageInfo.Height / 2); // RT
 	m_vecContentBox[2] = D3DXVECTOR2( m_stImageInfo.Width / 2,  m_stImageInfo.Height / 2); // RB
