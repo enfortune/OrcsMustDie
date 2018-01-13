@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="ObjLoader">
-      <UniqueIdentifier>{25f2c264-14ed-41b5-af1f-c10f021d4d3f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ASELoader">
-      <UniqueIdentifier>{ec42ffbd-689f-4d31-ae02-2c26f36c2447}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Class">
       <UniqueIdentifier>{08ba27d6-04b6-4a83-8548-cf96165b36da}</UniqueIdentifier>
     </Filter>
@@ -82,9 +76,6 @@
     <Filter Include="Class\Scene">
       <UniqueIdentifier>{5036948f-0cd8-4af3-a721-df4c3562096f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Class\Scene\cTestScene">
-      <UniqueIdentifier>{3fee7e1b-a715-4b6c-9203-60de87e02e52}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Framework\Manager\KeyManager">
       <UniqueIdentifier>{a67c4230-b245-4db8-bd53-864f1f332d23}</UniqueIdentifier>
     </Filter>
@@ -100,9 +91,6 @@
     <Filter Include="Framework\BaseInterface\iTimer">
       <UniqueIdentifier>{03426a59-2232-48d5-bdf3-3313296a2210}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\BaseClass\cTimer">
-      <UniqueIdentifier>{c1d7c14d-0f2e-41b4-a3cf-bcff23c2826f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="차종서">
       <UniqueIdentifier>{9e0e1655-6a43-4f70-9492-25834f422057}</UniqueIdentifier>
     </Filter>
@@ -112,11 +100,23 @@
     <Filter Include="Framework\BaseClass\cRay">
       <UniqueIdentifier>{918b86de-70d7-49d5-99f5-b278f0b3ee99}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Framework\Manager\TextureManager\SoundManager">
-      <UniqueIdentifier>{ed4892b5-f7f3-439f-87f8-9ac23e95c363}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Framework\BaseClass\cSprite">
       <UniqueIdentifier>{c687155a-9f41-451a-8338-d41f83947003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\BaseClass\cTimer">
+      <UniqueIdentifier>{c1d7c14d-0f2e-41b4-a3cf-bcff23c2826f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Manager\SoundManager">
+      <UniqueIdentifier>{ed4892b5-f7f3-439f-87f8-9ac23e95c363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Parser">
+      <UniqueIdentifier>{173af092-bf9f-4bc2-bb52-f1c4c083208c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Parser\ASELoader">
+      <UniqueIdentifier>{ec42ffbd-689f-4d31-ae02-2c26f36c2447}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Parser\ObjLoader">
+      <UniqueIdentifier>{25f2c264-14ed-41b5-af1f-c10f021d4d3f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -137,25 +137,25 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="cObjLoader.h">
-      <Filter>ObjLoader</Filter>
+      <Filter>Framework\Parser\ObjLoader</Filter>
     </ClInclude>
     <ClInclude Include="cMtlTex.h">
-      <Filter>ObjLoader</Filter>
+      <Filter>Framework\Parser\ObjLoader</Filter>
     </ClInclude>
     <ClInclude Include="cGroup.h">
-      <Filter>ObjLoader</Filter>
+      <Filter>Framework\Parser\ObjLoader</Filter>
     </ClInclude>
     <ClInclude Include="cObjMap.h">
-      <Filter>ObjLoader</Filter>
+      <Filter>Framework\Parser\ObjLoader</Filter>
     </ClInclude>
     <ClInclude Include="Asciitok.h">
-      <Filter>ASELoader</Filter>
+      <Filter>Framework\Parser\ASELoader</Filter>
     </ClInclude>
     <ClInclude Include="cAseLoader.h">
-      <Filter>ASELoader</Filter>
+      <Filter>Framework\Parser\ASELoader</Filter>
     </ClInclude>
     <ClInclude Include="cAseNode.h">
-      <Filter>ASELoader</Filter>
+      <Filter>Framework\Parser\ASELoader</Filter>
     </ClInclude>
     <ClInclude Include="cMainGame.h">
       <Filter>Class\cMainGame</Filter>
@@ -217,11 +217,8 @@
     <ClInclude Include="cSceneManager.h">
       <Filter>Framework\Manager\SceneManager</Filter>
     </ClInclude>
-    <ClInclude Include="cTestScene.h">
-      <Filter>Class\Scene\cTestScene</Filter>
-    </ClInclude>
     <ClInclude Include="cSoundManager.h">
-      <Filter>Framework\Manager\TextureManager\SoundManager</Filter>
+      <Filter>Framework\Manager\SoundManager</Filter>
     </ClInclude>
     <ClInclude Include="cKeyManager.h">
       <Filter>Framework\Manager\KeyManager</Filter>
@@ -247,8 +244,11 @@
     <ClInclude Include="cTransformData.h">
       <Filter>Framework\BaseClass\cGameNode</Filter>
     </ClInclude>
-    <ClInclude Include="cSprite.h">
+    <ClInclude Include="cGameSprite.h">
       <Filter>Framework\BaseClass\cSprite</Filter>
+    </ClInclude>
+    <ClInclude Include="cTestScene.h">
+      <Filter>Class\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -259,22 +259,22 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="cObjLoader.cpp">
-      <Filter>ObjLoader</Filter>
+      <Filter>Framework\Parser\ObjLoader</Filter>
     </ClCompile>
     <ClCompile Include="cMtlTex.cpp">
-      <Filter>ObjLoader</Filter>
+      <Filter>Framework\Parser\ObjLoader</Filter>
     </ClCompile>
     <ClCompile Include="cGroup.cpp">
-      <Filter>ObjLoader</Filter>
+      <Filter>Framework\Parser\ObjLoader</Filter>
     </ClCompile>
     <ClCompile Include="cObjMap.cpp">
-      <Filter>ObjLoader</Filter>
+      <Filter>Framework\Parser\ObjLoader</Filter>
     </ClCompile>
     <ClCompile Include="cAseLoader.cpp">
-      <Filter>ASELoader</Filter>
+      <Filter>Framework\Parser\ASELoader</Filter>
     </ClCompile>
     <ClCompile Include="cAseNode.cpp">
-      <Filter>ASELoader</Filter>
+      <Filter>Framework\Parser\ASELoader</Filter>
     </ClCompile>
     <ClCompile Include="cMainGame.cpp">
       <Filter>Class\cMainGame</Filter>
@@ -330,11 +330,8 @@
     <ClCompile Include="cSceneManager.cpp">
       <Filter>Framework\Manager\SceneManager</Filter>
     </ClCompile>
-    <ClCompile Include="cTestScene.cpp">
-      <Filter>Class\Scene\cTestScene</Filter>
-    </ClCompile>
     <ClCompile Include="cSoundManager.cpp">
-      <Filter>Framework\Manager\TextureManager\SoundManager</Filter>
+      <Filter>Framework\Manager\SoundManager</Filter>
     </ClCompile>
     <ClCompile Include="cKeyManager.cpp">
       <Filter>Framework\Manager\KeyManager</Filter>
@@ -357,8 +354,11 @@
     <ClCompile Include="cTransformData.cpp">
       <Filter>Framework\BaseClass\cGameNode</Filter>
     </ClCompile>
-    <ClCompile Include="cSprite.cpp">
+    <ClCompile Include="cGameSprite.cpp">
       <Filter>Framework\BaseClass\cSprite</Filter>
+    </ClCompile>
+    <ClCompile Include="cTestScene.cpp">
+      <Filter>Class\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
