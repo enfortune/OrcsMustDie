@@ -1,14 +1,22 @@
 #pragma once
 #include "cGameScene.h"
+#include "iGameUIDelegate.h"
 
 class cGameSprite;
+class cGameUIButton;
 
-class cTestScene :
-	public cGameScene
+class cTestScene : public cGameScene, public iGameUIDelegate
 {
+	friend class iGameUIDelegate;
 private:
-	cGameSprite* m_spriteGirl;
+	cGameSprite*	m_spritePoke[5];
+	int				m_nSpriteIndex;
 
+	cGameUIButton*	m_pButtonRender;
+	cGameUIButton*	m_pButtonLeft;
+	cGameUIButton*  m_pButtonRight;
+
+	bool			m_bSpriteRender;
 	
 public:
 	cTestScene();
@@ -20,5 +28,16 @@ public:
 	virtual void Destroy() override;
 
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
+
+private:
+	void ButtonSetup();
+	void SpriteSetup();
+	void ButtonDestroy();
+	void SpriteDestroy();
+	void LeftButtonAction(std::string sTag, BUTTON_STATE enState);
+	void RightButtonAction(std::string sTag, BUTTON_STATE enState);
+
+public: // iGameUIDelegate
+	virtual bool UIButtonAction(std::string sTag, BUTTON_STATE enState);
 };
 

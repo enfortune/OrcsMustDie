@@ -44,9 +44,7 @@ void cMainGame::Render()
 	g_pD3DDevice->BeginScene();
 	/////////////////////////////////
 
-
 	g_pSceneManager->Render();
-
 
 	/////////////////////////////////
 

@@ -24,7 +24,7 @@ void cActionBezier::Start()
 {
 	if (m_pOwner)
 	{
-		assert(m_pOwner->GetTransformData() != nullptr && "TransformData 없이는 Action을 사용할 수 없다.");
+		assert(m_pOwner->GetTransformData() == nullptr && "TransformData 없이는 Action을 사용할 수 없다.");
 		m_pOwner->GetTransformData()->SetPosition(m_vFrom);
 		m_fPassedTime = 0.0f;
 		m_fStartTime = g_pTimeManager->GetWorldTime();

@@ -7,8 +7,11 @@
 
 #define MAX_LOADSTRING 100
 
+
+
 HWND	g_hWnd;
 cMainGame*	g_pMainGame;
+POINT g_ptMouse {};
 
 // 전역 변수:
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
@@ -153,6 +156,19 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	/* 굳이 여기서 해주는 이유는 mainGame의 WndProc 이전에 마우스좌표를 갱신하기 위함임 */
+	switch (message)
+	{
+	case WM_MOUSEMOVE:
+		{
+			g_ptMouse.x = LOWORD(lParam);
+			g_ptMouse.y = HIWORD(lParam);
+		}
+		break;
+	default:
+		break;
+	}
+
 	if (g_pMainGame)
 		g_pMainGame->WndProc(hWnd, message, wParam, lParam);
 

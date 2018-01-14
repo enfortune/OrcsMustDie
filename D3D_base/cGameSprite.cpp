@@ -13,7 +13,6 @@ cGameSprite::cGameSprite()
 {
 }
 
-
 cGameSprite::~cGameSprite()
 {
 	this->Destroy();
@@ -43,10 +42,10 @@ void cGameSprite::Setup(std::string sFileName)
 
 	m_vecContentBox.resize(4);
 
-	m_vecContentBox[0] = D3DXVECTOR2(-m_stImageInfo.Width / 2, -m_stImageInfo.Height / 2); // LT
-	m_vecContentBox[1] = D3DXVECTOR2( m_stImageInfo.Width / 2, -m_stImageInfo.Height / 2); // RT
-	m_vecContentBox[2] = D3DXVECTOR2( m_stImageInfo.Width / 2,  m_stImageInfo.Height / 2); // RB
-	m_vecContentBox[3] = D3DXVECTOR2(-m_stImageInfo.Width / 2,  m_stImageInfo.Height / 2); // LB
+	m_vecContentBox[0] = D3DXVECTOR2(-static_cast<float>(m_stImageInfo.Width) / 2.f, -static_cast<float>(m_stImageInfo.Height) / 2.f); // LT
+	m_vecContentBox[1] = D3DXVECTOR2(static_cast<float>(m_stImageInfo.Width) / 2.f, -static_cast<float>(m_stImageInfo.Height) / 2.f); // RT
+	m_vecContentBox[2] = D3DXVECTOR2(static_cast<float>(m_stImageInfo.Width) / 2.f, static_cast<float>(m_stImageInfo.Height) / 2.f); // RB
+	m_vecContentBox[3] = D3DXVECTOR2(-static_cast<float>(m_stImageInfo.Width) / 2.f, static_cast<float>(m_stImageInfo.Height) / 2.f); // LB
 }
 
 void cGameSprite::Render()

@@ -37,8 +37,11 @@
 //#define TEST_2
 
 
+/* Extern */
 extern HWND g_hWnd;
+extern POINT g_ptMouse;
 
+/* Macro Function List */
 #define SAFE_ADD(p) { if(p) p->AddRef(); }
 #define SAFE_DELETE(p) { if(p) { delete p; p = NULL; } }
 #define SAFE_DELETE_ARRAY(p) {if(p) { delete[](p); (p) = NULL;}}
@@ -84,6 +87,7 @@ public: virtual void Set##funName(varType var)\
 			return &instance; \
 		}
 
+/* Public Struct List*/
 struct ST_PC_VERTEX
 {
 	D3DXVECTOR3 p;
@@ -124,7 +128,8 @@ struct ST_ROT_SAMPLE
 		D3DXQuaternionIdentity(&q);
 	}
 };
-
+/* Public Enum List */
+#include "GameUIEnumList.h"
 
 /* Manager */
 #include "cDeviceManager.h"
@@ -139,4 +144,6 @@ struct ST_ROT_SAMPLE
 #include "commonMacroFunction.h"
 #include "utils.h"
 #include "additionalUtils.h"
+#include "D3DX_UTIL.h"
 using namespace THETA_UTIL;
+using namespace D3DX_UTIL;

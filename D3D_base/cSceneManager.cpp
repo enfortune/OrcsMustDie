@@ -105,6 +105,7 @@ void cSceneManager::ReplaceScene(cGameScene* sceneToReplace)
 
 void cSceneManager::ClearScene()
 {
+	//m_pRunningScene->RemoveAllChildren();
 	SAFE_RELEASE(m_pRunningScene);
 
 	this->ClearSceneStack();
@@ -113,6 +114,7 @@ void cSceneManager::ClearSceneStack()
 {
 	for (size_t i = 0; i < m_stackScene.size(); i++)
 	{
+		m_stackScene[i]->RemoveAllChildren();
 		SAFE_RELEASE(m_stackScene[i]);
 	}
 	m_stackScene.clear();

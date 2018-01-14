@@ -265,6 +265,18 @@
     <ClInclude Include="OBJC_UTIL.h">
       <Filter>Framework\Util</Filter>
     </ClInclude>
+    <ClInclude Include="iGameUIDelegate.h">
+      <Filter>Framework\BaseClass\cGameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameUIButton.h">
+      <Filter>Framework\BaseClass\cGameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameUIEnumList.h">
+      <Filter>Framework\BaseClass\cGameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DX_UTIL.h">
+      <Filter>Framework\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -379,6 +391,15 @@
       <Filter>Framework\Util</Filter>
     </ClCompile>
     <ClCompile Include="utils.cpp">
+      <Filter>Framework\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="iGameUIDelegate.cpp">
+      <Filter>Framework\BaseClass\cGameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameUIButton.cpp">
+      <Filter>Framework\BaseClass\cGameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DX_UTIL.cpp">
       <Filter>Framework\Util</Filter>
     </ClCompile>
   </ItemGroup>

@@ -6,7 +6,7 @@ cTransformData::cTransformData()
 	: m_vPos(0.0f, 0.0f, 0.0f)
 	, m_vAxis(0.0f, 1.0f, 0.0f)
 	, m_fRotAngle(0.0f)
-	, m_vScale(0.0f, 0.0f, 0.0f)
+	, m_vScale(1.0f, 1.0f, 1.0f)
 {
 }
 

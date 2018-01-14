@@ -59,7 +59,7 @@ void cGameNode::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void cGameNode::UpdatePhysics(float fDelta)
 {
-	assert(m_pPhysicsBody != nullptr && "PhysicsBody 없이 PhysicsNode에 추가해선 안된다");
+	assert(m_pPhysicsBody == nullptr && "PhysicsBody 없이 PhysicsNode에 추가해선 안된다");
 
 	m_pPhysicsBody->UpdatePhysics();
 	if (m_pTransformData)
@@ -71,40 +71,51 @@ void cGameNode::UpdatePhysics(float fDelta)
 }
 
 
-void cGameNode::AddChild(cGameNode* node)
+void cGameNode::AddChild(cGameNode* pNode)
 {
-	if (node == nullptr)
+	if (pNode != nullptr)
 	{
-		assert(node->GetParentNode() != nullptr && "node는 하나의 parent만 가질 수 있음.");
-		node->AddRef();
-		m_setChild.insert(node);
-		cGameNode *node = this;
-		node->SetParentNode(node);
+		assert(pNode->GetParentNode() == nullptr && "node는 하나의 parent만 가질 수 있음.");
+		pNode->AddRef();
+		m_setChild.insert(pNode);
+		//cGameNode *node = this;
+		//this->AddRef();
+		pNode->SetParentNode(this);
 	}		
 }
-void cGameNode::RemoveChild(cGameNode* node)
+void cGameNode::RemoveChild(cGameNode* pNode)
 {
-	std::set<cGameNode*>::iterator Iter = m_setChild.find(node);
+	std::set<cGameNode*>::iterator Iter = m_setChild.find(pNode);
 	if (Iter == m_setChild.end()) return;
 
-	(*Iter)->Release();
 	(*Iter)->SetParentNode(nullptr);
+	(*Iter)->Release();
 	Iter = m_setChild.erase(Iter);
 }
 void cGameNode::RemoveAllChildren()
 {
-	for each (cGameNode* node in m_setChild)
+	//for each (cGameNode* node in m_setChild)
+	//{
+	//	//node->RemoveAllChildren();
+	//	node->RemoveFromParent();
+	//}
+
+	std::set<cGameNode*>::iterator Iter = m_setChild.begin();
+	while (Iter != m_setChild.end())
 	{
-		node->RemoveFromParent();
+		(*Iter)->RemoveFromParent();
+		Iter = m_setChild.begin();
 	}
+
 }
 void cGameNode::RemoveFromParent()
 {
 	if (m_pParent == nullptr) return;
 	
 	m_pParent->RemoveChild(this);
-	m_pParent = nullptr;
-	this->Release();
+	//m_pParent->Release();
+	
+	//this->Release();
 
 }
 D3DXMATRIXA16 cGameNode::GetMatirixToParent()

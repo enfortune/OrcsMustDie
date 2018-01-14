@@ -13,10 +13,8 @@ protected:
 	std::vector<D3DXVECTOR2> m_vecContentBox;
 
 	SYNTHESIZE_REF(D3DXVECTOR2, m_vPos, Position);
-	//SYNTHESIZE_REF(D3DXVECTOR3, m_vAxis, Axis); // use Axis(0,0,1)
 	SYNTHESIZE_REF(float, m_fRotAngle, RotAngle); // Z angle
 	SYNTHESIZE_REF(D3DXVECTOR2, m_vScale, Scale);
-
 public:
 	cGameSprite();
 	~cGameSprite();
