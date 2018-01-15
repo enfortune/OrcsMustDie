@@ -22,6 +22,31 @@ LPDIRECT3DTEXTURE9 cTextureManager::GetTexture(std::string sFullPath)
 
 	return m_mapTexture[sFullPath];
 }
+LPDIRECT3DTEXTURE9 cTextureManager::GetTexture(std::string sFullPath, OUT D3DXIMAGE_INFO* pImageInfo)
+{
+	if (m_mapTexture.find(sFullPath) == m_mapTexture.end())
+	{
+		ZeroMemory(pImageInfo, sizeof(D3DXIMAGE_INFO));
+
+		D3DXCreateTextureFromFileEx(
+			g_pD3DDevice,
+			sFullPath.c_str(),
+			D3DX_DEFAULT_NONPOW2,
+			D3DX_DEFAULT_NONPOW2,
+			D3DX_DEFAULT,
+			0,
+			D3DFMT_UNKNOWN,
+			D3DPOOL_MANAGED,
+			D3DX_FILTER_NONE,
+			D3DX_DEFAULT,
+			0,
+			pImageInfo,
+			NULL,
+			&m_mapTexture[sFullPath]);
+	}
+
+	return m_mapTexture[sFullPath];
+}
 
 void cTextureManager::Destroy()
 {

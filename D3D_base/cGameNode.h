@@ -1,5 +1,5 @@
 #pragma once
-#include "cGameObject.h"
+#include "cObject.h"
 
 class cPhysicsBody;
 class cTransformData;
@@ -7,7 +7,7 @@ class cGameMatrixNode;
 
 
 
-class cGameNode : public cGameObject
+class cGameNode : public cObject
 {
 protected:
 	/* parent */
@@ -30,7 +30,9 @@ public:
 	virtual void Setup(bool bUseTransformData = true);
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime());
 	virtual void Render();
-	virtual void Destroy();
+	void Destroy();
+
+	virtual void Delete() = 0;
 
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	
@@ -41,7 +43,7 @@ public:
 	void RemoveAllChildren();
 	void RemoveFromParent();
 
-	D3DXMATRIXA16 GetMatirixToParent();
+	virtual D3DXMATRIXA16 GetMatirixToParent();
 	D3DXMATRIXA16 GetMatrixToWorld(); 
 	//D3DXMATRIXA16 GetMatrixToViewPort();
 };

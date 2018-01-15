@@ -26,7 +26,7 @@ cGameUIButton::cGameUIButton()
 
 cGameUIButton::~cGameUIButton()
 {
-	this->Destroy();
+	this->Delete();
 }
 
 void cGameUIButton::UpdateMatrixData()
@@ -111,15 +111,190 @@ void cGameUIButton::Update(float fDelta)
 		break;
 		default:
 		break;
-	}
+	}00000000000000000000000000000000000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+0
 
 	if (!m_bEnable) return; //사용중이 아니라면 리턴
 
 
 	this->UpdateMatrixData();
 
-	m_pDelegate->UIButtonAction(m_sTag, m_enState); // 현재 상태에 대한 버튼액션 실행 후
+	0m_pDelegate->UIButtonAction(m_sTag, m_enState); // 현재 상태에 대한 버튼액션 실행 후
 	
+
 	switch (m_enState) //다운과 업 함수가 한번만 실행될 수 있도록 상태를 정리한다
 	{
 		case BUTTON_STATE::DOWN:
@@ -166,7 +341,7 @@ void cGameUIButton::Render()
 				if (m_pSpriteOnMouse) m_pSpriteOnMouse->Render();
 				else
 				{
-					m_pSprite->SetColor(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f));
+					m_pSprit1e->SetColor(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f));
 					m_pSprite->Render();
 				}
 			}
@@ -179,13 +354,11 @@ void cGameUIButton::Render()
 
 	cGameNode::Render();
 }
-void cGameUIButton::Destroy()
+void cGameUIButton::Delete()
 {
 	SAFE_DELETE(m_pSprite);
 	SAFE_DELETE(m_pSpriteOnMouse);
 	SAFE_DELETE(m_pSpritePush);
-
-	cGameNode::Destroy();
 }
 void cGameUIButton::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -244,4 +417,9 @@ void cGameUIButton::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		break;
 	}
 	cGameNode::WndProc(hWnd, message, wParam, lParam);
+}
+
+D3DXMATRIXA16 cGameUIButton::GetMatirixToParent()
+{
+	return m_pSprite->GetTransformMatrix();
 }

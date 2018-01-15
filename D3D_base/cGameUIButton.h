@@ -35,13 +35,15 @@ protected:
 	void UpdateMatrixData();
 public:
 	cGameUIButton();
-	~cGameUIButton();
+	virtual ~cGameUIButton();
 
 	virtual void Setup(std::string sTag, iGameUIDelegate* pDelegate, std::string sSpriteFileName, std::string sSpriteOnMouseFileName = std::string(""), std::string sSpritePushFileName = std::string(""));
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime()) override;
 	virtual void Render() override;
-	virtual void Destroy() override;
+	virtual void Delete() override;
 
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
+
+	virtual D3DXMATRIXA16 GetMatirixToParent() override;
 };
 

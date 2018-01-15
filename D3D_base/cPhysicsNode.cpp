@@ -35,6 +35,11 @@ void cPhysicsNode::Render()
 	cGameNode::Render();
 }
 
+void cPhysicsNode::Delete()
+{
+
+}
+
 void cPhysicsNode::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	cGameNode::WndProc(hWnd, message, wParam, lParam);

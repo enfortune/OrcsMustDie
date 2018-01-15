@@ -16,7 +16,7 @@ cTestScene::cTestScene()
 
 cTestScene::~cTestScene()
 {
-	this->Destroy();
+	this->Delete();
 }
 
 void cTestScene::Setup()
@@ -54,12 +54,10 @@ void cTestScene::Render()
 
 	
 }
-void cTestScene::Destroy()
+void cTestScene::Delete()
 {
-	this->ButtonDestroy();
-	this->SpriteDestroy();
-
-	cGameScene::Destroy();
+	this->DeleteButton();
+	this->DeleteSprite();
 }
 
 void cTestScene::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -99,6 +97,8 @@ void cTestScene::ButtonSetup()
 		SCREEN_WIDTH / 2.f + 300,
 		SCREEN_HEIGHT / 2.f));
 	this->AddChild(m_pButtonRight);
+
+
 }
 
 void cTestScene::SpriteSetup()
@@ -119,7 +119,7 @@ void cTestScene::SpriteSetup()
 	m_spritePoke[4]->Setup("UITest/이브이.png");
 }
 
-void cTestScene::ButtonDestroy()
+void cTestScene::DeleteButton()
 {
 	// cGameUIButton 클래스는 GameNode를 상속받은 클래스이므로
 	// SAFE_DELETE 대신 SAFE_RELEASE를 사용해야 함을 주의.
@@ -128,7 +128,7 @@ void cTestScene::ButtonDestroy()
 	SAFE_RELEASE(m_pButtonLeft);
 	SAFE_RELEASE(m_pButtonRight);
 }
-void cTestScene::SpriteDestroy()
+void cTestScene::DeleteSprite()
 {
 	for (int i = 0; i < 5; i++)
 	{
@@ -179,6 +179,5 @@ bool cTestScene::UIButtonAction(std::string sTag, BUTTON_STATE enState)
 	this->LeftButtonAction(sTag, enState); // 이렇게 함수로 빼도 됨
 	this->RightButtonAction(sTag, enState);
 
-	
 	return true;
 }

@@ -1,7 +1,7 @@
 #pragma once
-#include "cGameObject.h"
+#include "cObject.h"
 
-class cMtlTex : public cGameObject
+class cMtlTex : public cObject
 {
 private:
 	SYNTHESIZE_REF(D3DMATERIAL9, m_stMtl, Material);

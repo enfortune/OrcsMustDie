@@ -10,7 +10,7 @@ cGameScene::cGameScene()
 
 cGameScene::~cGameScene()
 {
-	this->Destroy();
+	this->Delete();
 }
 
 void cGameScene::Setup()
@@ -25,9 +25,8 @@ void cGameScene::Render()
 {
 	cGameNode::Render();
 }
-void cGameScene::Destroy()
+void cGameScene::Delete()
 {
-	cGameNode::Destroy();
 }
 void cGameScene::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {

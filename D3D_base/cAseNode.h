@@ -1,9 +1,9 @@
 #pragma once
-#include "cGameObject.h"
+#include "cObject.h"
 #include "cMtlTex.h"
 
 //class cMtlTex;
-class cAseNode : public cGameObject
+class cAseNode : public cObject
 {
 private:
 	D3DXMATRIXA16	m_matLocalTM;

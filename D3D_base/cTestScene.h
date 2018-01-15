@@ -25,15 +25,15 @@ public:
 	virtual void Setup() override;
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime()) override;
 	virtual void Render() override;
-	virtual void Destroy() override;
+	virtual void Delete() override;
 
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
 
 private:
 	void ButtonSetup();
 	void SpriteSetup();
-	void ButtonDestroy();
-	void SpriteDestroy();
+	void DeleteButton();
+	void DeleteSprite();
 	void LeftButtonAction(std::string sTag, BUTTON_STATE enState);
 	void RightButtonAction(std::string sTag, BUTTON_STATE enState);
 

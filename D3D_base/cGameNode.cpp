@@ -44,10 +44,13 @@ void cGameNode::Render()
 }
 void cGameNode::Destroy()
 {
+	
 	this->RemoveAllChildren();
 	SAFE_DELETE(m_pTransformData);
 	SAFE_DELETE(m_pPhysicsBody);
 	this->RemoveFromParent();
+
+	//this->Delete();
 }
 void cGameNode::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -94,19 +97,13 @@ void cGameNode::RemoveChild(cGameNode* pNode)
 }
 void cGameNode::RemoveAllChildren()
 {
-	//for each (cGameNode* node in m_setChild)
-	//{
-	//	//node->RemoveAllChildren();
-	//	node->RemoveFromParent();
-	//}
-
 	std::set<cGameNode*>::iterator Iter = m_setChild.begin();
 	while (Iter != m_setChild.end())
 	{
+		(*Iter)->RemoveAllChildren();
 		(*Iter)->RemoveFromParent();
 		Iter = m_setChild.begin();
 	}
-
 }
 void cGameNode::RemoveFromParent()
 {
@@ -120,7 +117,6 @@ void cGameNode::RemoveFromParent()
 }
 D3DXMATRIXA16 cGameNode::GetMatirixToParent()
 {
-	
 	if (m_pTransformData)
 	{
 		return m_pTransformData->GetTransformMatrix();
@@ -130,8 +126,7 @@ D3DXMATRIXA16 cGameNode::GetMatirixToParent()
 		D3DXMATRIXA16 matI;
 		D3DXMatrixIdentity(&matI);
 		return matI;
-	}
-	
+	}	
 }
 
 D3DXMATRIXA16 cGameNode::GetMatrixToWorld()
@@ -139,8 +134,7 @@ D3DXMATRIXA16 cGameNode::GetMatrixToWorld()
 	D3DXMATRIXA16 matToWorld;
 	D3DXMatrixIdentity(&matToWorld);
 	cGameNode* node = this;
-	
-	while (node != nullptr)
+	while (node != nullptr /*&& node->GetTransformData() != nullptr*/)
 	{
 		matToWorld *= node->GetMatirixToParent();
 		node = node->GetParentNode();

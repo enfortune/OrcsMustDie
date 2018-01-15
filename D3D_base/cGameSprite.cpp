@@ -22,7 +22,7 @@ void cGameSprite::Setup(std::string sFileName)
 {
 	D3DXCreateSprite(g_pD3DDevice, &m_pSprite);
 
-	ZeroMemory(&m_stImageInfo, sizeof(D3DXIMAGE_INFO));
+	/*ZeroMemory(&m_stImageInfo, sizeof(D3DXIMAGE_INFO));
 
 	D3DXCreateTextureFromFileEx(
 		g_pD3DDevice,
@@ -38,7 +38,10 @@ void cGameSprite::Setup(std::string sFileName)
 		0,
 		&m_stImageInfo,
 		NULL,
-		&m_pTexture);
+		&m_pTexture);*/
+
+	m_pTexture = g_pTextureManager->GetTexture(sFileName, &m_stImageInfo);
+	m_pTexture->AddRef();
 
 	m_vecContentBox.resize(4);
 

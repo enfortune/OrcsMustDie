@@ -1,8 +1,8 @@
 #pragma once
-#include "cGameObject.h"
+#include "cObject.h"
 #include "cMtlTex.h"
 
-class cGroup : public cGameObject
+class cGroup : public cObject
 {
 private:
 	SYNTHESIZE_REF(std::vector<ST_PTN_VERTEX>, m_vecVertex, Vertex);

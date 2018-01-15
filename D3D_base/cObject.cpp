@@ -1,23 +1,23 @@
 #include "stdafx.h"
-#include "cGameObject.h"
+#include "cObject.h"
 
 
-cGameObject::cGameObject()
+cObject::cObject()
 	: m_ulRefCount(1)
 {
 }
 
 
-cGameObject::~cGameObject()
+cObject::~cObject()
 {
 }
 
-void cGameObject::AddRef()
+void cObject::AddRef()
 {
 	m_ulRefCount++;
 }
 
-void cGameObject::Release()
+void cObject::Release()
 {
 	m_ulRefCount--;
 	if (m_ulRefCount == 0)

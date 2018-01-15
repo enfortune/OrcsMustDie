@@ -1,12 +1,12 @@
 #pragma once
-class cGameObject
+class cObject
 {
 protected:
 	ULONG m_ulRefCount;
 
 public:
-	cGameObject();
-	virtual ~cGameObject();
+	cObject();
+	virtual ~cObject();
 
 	virtual void AddRef();
 	virtual void Release();
