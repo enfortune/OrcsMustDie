@@ -27,12 +27,12 @@ class cGameUIButton : public cGameNode
 	SYNTHESIZE_REF(D3DXVECTOR2, m_vPos, Position);
 	SYNTHESIZE_REF(float, m_fRotAngle, RotAngle); // Z angle
 	SYNTHESIZE_REF(D3DXVECTOR2, m_vScale, Scale);
+
 protected:
 	float					m_fButtonScale;
 	BUTTON_SPRITESTATE		m_enSpriteState;
 	std::string				m_sTag;
-protected:
-	void UpdateMatrixData();
+
 public:
 	cGameUIButton();
 	virtual ~cGameUIButton();

@@ -2,6 +2,7 @@
 #include "cMainGame.h"
 
 #include "cTestScene.h"
+#include "cInGameScene.h"
 
 cMainGame::cMainGame()
 {
@@ -11,6 +12,7 @@ cMainGame::cMainGame()
 cMainGame::~cMainGame()
 {
 	g_pTextureManager->Destroy();
+	g_pFontManager->Destroy();
 	g_pSceneManager->Destroy();
 	g_pSoundManager->Destroy();
 
@@ -22,7 +24,7 @@ void cMainGame::Setup()
 	g_pSoundManager->Setup();
 	g_pKeyManager->Setup();
 
-	g_pSceneManager->Setup(new cTestScene);
+	g_pSceneManager->Setup(new cInGameScene);
 }
 
 void cMainGame::Update()

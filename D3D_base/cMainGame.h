@@ -1,5 +1,5 @@
 #pragma once
-class cTextScene;
+//class cTextScene;
 
 class cMainGame
 {

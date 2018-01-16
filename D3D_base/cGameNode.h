@@ -3,7 +3,6 @@
 
 class cPhysicsBody;
 class cTransformData;
-class cGameMatrixNode;
 
 
 
@@ -26,12 +25,11 @@ protected:
 public:
 	cGameNode();
 	virtual ~cGameNode();
+	void Destroy();
 
 	virtual void Setup(bool bUseTransformData = true);
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime());
 	virtual void Render();
-	void Destroy();
-
 	virtual void Delete() = 0;
 
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);

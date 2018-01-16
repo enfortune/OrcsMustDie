@@ -3,7 +3,9 @@
 
 
 cGameSprite::cGameSprite()
-	: m_pSprite(NULL)
+	: m_pCropRect({0,0,0,0})
+	, m_fZorder(0.0f)
+	, m_pSprite(NULL)
 	, m_pTexture(NULL)
 	, m_stColor(1.0f, 1.0f, 1.0f, 1.0f)
 	, m_dwSpriteFlags(D3DXSPRITE_ALPHABLEND)
@@ -15,7 +17,7 @@ cGameSprite::cGameSprite()
 
 cGameSprite::~cGameSprite()
 {
-	this->Destroy();
+	this->Delete();
 }
 
 void cGameSprite::Setup(std::string sFileName)
@@ -43,6 +45,8 @@ void cGameSprite::Setup(std::string sFileName)
 	m_pTexture = g_pTextureManager->GetTexture(sFileName, &m_stImageInfo);
 	m_pTexture->AddRef();
 
+	m_pCropRect = { 0, 0, m_stImageInfo.Width, m_stImageInfo.Height };
+
 	m_vecContentBox.resize(4);
 
 	m_vecContentBox[0] = D3DXVECTOR2(-static_cast<float>(m_stImageInfo.Width) / 2.f, -static_cast<float>(m_stImageInfo.Height) / 2.f); // LT
@@ -51,16 +55,16 @@ void cGameSprite::Setup(std::string sFileName)
 	m_vecContentBox[3] = D3DXVECTOR2(-static_cast<float>(m_stImageInfo.Width) / 2.f, static_cast<float>(m_stImageInfo.Height) / 2.f); // LB
 }
 
-void cGameSprite::Render()
+void cGameSprite::Render(D3DXMATRIXA16* matParent)
 {
-	m_pSprite->SetTransform(&this->GetTransformMatrix());
+	m_pSprite->SetTransform(&this->GetTransformMatrix(matParent));
 
 	m_pSprite->Begin(m_dwSpriteFlags);
 
-	m_pSprite->Draw(m_pTexture, 
-		NULL,
+	m_pSprite->Draw(m_pTexture,
+		&m_pCropRect,
 		&D3DXVECTOR3(m_stImageInfo.Width / 2.0f, m_stImageInfo.Height / 2.0f, 0),
-		&D3DXVECTOR3(0, 0, 0.0f),
+		&D3DXVECTOR3(0, 0, m_fZorder),
 		D3DCOLOR_COLORVALUE(m_stColor.r, m_stColor.g, m_stColor.b, m_stColor.a)
 		//m_stColor
 		);
@@ -68,16 +72,44 @@ void cGameSprite::Render()
 	m_pSprite->End();
 }
 
-void cGameSprite::Destroy()
+void cGameSprite::Delete()
 {
 	SAFE_RELEASE(m_pSprite);
 	SAFE_RELEASE(m_pTexture);
 }
+void cGameSprite::SetCropRect(RECT* lpRect)
+{
+	if (lpRect == nullptr)
+	{
+		m_pCropRect = { 0, 0, m_stImageInfo.Width, m_stImageInfo.Height };
+	}
+	else
+	{
+		m_pCropRect = (*lpRect);
+		if (m_pCropRect.left < 0) m_pCropRect.left = 0;
+		if (m_pCropRect.top < 0) m_pCropRect.top = 0;
+		if (m_pCropRect.right > m_stImageInfo.Width) m_pCropRect.right = m_stImageInfo.Width;
+		if (m_pCropRect.bottom > m_stImageInfo.Height) m_pCropRect.bottom = m_stImageInfo.Height;
+	}
+}
+void cGameSprite::SetCropRect(float fRatioL, float fRatioT, float fRatioR, float fRatioB)
+{
+	m_pCropRect = { 
+		static_cast<LONG>(static_cast<float>(m_stImageInfo.Width) * fRatioL), 
+		static_cast<LONG>(static_cast<float>(m_stImageInfo.Height) * fRatioT),
+		static_cast<LONG>(static_cast<float>(m_stImageInfo.Width) * fRatioR),
+		static_cast<LONG>(static_cast<float>(m_stImageInfo.Height) * fRatioB) };
 
-std::vector<D3DXVECTOR2> cGameSprite::GetBoundingBox()
+	if (m_pCropRect.left < 0) m_pCropRect.left = 0;
+	if (m_pCropRect.top < 0) m_pCropRect.top = 0;
+	if (m_pCropRect.right > m_stImageInfo.Width) m_pCropRect.right = m_stImageInfo.Width;
+	if (m_pCropRect.bottom > m_stImageInfo.Height) m_pCropRect.bottom = m_stImageInfo.Height;
+}
+
+std::vector<D3DXVECTOR2> cGameSprite::GetBoundingBox(D3DXMATRIXA16* matParent)
 {
 	std::vector<D3DXVECTOR2> vecRet(4);
-	D3DXMATRIXA16 matTrans = this->GetTransformMatrix();
+	D3DXMATRIXA16 matTrans = this->GetTransformMatrix(matParent);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -86,7 +118,7 @@ std::vector<D3DXVECTOR2> cGameSprite::GetBoundingBox()
 	return vecRet;
 }
 
-D3DXMATRIXA16 cGameSprite::GetTransformMatrix()
+D3DXMATRIXA16 cGameSprite::GetTransformMatrix(D3DXMATRIXA16* matParent)
 {
 	D3DXMATRIXA16 matTransform, matS, matR, matT;
 	D3DXMatrixIdentity(&matTransform);
@@ -97,5 +129,6 @@ D3DXMATRIXA16 cGameSprite::GetTransformMatrix()
 	D3DXMatrixTranslation(&matT, m_vPos.x, m_vPos.y, 0.0f);
 
 	matTransform = matS * matR * matT;
+	if (matParent != nullptr) matTransform *= (*matParent);
 	return matTransform;
 }

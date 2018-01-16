@@ -29,34 +29,6 @@ cGameUIButton::~cGameUIButton()
 	this->Delete();
 }
 
-void cGameUIButton::UpdateMatrixData()
-{
-	if (m_pSprite)
-	{
-		m_pSprite->SetPosition(m_vPos);
-		m_pSprite->SetRotAngle(m_fRotAngle);
-		m_pSprite->SetScale(D3DXVECTOR2(
-			m_vScale.x * m_fButtonScale,
-			m_vScale.y * m_fButtonScale));
-	}
-	if (m_pSpriteOnMouse)
-	{
-		m_pSpriteOnMouse->SetPosition(m_vPos);
-		m_pSpriteOnMouse->SetRotAngle(m_fRotAngle);
-		m_pSpriteOnMouse->SetScale(D3DXVECTOR2(
-			m_vScale.x * m_fButtonScale,
-			m_vScale.y * m_fButtonScale));
-	}
-	if (m_pSpritePush)
-	{
-		m_pSpritePush->SetPosition(m_vPos);
-		m_pSpritePush->SetRotAngle(m_fRotAngle);
-		m_pSpritePush->SetScale(D3DXVECTOR2(
-			m_vScale.x * m_fButtonScale,
-			m_vScale.y * m_fButtonScale));
-	}
-}
-
 void cGameUIButton::Setup(std::string sTag, iGameUIDelegate* pDelegate, std::string sSpriteFileName, std::string sSpriteOnMouseFileName, std::string sSpritePushFileName)
 {
 	cGameNode::Setup(false);
@@ -74,8 +46,6 @@ void cGameUIButton::Setup(std::string sTag, iGameUIDelegate* pDelegate, std::str
 	}
 	m_pDelegate = pDelegate;
 	m_sTag = sTag;
-
-	this->UpdateMatrixData();
 }
 void cGameUIButton::Update(float fDelta)
 {
@@ -115,9 +85,6 @@ void cGameUIButton::Update(float fDelta)
 
 	if (!m_bEnable) return; //사용중이 아니라면 리턴
 
-
-	this->UpdateMatrixData();
-
 	m_pDelegate->UIButtonAction(m_sTag, m_enState); // 현재 상태에 대한 버튼액션 실행 후
 	
 
@@ -140,7 +107,7 @@ void cGameUIButton::Render()
 	if (!m_bEnable)
 	{
 		m_pSprite->SetColor(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f));
-		m_pSprite->Render();
+		m_pSprite->Render(&this->GetMatrixToWorld());
 		return;
 	}
 
@@ -150,31 +117,31 @@ void cGameUIButton::Render()
 		case BUTTON_SPRITESTATE::IDLE:
 			if (!m_pSpriteOnMouse) m_pSprite->SetColor(D3DXCOLOR(0.8f, 0.8f, 0.8f, 1.0f));
 			else m_pSprite->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-			m_pSprite->Render();
+			m_pSprite->Render(&this->GetMatrixToWorld());
 		break;
 		case BUTTON_SPRITESTATE::ONMOUSE:
-			if (m_pSpriteOnMouse) m_pSpriteOnMouse->Render();
+			if (m_pSpriteOnMouse) m_pSpriteOnMouse->Render(&this->GetMatrixToWorld());
 			else
 			{
 				m_pSprite->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-				m_pSprite->Render();
+				m_pSprite->Render(&this->GetMatrixToWorld());
 			}
 		break;
 		case BUTTON_SPRITESTATE::PUSH:
-			if (m_pSpritePush) m_pSpritePush->Render();
+			if (m_pSpritePush) m_pSpritePush->Render(&this->GetMatrixToWorld());
 			else
 			{
-				if (m_pSpriteOnMouse) m_pSpriteOnMouse->Render();
+				if (m_pSpriteOnMouse) m_pSpriteOnMouse->Render(&this->GetMatrixToWorld());
 				else
 				{
 					m_pSprite->SetColor(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f));
-					m_pSprite->Render();
+					m_pSprite->Render(&this->GetMatrixToWorld());
 				}
 			}
 		break;
 		default:
 			m_pSprite->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-			m_pSprite->Render();
+			m_pSprite->Render(&this->GetMatrixToWorld());
 		break;
 	}
 
@@ -194,7 +161,7 @@ void cGameUIButton::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	switch (message)
 	{
 		case WM_MOUSEMOVE:
-			if (CheckPolygonContainVec2(m_pSprite->GetBoundingBox(),
+			if (CheckPolygonContainVec2(m_pSprite->GetBoundingBox(&this->GetMatrixToWorld()),
 				D3DXVECTOR2(g_ptMouse.x, g_ptMouse.y)))
 			{
 				switch (m_enState)
@@ -216,7 +183,7 @@ void cGameUIButton::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 			}
 		break;
 		case WM_LBUTTONDOWN:
-			if (CheckPolygonContainVec2(m_pSprite->GetBoundingBox(),
+			if (CheckPolygonContainVec2(m_pSprite->GetBoundingBox(&this->GetMatrixToWorld()),
 				D3DXVECTOR2(g_ptMouse.x, g_ptMouse.y)))
 			{
 				m_enSpriteState = BUTTON_SPRITESTATE::PUSH;
@@ -224,7 +191,7 @@ void cGameUIButton::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 			}
 		break;
 		case WM_LBUTTONUP:
-			if (CheckPolygonContainVec2(m_pSprite->GetBoundingBox(),
+			if (CheckPolygonContainVec2(m_pSprite->GetBoundingBox(&this->GetMatrixToWorld()),
 				D3DXVECTOR2(g_ptMouse.x, g_ptMouse.y)))
 			{
 				m_enSpriteState = BUTTON_SPRITESTATE::ONMOUSE;
@@ -247,5 +214,15 @@ void cGameUIButton::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
 D3DXMATRIXA16 cGameUIButton::GetMatirixToParent()
 {
-	return m_pSprite->GetTransformMatrix();
+	D3DXMATRIXA16 matRet, matS, matR, matT;
+	D3DXMatrixIdentity(&matRet);
+
+	D3DXMatrixScaling(&matS, m_vScale.x, m_vScale.y, 0.0f);
+	//D3DXMatrixRotationAxis(&matR, &m_vAxis, m_fRotAngle); // use Axis Z
+	D3DXMatrixRotationZ(&matR, m_fRotAngle);
+	D3DXMatrixTranslation(&matT, m_vPos.x, m_vPos.y, 0.0f);
+
+	matRet = matS * matR * matT;
+
+	return matRet;
 }
