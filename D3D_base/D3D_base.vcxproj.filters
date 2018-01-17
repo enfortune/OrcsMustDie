@@ -49,9 +49,6 @@
     <Filter Include="cMainGame">
       <UniqueIdentifier>{641b5ae9-9b25-47a5-ba8b-4a67f6340c52}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Class\SampleCode">
-      <UniqueIdentifier>{5036948f-0cd8-4af3-a721-df4c3562096f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Foundation">
       <UniqueIdentifier>{8da42663-6884-4ecf-87f0-e4d4ffe7e0a4}</UniqueIdentifier>
     </Filter>
@@ -99,6 +96,9 @@
     </Filter>
     <Filter Include="Foundation\Parser\XFileLoader">
       <UniqueIdentifier>{931b52f0-32d2-4c78-925c-fa7afbde7a99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SampleCode">
+      <UniqueIdentifier>{5036948f-0cd8-4af3-a721-df4c3562096f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -173,7 +173,7 @@
       <Filter>Interface\iMap</Filter>
     </ClInclude>
     <ClInclude Include="cTestScene.h">
-      <Filter>Class\SampleCode</Filter>
+      <Filter>SampleCode</Filter>
     </ClInclude>
     <ClInclude Include="additionalUtils.h">
       <Filter>Global\Util</Filter>
@@ -286,6 +286,9 @@
     <ClInclude Include="cGameUISprite.h">
       <Filter>Foundation\cGameUI</Filter>
     </ClInclude>
+    <ClInclude Include="cAllocateHierarchy_HARDWARE.h">
+      <Filter>Foundation\Parser\XFileLoader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -346,7 +349,7 @@
       <Filter>Interface\iMap</Filter>
     </ClCompile>
     <ClCompile Include="cTestScene.cpp">
-      <Filter>Class\SampleCode</Filter>
+      <Filter>SampleCode</Filter>
     </ClCompile>
     <ClCompile Include="additionalUtils.cpp">
       <Filter>Global\Util</Filter>
@@ -443,6 +446,9 @@
     </ClCompile>
     <ClCompile Include="cGameUISprite.cpp">
       <Filter>Foundation\cGameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="cAllocateHierarchy_HARDWARE.cpp">
+      <Filter>Foundation\Parser\XFileLoader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
