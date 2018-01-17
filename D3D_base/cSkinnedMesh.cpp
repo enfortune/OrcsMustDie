@@ -16,7 +16,6 @@ cSkinnedMesh::~cSkinnedMesh()
 
 void cSkinnedMesh::Setup(IN char* szFolder, IN char* szFile)
 {
-	
 	cAllocateHierarchy boneHierarchy;
 	boneHierarchy.SetFolder(szFolder);
 
@@ -26,10 +25,13 @@ void cSkinnedMesh::Setup(IN char* szFolder, IN char* szFile)
 		&boneHierarchy,
 		NULL,
 		&m_pRoot,
-		NULL);
+		&m_pAniCtrl);
 
 	SetupBoneMatrixPtrs(m_pRoot);
-	//Update(m_pRoot, nullptr);
+	SetupAnimationSet(m_pAniCtrl);
+
+	
+	
 }
 void cSkinnedMesh::Update(LPD3DXFRAME pFrame, LPD3DXFRAME pParent)
 {
@@ -100,15 +102,13 @@ void cSkinnedMesh::SetupBoneMatrixPtrs(LPD3DXFRAME pFrame)
 	if (pFrame == nullptr) pBone = static_cast<ST_BONE*>(m_pRoot); // 초기에 null이 들어올 것이므로?
 	else pBone = static_cast<ST_BONE*>(pFrame);
 
-	
-
 	if (pBone->pMeshContainer != nullptr)
 	{
 		ST_BONE_MESH* pBoneMesh = static_cast<ST_BONE_MESH*>(pBone->pMeshContainer);
 
 		if (pBoneMesh->pSkinInfo != NULL)
 		{
-			int nNumBones = pBoneMesh->pSkinInfo->GetNumBones();
+			int nNumBones = static_cast<int>(pBoneMesh->pSkinInfo->GetNumBones());
 
 			pBoneMesh->ppBoneMatrixPtrs = new D3DXMATRIX*[nNumBones];
 
@@ -134,6 +134,10 @@ void cSkinnedMesh::SetupBoneMatrixPtrs(LPD3DXFRAME pFrame)
 	
 	if (pBone->pFrameSibling != nullptr) SetupBoneMatrixPtrs(pBone->pFrameSibling);
 	if (pBone->pFrameFirstChild != nullptr) SetupBoneMatrixPtrs(pBone->pFrameFirstChild);
+
+
+
+
 }
 
 
@@ -149,7 +153,7 @@ void cSkinnedMesh::UpdateSkinnedMesh(LPD3DXFRAME pFrame)
 
 		if (pBoneMesh->pSkinInfo != NULL)
 		{
-			int nNumBones = pBoneMesh->pSkinInfo->GetNumBones();
+			int nNumBones = static_cast<int>(pBoneMesh->pSkinInfo->GetNumBones());
 			for (int i = 0; i < nNumBones; i++)
 			{
 				D3DXMatrixMultiply(&pBoneMesh->pCurrBoneMatrix[i],
@@ -172,4 +176,37 @@ void cSkinnedMesh::UpdateSkinnedMesh(LPD3DXFRAME pFrame)
 			pBoneMesh->pOrigMesh->UnlockVertexBuffer();
 		}
 	}
+}
+
+void cSkinnedMesh::UpdateAnimation(float fDelta)
+{
+	
+	m_pAniCtrl->AdvanceTime(fDelta, NULL);
+}
+
+void cSkinnedMesh::SetupAnimationSet(LPD3DXANIMATIONCONTROLLER pAniCtrl)
+{
+	UINT nNumSet = pAniCtrl->GetNumAnimationSets();
+	
+	for (UINT i = 0; i < nNumSet; i++)
+	{
+		LPD3DXANIMATIONSET aniSet;
+		LPTSTR	szName;
+		pAniCtrl->GetAnimationSet(i, &aniSet);
+		m_mapAniSet[aniSet->GetName()] = aniSet;
+		m_vecAniSetName.push_back(aniSet->GetName());
+	}
+}
+
+void cSkinnedMesh::SelectAnimationSet(UINT nTrack, LPCSTR szAniSetName)
+{
+	if (m_mapAniSet.find(szAniSetName) == m_mapAniSet.end()) return;
+
+	m_pAniCtrl->SetTrackAnimationSet(nTrack, m_mapAniSet[szAniSetName]);
+}
+void cSkinnedMesh::SelectAnimationSet(UINT nTrack, int nAniID)
+{
+	if (nTrack >= m_vecAniSetName.size()) return;
+
+	m_pAniCtrl->SetTrackAnimationSet(nTrack, (m_mapAniSet.find(m_vecAniSetName[nAniID]))->second);
 }

@@ -39,12 +39,15 @@ void cInGameScene::Setup()
 	m_pSkinnedMesh = new cSkinnedMesh;
 	m_pSkinnedMesh->Setup("XFileSample","XFileSample/sylva.X");
 
+	m_pSkinnedMesh->SelectAnimationSet(0, 3);
+
 }
 void cInGameScene::Update(float fDelta)
 {
 	m_pCamera->Update();
 
 	m_pSkinnedMesh->Update(nullptr, nullptr);
+	m_pSkinnedMesh->UpdateAnimation(fDelta);
 	cGameScene::Update(fDelta);
 
 	

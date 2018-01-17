@@ -1,13 +1,11 @@
 #include "stdafx.h"
 #include "cRay.h"
 
-
 cRay::cRay()
 	: m_vPos(0, 0, 0)
 	, m_vDir(0, 0, 0)
 {
 }
-
 
 cRay::~cRay()
 {

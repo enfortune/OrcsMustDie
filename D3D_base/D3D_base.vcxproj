@@ -163,7 +163,6 @@
     <ClInclude Include="cActionRepeat.h" />
     <ClInclude Include="cActionSeq.h" />
     <ClInclude Include="cAllocateHierarchy.h" />
-    <ClInclude Include="cAllocateHierarchy_HARDWARE.h" />
     <ClInclude Include="cAseLoader.h" />
     <ClInclude Include="cAseNode.h" />
     <ClInclude Include="cCamera.h" />
@@ -225,7 +224,6 @@
     <ClCompile Include="cActionRepeat.cpp" />
     <ClCompile Include="cActionSeq.cpp" />
     <ClCompile Include="cAllocateHierarchy.cpp" />
-    <ClCompile Include="cAllocateHierarchy_HARDWARE.cpp" />
     <ClCompile Include="cAseLoader.cpp" />
     <ClCompile Include="cAseNode.cpp" />
     <ClCompile Include="cCamera.cpp" />

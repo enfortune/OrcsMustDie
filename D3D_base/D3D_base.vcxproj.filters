@@ -286,9 +286,6 @@
     <ClInclude Include="cGameUISprite.h">
       <Filter>Foundation\cGameUI</Filter>
     </ClInclude>
-    <ClInclude Include="cAllocateHierarchy_HARDWARE.h">
-      <Filter>Foundation\Parser\XFileLoader</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -446,9 +443,6 @@
     </ClCompile>
     <ClCompile Include="cGameUISprite.cpp">
       <Filter>Foundation\cGameUI</Filter>
-    </ClCompile>
-    <ClCompile Include="cAllocateHierarchy_HARDWARE.cpp">
-      <Filter>Foundation\Parser\XFileLoader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
