@@ -2,12 +2,10 @@
 #include "cSkinnedMesh.h"
 #include "cAllocateHierarchy.h"
 
-
 cSkinnedMesh::cSkinnedMesh()
 	: m_pRoot(nullptr)
 {
 }
-
 
 cSkinnedMesh::~cSkinnedMesh()
 {
@@ -20,7 +18,7 @@ void cSkinnedMesh::Setup(IN char* szFolder, IN char* szFile)
 	boneHierarchy.SetFolder(szFolder);
 
 	D3DXLoadMeshHierarchyFromX(szFile,
-		D3DXMESH_MANAGED,
+		D3DXMESH_MANAGED | D3DXMESH_32BIT,
 		g_pD3DDevice,
 		&boneHierarchy,
 		NULL,
@@ -28,17 +26,18 @@ void cSkinnedMesh::Setup(IN char* szFolder, IN char* szFile)
 		&m_pAniCtrl);
 
 	SetupBoneMatrixPtrs(m_pRoot);
-	SetupAnimationSet(m_pAniCtrl);
+	UpdateFrames(nullptr, nullptr); // 로드 후 한번 업데이트를 돌려준다.
 
-	
-	
+	SetupAnimationSet(m_pAniCtrl);
 }
-void cSkinnedMesh::Update(LPD3DXFRAME pFrame, LPD3DXFRAME pParent)
+
+void cSkinnedMesh::UpdateFrames(LPD3DXFRAME pFrame, LPD3DXFRAME pParent)
 {
 	ST_BONE* pBone;
 	if (pFrame == nullptr) pBone = static_cast<ST_BONE*>(m_pRoot); // 초기에 null이 들어올 것이므로?
 
 	else pBone = static_cast<ST_BONE*>(pFrame);
+
 
 	if (pParent == nullptr)
 	{
@@ -52,26 +51,29 @@ void cSkinnedMesh::Update(LPD3DXFRAME pFrame, LPD3DXFRAME pParent)
 			&pParentFrame->matCombinedTransformMatrix);
 	}
 
-	UpdateSkinnedMesh(pBone);
-//	
+	
 
-	if (pBone->pFrameSibling != nullptr) Update(pBone->pFrameSibling, pParent);
-	if (pBone->pFrameFirstChild != nullptr) Update(pBone->pFrameFirstChild, pFrame);
-
+	if (pBone->pFrameSibling != nullptr) UpdateFrames(pBone->pFrameSibling, pParent);
+	if (pBone->pFrameFirstChild != nullptr) UpdateFrames(pBone->pFrameFirstChild, pFrame);
 }
-void cSkinnedMesh::Render(LPD3DXFRAME pFrame)
+
+void cSkinnedMesh::Update()
+{
+	this->UpdateFrames(m_pRoot, nullptr);
+	this->UpdateSkinnedMesh(m_pRoot); // software skinning
+}
+
+void cSkinnedMesh::RenderFrames(LPD3DXFRAME pFrame)
 {
 	ST_BONE* pBone;
 	if (pFrame == nullptr) pBone = static_cast<ST_BONE*>(m_pRoot); // 초기에 null이 들어올 것이므로?
 	else pBone = static_cast<ST_BONE*>(pFrame);
 
-	
-
 	if (pBone->pMeshContainer != nullptr)
 	{
 		ST_BONE_MESH* pBoneMesh = static_cast<ST_BONE_MESH*>(pBone->pMeshContainer);
 		
-		if (pBoneMesh->pSkinInfo != NULL)
+		if (pBoneMesh->MeshData.pMesh != nullptr)
 		{
 			for (int i = 0; i < pBoneMesh->nNumAttributeGroups; i++)
 			{
@@ -82,12 +84,14 @@ void cSkinnedMesh::Render(LPD3DXFRAME pFrame)
 			}
 		}
 	}
-	
 
-	if (pBone->pFrameSibling != nullptr) Render(pBone->pFrameSibling);
-	if (pBone->pFrameFirstChild != nullptr) Render(pBone->pFrameFirstChild);
+	if (pBone->pFrameSibling != nullptr) RenderFrames(pBone->pFrameSibling);
+	if (pBone->pFrameFirstChild != nullptr) RenderFrames(pBone->pFrameFirstChild);
+}
 
-
+void cSkinnedMesh::Render()
+{
+	this->RenderFrames(m_pRoot);
 }
 
 void cSkinnedMesh::Destroy()
@@ -96,7 +100,8 @@ void cSkinnedMesh::Destroy()
 	D3DXFrameDestroy(m_pRoot, &boneHierarchy);
 
 }
-void cSkinnedMesh::SetupBoneMatrixPtrs(LPD3DXFRAME pFrame)
+
+void cSkinnedMesh::SetupBoneMatrixPtrs(LPD3DXFRAME pFrame) // 연관된 본의 매트릭스 포인터를 연결함. (스키닝을 위해)
 {
 	ST_BONE* pBone;
 	if (pFrame == nullptr) pBone = static_cast<ST_BONE*>(m_pRoot); // 초기에 null이 들어올 것이므로?
@@ -106,13 +111,11 @@ void cSkinnedMesh::SetupBoneMatrixPtrs(LPD3DXFRAME pFrame)
 	{
 		ST_BONE_MESH* pBoneMesh = static_cast<ST_BONE_MESH*>(pBone->pMeshContainer);
 
-		if (pBoneMesh->pSkinInfo != NULL)
+		if (pBoneMesh->pSkinInfo != nullptr)
 		{
-			int nNumBones = static_cast<int>(pBoneMesh->pSkinInfo->GetNumBones());
-
-			pBoneMesh->ppBoneMatrixPtrs = new D3DXMATRIX*[nNumBones];
-
-			for (int i = 0; i < nNumBones; i++)
+			DWORD dwNumBones =pBoneMesh->pSkinInfo->GetNumBones();
+			//pBoneMesh->ppBoneMatrixPtrs = new D3DXMATRIX*[dwNumBones]; // AllocateHierarchy 클래스에서 이미 메모리 할당해놨음.
+			for (DWORD i = 0; i < dwNumBones; i++)
 			{
 				ST_BONE* pB = static_cast<ST_BONE*>(
 					D3DXFrameFind(
@@ -134,14 +137,9 @@ void cSkinnedMesh::SetupBoneMatrixPtrs(LPD3DXFRAME pFrame)
 	
 	if (pBone->pFrameSibling != nullptr) SetupBoneMatrixPtrs(pBone->pFrameSibling);
 	if (pBone->pFrameFirstChild != nullptr) SetupBoneMatrixPtrs(pBone->pFrameFirstChild);
-
-
-
-
 }
 
-
-void cSkinnedMesh::UpdateSkinnedMesh(LPD3DXFRAME pFrame)
+void cSkinnedMesh::UpdateSkinnedMesh(LPD3DXFRAME pFrame) // skinning
 {
 	ST_BONE* pBone;
 	if (pFrame == nullptr) pBone = static_cast<ST_BONE*>(m_pRoot); // 초기에 null이 들어올 것이므로?
@@ -151,17 +149,17 @@ void cSkinnedMesh::UpdateSkinnedMesh(LPD3DXFRAME pFrame)
 	{
 		ST_BONE_MESH* pBoneMesh = static_cast<ST_BONE_MESH*>(pBone->pMeshContainer);
 
-		if (pBoneMesh->pSkinInfo != NULL)
+		if (pBoneMesh->pSkinInfo != nullptr)
 		{
-			int nNumBones = static_cast<int>(pBoneMesh->pSkinInfo->GetNumBones());
-			for (int i = 0; i < nNumBones; i++)
+			DWORD dwNumBones = pBoneMesh->pSkinInfo->GetNumBones();
+			for (DWORD i = 0; i < dwNumBones; i++)
 			{
 				D3DXMatrixMultiply(&pBoneMesh->pCurrBoneMatrix[i],
 					&pBoneMesh->pBoneOffsetMatrix[i],
 					pBoneMesh->ppBoneMatrixPtrs[i]);
 			}
 
-			/*unsigned char*/
+			//BYTE = unsigned char
 			BYTE* lpSrc = NULL;
 			void* lpDest = NULL;
 			pBoneMesh->pOrigMesh->
@@ -176,6 +174,9 @@ void cSkinnedMesh::UpdateSkinnedMesh(LPD3DXFRAME pFrame)
 			pBoneMesh->pOrigMesh->UnlockVertexBuffer();
 		}
 	}
+
+	if (pBone->pFrameSibling != nullptr) UpdateSkinnedMesh(pBone->pFrameSibling);
+	if (pBone->pFrameFirstChild != nullptr) UpdateSkinnedMesh(pBone->pFrameFirstChild);
 }
 
 void cSkinnedMesh::UpdateAnimation(float fDelta)
@@ -186,7 +187,7 @@ void cSkinnedMesh::UpdateAnimation(float fDelta)
 
 void cSkinnedMesh::SetupAnimationSet(LPD3DXANIMATIONCONTROLLER pAniCtrl)
 {
-	UINT nNumSet = pAniCtrl->GetNumAnimationSets();
+	UINT nNumSet = pAniCtrl->GetMaxNumAnimationSets();
 	
 	for (UINT i = 0; i < nNumSet; i++)
 	{
@@ -198,13 +199,14 @@ void cSkinnedMesh::SetupAnimationSet(LPD3DXANIMATIONCONTROLLER pAniCtrl)
 	}
 }
 
-void cSkinnedMesh::SelectAnimationSet(UINT nTrack, LPCSTR szAniSetName)
+void cSkinnedMesh::SetAnimationSet(UINT nTrack, LPCSTR szAniSetName)
 {
 	if (m_mapAniSet.find(szAniSetName) == m_mapAniSet.end()) return;
 
 	m_pAniCtrl->SetTrackAnimationSet(nTrack, m_mapAniSet[szAniSetName]);
 }
-void cSkinnedMesh::SelectAnimationSet(UINT nTrack, int nAniID)
+
+void cSkinnedMesh::SetAnimationSet(UINT nTrack, int nAniID)
 {
 	if (nTrack >= m_vecAniSetName.size()) return;
 

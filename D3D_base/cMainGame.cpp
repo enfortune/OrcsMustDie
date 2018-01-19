@@ -8,7 +8,7 @@ cMainGame::cMainGame()
 {
 }
 
-
+     
 cMainGame::~cMainGame()
 {
 	g_pTextureManager->Destroy();

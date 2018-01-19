@@ -22,6 +22,7 @@ STDMETHODIMP cAllocateHierarchy::CreateFrame(LPCSTR Name, LPD3DXFRAME * ppNewFra
 		UINT length = lstrlen(Name) + 1;
 		strcpy_s(pBone->Name, length * sizeof(TCHAR), Name);
 	}
+	else pBone->Name = NULL;
 
 	D3DXMatrixIdentity(&pBone->TransformationMatrix);
 	D3DXMatrixIdentity(&pBone->matCombinedTransformMatrix);
@@ -48,7 +49,7 @@ STDMETHODIMP cAllocateHierarchy::CreateMeshContainer(
 
 		std::string sFullPath = m_sFolder;
 		sFullPath = sFullPath + std::string("/")
-			+ std::string(pMaterials[i].pTextureFilename);
+			+ std::string((pMaterials[i].pTextureFilename) ? (pMaterials[i].pTextureFilename) : (""));
 
 		pBoneMesh->vecTexture.push_back(
 			g_pTextureManager->GetTexture(sFullPath));

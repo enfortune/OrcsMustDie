@@ -39,14 +39,14 @@ void cInGameScene::Setup()
 	m_pSkinnedMesh = new cSkinnedMesh;
 	m_pSkinnedMesh->Setup("XFileSample","XFileSample/sylva.X");
 
-	m_pSkinnedMesh->SelectAnimationSet(0, 3);
+	m_pSkinnedMesh->SetAnimationSet(0, 6);
 
 }
 void cInGameScene::Update(float fDelta)
 {
 	m_pCamera->Update();
 
-	m_pSkinnedMesh->Update(nullptr, nullptr);
+	m_pSkinnedMesh->Update();
 	m_pSkinnedMesh->UpdateAnimation(fDelta);
 	cGameScene::Update(fDelta);
 
@@ -56,7 +56,7 @@ void cInGameScene::Render()
 {
 	m_pGrid->Render();
 
-	m_pSkinnedMesh->Render(nullptr);
+	m_pSkinnedMesh->Render();
 
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 

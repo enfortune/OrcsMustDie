@@ -13,13 +13,14 @@ typedef struct ST_PHYSICSSHAPEDATA
 class cPhysicsBody
 {
 	/* Physics Shape */
-	SYNTHESIZE_REF(EN_PHYSICSSHAPETYPE, m_enShapeType, ShapeType);
+	SYNTHESIZE_REF(ST_PHYSICSSHAPEDATA, m_stShapeData, ShapeData);
 
 	/* Physics Type */
 	SYNTHESIZE_REF(EN_PHYSICSBODYTYPE, m_enBodyType, BodyType);
 
 	/* Physics Data */
 	SYNTHESIZE_REF(D3DXVECTOR3, m_vPos, Position);
+	SYNTHESIZE_REF(D3DXVECTOR3, m_vDir, Direction);
 	SYNTHESIZE_REF(D3DXVECTOR3, m_vAxis, Axis);
 	SYNTHESIZE_REF(float, m_vRotAngle, RotAngle);
 	
@@ -32,8 +33,6 @@ class cPhysicsBody
 	SYNTHESIZE_REF(float, m_fFriction, Friction);
 
 	//SYNTHESIZE_REF(bool, m_bIsSpin, IsSpin);  // 이건 나중에 필요할 때 추가하면 될것임
-	
-
 public:
 	cPhysicsBody();
 	~cPhysicsBody();

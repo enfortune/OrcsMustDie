@@ -1,19 +1,26 @@
 #pragma once
-#include "cGameNode.h"
+#include "cGameScene.h"
 
-class cPhysicsNode : public cGameNode
+class cMapToolUILayer;
+class cMapData;
+class cGrid;
+
+class cMapToolScene : public cGameScene
 {
+	
+
+	cMapToolUILayer* m_pUILayer;
+	cMapData*		m_pMapData;
 
 public:
-	cPhysicsNode();
-	virtual ~cPhysicsNode();
+	cMapToolScene();
+	virtual ~cMapToolScene();
 
-	virtual void Setup();
+	virtual void Setup() override;
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime()) override;
 	virtual void Render() override;
 	virtual void Delete() override;
 
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
-	virtual void UpdatePhysics(float fDelta = g_pTimeManager->GetEllapsedTime());
 };
 

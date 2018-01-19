@@ -61,9 +61,6 @@
     <Filter Include="Foundation\Parser\ObjLoader">
       <UniqueIdentifier>{25f2c264-14ed-41b5-af1f-c10f021d4d3f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Foundation\cTimer">
-      <UniqueIdentifier>{c1d7c14d-0f2e-41b4-a3cf-bcff23c2826f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Foundation\D3D">
       <UniqueIdentifier>{531f3837-4cb3-4614-a53c-f75f2f9299c1}</UniqueIdentifier>
     </Filter>
@@ -99,6 +96,18 @@
     </Filter>
     <Filter Include="SampleCode">
       <UniqueIdentifier>{5036948f-0cd8-4af3-a721-df4c3562096f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Foundation\D3D\cTimer">
+      <UniqueIdentifier>{c1d7c14d-0f2e-41b4-a3cf-bcff23c2826f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="김완수\MapTool">
+      <UniqueIdentifier>{65bbc7f0-8e7a-4c58-b523-03636f24b4a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="김완수\Trap">
+      <UniqueIdentifier>{92dc699f-f39c-4351-8644-21aafe980161}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="김완수\UI\InGame">
+      <UniqueIdentifier>{56d6c34b-cac0-4a41-8d97-dbb3e2bead32}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -164,13 +173,10 @@
       <Filter>Interface\iMap</Filter>
     </ClInclude>
     <ClInclude Include="cTimer_GetTickCount.h">
-      <Filter>Foundation\cTimer</Filter>
+      <Filter>Foundation\D3D\cTimer</Filter>
     </ClInclude>
     <ClInclude Include="cTimer_QueryPerformanceFrequency.h">
-      <Filter>Foundation\cTimer</Filter>
-    </ClInclude>
-    <ClInclude Include="cGridBox.h">
-      <Filter>Interface\iMap</Filter>
+      <Filter>Foundation\D3D\cTimer</Filter>
     </ClInclude>
     <ClInclude Include="cTestScene.h">
       <Filter>SampleCode</Filter>
@@ -215,7 +221,7 @@
       <Filter>Foundation\D3D</Filter>
     </ClInclude>
     <ClInclude Include="iTimer.h">
-      <Filter>Foundation\cTimer</Filter>
+      <Filter>Foundation\D3D\cTimer</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsTagDefine.h">
       <Filter>Foundation\Physics</Filter>
@@ -256,20 +262,11 @@
     <ClInclude Include="cInGameScene.h">
       <Filter>Class\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="cInGameUILayer.h">
-      <Filter>김완수\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="cInGameUIGauge.h">
-      <Filter>김완수\UI</Filter>
-    </ClInclude>
     <ClInclude Include="cMainGame.h">
       <Filter>cMainGame</Filter>
     </ClInclude>
     <ClInclude Include="iGameUIDelegate.h">
       <Filter>Foundation\cGameUI</Filter>
-    </ClInclude>
-    <ClInclude Include="cInGameUIScore.h">
-      <Filter>김완수\UI</Filter>
     </ClInclude>
     <ClInclude Include="cAllocateHierarchy.h">
       <Filter>Foundation\Parser\XFileLoader</Filter>
@@ -285,6 +282,33 @@
     </ClInclude>
     <ClInclude Include="cGameUISprite.h">
       <Filter>Foundation\cGameUI</Filter>
+    </ClInclude>
+    <ClInclude Include="cTrap.h">
+      <Filter>김완수\Trap</Filter>
+    </ClInclude>
+    <ClInclude Include="cMapToolScene.h">
+      <Filter>김완수\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="cInGameUIGauge.h">
+      <Filter>김완수\UI\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="cInGameUILayer.h">
+      <Filter>김완수\UI\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="cInGameUIScore.h">
+      <Filter>김완수\UI\InGame</Filter>
+    </ClInclude>
+    <ClInclude Include="cMapData.h">
+      <Filter>김완수\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="cMapToolUILayer.h">
+      <Filter>김완수\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="cHeightMap.h">
+      <Filter>김완수\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="cMapToolCamera.h">
+      <Filter>김완수\MapTool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -337,13 +361,10 @@
       <Filter>Interface\iMap</Filter>
     </ClCompile>
     <ClCompile Include="cTimer_QueryPerformanceFrequency.cpp">
-      <Filter>Foundation\cTimer</Filter>
+      <Filter>Foundation\D3D\cTimer</Filter>
     </ClCompile>
     <ClCompile Include="cTimer_GetTickCount.cpp">
-      <Filter>Foundation\cTimer</Filter>
-    </ClCompile>
-    <ClCompile Include="cGridBox.cpp">
-      <Filter>Interface\iMap</Filter>
+      <Filter>Foundation\D3D\cTimer</Filter>
     </ClCompile>
     <ClCompile Include="cTestScene.cpp">
       <Filter>SampleCode</Filter>
@@ -385,7 +406,7 @@
       <Filter>Foundation\D3D</Filter>
     </ClCompile>
     <ClCompile Include="iTimer.cpp">
-      <Filter>Foundation\cTimer</Filter>
+      <Filter>Foundation\D3D\cTimer</Filter>
     </ClCompile>
     <ClCompile Include="cPhysicsNode.cpp">
       <Filter>Foundation\Physics</Filter>
@@ -417,17 +438,8 @@
     <ClCompile Include="cInGameScene.cpp">
       <Filter>Class\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="cInGameUILayer.cpp">
-      <Filter>김완수\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="cInGameUIGauge.cpp">
-      <Filter>김완수\UI</Filter>
-    </ClCompile>
     <ClCompile Include="cMainGame.cpp">
       <Filter>cMainGame</Filter>
-    </ClCompile>
-    <ClCompile Include="cInGameUIScore.cpp">
-      <Filter>김완수\UI</Filter>
     </ClCompile>
     <ClCompile Include="cAllocateHierarchy.cpp">
       <Filter>Foundation\Parser\XFileLoader</Filter>
@@ -443,6 +455,33 @@
     </ClCompile>
     <ClCompile Include="cGameUISprite.cpp">
       <Filter>Foundation\cGameUI</Filter>
+    </ClCompile>
+    <ClCompile Include="cTrap.cpp">
+      <Filter>김완수\Trap</Filter>
+    </ClCompile>
+    <ClCompile Include="cMapToolScene.cpp">
+      <Filter>김완수\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="cInGameUIGauge.cpp">
+      <Filter>김완수\UI\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="cInGameUILayer.cpp">
+      <Filter>김완수\UI\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="cInGameUIScore.cpp">
+      <Filter>김완수\UI\InGame</Filter>
+    </ClCompile>
+    <ClCompile Include="cMapData.cpp">
+      <Filter>김완수\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="cMapToolUILayer.cpp">
+      <Filter>김완수\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="cHeightMap.cpp">
+      <Filter>김완수\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="cMapToolCamera.cpp">
+      <Filter>김완수\MapTool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

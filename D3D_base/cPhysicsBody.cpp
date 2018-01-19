@@ -3,7 +3,8 @@
 
 
 cPhysicsBody::cPhysicsBody()
-	: m_enShapeType(PHYSICSSHAPETYPE_END)
+	: m_vDir(0.0f, 0.0f, 1.0f)
+	//, m_enShapeType(PHYSICSSHAPETYPE_END)
 	, m_enBodyType(PHYSICSBODYTYPE_END)
 	, m_vPos(0.0f, 0.0f, 0.0f)
 	, m_vAxis(0.0f, 1.0f, 0.0f)

@@ -15,7 +15,6 @@ struct ST_BONE_MESH : public D3DXMESHCONTAINER
 	D3DXMATRIX**	ppBoneMatrixPtrs;
 	D3DXMATRIX*		pBoneOffsetMatrix;
 	D3DXMATRIX*		pCurrBoneMatrix;
-
 };
 
 class cAllocateHierarchy : public ID3DXAllocateHierarchy
