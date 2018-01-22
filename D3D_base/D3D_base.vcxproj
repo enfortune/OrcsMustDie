@@ -179,6 +179,7 @@
     <ClInclude Include="cInGameUILayer.h" />
     <ClInclude Include="cInGameUIScore.h" />
     <ClInclude Include="cMapData.h" />
+    <ClInclude Include="cMapMaker.h" />
     <ClInclude Include="cMapToolCamera.h" />
     <ClInclude Include="cMapToolScene.h" />
     <ClInclude Include="cMapToolUILayer.h" />
@@ -195,6 +196,8 @@
     <ClInclude Include="commonMacroFunction.h" />
     <ClInclude Include="cPhysicsBody.h" />
     <ClInclude Include="cPhysicsNode.h" />
+    <ClInclude Include="cPhysicsSpace.h" />
+    <ClInclude Include="cPhysicsTestScene.h" />
     <ClInclude Include="cRay.h" />
     <ClInclude Include="cSceneManager.h" />
     <ClInclude Include="cSkinnedMesh.h" />
@@ -211,6 +214,7 @@
     <ClInclude Include="D3D_base.h" />
     <ClInclude Include="enPhysicsBody.h" />
     <ClInclude Include="GameUIEnumList.h" />
+    <ClInclude Include="iGameMap.h" />
     <ClInclude Include="iGameUIDelegate.h" />
     <ClInclude Include="iMap.h" />
     <ClInclude Include="iTimer.h" />
@@ -245,6 +249,7 @@
     <ClCompile Include="cInGameUILayer.cpp" />
     <ClCompile Include="cInGameUIScore.cpp" />
     <ClCompile Include="cMapData.cpp" />
+    <ClCompile Include="cMapMaker.cpp" />
     <ClCompile Include="cMapToolCamera.cpp" />
     <ClCompile Include="cMapToolScene.cpp" />
     <ClCompile Include="cMapToolUILayer.cpp" />
@@ -260,6 +265,8 @@
     <ClCompile Include="cObjMap.cpp" />
     <ClCompile Include="cPhysicsBody.cpp" />
     <ClCompile Include="cPhysicsNode.cpp" />
+    <ClCompile Include="cPhysicsSpace.cpp" />
+    <ClCompile Include="cPhysicsTestScene.cpp" />
     <ClCompile Include="cRay.cpp" />
     <ClCompile Include="cSceneManager.cpp" />
     <ClCompile Include="cSkinnedMesh.cpp" />
@@ -274,6 +281,7 @@
     <ClCompile Include="cTrap.cpp" />
     <ClCompile Include="D3DX_UTIL.cpp" />
     <ClCompile Include="D3D_base.cpp" />
+    <ClCompile Include="iGameMap.cpp" />
     <ClCompile Include="iGameUIDelegate.cpp" />
     <ClCompile Include="iMap.cpp" />
     <ClCompile Include="iTimer.cpp" />

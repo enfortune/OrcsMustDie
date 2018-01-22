@@ -60,16 +60,34 @@ void cGameNode::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 }
 
+void cGameNode::UpdateTempPhysics(float fDelta)
+{
+	assert(m_pPhysicsBody == nullptr && "PhysicsBody 없이 PhysicsNode에 추가해선 안된다");
+	m_pPhysicsBody->UpdateTempPhysics(fDelta);
+}
+
 void cGameNode::UpdatePhysics(float fDelta)
 {
 	assert(m_pPhysicsBody == nullptr && "PhysicsBody 없이 PhysicsNode에 추가해선 안된다");
 
-	m_pPhysicsBody->UpdatePhysics();
+	m_pPhysicsBody->UpdatePhysics(fDelta);
 	if (m_pTransformData)
 	{
-		m_pTransformData->SetPosition(m_pPhysicsBody->GetPosition());
-		m_pTransformData->SetAxis(m_pPhysicsBody->GetAxis());
-		m_pTransformData->SetRotAngle(m_pPhysicsBody->GetRotAngle());
+		m_pTransformData->SetPosition(m_pPhysicsBody->GetPhysicsData().vPos);
+		m_pTransformData->SetAxis(m_pPhysicsBody->GetPhysicsData().vAxis);
+		m_pTransformData->SetRotAngle(m_pPhysicsBody->GetPhysicsData().fRotAngle);
+	}
+}
+
+void cGameNode::CollisionWithNode(cGameNode* node)
+{
+	if (node->GetPhysicsTag() == PHYSICSTAG_NO_CHECK)
+	{
+		
+	}
+	else
+	{
+		
 	}
 }
 

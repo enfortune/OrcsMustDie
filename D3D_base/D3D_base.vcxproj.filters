@@ -19,9 +19,6 @@
     <Filter Include="Interface">
       <UniqueIdentifier>{9a881338-48a7-43d4-8689-565ddaa22706}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Interface\iMap">
-      <UniqueIdentifier>{878458ae-0cc7-41ba-9845-57df50162ed7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="엄윤호">
       <UniqueIdentifier>{f338546e-50a9-4382-97a5-9ddfdcc0d7cb}</UniqueIdentifier>
     </Filter>
@@ -109,6 +106,9 @@
     <Filter Include="김완수\UI\InGame">
       <UniqueIdentifier>{56d6c34b-cac0-4a41-8d97-dbb3e2bead32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="김완수\Physics">
+      <UniqueIdentifier>{4963c78a-16e6-4e81-a142-f945186f0294}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -168,9 +168,6 @@
     </ClInclude>
     <ClInclude Include="cGrid.h">
       <Filter>Foundation\cGrid</Filter>
-    </ClInclude>
-    <ClInclude Include="iMap.h">
-      <Filter>Interface\iMap</Filter>
     </ClInclude>
     <ClInclude Include="cTimer_GetTickCount.h">
       <Filter>Foundation\D3D\cTimer</Filter>
@@ -310,6 +307,21 @@
     <ClInclude Include="cMapToolCamera.h">
       <Filter>김완수\MapTool</Filter>
     </ClInclude>
+    <ClInclude Include="cMapMaker.h">
+      <Filter>김완수\MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="cPhysicsTestScene.h">
+      <Filter>Class\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="cPhysicsSpace.h">
+      <Filter>김완수\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="iMap.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="iGameMap.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -356,9 +368,6 @@
     </ClCompile>
     <ClCompile Include="cGrid.cpp">
       <Filter>Foundation\cGrid</Filter>
-    </ClCompile>
-    <ClCompile Include="iMap.cpp">
-      <Filter>Interface\iMap</Filter>
     </ClCompile>
     <ClCompile Include="cTimer_QueryPerformanceFrequency.cpp">
       <Filter>Foundation\D3D\cTimer</Filter>
@@ -482,6 +491,21 @@
     </ClCompile>
     <ClCompile Include="cMapToolCamera.cpp">
       <Filter>김완수\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="cMapMaker.cpp">
+      <Filter>김완수\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="cPhysicsTestScene.cpp">
+      <Filter>Class\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="cPhysicsSpace.cpp">
+      <Filter>김완수\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="iMap.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="iGameMap.cpp">
+      <Filter>Interface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

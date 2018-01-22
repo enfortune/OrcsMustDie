@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "cPhysicsNode.h"
 #include "cPhysicsBody.h"
+#include "iGameMap.h"
 
 
 cPhysicsNode::cPhysicsNode()
@@ -16,17 +17,32 @@ cPhysicsNode::~cPhysicsNode()
 }
 
 
-void cPhysicsNode::Setup()
+void cPhysicsNode::Setup(iGameMap* pMap)
 {
-	cGameNode::Setup();
+	cGameNode::Setup(true);
+
+	m_pMap = pMap;
 }
 void cPhysicsNode::Update(float fDelta)
 {
-	for each (cGameNode* node in m_setChild)
+	// 상호작용
+	std::set<cGameNode*>::iterator itSour, itDest;
+
+	for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
 	{
-		node->UpdatePhysics();
-		node->Update();
+		(*itSour)->UpdateTempPhysics();
+		for (itDest = ++itSour; itDest != m_setChild.end(); itDest++)
+		{
+			
+		}
 	}
+
+	
+	/*for each (cGameNode* node in m_setChild)
+	{
+		node->UpdatePhysics(fDelta);
+		node->Update(fDelta);
+	}*/
 }
 void cPhysicsNode::Render()
 {

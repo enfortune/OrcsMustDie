@@ -39,8 +39,7 @@ void cMapToolUILayer::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPa
 
 bool cMapToolUILayer::UIButtonAction(std::string sTag, BUTTON_STATE enState)
 {
-
-	
+		
 
 	return true;
 }

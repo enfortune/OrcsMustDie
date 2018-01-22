@@ -1,10 +1,9 @@
 #pragma once
 #include "cObject.h"
+#include "PhysicsTagDefine.h"
 
 class cPhysicsBody;
 class cTransformData;
-
-
 
 class cGameNode : public cObject
 {
@@ -34,7 +33,9 @@ public:
 
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	
+	virtual void UpdateTempPhysics(float fDelta = g_pTimeManager->GetEllapsedTime());
 	virtual void UpdatePhysics(float fDelta = g_pTimeManager->GetEllapsedTime());
+	virtual void CollisionWithNode(cGameNode* node);
 	
 	void AddChild(cGameNode* pNode);
 	void RemoveChild(cGameNode* pNode);

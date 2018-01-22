@@ -3,6 +3,7 @@
 
 #include "cTestScene.h"
 #include "cInGameScene.h"
+#include "cMapToolScene.h"
 
 cMainGame::cMainGame()
 {
@@ -24,7 +25,7 @@ void cMainGame::Setup()
 	g_pSoundManager->Setup();
 	g_pKeyManager->Setup();
 
-	g_pSceneManager->Setup(new cInGameScene);
+	g_pSceneManager->Setup(new cMapToolScene);
 }
 
 void cMainGame::Update()

@@ -81,7 +81,7 @@ void cGameSprite::SetCropRect(RECT* lpRect)
 {
 	if (lpRect == nullptr)
 	{
-		m_pCropRect = { 0, 0, m_stImageInfo.Width, m_stImageInfo.Height };
+		m_pCropRect = { 0, 0, static_cast<LONG>(m_stImageInfo.Width), static_cast<LONG>(m_stImageInfo.Height) };
 	}
 	else
 	{
@@ -102,8 +102,8 @@ void cGameSprite::SetCropRect(float fRatioL, float fRatioT, float fRatioR, float
 
 	if (m_pCropRect.left < 0) m_pCropRect.left = 0;
 	if (m_pCropRect.top < 0) m_pCropRect.top = 0;
-	if (m_pCropRect.right > m_stImageInfo.Width) m_pCropRect.right = m_stImageInfo.Width;
-	if (m_pCropRect.bottom > m_stImageInfo.Height) m_pCropRect.bottom = m_stImageInfo.Height;
+	if (m_pCropRect.right > m_stImageInfo.Width) m_pCropRect.right = static_cast<LONG>(m_stImageInfo.Width);
+	if (m_pCropRect.bottom > m_stImageInfo.Height) m_pCropRect.bottom = static_cast<LONG>(m_stImageInfo.Height);
 }
 
 std::vector<D3DXVECTOR2> cGameSprite::GetBoundingBox(D3DXMATRIXA16* matParent)

@@ -2,6 +2,7 @@
 #include "cGameUILayer.h"
 class cMapToolUILayer : public cGameUILayer
 {
+
 public:
 	cMapToolUILayer();
 	virtual ~cMapToolUILayer();
