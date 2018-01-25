@@ -8,7 +8,7 @@ typedef struct ST_PHYSICSSPACEDATA
 
 	ST_PHYSICSSPACEDATA()
 	{
-		vGravity = D3DXVECTOR3(0.0f, -1.0f, 0.0f);
+		vGravity = D3DXVECTOR3(0.0f, -9.8f, 0.0f);
 	}
 }PHYSICSSPACEDATA;
 

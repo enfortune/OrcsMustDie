@@ -20,15 +20,13 @@ typedef struct ST_PHYSICSDATA
 	float fAngleDamping;
 	float fAngleVelocity;
 	float fRotAngle;
-
-
 	float fMass;
 	D3DXVECTOR3 vForce;
 	D3DXVECTOR3 vAccel;
 	D3DXVECTOR3 vDamping;
 	D3DXVECTOR3 vVelocity;
-
 	float fElasticity;
+	bool bOnGround;
 	ST_PHYSICSDATA()
 		: fOriginAngle(0.0f)
 		, vPos(0.0f, 0.0f, 0.0f)
@@ -44,6 +42,7 @@ typedef struct ST_PHYSICSDATA
 		, vDamping(0.0f, 0.0f, 0.0f)
 		, vVelocity(0.0f, 0.0f, 0.0f)
 		, fElasticity(0.0f)
+		, bOnGround(false)
 	{}
 }PHYSICSDATA;
 

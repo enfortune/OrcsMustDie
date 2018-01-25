@@ -31,10 +31,10 @@ void cSampleChar::Setup(bool move, D3DXVECTOR3 vPosSetup)
 
 	m_pPhysicsBody = new cPhysicsBody;
 	m_pPhysicsBody->Setup(-PI / 4.f);
-	m_pPhysicsBody->MakeBodyCuboid(1.f, 1.f, 1.f, D3DXVECTOR3(0.f, 0.5f, 0.f));
+	m_pPhysicsBody->MakeBodyCuboid(0.8f, 1.f, 0.6f, D3DXVECTOR3(0.f, 0.5f, 0.f));
 	m_pPhysicsBody->GetPhysicsData().vPos = vPosSetup;
-	m_pPhysicsBody->GetPhysicsData().vDamping = D3DXVECTOR3(1.f, 0.f, 1.f);
-	m_pPhysicsBody->SetBodyType(PHYSICSBODYTYPE_DINAMIC);
+	m_pPhysicsBody->GetPhysicsData().vDamping = D3DXVECTOR3(5.f, 0.f, 5.f);
+	m_pPhysicsBody->SetBodyType(PHYSICSBODYTYPE_DINAMIC); // PHYSICSBODYTYPE_STATIC은 밀어낼 수 없는 속성.
 
 }
 
@@ -50,14 +50,18 @@ void cSampleChar::Update(float fDelta)
 	{
 		float speedX = 0.f;
 		float speedZ = 0.f;
+		float speedY = 0.f;
 
-		if (g_pKeyManager->IsStayKeyDown('W')) speedZ += 1.f;
-		if (g_pKeyManager->IsStayKeyDown('S')) speedZ -= 1.f;
-		if (g_pKeyManager->IsStayKeyDown('A')) speedX -= 1.f;
-		if (g_pKeyManager->IsStayKeyDown('D')) speedX += 1.f;
+		if (g_pKeyManager->IsStayKeyDown('W')) speedZ += 3.f;
+		if (g_pKeyManager->IsStayKeyDown('S')) speedZ -= 3.f;
+		if (g_pKeyManager->IsStayKeyDown('A')) speedX -= 3.f;
+		if (g_pKeyManager->IsStayKeyDown('D')) speedX += 3.f;
+		if (g_pKeyManager->IsOnceKeyDown(VK_SPACE))  speedY += 7.f;
 
 		m_pPhysicsBody->GetPhysicsData().vVelocity.x = speedX;
 		m_pPhysicsBody->GetPhysicsData().vVelocity.z = speedZ;
+
+		if (m_pPhysicsBody->GetPhysicsData().bOnGround == true) m_pPhysicsBody->GetPhysicsData().vVelocity.y = speedY;
 	}
 	
 

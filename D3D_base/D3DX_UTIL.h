@@ -77,6 +77,9 @@ namespace D3DX_UTIL
 				case D3DX_UTIL::DIRECTION_6::BOTTOM:
 					vRet = (vNear_00 + vNear_10 + vFar_00 + vFar_10) / 4.f;
 				break;
+				case D3DX_UTIL::DIRECTION_6::END:
+					vRet = (vNear_00 + vNear_01 + vNear_10 + vNear_11 + vFar_00 + vFar_01 + vFar_10 + vFar_11) / 8.f;
+				break;
 			}
 			return vRet;
 		}
@@ -110,12 +113,12 @@ namespace D3DX_UTIL
 			D3DXVec3Normalize(&vRet, &vRet);
 			return vRet;
 		}
-		D3DXVECTOR3 GetNearestSideNormalVec3(D3DXVECTOR3* pSour)
+		/*D3DXVECTOR3 GetNearestSideNormalVec3(D3DXVECTOR3* pSour)
 		{
 			DIRECTION_6 enDir = DIRECTION_6::END;
 			float fNearestDist = -1.f;
 			float fDist;
-			D3DXVECTOR3 vCenter;	
+			D3DXVECTOR3 vCenter;
 
 			for (int i = 0; i < static_cast<int>(DIRECTION_6::END); i++)
 			{
@@ -127,6 +130,111 @@ namespace D3DX_UTIL
 					enDir = static_cast<DIRECTION_6>(i);
 				}
 			}
+			return -GetNormalVec3(enDir);
+		}*/
+		D3DXVECTOR3 GetNearestSideNormalVec3(D3DXVECTOR3* pSour)
+		{
+			DIRECTION_6 enDir = DIRECTION_6::END;
+
+			D3DXVECTOR3 vCenter = GetCenterVec3(DIRECTION_6::END); // 중점을 찾은 후
+			D3DXVECTOR3 vPlaneCenter;
+			D3DXVECTOR3 vPlaneDist;
+			D3DXVECTOR3 vDist;
+			float fRatio;
+			float fResult;
+			float fNearestResult= -1;
+
+			for (int i = 0; i < static_cast<int>(DIRECTION_6::END); i++)
+			{
+				vPlaneCenter = GetCenterVec3(static_cast<DIRECTION_6>(i));
+				vPlaneDist = vPlaneCenter - vCenter;
+				fRatio = D3DXVec3Length(&vPlaneDist);
+				vDist = (*pSour) - vCenter;
+
+				fResult = D3DXVec3Dot(&vPlaneDist, &vDist) / fRatio;
+
+				if (fNearestResult < 0.f || fNearestResult < fResult)
+				{
+					fNearestResult = fResult;
+					enDir = static_cast<DIRECTION_6>(i);
+				}
+			}
+			return -GetNormalVec3(enDir);
+		}
+		D3DXVECTOR3 GetNearestSideNormalVec3(ST_FRUSTUM* pSour)
+		{
+			DIRECTION_6 enDir = DIRECTION_6::END;
+			D3DXVECTOR3 vN, vC;
+			D3DXVECTOR3 vTemp;
+			float fCalc[static_cast<int>(DI6::END)];
+			float fComp = -1.f;
+			float fTemp;
+			for (int i = 0; i < static_cast<int>(DI6::END); i++)
+			{
+				fCalc[i] = 0.f;
+
+				vC = GetCenterVec3(static_cast<DIRECTION_6>(i));
+				vN = GetNormalVec3(static_cast<DIRECTION_6>(i));
+
+				D3DXVec3Normalize(&vTemp, &(pSour->vNear_00 - vC));
+				fTemp = D3DXVec3Dot(&vN, &vTemp);
+				if (fTemp > 0)
+				{
+					fCalc[i] += fTemp;
+				}
+				D3DXVec3Normalize(&vTemp, &(pSour->vNear_01 - vC));
+				fTemp = D3DXVec3Dot(&vN, &vTemp);
+				if (fTemp > 0)
+				{
+					fCalc[i] += fTemp;
+				}
+				D3DXVec3Normalize(&vTemp, &(pSour->vNear_10 - vC));
+				fTemp = D3DXVec3Dot(&vN, &vTemp);
+				if (fTemp > 0)
+				{
+					fCalc[i] += fTemp;
+				}
+				D3DXVec3Normalize(&vTemp, &(pSour->vNear_11 - vC));
+				fTemp = D3DXVec3Dot(&vN, &vTemp);
+				if (fTemp > 0)
+				{
+					fCalc[i] += fTemp;
+				}
+				D3DXVec3Normalize(&vTemp, &(pSour->vFar_00 - vC));
+				fTemp = D3DXVec3Dot(&vN, &vTemp);
+				if (fTemp > 0)
+				{
+					fCalc[i] += fTemp;
+				}
+				D3DXVec3Normalize(&vTemp, &(pSour->vFar_01 - vC));
+				fTemp = D3DXVec3Dot(&vN, &vTemp);
+				if (fTemp > 0)
+				{
+					fCalc[i] += fTemp;
+				}
+				D3DXVec3Normalize(&vTemp, &(pSour->vFar_10 - vC));
+				fTemp = D3DXVec3Dot(&vN, &vTemp);
+				if (fTemp > 0)
+				{
+					fCalc[i] += fTemp;
+				}
+				D3DXVec3Normalize(&vTemp, &(pSour->vFar_11 - vC));
+				fTemp = D3DXVec3Dot(&vN, &vTemp);
+				if (fTemp > 0)
+				{
+					fCalc[i] += fTemp;
+				}
+			}
+
+			for (int i = 0; i < static_cast<int>(DI6::END); i++)
+			{
+				if (fComp < 0 || fCalc[i] < fComp)
+				{
+					fComp = fCalc[i];
+					enDir = static_cast<DIRECTION_6>(i);
+				}
+			}
+			
 			return -GetNormalVec3(enDir);
 		}
 	}FRUSTUM;

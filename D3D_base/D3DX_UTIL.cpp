@@ -72,8 +72,8 @@ namespace D3DX_UTIL
 			v1 = pSphere->vCenter + pSphere->fRadius * vN;
 			v2 = pSphere->vCenter - pSphere->fRadius * vN;
 
-			if (D3DXVec3Dot(&vN, &(v1 - vC)) < 0 &&
-				D3DXVec3Dot(&vN, &(v2 - vC)) < 0) // 원의 일부조차 겹치지 않을 경우
+			if (D3DXVec3Dot(&vN, &(v1 - vC)) <= 0 &&
+				D3DXVec3Dot(&vN, &(v2 - vC)) <= 0) // 원의 일부조차 겹치지 않을 경우
 				return false;
 		}
 
@@ -82,7 +82,7 @@ namespace D3DX_UTIL
 
 	bool CheckSphereIntersectSphere(ST_SPHERE* pSphere1, ST_SPHERE* pSphere2)
 	{
-		if (D3DXVec3Length(&(pSphere1->vCenter - pSphere2->vCenter)) < pSphere1->fRadius + pSphere2->fRadius)
+		if (D3DXVec3Length(&(pSphere1->vCenter - pSphere2->vCenter)) <= pSphere1->fRadius + pSphere2->fRadius)
 			return true;
 		else return false;
 	}
@@ -94,14 +94,14 @@ namespace D3DX_UTIL
 			vC = pFrustum2->GetCenterVec3(static_cast<DIRECTION_6>(i));
 			vN = pFrustum2->GetNormalVec3(static_cast<DIRECTION_6>(i));
 
-			if (D3DXVec3Dot(&vN, &(pFrustum1->vNear_00 - vC)) < 0 &&
-				D3DXVec3Dot(&vN, &(pFrustum1->vNear_01 - vC)) < 0 &&
-				D3DXVec3Dot(&vN, &(pFrustum1->vNear_10 - vC)) < 0 &&
-				D3DXVec3Dot(&vN, &(pFrustum1->vNear_11 - vC)) < 0 &&
-				D3DXVec3Dot(&vN, &(pFrustum1->vFar_00 - vC)) < 0 &&
-				D3DXVec3Dot(&vN, &(pFrustum1->vFar_01 - vC)) < 0 &&
-				D3DXVec3Dot(&vN, &(pFrustum1->vFar_10 - vC)) < 0 &&
-				D3DXVec3Dot(&vN, &(pFrustum1->vFar_11 - vC)) < 0) // 절두체의 일부조차 겹치지 않을 경우
+			if (D3DXVec3Dot(&vN, &(pFrustum1->vNear_00 - vC)) <= 0 &&
+				D3DXVec3Dot(&vN, &(pFrustum1->vNear_01 - vC)) <= 0 &&
+				D3DXVec3Dot(&vN, &(pFrustum1->vNear_10 - vC)) <= 0 &&
+				D3DXVec3Dot(&vN, &(pFrustum1->vNear_11 - vC)) <= 0 &&
+				D3DXVec3Dot(&vN, &(pFrustum1->vFar_00 - vC)) <= 0 &&
+				D3DXVec3Dot(&vN, &(pFrustum1->vFar_01 - vC)) <= 0 &&
+				D3DXVec3Dot(&vN, &(pFrustum1->vFar_10 - vC)) <= 0 &&
+				D3DXVec3Dot(&vN, &(pFrustum1->vFar_11 - vC)) <= 0) // 절두체의 일부조차 겹치지 않을 경우
 				return false;
 		}
 		return true;

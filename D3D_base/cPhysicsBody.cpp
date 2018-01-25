@@ -76,17 +76,17 @@ void cPhysicsBody::UpdateTempPhysics(float fDelta)
 		if (m_stTempPhysicsData.fRotAngle < 0) m_stTempPhysicsData.fRotAngle += PI * 2.f;
 	}
 
-	m_stTempPhysicsData.fAngleAccel += m_stTempPhysicsData.fSurfaceTorque * fDelta / m_stTempPhysicsData.fMass;
+	m_stTempPhysicsData.fAngleAccel += m_stTempPhysicsData.fSurfaceTorque / m_stTempPhysicsData.fMass;
 	m_stTempPhysicsData.fAngleVelocity += m_stTempPhysicsData.fAngleAccel * fDelta;
 
-	if (fabs(m_stTempPhysicsData.fAngleVelocity) <= PHYSICSBODY_ANGLEVELOCITYEPSILON) m_stTempPhysicsData.fAngleVelocity = 0.f;
+	//if (fabs(m_stTempPhysicsData.fAngleVelocity) <= PHYSICSBODY_ANGLEVELOCITYEPSILON) m_stTempPhysicsData.fAngleVelocity = 0.f;
 
 	m_stTempPhysicsData.fRotAngle += m_stTempPhysicsData.fAngleVelocity * fDelta;
 
-	if (m_stTempPhysicsData.fAngleVelocity > 0.f) // x ¥Ô«Œ
+	if (m_stTempPhysicsData.fAngleVelocity > 0.f) // æﬁ±€ ¥Ô«Œ
 	{
-		m_stTempPhysicsData.fAngleAccel -= m_stTempPhysicsData.fAngleDamping * fDelta;
-		if (m_stTempPhysicsData.fAngleAccel < 0.f) m_stTempPhysicsData.fAngleAccel = 0.f;
+		m_stTempPhysicsData.fAngleVelocity -= m_stTempPhysicsData.fAngleDamping * fDelta;
+		if (m_stTempPhysicsData.fAngleVelocity < 0.f) m_stTempPhysicsData.fAngleVelocity = 0.f;
 	}
 	else if (m_stTempPhysicsData.fAngleVelocity < 0.f)
 	{
@@ -96,7 +96,7 @@ void cPhysicsBody::UpdateTempPhysics(float fDelta)
 
 	m_stTempPhysicsData.fSurfaceTorque = 0.0f;
 
-	m_stTempPhysicsData.vAccel += m_stTempPhysicsData.vForce * fDelta / m_stTempPhysicsData.fMass;
+	m_stTempPhysicsData.vAccel += m_stTempPhysicsData.vForce / m_stTempPhysicsData.fMass;
 	m_stTempPhysicsData.vVelocity += m_stTempPhysicsData.vAccel * fDelta;
 	if (m_stTempPhysicsData.vVelocity.x > 0.f) // x ¥Ô«Œ
 	{
@@ -131,9 +131,9 @@ void cPhysicsBody::UpdateTempPhysics(float fDelta)
 		if (m_stTempPhysicsData.vVelocity.z > 0.f) m_stTempPhysicsData.vVelocity.z = 0.f;
 	}
 
-	if (fabs(m_stTempPhysicsData.vVelocity.x) <= PHYSICSBODY_VELOCITYEPSILON) m_stTempPhysicsData.vVelocity.x = 0.f;
+	/*if (fabs(m_stTempPhysicsData.vVelocity.x) <= PHYSICSBODY_VELOCITYEPSILON) m_stTempPhysicsData.vVelocity.x = 0.f;
 	if (fabs(m_stTempPhysicsData.vVelocity.y) <= PHYSICSBODY_VELOCITYEPSILON) m_stTempPhysicsData.vVelocity.y = 0.f;
-	if (fabs(m_stTempPhysicsData.vVelocity.z) <= PHYSICSBODY_VELOCITYEPSILON) m_stTempPhysicsData.vVelocity.z = 0.f;
+	if (fabs(m_stTempPhysicsData.vVelocity.z) <= PHYSICSBODY_VELOCITYEPSILON) m_stTempPhysicsData.vVelocity.z = 0.f;*/
 
 	m_stTempPhysicsData.vPos += m_stTempPhysicsData.vVelocity * fDelta;
 
@@ -152,29 +152,29 @@ void cPhysicsBody::UpdatePhysics(float fDelta)
 		if (m_stPhysicsData.fRotAngle < 0) m_stPhysicsData.fRotAngle += PI * 2.f;
 	}
 
-	m_stPhysicsData.fAngleAccel += m_stPhysicsData.fSurfaceTorque * fDelta / m_stPhysicsData.fMass;
+	m_stPhysicsData.fAngleAccel += m_stPhysicsData.fSurfaceTorque / m_stPhysicsData.fMass;
 	m_stPhysicsData.fAngleVelocity += m_stPhysicsData.fAngleAccel * fDelta;
 
-	if (fabs(m_stPhysicsData.fAngleVelocity) <= PHYSICSBODY_ANGLEVELOCITYEPSILON) m_stPhysicsData.fAngleVelocity = 0.f;
+	//if (fabs(m_stPhysicsData.fAngleVelocity) <= PHYSICSBODY_ANGLEVELOCITYEPSILON) m_stPhysicsData.fAngleVelocity = 0.f;
 
 	m_stPhysicsData.fRotAngle += m_stPhysicsData.fAngleVelocity * fDelta;
 
-	if (m_stPhysicsData.fAngleVelocity > 0.f) // x ¥Ô«Œ
+	if (m_stPhysicsData.fAngleVelocity > 0.f) // æﬁ±€ ¥Ô«Œ
 	{
-		m_stPhysicsData.fAngleAccel -= m_stPhysicsData.fAngleDamping * fDelta;
-		if (m_stPhysicsData.fAngleAccel < 0.f) m_stPhysicsData.fAngleAccel = 0.f;
+		m_stPhysicsData.fAngleVelocity -= m_stPhysicsData.fAngleDamping * fDelta;
+		if (m_stPhysicsData.fAngleVelocity < 0.f) m_stPhysicsData.fAngleVelocity = 0.f;
 	}
 	else if (m_stPhysicsData.fAngleVelocity < 0.f)
 	{
-		m_stPhysicsData.fAngleAccel += m_stPhysicsData.fAngleDamping * fDelta;
-		if (m_stPhysicsData.fAngleAccel > 0.f) m_stPhysicsData.fAngleAccel = 0.f;
+		m_stPhysicsData.fAngleVelocity += m_stPhysicsData.fAngleDamping * fDelta;
+		if (m_stPhysicsData.fAngleVelocity > 0.f) m_stPhysicsData.fAngleVelocity = 0.f;
 	}
 
 	
 	m_stPhysicsData.fSurfaceTorque = 0.0f;
 
 
-	m_stPhysicsData.vAccel += m_stPhysicsData.vForce * fDelta / m_stPhysicsData.fMass;
+	m_stPhysicsData.vAccel += m_stPhysicsData.vForce / m_stPhysicsData.fMass;
 	m_stPhysicsData.vVelocity += m_stPhysicsData.vAccel * fDelta;
 
 
@@ -197,7 +197,7 @@ void cPhysicsBody::UpdatePhysics(float fDelta)
 	else if (m_stPhysicsData.vVelocity.y < 0.f)
 	{
 		m_stPhysicsData.vVelocity.y += m_stPhysicsData.vDamping.y * fDelta;
-		if (m_stPhysicsData.vVelocity.y > 0.f)m_stPhysicsData.vVelocity.y = 0.f;
+		if (m_stPhysicsData.vVelocity.y > 0.f) m_stPhysicsData.vVelocity.y = 0.f;
 	}
 
 	if (m_stPhysicsData.vVelocity.z > 0.f) // z ¥Ô«Œ
@@ -212,9 +212,9 @@ void cPhysicsBody::UpdatePhysics(float fDelta)
 	}
 
 
-	if (fabs(m_stPhysicsData.vVelocity.x) <= PHYSICSBODY_VELOCITYEPSILON) m_stPhysicsData.vVelocity.x = 0.f;
+	/*if (fabs(m_stPhysicsData.vVelocity.x) <= PHYSICSBODY_VELOCITYEPSILON) m_stPhysicsData.vVelocity.x = 0.f;
 	if (fabs(m_stPhysicsData.vVelocity.y) <= PHYSICSBODY_VELOCITYEPSILON) m_stPhysicsData.vVelocity.y = 0.f;
-	if (fabs(m_stPhysicsData.vVelocity.z) <= PHYSICSBODY_VELOCITYEPSILON) m_stPhysicsData.vVelocity.z = 0.f;
+	if (fabs(m_stPhysicsData.vVelocity.z) <= PHYSICSBODY_VELOCITYEPSILON) m_stPhysicsData.vVelocity.z = 0.f;*/
 
 	m_stPhysicsData.vPos += m_stPhysicsData.vVelocity * fDelta;
 

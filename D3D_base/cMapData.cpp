@@ -252,6 +252,7 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode)
 	ST_SPHERE  stBodySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);
 
 	D3DXVECTOR3 vCrushNorm;
+	D3DXVECTOR3 vGroundCheckNorm;
 	float fDot;
 
 	//this->OctaTreeCollisionCheck(body, 0, MAPSIZE_X, 0, MAPSIZE_Y, 0, MAPSIZE_Z);
@@ -287,7 +288,13 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode)
 							{
 								pBody->GetTempPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
 								pBody->GetPhysicsData().vVelocity = pBody->GetTempPhysicsData().vVelocity;
+								D3DXVec3Normalize(&vGroundCheckNorm, &vCrushNorm);
+								if (D3DXVec3Dot(&vGroundCheckNorm, &D3DXVECTOR3(0.f, 1.f, 0.f)) > cosf(PI / 4))
+									pBody->GetPhysicsData().bOnGround = true;
 							}
+
+							
+
 							bRet =  true;
 
 						}
@@ -320,14 +327,19 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode)
 						//2. 다면체 vs 다면체 충돌을 한다
 						if (CheckFrustumIntersectFrustum(&m_arrGridBox[x][y][z].stCube, &stBodyFrustum))
 						{
-							vCrushNorm = m_arrGridBox[x][y][z].stCube.GetNearestSideNormalVec3(&stBodySphere.vCenter);
+							vCrushNorm = m_arrGridBox[x][y][z].stCube.GetNearestSideNormalVec3(&stBodyFrustum);
 							fDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vCrushNorm);
 							if (fDot < 0)
 							{
 								pBody->GetTempPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1 + pBody->GetTempPhysicsData().fElasticity);
 								pBody->GetPhysicsData().vVelocity = pBody->GetTempPhysicsData().vVelocity;
+								D3DXVec3Normalize(&vGroundCheckNorm, &vCrushNorm);
+								if (D3DXVec3Dot(&vGroundCheckNorm, &D3DXVECTOR3(0.f, 1.f, 0.f)) > cosf(PI / 4))
+									pBody->GetPhysicsData().bOnGround = true;
 								// 가속도와 힘도 제거할지는 조금 더 지켜보자.
 							}
+							
+
 							bRet = true;
 						}
 
