@@ -21,6 +21,10 @@ protected:
 	SYNTHESIZE_REF(std::string, m_sPhysicsTag, PhysicsTag);
 	SYNTHESIZE_REF(cPhysicsBody*, m_pPhysicsBody, PhysicsBody);
 
+	/* frustum */
+	SYNTHESIZE_REF(float, m_fCullingRadius, CullingRadius);
+	SYNTHESIZE_REF(cGameNode*, m_pCollisionNode, CollisionNode);
+	
 public:
 	cGameNode();
 	virtual ~cGameNode();
@@ -35,7 +39,7 @@ public:
 	
 	virtual void UpdateTempPhysics(float fDelta = g_pTimeManager->GetEllapsedTime());
 	virtual void UpdatePhysics(float fDelta = g_pTimeManager->GetEllapsedTime());
-	virtual void CollisionWithNode(cGameNode* node);
+	virtual void CollisionWithNode(cGameNode* pNode);
 	
 	void AddChild(cGameNode* pNode);
 	void RemoveChild(cGameNode* pNode);

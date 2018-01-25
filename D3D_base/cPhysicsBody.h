@@ -5,9 +5,8 @@ typedef struct ST_PHYSICSSHAPEDATA
 {
 	EN_PHYSICSSHAPETYPE enShapeType;
 	
-	std::vector<D3DXVECTOR3>vecVertex; // Rectosahedron.
-	D3DXVECTOR3 vCenter; // 무게 중심
-	float fRadius; // Sphere
+	ST_FRUSTUM stCuboid; // 직육면체
+	ST_SPHERE  stSphere; // 구
 	
 }PHYSICSSHAPEDATA;
 
@@ -59,7 +58,6 @@ class cPhysicsBody
 
 	/* Temp Physics Data */
 	SYNTHESIZE_REF(ST_PHYSICSDATA, m_stTempPhysicsData, TempPhysicsData);
-
 	/* Physics Data */
 	SYNTHESIZE_REF(ST_PHYSICSDATA, m_stPhysicsData, PhysicsData);
 
@@ -69,7 +67,7 @@ public:
 
 	void Setup(float fOriginAngle);
 	void MakeBodyShape(ST_PHYSICSSHAPEDATA stShapeData);
-	void MakeBodyRectosahedron(float fX, float fY, float fZ, D3DXVECTOR3 vCenter); // Center는 x,y,z,값의 중점으로 잡는걸 권장
+	void MakeBodyCuboid(float fX, float fY, float fZ, D3DXVECTOR3 vCenter); // Center는 x,y,z,값의 중점으로 잡는걸 권장
 	void MakeBodySphere(float fRadius, D3DXVECTOR3 vCenter);
 
 	void RenderBody();
@@ -78,3 +76,4 @@ public:
 	void UpdatePhysics(float fDelta = g_pTimeManager->GetEllapsedTime());
 };
 
+                                                 

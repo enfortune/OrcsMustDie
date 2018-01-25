@@ -1,4 +1,5 @@
 #pragma once
+;
 class cTransformData
 {
 	/* basic data for matrix */

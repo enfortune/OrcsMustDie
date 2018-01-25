@@ -1,5 +1,6 @@
 #pragma once
 #include "cGameNode.h"
+#include "iGameMap.h"
 
 #define MAPSIZE_X 30
 #define MAPSIZE_Z 30
@@ -57,7 +58,8 @@ struct ST_GRIDBOX
 {
 	EN_GRIDBOXKIND enKind;
 	//ST_CUBE_XYZ stCube;
-	ST_PTN_VERTEX v[36];
+	ST_PTN_VERTEX v[36]; // 그리는 버텍스 (추후 버텍스 버퍼로 바꿀 것)
+	ST_FRUSTUM stCube;
 
 	cTrap* pRight;  //  1  0  0
 	cTrap* pLeft;	// -1  0  0
@@ -98,6 +100,16 @@ struct ST_GRIDBOX
 		_110 = D3DXVECTOR3((x + 1) * MAPSIZE_CUBE, (y + 1 - MAPSIZE_Y_ZEROSTD) * MAPSIZE_CUBE, (z)* MAPSIZE_CUBE);
 		_111 = D3DXVECTOR3((x + 1) * MAPSIZE_CUBE, (y + 1 - MAPSIZE_Y_ZEROSTD) * MAPSIZE_CUBE, (z + 1) * MAPSIZE_CUBE);
 
+
+
+		stCube.vNear_00 = _000;
+		stCube.vNear_00 = _010;
+		stCube.vNear_00 = _100;
+		stCube.vNear_00 = _110;
+		stCube.vFar_00 = _001;
+		stCube.vFar_00 = _011;
+		stCube.vFar_00 = _101;
+		stCube.vFar_00 = _111;
 
 		//뒤
 
@@ -187,7 +199,7 @@ struct ST_GRIDBOX
 };
 
 
-class cMapData : public cGameNode
+class cMapData : public cGameNode, public iGameMap
 {
 protected:
 	ST_GRIDBOX m_arrGridBox[MAPSIZE_X][MAPSIZE_Y][MAPSIZE_Z];
@@ -220,5 +232,13 @@ public:
 
 	void SaveData(std::string sFileName);
 	void LoadData(std::string sFileName);
+
+	
+
+	/* for interface */
+protected: 
+	//bool OctaTreeCollisionCheck(cPhysicsBody* body, int nStartX, int nEndX, int nStartY, int nEndY, int nStartZ, int nEndZ);
+public: 
+	virtual bool MapCollisionCheck(cGameNode* pNode) override;
 };
 

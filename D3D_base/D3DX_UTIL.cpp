@@ -9,6 +9,24 @@ namespace D3DX_UTIL
 {
 #define INF 10000
 
+	DWORD FtoDw(float f) { return *((DWORD*)&f); }
+
+	float GetRandomFloat(float fMin, float fMax)
+	{
+		if (fMin >= fMax)
+			return fMin;
+
+		float f = (rand() % 10000) * 0.0001f;
+		return (f * (fMax - fMin)) + fMin;
+	}
+	
+	void GetRandomVec3(OUT D3DXVECTOR3* vOut, IN D3DXVECTOR3* vMin, IN D3DXVECTOR3* vMax)
+	{
+		vOut->x = GetRandomFloat(vMin->x, vMax->x);
+		vOut->y = GetRandomFloat(vMin->y, vMax->y);
+		vOut->z = GetRandomFloat(vMin->z, vMax->z);
+	}
+
 
 	bool CheckPolygonContainVec2(std::vector<D3DXVECTOR2>& vecPolygon, D3DXVECTOR2 p)
 	{
@@ -34,6 +52,90 @@ namespace D3DX_UTIL
 		} while (i != 0);
 
 		return count & 1;
+	}
+
+	bool CheckAABBRectosahedronContainVec3(float nStartX, float nEndX, float nStartY, float nEndY, float nStartZ, float nEndZ, D3DXVECTOR3 v)
+	{
+		if (v.x >= nStartX && v.x <= nEndX &&
+			v.y >= nStartY && v.y <= nEndY &&
+			v.z >= nStartZ && v.z <= nEndZ) return true;
+		else return false;
+	}
+
+	bool CheckFrustumIntersectSphere(ST_FRUSTUM* pFrustum, ST_SPHERE* pSphere)
+	{
+		D3DXVECTOR3 v1, v2 , vN, vC;
+		for (int i = 0; i < static_cast<int>(DI6::END); i++)
+		{
+			vC = pFrustum->GetCenterVec3(static_cast<DIRECTION_6>(i));
+			vN = pFrustum->GetNormalVec3(static_cast<DIRECTION_6>(i));
+			v1 = pSphere->vCenter + pSphere->fRadius * vN;
+			v2 = pSphere->vCenter - pSphere->fRadius * vN;
+
+			if (D3DXVec3Dot(&vN, &(v1 - vC)) < 0 &&
+				D3DXVec3Dot(&vN, &(v2 - vC)) < 0) // 원의 일부조차 겹치지 않을 경우
+				return false;
+		}
+
+		return true;
+	}
+
+	bool CheckSphereIntersectSphere(ST_SPHERE* pSphere1, ST_SPHERE* pSphere2)
+	{
+		if (D3DXVec3Length(&(pSphere1->vCenter - pSphere2->vCenter)) < pSphere1->fRadius + pSphere2->fRadius)
+			return true;
+		else return false;
+	}
+	bool CheckFrustumIntersectFrustum(ST_FRUSTUM* pFrustum1, ST_FRUSTUM* pFrustum2)
+	{
+		D3DXVECTOR3 vN, vC;
+		for (int i = 0; i < static_cast<int>(DI6::END); i++)
+		{
+			vC = pFrustum2->GetCenterVec3(static_cast<DIRECTION_6>(i));
+			vN = pFrustum2->GetNormalVec3(static_cast<DIRECTION_6>(i));
+
+			if (D3DXVec3Dot(&vN, &(pFrustum1->vNear_00 - vC)) < 0 &&
+				D3DXVec3Dot(&vN, &(pFrustum1->vNear_01 - vC)) < 0 &&
+				D3DXVec3Dot(&vN, &(pFrustum1->vNear_10 - vC)) < 0 &&
+				D3DXVec3Dot(&vN, &(pFrustum1->vNear_11 - vC)) < 0 &&
+				D3DXVec3Dot(&vN, &(pFrustum1->vFar_00 - vC)) < 0 &&
+				D3DXVec3Dot(&vN, &(pFrustum1->vFar_01 - vC)) < 0 &&
+				D3DXVec3Dot(&vN, &(pFrustum1->vFar_10 - vC)) < 0 &&
+				D3DXVec3Dot(&vN, &(pFrustum1->vFar_11 - vC)) < 0) // 절두체의 일부조차 겹치지 않을 경우
+				return false;
+		}
+		return true;
+	}
+
+	ST_FRUSTUM GetViewFrustum()
+	{
+		ST_FRUSTUM stRet;
+		D3DXMATRIXA16 matView, matProj, matInv;
+		g_pD3DDevice->GetTransform(D3DTS_VIEW, &matView);
+		g_pD3DDevice->GetTransform(D3DTS_PROJECTION, &matProj);
+
+		stRet.vNear_00 = D3DXVECTOR3(-1.0f, -1.0f, 0.0f);
+		stRet.vNear_01 = D3DXVECTOR3(-1.0f, 1.0f, 0.0f);
+		stRet.vNear_10 = D3DXVECTOR3(1.0f, -1.0f, 0.0f);
+		stRet.vNear_11 = D3DXVECTOR3(1.0f, 1.0f, 0.0f);
+
+		stRet.vFar_00 = D3DXVECTOR3(-1.0f, -1.0f, 1.0f);
+		stRet.vFar_01 = D3DXVECTOR3(-1.0f, 1.0f, 1.0f);
+		stRet.vFar_10 = D3DXVECTOR3(1.0f, -1.0f, 1.0f);
+		stRet.vFar_11 = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
+
+		D3DXMatrixInverse(&matInv, NULL, &(matView * matProj));
+
+		D3DXVec3TransformCoord(&stRet.vNear_00, &stRet.vNear_00, &matInv);
+		D3DXVec3TransformCoord(&stRet.vNear_01, &stRet.vNear_01, &matInv);
+		D3DXVec3TransformCoord(&stRet.vNear_10, &stRet.vNear_10, &matInv);
+		D3DXVec3TransformCoord(&stRet.vNear_11, &stRet.vNear_11, &matInv);
+		D3DXVec3TransformCoord(&stRet.vFar_00, &stRet.vFar_00, &matInv);
+		D3DXVec3TransformCoord(&stRet.vFar_01, &stRet.vFar_01, &matInv);
+		D3DXVec3TransformCoord(&stRet.vFar_10, &stRet.vFar_10, &matInv);
+		D3DXVec3TransformCoord(&stRet.vFar_11, &stRet.vFar_11, &matInv);
+
+		return stRet;
 	}
 }
 

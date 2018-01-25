@@ -8,6 +8,8 @@ cGameNode::cGameNode()
 	: m_pTransformData(nullptr)
 	, m_pParent(nullptr)
 	, m_pPhysicsBody(nullptr)
+	, m_pCollisionNode(nullptr)
+	, m_fCullingRadius(-1.f)
 {
 	
 	m_setChild.clear();
@@ -37,9 +39,22 @@ void cGameNode::Update(float fDelta)
 }
 void cGameNode::Render()
 {
+	ST_SPHERE stSphere;
+	ST_FRUSTUM stFrustum;
+	stFrustum = GetViewFrustum();
 	for each (cGameNode* node in m_setChild)
 	{
-		node->Render();
+		if (node->GetTransformData() != nullptr &&
+			node->GetCullingRadius() >= -0.0001f)
+		{                                                
+			stSphere.vCenter = node->GetTransformData()->GetPosition();
+			D3DXVec3TransformCoord(&stSphere.vCenter, &stSphere.vCenter, &this->GetMatrixToWorld());
+			stSphere.fRadius = node->GetCullingRadius();
+			if (CheckFrustumIntersectSphere(&stFrustum, &stSphere))
+				node->Render();
+		}
+		else
+			node->Render();
 	}
 }
 void cGameNode::Destroy()
@@ -79,16 +94,155 @@ void cGameNode::UpdatePhysics(float fDelta)
 	}
 }
 
-void cGameNode::CollisionWithNode(cGameNode* node)
+void cGameNode::CollisionWithNode(cGameNode* pNode)
 {
-	if (node->GetPhysicsTag() == PHYSICSTAG_NO_CHECK)
-	{
-		
-	}
+	cPhysicsBody* pBody = pNode->GetPhysicsBody();
+	if (pBody == nullptr) return;
+
+	D3DXMATRIXA16 matMyWorld, matMyParentWorld, matMyR, matMyT;
+	if (this->GetParentNode() == nullptr)
+		D3DXMatrixIdentity(&matMyParentWorld);
+	else matMyWorld = this->GetParentNode()->GetMatrixToWorld();
+
+	D3DXMatrixRotationAxis(&matMyR,
+		&m_pPhysicsBody->GetTempPhysicsData().vAxis,
+		m_pPhysicsBody->GetTempPhysicsData().fRotAngle);
+	D3DXMatrixTranslation(&matMyT,
+		m_pPhysicsBody->GetTempPhysicsData().vPos.x,
+		m_pPhysicsBody->GetTempPhysicsData().vPos.y,
+		m_pPhysicsBody->GetTempPhysicsData().vPos.z);
+
+	matMyWorld = matMyR * matMyT * matMyParentWorld;
+
+	D3DXMATRIXA16 matWorld, matParentWorld, matR, matT;
+	if (pNode->GetParentNode() == nullptr)
+		D3DXMatrixIdentity(&matParentWorld);
 	else
+		matParentWorld = pNode->GetParentNode()->GetMatrixToWorld();
+
+	D3DXMatrixRotationAxis(&matR,
+		&pBody->GetTempPhysicsData().vAxis,
+		pBody->GetTempPhysicsData().fRotAngle);
+	D3DXMatrixTranslation(&matT,
+		pBody->GetTempPhysicsData().vPos.x,
+		pBody->GetTempPhysicsData().vPos.y,
+		pBody->GetTempPhysicsData().vPos.z);
+
+	matWorld = matR * matT * matParentWorld;
+
+	ST_FRUSTUM stMyFrustum = m_pPhysicsBody->GetShapeData().stCuboid.TransformCoord(&matMyWorld);
+	ST_SPHERE  stMySphere = m_pPhysicsBody->GetShapeData().stSphere.TransformCoord(&matMyWorld);
+	ST_FRUSTUM stOpponentFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
+	ST_SPHERE  stOpponentSphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);
+
+	D3DXVECTOR3 vMyCrushNorm;
+	float fMyDot;
+	D3DXVECTOR3 vOpponentCrushNorm;
+	float fOpponentDot;
+	bool bIsCollision = false;
+
+
+	if (m_pPhysicsBody->GetShapeData().enShapeType == PHYSICSSHAPETYPE_SPHERE)
 	{
-		
+		if (pBody->GetShapeData().enShapeType == PHYSICSSHAPETYPE_SPHERE)
+		{
+			if (CheckSphereIntersectSphere(&stMySphere, &stOpponentSphere))
+			{
+				vMyCrushNorm = stMySphere.vCenter - stOpponentSphere.vCenter;
+				fMyDot = D3DXVec3Dot(&m_pPhysicsBody->GetTempPhysicsData().vVelocity, &vMyCrushNorm);
+				vOpponentCrushNorm = -vMyCrushNorm;
+				fOpponentDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vOpponentCrushNorm);
+				bIsCollision = true;
+			}
+		}
+		else if (pBody->GetShapeData().enShapeType == PHYSICSSHAPETYPE_CUBOID)
+		{
+			if (CheckFrustumIntersectSphere(&stOpponentFrustum, &stMySphere))
+			{
+				vMyCrushNorm = stOpponentFrustum.GetNearestSideNormalVec3(&stMySphere.vCenter);
+				fMyDot = D3DXVec3Dot(&m_pPhysicsBody->GetTempPhysicsData().vVelocity, &vMyCrushNorm);
+				vOpponentCrushNorm = -vMyCrushNorm;
+				fOpponentDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vOpponentCrushNorm);
+				bIsCollision = true;
+			}
+		}
 	}
+	else if (m_pPhysicsBody->GetShapeData().enShapeType == PHYSICSSHAPETYPE_CUBOID)
+	{
+		if (pBody->GetShapeData().enShapeType == PHYSICSSHAPETYPE_SPHERE)
+		{
+			if (CheckFrustumIntersectSphere(&stMyFrustum, &stOpponentSphere))
+			{
+				vOpponentCrushNorm = stMyFrustum.GetNearestSideNormalVec3(&stOpponentSphere.vCenter);
+				fOpponentDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vOpponentCrushNorm);
+				vMyCrushNorm = -vOpponentCrushNorm;
+				fMyDot = D3DXVec3Dot(&m_pPhysicsBody->GetTempPhysicsData().vVelocity, &vMyCrushNorm);
+				bIsCollision = true;
+			}
+		}
+		else if (pBody->GetShapeData().enShapeType == PHYSICSSHAPETYPE_CUBOID)
+		{
+			if (CheckFrustumIntersectFrustum(&stMyFrustum, &stOpponentFrustum))
+			{
+				vMyCrushNorm = stOpponentFrustum.GetNearestSideNormalVec3(&stMySphere.vCenter);
+				fMyDot = D3DXVec3Dot(&m_pPhysicsBody->GetTempPhysicsData().vVelocity, &vMyCrushNorm);
+				vOpponentCrushNorm = -vMyCrushNorm;
+				fOpponentDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vOpponentCrushNorm);
+				bIsCollision = true;
+			}
+		}
+	}
+	if (bIsCollision == true)
+	{
+		m_pCollisionNode = pNode;
+		if (m_pPhysicsBody->GetBodyType() == PHYSICSBODYTYPE_STATIC &&
+			pBody->GetBodyType() == PHYSICSBODYTYPE_STATIC)
+		{
+			if (fMyDot < 0)
+			{
+				m_pPhysicsBody->GetTempPhysicsData().vVelocity + (vMyCrushNorm * fMyDot) * (1.f/* + m_pPhysicsBody->GetTempPhysicsData().fElasticity*/);
+				m_pPhysicsBody->GetPhysicsData().vVelocity = m_pPhysicsBody->GetTempPhysicsData().vVelocity;
+			}
+			if (fOpponentDot < 0)
+			{
+				pBody->GetTempPhysicsData().vVelocity + (vMyCrushNorm * fMyDot) * (1.f/* + pBody->GetTempPhysicsData().fElasticity*/);
+				pBody->GetPhysicsData().vVelocity = m_pPhysicsBody->GetTempPhysicsData().vVelocity;
+			}
+		}
+		else if (m_pPhysicsBody->GetBodyType() == PHYSICSBODYTYPE_DINAMIC &&
+			pBody->GetBodyType() == PHYSICSBODYTYPE_STATIC)
+		{
+			if (fMyDot < 0)
+			{
+				m_pPhysicsBody->GetTempPhysicsData().vVelocity + (vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity);
+				m_pPhysicsBody->GetPhysicsData().vVelocity = m_pPhysicsBody->GetTempPhysicsData().vVelocity;
+			}
+		}
+		else if (m_pPhysicsBody->GetBodyType() == PHYSICSBODYTYPE_STATIC &&
+			pBody->GetBodyType() == PHYSICSBODYTYPE_DINAMIC)
+		{
+			if (fOpponentDot < 0)
+			{
+				pBody->GetTempPhysicsData().vVelocity + (vMyCrushNorm * fMyDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
+				pBody->GetPhysicsData().vVelocity = m_pPhysicsBody->GetTempPhysicsData().vVelocity;
+			}
+		}
+		else if (m_pPhysicsBody->GetBodyType() == PHYSICSBODYTYPE_DINAMIC &&
+			pBody->GetBodyType() == PHYSICSBODYTYPE_DINAMIC)
+		{
+			if (fMyDot < 0)
+			{
+				m_pPhysicsBody->GetTempPhysicsData().vVelocity + (vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity) * pBody->GetPhysicsData().fMass / (m_pPhysicsBody->GetPhysicsData().fMass + pBody->GetPhysicsData().fMass);
+				m_pPhysicsBody->GetPhysicsData().vVelocity = m_pPhysicsBody->GetTempPhysicsData().vVelocity;
+			}
+			if (fOpponentDot < 0)
+			{
+				pBody->GetTempPhysicsData().vVelocity + (vMyCrushNorm * fMyDot) * (1.f + pBody->GetTempPhysicsData().fElasticity) * m_pPhysicsBody->GetPhysicsData().fMass / (m_pPhysicsBody->GetPhysicsData().fMass + pBody->GetPhysicsData().fMass);
+				pBody->GetPhysicsData().vVelocity = m_pPhysicsBody->GetTempPhysicsData().vVelocity;
+			}
+		}
+	}
+
 }
 
 

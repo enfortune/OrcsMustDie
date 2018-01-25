@@ -51,8 +51,6 @@ void cSkinnedMesh::UpdateFrames(LPD3DXFRAME pFrame, LPD3DXFRAME pParent)
 			&pParentFrame->matCombinedTransformMatrix);
 	}
 
-	
-
 	if (pBone->pFrameSibling != nullptr) UpdateFrames(pBone->pFrameSibling, pParent);
 	if (pBone->pFrameFirstChild != nullptr) UpdateFrames(pBone->pFrameFirstChild, pFrame);
 }

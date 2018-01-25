@@ -23,11 +23,11 @@ void cPhysicsBody::MakeBodyShape(ST_PHYSICSSHAPEDATA stShapeData)
 {
 	m_stShapeData = stShapeData;
 }
-void cPhysicsBody::MakeBodyRectosahedron(float fX, float fY, float fZ, D3DXVECTOR3 vCenter)
+void cPhysicsBody::MakeBodyCuboid(float fX, float fY, float fZ, D3DXVECTOR3 vCenter)
 {
-	m_stShapeData.enShapeType = PHYSICSSHAPETYPE_RECTOSAHEDRON;
-	m_stShapeData.vCenter = vCenter;
-	m_stShapeData.vecVertex.clear();
+	m_stShapeData.enShapeType = PHYSICSSHAPETYPE_CUBOID;
+	m_stShapeData.stSphere.vCenter = vCenter;
+	//m_stShapeData.vecVertex.clear();
 
 	D3DXVECTOR3 _000 = D3DXVECTOR3(vCenter.x - fX / 2, vCenter.y - fY / 2, vCenter.z - fZ / 2);
 	D3DXVECTOR3 _001 = D3DXVECTOR3(vCenter.x - fX / 2, vCenter.y - fY / 2, vCenter.z + fZ / 2);
@@ -38,23 +38,32 @@ void cPhysicsBody::MakeBodyRectosahedron(float fX, float fY, float fZ, D3DXVECTO
 	D3DXVECTOR3 _110 = D3DXVECTOR3(vCenter.x + fX / 2, vCenter.y + fY / 2, vCenter.z - fZ / 2);
 	D3DXVECTOR3 _111 = D3DXVECTOR3(vCenter.x + fX / 2, vCenter.y + fY / 2, vCenter.z + fZ / 2);
 
-	m_stShapeData.vecVertex.push_back(_000);
+	/*m_stShapeData.vecVertex.push_back(_000);
 	m_stShapeData.vecVertex.push_back(_001);
 	m_stShapeData.vecVertex.push_back(_010);
 	m_stShapeData.vecVertex.push_back(_011);
 	m_stShapeData.vecVertex.push_back(_100);
 	m_stShapeData.vecVertex.push_back(_101);
 	m_stShapeData.vecVertex.push_back(_110);
-	m_stShapeData.vecVertex.push_back(_111);
+	m_stShapeData.vecVertex.push_back(_111);*/
 
-	m_stShapeData.fRadius = sqrtf(powf(fX / 2, 2.f) + powf(fY / 2, 2.f) + powf(fZ / 2, 2.f));
+	m_stShapeData.stCuboid.vNear_00 =	_000;
+	m_stShapeData.stCuboid.vNear_01 =	_010;
+	m_stShapeData.stCuboid.vNear_10 =	_100;
+	m_stShapeData.stCuboid.vNear_11 =	_110;
+	m_stShapeData.stCuboid.vFar_00 =	_001;
+	m_stShapeData.stCuboid.vFar_01 =	_011;
+	m_stShapeData.stCuboid.vFar_10 =	_101;
+	m_stShapeData.stCuboid.vFar_11 =	_111;
+
+	m_stShapeData.stSphere.fRadius = sqrtf(powf(fX / 2, 2.f) + powf(fY / 2, 2.f) + powf(fZ / 2, 2.f));
 }
 
 void cPhysicsBody::MakeBodySphere(float fRadius, D3DXVECTOR3 vCenter)
 {
 	m_stShapeData.enShapeType = PHYSICSSHAPETYPE_SPHERE;
-	m_stShapeData.fRadius = fRadius;
-	m_stShapeData.vCenter = vCenter;
+	m_stShapeData.stSphere.fRadius = fRadius;
+	m_stShapeData.stSphere.vCenter = vCenter;
 }
 
 void cPhysicsBody::UpdateTempPhysics(float fDelta)
@@ -86,7 +95,6 @@ void cPhysicsBody::UpdateTempPhysics(float fDelta)
 			m_stTempPhysicsData.fAngleAccel += m_stTempPhysicsData.fAngleDamping * fDelta;
 			if (m_stTempPhysicsData.fAngleAccel > 0.f) m_stTempPhysicsData.fAngleAccel = 0.f;
 		}
-
 
 		m_stTempPhysicsData.fSurfaceTorque = 0.0f;
 	}
@@ -217,7 +225,6 @@ void cPhysicsBody::UpdatePhysics(float fDelta)
 		if (m_stPhysicsData.vAccel.z > 0.f) m_stPhysicsData.vAccel.z = 0.f;
 	}
 
-	
 	m_stPhysicsData.vForce = D3DXVECTOR3(0.f, 0.f, 0.f); // 외력 초기화
 
 }

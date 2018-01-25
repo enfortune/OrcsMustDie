@@ -29,7 +29,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120_xp</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -168,6 +168,10 @@
     <ClInclude Include="cCamera.h" />
     <ClInclude Include="cDeviceManager.h" />
     <ClInclude Include="cFontManager.h" />
+    <ClInclude Include="cGameParticle.h" />
+    <ClInclude Include="cGameParticleEnumList.h" />
+    <ClInclude Include="cGameParticleFirework.h" />
+    <ClInclude Include="cGameParticleSnow.h" />
     <ClInclude Include="cGameText.h" />
     <ClInclude Include="cGameNode.h" />
     <ClInclude Include="cGameUILabel.h" />
@@ -194,6 +198,8 @@
     <ClInclude Include="cObjLoader.h" />
     <ClInclude Include="cObjMap.h" />
     <ClInclude Include="commonMacroFunction.h" />
+    <ClInclude Include="cParticleManager.h" />
+    <ClInclude Include="cParticleTestScene.h" />
     <ClInclude Include="cPhysicsBody.h" />
     <ClInclude Include="cPhysicsNode.h" />
     <ClInclude Include="cPhysicsSpace.h" />
@@ -238,6 +244,9 @@
     <ClCompile Include="cCamera.cpp" />
     <ClCompile Include="cDeviceManager.cpp" />
     <ClCompile Include="cFontManager.cpp" />
+    <ClCompile Include="cGameParticle.cpp" />
+    <ClCompile Include="cGameParticleFirework.cpp" />
+    <ClCompile Include="cGameParticleSnow.cpp" />
     <ClCompile Include="cGameText.cpp" />
     <ClCompile Include="cGameNode.cpp" />
     <ClCompile Include="cGameUILabel.cpp" />
@@ -263,6 +272,8 @@
     <ClCompile Include="cMtlTex.cpp" />
     <ClCompile Include="cObjLoader.cpp" />
     <ClCompile Include="cObjMap.cpp" />
+    <ClCompile Include="cParticleManager.cpp" />
+    <ClCompile Include="cParticleTestScene.cpp" />
     <ClCompile Include="cPhysicsBody.cpp" />
     <ClCompile Include="cPhysicsNode.cpp" />
     <ClCompile Include="cPhysicsSpace.cpp" />

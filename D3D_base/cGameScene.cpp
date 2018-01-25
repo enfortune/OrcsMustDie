@@ -20,10 +20,12 @@ void cGameScene::Setup()
 void cGameScene::Update(float fDelta)
 {
 	cGameNode::Update(fDelta);
+
 }
 void cGameScene::Render()
 {
 	cGameNode::Render();
+
 }
 void cGameScene::Delete()
 {
@@ -32,7 +34,6 @@ void cGameScene::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	cGameNode::WndProc(hWnd, message, wParam, lParam);
 }
-
 RECT cGameScene::GetScreenRect()
 {
 	RECT rcRet;

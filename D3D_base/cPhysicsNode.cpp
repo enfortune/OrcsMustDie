@@ -33,10 +33,12 @@ void cPhysicsNode::Update(float fDelta)
 		(*itSour)->UpdateTempPhysics();
 		for (itDest = ++itSour; itDest != m_setChild.end(); itDest++)
 		{
-			
+			(*itSour)->CollisionWithNode(*itDest);
 		}
-	}
+		this->CollisionWithMap((*itSour));
 
+		(*itSour)->UpdatePhysics();
+	}
 	
 	/*for each (cGameNode* node in m_setChild)
 	{
@@ -68,3 +70,7 @@ void cPhysicsNode::UpdatePhysics(float fDelta)
 
 }
 
+void cPhysicsNode::CollisionWithMap(cGameNode* pNode)
+{
+	// TODO: 맵 충돌 코드 추가 필요
+}

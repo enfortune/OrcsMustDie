@@ -109,6 +109,9 @@
     <Filter Include="김완수\Physics">
       <UniqueIdentifier>{4963c78a-16e6-4e81-a142-f945186f0294}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Foundation\D3D\Particle">
+      <UniqueIdentifier>{7a90039a-0600-42d4-b1bb-f5f479a4ea98}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -322,6 +325,24 @@
     <ClInclude Include="iGameMap.h">
       <Filter>Interface</Filter>
     </ClInclude>
+    <ClInclude Include="cParticleTestScene.h">
+      <Filter>SampleCode</Filter>
+    </ClInclude>
+    <ClInclude Include="cParticleManager.h">
+      <Filter>Global\Manager\D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameParticleEnumList.h">
+      <Filter>Foundation\D3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameParticle.h">
+      <Filter>Foundation\D3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameParticleSnow.h">
+      <Filter>Foundation\D3D\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameParticleFirework.h">
+      <Filter>Foundation\D3D\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -506,6 +527,21 @@
     </ClCompile>
     <ClCompile Include="iGameMap.cpp">
       <Filter>Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="cParticleTestScene.cpp">
+      <Filter>SampleCode</Filter>
+    </ClCompile>
+    <ClCompile Include="cParticleManager.cpp">
+      <Filter>Global\Manager\D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameParticle.cpp">
+      <Filter>Foundation\D3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameParticleSnow.cpp">
+      <Filter>Foundation\D3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameParticleFirework.cpp">
+      <Filter>Foundation\D3D\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
