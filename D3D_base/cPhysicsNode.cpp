@@ -30,14 +30,25 @@ void cPhysicsNode::Update(float fDelta)
 
 	for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
 	{
-		(*itSour)->UpdateTempPhysics();
-		for (itDest = ++itSour; itDest != m_setChild.end(); itDest++)
+		(*itSour)->Update(fDelta);
+
+		(*itSour)->GetPhysicsBody()->GetPhysicsData().vVelocity += m_stSpaceData.vGravity * fDelta;
+
+		(*itSour)->UpdateTempPhysics(fDelta);
+	}
+
+
+	for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
+	{
+		itDest = itSour;
+		itDest++;
+		for (; itDest != m_setChild.end(); itDest++)
 		{
 			(*itSour)->CollisionWithNode(*itDest);
 		}
 		this->CollisionWithMap((*itSour));
 
-		(*itSour)->UpdatePhysics();
+		(*itSour)->UpdatePhysics(fDelta);	
 	}
 	
 	/*for each (cGameNode* node in m_setChild)
@@ -73,4 +84,7 @@ void cPhysicsNode::UpdatePhysics(float fDelta)
 void cPhysicsNode::CollisionWithMap(cGameNode* pNode)
 {
 	// TODO: 맵 충돌 코드 추가 필요
+	bool a = false;
+	if (m_pMap) a = m_pMap->MapCollisionCheck(pNode);
+	bool b = a;
 }

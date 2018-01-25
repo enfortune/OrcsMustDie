@@ -30,7 +30,4 @@ public:
 	virtual void Delete() override;
 
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
-
-	virtual void UpdatePhysics(float fDelta = g_pTimeManager->GetEllapsedTime()) override;
-
 };

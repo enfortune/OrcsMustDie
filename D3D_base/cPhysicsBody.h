@@ -38,7 +38,7 @@ typedef struct ST_PHYSICSDATA
 		, fAngleAccel(0.0f)
 		, fAngleDamping(0.0f)
 		, fAngleVelocity(0.0f)
-		, fMass(0.0f)
+		, fMass(1.0f)
 		, vForce(0.0f, 0.0f, 0.0f)
 		, vAccel(0.0f, 0.0f, 0.0f)
 		, vDamping(0.0f, 0.0f, 0.0f)

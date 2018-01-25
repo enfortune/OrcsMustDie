@@ -43,7 +43,3 @@ void cChaNode::Delete()
 void cChaNode::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 }
-
-void cChaNode::UpdatePhysics(float fDelta)
-{
-}

@@ -2,6 +2,7 @@
 #include "cSampleChar.h"
 #include "cSkinnedMesh.h"
 #include "cTransformData.h"
+#include "cPhysicsBody.h"
 
 cSampleChar::cSampleChar()
 {
@@ -13,10 +14,10 @@ cSampleChar::~cSampleChar()
 	Delete();
 }
 
-void cSampleChar::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
+void cSampleChar::Setup(bool move, D3DXVECTOR3 vPosSetup)
 {
 	cGameNode::Setup(true);
-	bMove = FALSE;
+	bMove = move;
 	vDir = D3DXVECTOR3(0, 0, -1);
 	fRotY = 0.f;
 	m_pSkinnedMesh = new cSkinnedMesh;
@@ -28,29 +29,38 @@ void cSampleChar::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 	GetTransformData()->SetAxis(vDir);
 	vPos = vPosSetup;
 
-	move1 = true;
-	move2 = false;
-	move3 = false;
+	m_pPhysicsBody = new cPhysicsBody;
+	m_pPhysicsBody->Setup(-PI / 4.f);
+	m_pPhysicsBody->MakeBodyCuboid(1.f, 1.f, 1.f, D3DXVECTOR3(0.f, 0.5f, 0.f));
+	m_pPhysicsBody->GetPhysicsData().vPos = vPosSetup;
+	m_pPhysicsBody->GetPhysicsData().vDamping = D3DXVECTOR3(1.f, 0.f, 1.f);
+	m_pPhysicsBody->SetBodyType(PHYSICSBODYTYPE_DINAMIC);
+
 }
 
 void cSampleChar::Update(float fDelta)
 {
 	m_pSkinnedMesh->Update();
 	m_pSkinnedMesh->UpdateAnimation(fDelta);
-	GetTransformData()->SetPosition(vPos);
-	if (move1)
+
+
+
+	//m_pPhysicsBody->GetPhysicsData().vVelocity.z
+	if (bMove)
 	{
-		Move(D3DXVECTOR3(-7, 0, -5), fDelta);
-	}
-	else if (move2)
-	{
-		Move(D3DXVECTOR3(5, 0, 6), fDelta);
-	}
-	else if (move3)
-	{
-		Move(D3DXVECTOR3(-4, 0, 4), fDelta);
+		float speedX = 0.f;
+		float speedZ = 0.f;
+
+		if (g_pKeyManager->IsStayKeyDown('W')) speedZ += 1.f;
+		if (g_pKeyManager->IsStayKeyDown('S')) speedZ -= 1.f;
+		if (g_pKeyManager->IsStayKeyDown('A')) speedX -= 1.f;
+		if (g_pKeyManager->IsStayKeyDown('D')) speedX += 1.f;
+
+		m_pPhysicsBody->GetPhysicsData().vVelocity.x = speedX;
+		m_pPhysicsBody->GetPhysicsData().vVelocity.z = speedZ;
 	}
 	
+
 	cGameNode::Update(fDelta);
 }
 
@@ -73,64 +83,3 @@ void cSampleChar::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	
 }
-
-void cSampleChar::UpdatePhysics(float fDelta)
-{
-}
-
-void cSampleChar::Move(D3DXVECTOR3 vGoal, float fDelta)
-{
-	D3DXVECTOR3 vTempDir = vGoal - vPos;
-	float tempLength = D3DXVec3Length(&vTempDir);
-	if (!bMove)
-	{
-		if (tempLength > 0.1)
-		{
-			bMove = TRUE;
-			m_pSkinnedMesh->SetAnimationSet(0, 2);
-		}
-	}
-	else
-	{
-		if (tempLength > 0.1)
-		{
-			D3DXVec3Normalize(&vDir, &vTempDir);
-
-			float tempRot;
-			tempRot = atan((-1 * vTempDir.z) / vTempDir.x);
-			if (vTempDir.x < 0) tempRot -= D3DX_PI;
-
-			tempRot = tempRot - (D3DX_PI / 2);
-			GetTransformData()->SetAxis(D3DXVECTOR3(0, 1, 0));
-			GetTransformData()->SetRotAngle(tempRot);
-			vPos += vDir * (fDelta * 5.f);
-		}
-		else
-		{
-			vPos = vGoal;
-			bMove = FALSE;
-			m_pSkinnedMesh->SetAnimationSet(0, 3);
-			if (move1)
-			{
-				move1 = false;
-				move2 = true;
-			}
-			else if (move2)
-			{
-				move2 = false;
-				move3 = true;
-			}
-			else if (move3)
-			{
-				move3 = false;
-				move1 = true;
-			}
-		}
-	}
-}
-
-void cSampleChar::Attack(D3DXVECTOR3 vPlayer)
-{
-
-}
-

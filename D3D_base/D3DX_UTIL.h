@@ -115,7 +115,7 @@ namespace D3DX_UTIL
 			DIRECTION_6 enDir = DIRECTION_6::END;
 			float fNearestDist = -1.f;
 			float fDist;
-			D3DXVECTOR3 vCenter;
+			D3DXVECTOR3 vCenter;	
 
 			for (int i = 0; i < static_cast<int>(DIRECTION_6::END); i++)
 			{

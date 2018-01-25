@@ -1,10 +1,21 @@
 #pragma once
 #include "cGameScene.h"
 class cMapData;
+class cPhysicsNode;
+class cCamera;
+class cGrid;
+class cSampleChar;
+
 class cPhysicsTestScene : public cGameScene
 {
+	cCamera* m_pCamera;
+	cGrid*   m_pGrid;
 	
 	cMapData* m_pMapData;
+	cPhysicsNode* m_pSpace;
+
+	cSampleChar* m_pEnemy;
+	cSampleChar* m_pEnemy2;
 
 public:
 	cPhysicsTestScene();

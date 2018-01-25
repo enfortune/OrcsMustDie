@@ -2,10 +2,22 @@
 #include "cGameNode.h"
 class iGameMap;
 
+typedef struct ST_PHYSICSSPACEDATA
+{
+	D3DXVECTOR3 vGravity;
+
+	ST_PHYSICSSPACEDATA()
+	{
+		vGravity = D3DXVECTOR3(0.0f, -1.0f, 0.0f);
+	}
+}PHYSICSSPACEDATA;
+
 class cPhysicsNode : public cGameNode
 {
 	iGameMap* m_pMap;
-	
+
+	ST_PHYSICSSPACEDATA m_stSpaceData;
+
 public:
 	cPhysicsNode();
 	virtual ~cPhysicsNode();

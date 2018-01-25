@@ -103,13 +103,13 @@ struct ST_GRIDBOX
 
 
 		stCube.vNear_00 = _000;
-		stCube.vNear_00 = _010;
-		stCube.vNear_00 = _100;
-		stCube.vNear_00 = _110;
+		stCube.vNear_01 = _010;
+		stCube.vNear_10 = _100;
+		stCube.vNear_11 = _110;
 		stCube.vFar_00 = _001;
-		stCube.vFar_00 = _011;
-		stCube.vFar_00 = _101;
-		stCube.vFar_00 = _111;
+		stCube.vFar_01 = _011;
+		stCube.vFar_10 = _101;
+		stCube.vFar_11 = _111;
 
 		//µÚ
 

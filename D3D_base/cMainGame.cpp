@@ -5,6 +5,7 @@
 #include "cInGameScene.h"
 #include "cMapToolScene.h"
 #include "cParticleTestScene.h"
+#include "cPhysicsTestScene.h"
 
 cMainGame::cMainGame()
 {
@@ -26,7 +27,7 @@ void cMainGame::Setup()
 	g_pSoundManager->Setup();
 	g_pKeyManager->Setup();
 
-	g_pSceneManager->Setup(new cParticleTestScene);
+	g_pSceneManager->Setup(new cPhysicsTestScene);
 }
 
 void cMainGame::Update()
