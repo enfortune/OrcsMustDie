@@ -166,6 +166,7 @@
     <ClInclude Include="cAseLoader.h" />
     <ClInclude Include="cAseNode.h" />
     <ClInclude Include="cCamera.h" />
+    <ClInclude Include="cChaNode.h" />
     <ClInclude Include="cDeviceManager.h" />
     <ClInclude Include="cFontManager.h" />
     <ClInclude Include="cGameParticle.h" />
@@ -205,6 +206,7 @@
     <ClInclude Include="cPhysicsSpace.h" />
     <ClInclude Include="cPhysicsTestScene.h" />
     <ClInclude Include="cRay.h" />
+    <ClInclude Include="cSampleChar.h" />
     <ClInclude Include="cSceneManager.h" />
     <ClInclude Include="cSkinnedMesh.h" />
     <ClInclude Include="cSoundManager.h" />
@@ -242,6 +244,7 @@
     <ClCompile Include="cAseLoader.cpp" />
     <ClCompile Include="cAseNode.cpp" />
     <ClCompile Include="cCamera.cpp" />
+    <ClCompile Include="cChaNode.cpp" />
     <ClCompile Include="cDeviceManager.cpp" />
     <ClCompile Include="cFontManager.cpp" />
     <ClCompile Include="cGameParticle.cpp" />
@@ -279,6 +282,7 @@
     <ClCompile Include="cPhysicsSpace.cpp" />
     <ClCompile Include="cPhysicsTestScene.cpp" />
     <ClCompile Include="cRay.cpp" />
+    <ClCompile Include="cSampleChar.cpp" />
     <ClCompile Include="cSceneManager.cpp" />
     <ClCompile Include="cSkinnedMesh.cpp" />
     <ClCompile Include="cSoundManager.cpp" />

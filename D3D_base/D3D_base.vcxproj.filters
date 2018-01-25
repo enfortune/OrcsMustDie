@@ -343,6 +343,12 @@
     <ClInclude Include="cGameParticleFirework.h">
       <Filter>Foundation\D3D\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="cChaNode.h">
+      <Filter>SampleCode</Filter>
+    </ClInclude>
+    <ClInclude Include="cSampleChar.h">
+      <Filter>SampleCode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -542,6 +548,12 @@
     </ClCompile>
     <ClCompile Include="cGameParticleFirework.cpp">
       <Filter>Foundation\D3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="cChaNode.cpp">
+      <Filter>SampleCode</Filter>
+    </ClCompile>
+    <ClCompile Include="cSampleChar.cpp">
+      <Filter>SampleCode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
