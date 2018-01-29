@@ -14,10 +14,13 @@ private:
 	D3DXVECTOR3*	m_pvTarget;
 
 public:
+	inline void setTarget(D3DXVECTOR3 * pTarget) noexcept { m_pvTarget = pTarget; }
+
+public:
 	cCamera();
 	~cCamera();
 
-	void Setup(D3DXVECTOR3* pvTarget);
+	void Setup(D3DXVECTOR3* pvTarget = nullptr);
 	void Update();
 
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
