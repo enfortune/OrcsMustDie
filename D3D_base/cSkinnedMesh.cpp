@@ -179,7 +179,6 @@ void cSkinnedMesh::UpdateSkinnedMesh(LPD3DXFRAME pFrame) // skinning
 
 void cSkinnedMesh::UpdateAnimation(float fDelta)
 {
-	
 	m_pAniCtrl->AdvanceTime(fDelta, NULL);
 }
 
@@ -202,6 +201,8 @@ void cSkinnedMesh::SetAnimationSet(UINT nTrack, LPCSTR szAniSetName)
 	if (m_mapAniSet.find(szAniSetName) == m_mapAniSet.end()) return;
 
 	m_pAniCtrl->SetTrackAnimationSet(nTrack, m_mapAniSet[szAniSetName]);
+
+
 }
 
 void cSkinnedMesh::SetAnimationSet(UINT nTrack, int nAniID)
@@ -209,4 +210,5 @@ void cSkinnedMesh::SetAnimationSet(UINT nTrack, int nAniID)
 	if (nTrack >= m_vecAniSetName.size()) return;
 
 	m_pAniCtrl->SetTrackAnimationSet(nTrack, (m_mapAniSet.find(m_vecAniSetName[nAniID]))->second);
+	
 }

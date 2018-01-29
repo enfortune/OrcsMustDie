@@ -40,7 +40,7 @@ void cInGameUIScore::Update(float fDelta)
 
 	m_pLabel->SetText(std::to_string(m_nScore));
 
-	cGameNode::Update();
+	cGameNode::Update(fDelta);
 }
 void cInGameUIScore::Render()
 {

@@ -100,8 +100,6 @@ struct ST_GRIDBOX
 		_110 = D3DXVECTOR3((x + 1) * MAPSIZE_CUBE, (y + 1 - MAPSIZE_Y_ZEROSTD) * MAPSIZE_CUBE, (z)* MAPSIZE_CUBE);
 		_111 = D3DXVECTOR3((x + 1) * MAPSIZE_CUBE, (y + 1 - MAPSIZE_Y_ZEROSTD) * MAPSIZE_CUBE, (z + 1) * MAPSIZE_CUBE);
 
-
-
 		stCube.vNear_00 = _000;
 		stCube.vNear_01 = _010;
 		stCube.vNear_10 = _100;
@@ -112,22 +110,18 @@ struct ST_GRIDBOX
 		stCube.vFar_11 = _111;
 
 		//µÚ
-
 		v[0].p = _000; v[0].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 		v[1].p = _010; v[1].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 		v[2].p = _110; v[2].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-
 
 		v[3].p = _000; v[3].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 		v[4].p = _110; v[4].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 		v[5].p = _100; v[5].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
 
-
 		//¾Õ
 		v[6].p = _001; v[3].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 		v[7].p = _111; v[4].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 		v[8].p = _011; v[5].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
-
 
 		v[9].p = _001;	v[9].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
 		v[10].p = _101; v[10].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
@@ -233,12 +227,10 @@ public:
 	void SaveData(std::string sFileName);
 	void LoadData(std::string sFileName);
 
-	
-
 	/* for interface */
 protected: 
 	//bool OctaTreeCollisionCheck(cPhysicsBody* body, int nStartX, int nEndX, int nStartY, int nEndY, int nStartZ, int nEndZ);
 public: 
-	virtual bool MapCollisionCheck(cGameNode* pNode) override;
+	virtual bool MapCollisionCheck(cGameNode* pNode, float fDelta) override;
 };
 

@@ -164,7 +164,8 @@ namespace D3DX_UTIL
 		D3DXVECTOR3 GetNearestSideNormalVec3(ST_FRUSTUM* pSour)
 		{
 			DIRECTION_6 enDir = DIRECTION_6::END;
-			D3DXVECTOR3 vN, vC;
+			D3DXVECTOR3 vC;
+			D3DXVECTOR3 vN;
 			D3DXVECTOR3 vTemp;
 			float fCalc[static_cast<int>(DI6::END)];
 			float fComp = -1.f;
@@ -175,6 +176,16 @@ namespace D3DX_UTIL
 
 				vC = GetCenterVec3(static_cast<DIRECTION_6>(i));
 				vN = GetNormalVec3(static_cast<DIRECTION_6>(i));
+
+				/*fCalc[i] += D3DXVec3Length(&(pSour->vNear_00 - vC));
+				fCalc[i] += D3DXVec3Length(&(pSour->vNear_01 - vC));
+				fCalc[i] += D3DXVec3Length(&(pSour->vNear_10 - vC));
+				fCalc[i] += D3DXVec3Length(&(pSour->vNear_11 - vC));
+				fCalc[i] += D3DXVec3Length(&(pSour->vFar_00 - vC));
+				fCalc[i] += D3DXVec3Length(&(pSour->vFar_01 - vC));
+				fCalc[i] += D3DXVec3Length(&(pSour->vFar_10 - vC));
+				fCalc[i] += D3DXVec3Length(&(pSour->vFar_11 - vC));*/
+
 
 				D3DXVec3Normalize(&vTemp, &(pSour->vNear_00 - vC));
 				fTemp = D3DXVec3Dot(&vN, &vTemp);
@@ -237,6 +248,34 @@ namespace D3DX_UTIL
 			
 			return -GetNormalVec3(enDir);
 		}
+
+
+		float GetHighestPoint()
+		{
+			float fRet = vNear_00.y;
+			if (fRet < vNear_01.y) fRet = vNear_01.y;
+			if (fRet < vNear_10.y) fRet = vNear_10.y;
+			if (fRet < vNear_11.y) fRet = vNear_11.y;
+			if (fRet < vFar_00.y) fRet = vFar_00.y;
+			if (fRet < vFar_01.y) fRet = vFar_01.y;
+			if (fRet < vFar_10.y) fRet = vFar_10.y;
+			if (fRet < vFar_11.y) fRet = vFar_11.y;
+
+			return fRet;
+		}
+		float GetLowestPoint()
+		{
+			float fRet = vNear_00.y;
+			if (fRet > vNear_01.y) fRet = vNear_01.y;
+			if (fRet > vNear_10.y) fRet = vNear_10.y;
+			if (fRet > vNear_11.y) fRet = vNear_11.y;
+			if (fRet > vFar_00.y) fRet = vFar_00.y;
+			if (fRet > vFar_01.y) fRet = vFar_01.y;
+			if (fRet > vFar_10.y) fRet = vFar_10.y;
+			if (fRet > vFar_11.y) fRet = vFar_11.y;
+			return fRet;
+		}
+
 	}FRUSTUM;
 
 	/* function */

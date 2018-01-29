@@ -3,6 +3,7 @@
 #include "cPhysicsBody.h"
 #include "iGameMap.h"
 
+#define PHYSICSNODE_ONGROUNDEPSILON 0.001f
 
 cPhysicsNode::cPhysicsNode()
 {
@@ -32,8 +33,10 @@ void cPhysicsNode::Update(float fDelta)
 	{
 		(*itSour)->Update(fDelta);
 
+		//if ((*itSour)->GetPhysicsBody()->GetPhysicsData().bOnGround == false)
+			(*itSour)->GetPhysicsBody()->GetPhysicsData().vVelocity += m_stSpaceData.vGravity * fDelta;
+
 		(*itSour)->GetPhysicsBody()->GetPhysicsData().bOnGround = false;
-		(*itSour)->GetPhysicsBody()->GetPhysicsData().vVelocity += m_stSpaceData.vGravity * fDelta;
 
 		(*itSour)->UpdateTempPhysics(fDelta);
 	}
@@ -50,7 +53,7 @@ void cPhysicsNode::Update(float fDelta)
 	
 	for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
 	{
-		this->CollisionWithMap((*itSour));
+		this->CollisionWithMap((*itSour), fDelta);
 
 		(*itSour)->UpdatePhysics(fDelta);
 	}
@@ -85,10 +88,9 @@ void cPhysicsNode::UpdatePhysics(float fDelta)
 
 }
 
-void cPhysicsNode::CollisionWithMap(cGameNode* pNode)
+void cPhysicsNode::CollisionWithMap(cGameNode* pNode, float fDelta)
 {
 	// TODO: 맵 충돌 코드 추가 필요
-	bool a = false;
-	if (m_pMap) a = m_pMap->MapCollisionCheck(pNode);
-	bool b = a;
+	if (m_pMap) m_pMap->MapCollisionCheck(pNode, fDelta);
+
 }

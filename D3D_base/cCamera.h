@@ -14,7 +14,7 @@ private:
 	D3DXVECTOR3*	m_pvTarget;
 
 public:
-	inline void setTarget(D3DXVECTOR3 * pTarget) noexcept { m_pvTarget = pTarget; }
+	inline void setTarget(D3DXVECTOR3 * pTarget) { m_pvTarget = pTarget; }
 
 public:
 	cCamera();

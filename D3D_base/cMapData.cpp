@@ -6,7 +6,7 @@
 
 #include "cPhysicsBody.h"
 
-#define MAPCOLLISION_RATIOEPSILON 0.2f
+#define MAPCOLLISION_Y_EPSILON 0.1f
 
 cMapData::cMapData()
 {
@@ -223,7 +223,7 @@ void cMapData::LoadData(std::string sFileName)
 
 /* interface */
 
-bool cMapData::MapCollisionCheck(cGameNode* pNode)
+bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 {
 	cPhysicsBody* pBody = pNode->GetPhysicsBody();
 	bool bRet = false;
@@ -284,19 +284,84 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode)
 						{
 							vCrushNorm = m_arrGridBox[x][y][z].stCube.GetNearestSideNormalVec3(&stBodySphere.vCenter);
 							fDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vCrushNorm);
+
 							if (fDot < 0)
 							{
-								pBody->GetTempPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
-								pBody->GetPhysicsData().vVelocity = pBody->GetTempPhysicsData().vVelocity;
 								D3DXVec3Normalize(&vGroundCheckNorm, &vCrushNorm);
 								if (D3DXVec3Dot(&vGroundCheckNorm, &D3DXVECTOR3(0.f, 1.f, 0.f)) > cosf(PI / 4))
+								{
+									pBody->GetTempPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
+									pBody->GetPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
+									D3DXVec3Normalize(&vGroundCheckNorm, &vCrushNorm);
 									pBody->GetPhysicsData().bOnGround = true;
+
+									//pBody->UpdateTempPhysics(fDelta);
+
+									D3DXMatrixRotationAxis(&matR,
+										&pBody->GetTempPhysicsData().vAxis,
+										pBody->GetTempPhysicsData().fRotAngle);
+									D3DXMatrixTranslation(&matT,
+										pBody->GetTempPhysicsData().vPos.x,
+										pBody->GetTempPhysicsData().vPos.y,
+										pBody->GetTempPhysicsData().vPos.z);
+
+									matWorld = matR * matT * matParentWorld;
+
+									stBodyFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
+									stBodySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);
+								}
+								else
+								{//MAPCOLLISION_Y_EPSILON
+									float fDeltaY = m_arrGridBox[x][y][z].stCube.GetHighestPoint() - (stBodySphere.vCenter.y - stBodySphere.fRadius);
+									if (MAPCOLLISION_Y_EPSILON > fDeltaY && fDeltaY > 0.f)
+									{
+										pBody->GetTempPhysicsData().vPos.y += fDeltaY;
+										pBody->GetPhysicsData().vPos.y += fDeltaY;
+										if (pBody->GetTempPhysicsData().vVelocity.y < 0)
+										{
+											pBody->GetTempPhysicsData().vVelocity.y = 0;
+											pBody->GetPhysicsData().vVelocity.y = 0;
+											pBody->GetPhysicsData().bOnGround = true;
+										}
+
+										//pBody->UpdateTempPhysics(fDelta);
+
+										D3DXMatrixRotationAxis(&matR,
+											&pBody->GetTempPhysicsData().vAxis,
+											pBody->GetTempPhysicsData().fRotAngle);
+										D3DXMatrixTranslation(&matT,
+											pBody->GetTempPhysicsData().vPos.x,
+											pBody->GetTempPhysicsData().vPos.y,
+											pBody->GetTempPhysicsData().vPos.z);
+
+										matWorld = matR * matT * matParentWorld;
+
+										stBodyFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
+										stBodySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);
+									}
+									else
+									{
+										pBody->GetTempPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
+										pBody->GetPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
+
+										//pBody->UpdateTempPhysics(fDelta);
+
+										/*D3DXMatrixRotationAxis(&matR,
+											&pBody->GetTempPhysicsData().vAxis,
+											pBody->GetTempPhysicsData().fRotAngle);
+										D3DXMatrixTranslation(&matT,
+											pBody->GetTempPhysicsData().vPos.x,
+											pBody->GetTempPhysicsData().vPos.y,
+											pBody->GetTempPhysicsData().vPos.z);
+
+										matWorld = matR * matT * matParentWorld;
+
+										stBodyFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
+										stBodySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);*/
+									}
+								}
 							}
-
-							
-
 							bRet =  true;
-
 						}
 						
 					}
@@ -324,25 +389,90 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode)
 						if (!CheckSphereIntersectSphere(&stMapSphere, &stBodySphere)) 
 							continue;
 
-						//2. 다면체 vs 다면체 충돌을 한다
+						//2. 다면체 vs 다면체 충돌을 한다d
 						if (CheckFrustumIntersectFrustum(&m_arrGridBox[x][y][z].stCube, &stBodyFrustum))
 						{
 							vCrushNorm = m_arrGridBox[x][y][z].stCube.GetNearestSideNormalVec3(&stBodyFrustum);
 							fDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vCrushNorm);
 							if (fDot < 0)
 							{
-								pBody->GetTempPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1 + pBody->GetTempPhysicsData().fElasticity);
-								pBody->GetPhysicsData().vVelocity = pBody->GetTempPhysicsData().vVelocity;
 								D3DXVec3Normalize(&vGroundCheckNorm, &vCrushNorm);
 								if (D3DXVec3Dot(&vGroundCheckNorm, &D3DXVECTOR3(0.f, 1.f, 0.f)) > cosf(PI / 4))
+								{
+									pBody->GetTempPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
+									pBody->GetPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
+									D3DXVec3Normalize(&vGroundCheckNorm, &vCrushNorm);
 									pBody->GetPhysicsData().bOnGround = true;
+
+									//pBody->UpdateTempPhysics(fDelta);
+
+									/*D3DXMatrixRotationAxis(&matR,
+										&pBody->GetTempPhysicsData().vAxis,
+										pBody->GetTempPhysicsData().fRotAngle);
+									D3DXMatrixTranslation(&matT,
+										pBody->GetTempPhysicsData().vPos.x,
+										pBody->GetTempPhysicsData().vPos.y,
+										pBody->GetTempPhysicsData().vPos.z);
+
+									matWorld = matR * matT * matParentWorld;
+
+									stBodyFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
+									stBodySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);*/
+								}
+								else
+								{
+									float fDeltaY = m_arrGridBox[x][y][z].stCube.GetHighestPoint() - stBodyFrustum.GetLowestPoint();
+									if (MAPCOLLISION_Y_EPSILON > fDeltaY && fDeltaY > 0.f)
+									{
+										pBody->GetTempPhysicsData().vPos.y += fDeltaY;
+										pBody->GetPhysicsData().vPos.y += fDeltaY;
+										if (pBody->GetTempPhysicsData().vVelocity.y < 0)
+										{
+											pBody->GetTempPhysicsData().vVelocity.y = 0;
+											pBody->GetPhysicsData().vVelocity.y = 0;
+											pBody->GetPhysicsData().bOnGround = true;
+										}
+										
+										//pBody->UpdateTempPhysics(fDelta);
+
+										/*D3DXMatrixRotationAxis(&matR,
+											&pBody->GetTempPhysicsData().vAxis,
+											pBody->GetTempPhysicsData().fRotAngle);
+										D3DXMatrixTranslation(&matT,
+											pBody->GetTempPhysicsData().vPos.x,
+											pBody->GetTempPhysicsData().vPos.y,
+											pBody->GetTempPhysicsData().vPos.z);
+
+										matWorld = matR * matT * matParentWorld;
+
+										stBodyFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
+										stBodySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);*/
+									}
+									else // 벽에 부딪힌 경우 아님?
+									{
+										pBody->GetTempPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
+										pBody->GetPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
+
+										//pBody->UpdateTempPhysics(fDelta);
+
+										//D3DXMatrixRotationAxis(&matR,
+										//	&pBody->GetTempPhysicsData().vAxis,
+										//	pBody->GetTempPhysicsData().fRotAngle);
+										//D3DXMatrixTranslation(&matT,
+										//	pBody->GetTempPhysicsData().vPos.x,
+										//	pBody->GetTempPhysicsData().vPos.y,
+										//	pBody->GetTempPhysicsData().vPos.z);
+
+										//matWorld = matR * matT * matParentWorld;
+
+										//stBodyFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
+										//stBodySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);
+									}
+								}		
 								// 가속도와 힘도 제거할지는 조금 더 지켜보자.
 							}
-							
-
 							bRet = true;
 						}
-
 					}
 				}
 			}

@@ -12,6 +12,7 @@ protected:
 
 	SYNTHESIZE_REF(RECT, m_rcActiveArea, ActiveArea);
 	
+protected:
 	EN_GRIDBOXKIND m_enCurrBoxKind;
 	bool m_bIsOnMapLayer;
 	int m_nCurrX, m_nCurrY, m_nCurrZ;

@@ -28,7 +28,7 @@ void cMapToolScene::Setup()
 	m_pGrid->Setup();
 
 	m_pMapToolCamera = new cMapToolCamera;
-	m_pMapToolCamera->Setup(nullptr);
+	m_pMapToolCamera->Setup();
 
 	m_pUILayer = new cMapToolUILayer;
 	m_pUILayer->Setup();
@@ -44,7 +44,7 @@ void cMapToolScene::Setup()
 }
 void cMapToolScene::Update(float fDelta)
 {
-	m_pMapToolCamera->Update();
+	m_pMapToolCamera->Update(fDelta);
 
 	cGameScene::Update(fDelta);
 }

@@ -56,7 +56,7 @@ void cInGameUIGauge::Update(float fDelta)
 	m_pSpriteHPFront->SetCropRect(0.f, 0.f, m_fRatioHP, 1.f);
 	m_pSpriteMPFront->SetCropRect(0.f, 0.f, m_fRatioMP, 1.f);
 
-	cGameNode::Update();
+	cGameNode::Update(fDelta);
 }
 void cInGameUIGauge::Render()
 {

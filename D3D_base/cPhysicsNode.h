@@ -23,12 +23,12 @@ public:
 	virtual ~cPhysicsNode();
 
 	virtual void Setup(iGameMap* pMap);
-	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime()) override;
+	virtual void Update(float fDelta) override;
 	virtual void Render() override;
 	virtual void Delete() override;
 
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
-	virtual void UpdatePhysics(float fDelta = g_pTimeManager->GetEllapsedTime());
-	virtual void CollisionWithMap(cGameNode* pNode);
+	virtual void UpdatePhysics(float fDelta);
+	virtual void CollisionWithMap(cGameNode* pNode, float fDelta);
 };
 

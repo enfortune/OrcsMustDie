@@ -52,6 +52,7 @@ void cMapMaker::Update(float fDelta)
 	{
 		this->LoadData("SampleMap.map");
 	}
+	
 
 	cGameNode::Update(fDelta);
 }
@@ -72,7 +73,6 @@ void cMapMaker::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
-		
 		case WM_MOUSEMOVE:
 			if (CheckRectContainPoint(&m_rcActiveArea, &g_ptMouse))
 			{
@@ -83,13 +83,13 @@ void cMapMaker::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 		break;
 		case WM_LBUTTONDOWN:
-			if (m_bIsOnMapLayer && !(GetAsyncKeyState(VK_MENU) & 0x8000))
+			if (m_bIsOnMapLayer && !(GetAsyncKeyState(VK_CONTROL) & 0x8000))
 			{
 				if (m_pMapData) m_pMapData->MakeBox(m_nCurrX, m_nCurrY, m_nCurrZ, m_enCurrBoxKind);
 			}
 		break;
 		case WM_RBUTTONDOWN:
-			if (m_bIsOnMapLayer && !(GetAsyncKeyState(VK_MENU) & 0x8000))
+			if (m_bIsOnMapLayer && !(GetAsyncKeyState(VK_CONTROL) & 0x8000))
 			{
 				if (m_pMapData) m_pMapData->MakeBox(m_nCurrX, m_nCurrY, m_nCurrZ, GRIDBOXKIND_NONE);
 			}

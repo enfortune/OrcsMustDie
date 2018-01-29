@@ -186,6 +186,7 @@
     <ClInclude Include="cMapData.h" />
     <ClInclude Include="cMapMaker.h" />
     <ClInclude Include="cMapToolCamera.h" />
+    <ClInclude Include="cMapToolGrid.h" />
     <ClInclude Include="cMapToolScene.h" />
     <ClInclude Include="cMapToolUILayer.h" />
     <ClInclude Include="cObject.h" />
@@ -263,6 +264,7 @@
     <ClCompile Include="cMapData.cpp" />
     <ClCompile Include="cMapMaker.cpp" />
     <ClCompile Include="cMapToolCamera.cpp" />
+    <ClCompile Include="cMapToolGrid.cpp" />
     <ClCompile Include="cMapToolScene.cpp" />
     <ClCompile Include="cMapToolUILayer.cpp" />
     <ClCompile Include="cObject.cpp" />

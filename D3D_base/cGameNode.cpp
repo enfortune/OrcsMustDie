@@ -216,10 +216,12 @@ void cGameNode::CollisionWithNode(cGameNode* pNode)
 			if (fMyDot < 0)
 			{
 				m_pPhysicsBody->GetTempPhysicsData().vVelocity += -(vMyCrushNorm * fMyDot) * (1.f/* + m_pPhysicsBody->GetTempPhysicsData().fElasticity*/);
+				m_pPhysicsBody->GetPhysicsData().vVelocity += -(vMyCrushNorm * fMyDot) * (1.f/* + m_pPhysicsBody->GetTempPhysicsData().fElasticity*/);
 			}
 			if (fOpponentDot < 0)
 			{
 				pBody->GetTempPhysicsData().vVelocity += -(vOpponentCrushNorm * fOpponentDot) * (1.f/* + pBody->GetTempPhysicsData().fElasticity*/);
+				pBody->GetPhysicsData().vVelocity += -(vOpponentCrushNorm * fOpponentDot) * (1.f/* + pBody->GetTempPhysicsData().fElasticity*/);
 			}
 		}
 		else if (m_pPhysicsBody->GetBodyType() == PHYSICSBODYTYPE_DINAMIC &&
@@ -229,6 +231,9 @@ void cGameNode::CollisionWithNode(cGameNode* pNode)
 			{
 				m_pPhysicsBody->GetTempPhysicsData().vVelocity += -(vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity);
 				m_pPhysicsBody->GetTempPhysicsData().vVelocity += (vMyCrushNorm * fOpponentDot);
+
+				m_pPhysicsBody->GetPhysicsData().vVelocity += -(vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity);
+				m_pPhysicsBody->GetPhysicsData().vVelocity += (vMyCrushNorm * fOpponentDot);
 			}
 		}
 		else if (m_pPhysicsBody->GetBodyType() == PHYSICSBODYTYPE_STATIC &&
@@ -238,6 +243,9 @@ void cGameNode::CollisionWithNode(cGameNode* pNode)
 			{
 				pBody->GetTempPhysicsData().vVelocity += -(vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
 				pBody->GetTempPhysicsData().vVelocity += (vOpponentCrushNorm * fMyDot);
+
+				pBody->GetPhysicsData().vVelocity += -(vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
+				pBody->GetPhysicsData().vVelocity += (vOpponentCrushNorm * fMyDot);
 			}
 		}
 		else if (m_pPhysicsBody->GetBodyType() == PHYSICSBODYTYPE_DINAMIC &&
@@ -247,15 +255,21 @@ void cGameNode::CollisionWithNode(cGameNode* pNode)
 			{
 				m_pPhysicsBody->GetTempPhysicsData().vVelocity += -(vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity* pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
 				pBody->GetTempPhysicsData().vVelocity += (vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity * m_pPhysicsBody->GetPhysicsData().fMass / pBody->GetPhysicsData().fMass);
+
+				m_pPhysicsBody->GetPhysicsData().vVelocity += -(vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity* pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
+				pBody->GetPhysicsData().vVelocity += (vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity * m_pPhysicsBody->GetPhysicsData().fMass / pBody->GetPhysicsData().fMass);
 			}
 			if (fOpponentDot < 0)
 			{
 				pBody->GetTempPhysicsData().vVelocity += -(vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity * m_pPhysicsBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
 				m_pPhysicsBody->GetTempPhysicsData().vVelocity += (vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity * pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
+
+				pBody->GetPhysicsData().vVelocity += -(vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity * m_pPhysicsBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
+				m_pPhysicsBody->GetPhysicsData().vVelocity += (vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity * pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
 			}
 		}
-		m_pPhysicsBody->GetPhysicsData().vVelocity = m_pPhysicsBody->GetTempPhysicsData().vVelocity;
-		pBody->GetPhysicsData().vVelocity = pBody->GetTempPhysicsData().vVelocity;
+		//m_pPhysicsBody->GetPhysicsData().vVelocity = m_pPhysicsBody->GetTempPhysicsData().vVelocity;
+		//pBody->GetPhysicsData().vVelocity = pBody->GetTempPhysicsData().vVelocity;
 	}
 
 }

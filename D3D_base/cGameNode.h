@@ -31,14 +31,14 @@ public:
 	void Destroy();
 
 	virtual void Setup(bool bUseTransformData = true);
-	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime());
+	virtual void Update(float fDelta);
 	virtual void Render();
 	virtual void Delete() = 0;
 
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	
-	virtual void UpdateTempPhysics(float fDelta = g_pTimeManager->GetEllapsedTime());
-	virtual void UpdatePhysics(float fDelta = g_pTimeManager->GetEllapsedTime());
+	virtual void UpdateTempPhysics(float fDelta);
+	virtual void UpdatePhysics(float fDelta);
 	virtual void CollisionWithNode(cGameNode* pNode);
 	
 	void AddChild(cGameNode* pNode);

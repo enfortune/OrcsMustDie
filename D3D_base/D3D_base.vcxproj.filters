@@ -349,6 +349,9 @@
     <ClInclude Include="cSampleChar.h">
       <Filter>SampleCode</Filter>
     </ClInclude>
+    <ClInclude Include="cMapToolGrid.h">
+      <Filter>김완수\MapTool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -554,6 +557,9 @@
     </ClCompile>
     <ClCompile Include="cSampleChar.cpp">
       <Filter>SampleCode</Filter>
+    </ClCompile>
+    <ClCompile Include="cMapToolGrid.cpp">
+      <Filter>김완수\MapTool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

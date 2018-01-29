@@ -5,6 +5,7 @@
 #include "cCamera.h"
 #include "cGrid.h"
 #include "cSampleChar.h"
+#include "cPhysicsBody.h"
 
 cPhysicsTestScene::cPhysicsTestScene()
 	: m_pMapData(nullptr)
@@ -42,6 +43,7 @@ void cPhysicsTestScene::Setup()
 
 	m_pEnemy = new cSampleChar;
 	m_pEnemy->Setup(true, D3DXVECTOR3(2.f, 3.f, 2.f));
+	m_pEnemy->GetPhysicsBody()->GetPhysicsData().fRotAngle = PI / 4;
 	m_pSpace->AddChild(m_pEnemy);
 
 	m_pEnemy2 = new cSampleChar;

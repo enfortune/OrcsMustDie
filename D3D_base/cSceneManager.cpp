@@ -30,7 +30,7 @@ void cSceneManager::Update(float fDelta)
 {
 	//1. 현재 씬 업데이트 실행
 	if (m_pRunningScene != nullptr)
-		m_pRunningScene->Update();
+		m_pRunningScene->Update(fDelta);
 
 	//2. 스택의 씬 업데이트 선택적 실행 : default상태라면 업데이트는 실행하지 않음.
 	int nIndex = (int)m_stackScene.size() - 1;

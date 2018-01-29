@@ -31,9 +31,9 @@ void cSampleChar::Setup(bool move, D3DXVECTOR3 vPosSetup)
 
 	m_pPhysicsBody = new cPhysicsBody;
 	m_pPhysicsBody->Setup(-PI / 4.f);
-	m_pPhysicsBody->MakeBodyCuboid(0.8f, 1.f, 0.6f, D3DXVECTOR3(0.f, 0.5f, 0.f));
+	m_pPhysicsBody->MakeBodyCuboid(0.4f, 1.f, 0.2f, D3DXVECTOR3(0.f, 0.5f, 0.f));
 	m_pPhysicsBody->GetPhysicsData().vPos = vPosSetup;
-	m_pPhysicsBody->GetPhysicsData().vDamping = D3DXVECTOR3(5.f, 0.f, 5.f);
+	m_pPhysicsBody->GetPhysicsData().vDamping = D3DXVECTOR3(20.f, 0.f, 20.f);
 	m_pPhysicsBody->SetBodyType(PHYSICSBODYTYPE_DINAMIC); // PHYSICSBODYTYPE_STATIC은 밀어낼 수 없는 속성.
 
 }

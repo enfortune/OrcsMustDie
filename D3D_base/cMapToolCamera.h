@@ -11,14 +11,15 @@ private:
 	float			m_fCamDist;
 	D3DXVECTOR3		m_vCamRotAngle;
 
-	D3DXVECTOR3*	m_pvTarget;
+	D3DXVECTOR3		m_vPos;
+	D3DXVECTOR3		m_vDir;
 
 public:
 	cMapToolCamera();
 	~cMapToolCamera();
 
-	void Setup(D3DXVECTOR3* pvTarget);
-	void Update();
+	void Setup();
+	void Update(float fDelta);
 
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 

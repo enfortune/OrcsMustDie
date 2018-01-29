@@ -137,6 +137,7 @@ namespace D3DX_UTIL
 
 		return stRet;
 	}
+
 }
 
 
