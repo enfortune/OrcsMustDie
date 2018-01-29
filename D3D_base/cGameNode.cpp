@@ -161,39 +161,42 @@ void cGameNode::CollisionWithNode(cGameNode* pNode)
 		}
 		else if (pBody->GetShapeData().enShapeType == PHYSICSSHAPETYPE_CUBOID)
 		{
-			if (CheckFrustumIntersectSphere(&stOpponentFrustum, &stMySphere))
-			{
-				vMyCrushNorm = stOpponentFrustum.GetNearestSideNormalVec3(&stMySphere.vCenter);
-				fMyDot = D3DXVec3Dot(&m_pPhysicsBody->GetTempPhysicsData().vVelocity, &vMyCrushNorm);
-				vOpponentCrushNorm = -vMyCrushNorm;
-				fOpponentDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vOpponentCrushNorm);
-				bIsCollision = true;
-			}
+			if (CheckSphereIntersectSphere(&stMySphere, &stOpponentSphere))
+				if (CheckFrustumIntersectSphere(&stOpponentFrustum, &stMySphere))
+				{
+					vMyCrushNorm = stOpponentFrustum.GetNearestSideNormalVec3(&stMySphere.vCenter);
+					fMyDot = D3DXVec3Dot(&m_pPhysicsBody->GetTempPhysicsData().vVelocity, &vMyCrushNorm);
+					vOpponentCrushNorm = -vMyCrushNorm;
+					fOpponentDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vOpponentCrushNorm);
+					bIsCollision = true;
+				}
 		}
 	}
 	else if (m_pPhysicsBody->GetShapeData().enShapeType == PHYSICSSHAPETYPE_CUBOID)
 	{
 		if (pBody->GetShapeData().enShapeType == PHYSICSSHAPETYPE_SPHERE)
 		{
-			if (CheckFrustumIntersectSphere(&stMyFrustum, &stOpponentSphere))
-			{
-				vOpponentCrushNorm = stMyFrustum.GetNearestSideNormalVec3(&stOpponentSphere.vCenter);
-				fOpponentDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vOpponentCrushNorm);
-				vMyCrushNorm = -vOpponentCrushNorm;
-				fMyDot = D3DXVec3Dot(&m_pPhysicsBody->GetTempPhysicsData().vVelocity, &vMyCrushNorm);
-				bIsCollision = true;
-			}
+			if (CheckSphereIntersectSphere(&stMySphere, &stOpponentSphere))
+				if (CheckFrustumIntersectSphere(&stMyFrustum, &stOpponentSphere))
+				{
+					vOpponentCrushNorm = stMyFrustum.GetNearestSideNormalVec3(&stOpponentSphere.vCenter);
+					fOpponentDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vOpponentCrushNorm);
+					vMyCrushNorm = -vOpponentCrushNorm;
+					fMyDot = D3DXVec3Dot(&m_pPhysicsBody->GetTempPhysicsData().vVelocity, &vMyCrushNorm);
+					bIsCollision = true;
+				}
 		}
 		else if (pBody->GetShapeData().enShapeType == PHYSICSSHAPETYPE_CUBOID)
 		{
-			if (CheckFrustumIntersectFrustum(&stMyFrustum, &stOpponentFrustum))
-			{
-				vMyCrushNorm = stOpponentFrustum.GetNearestSideNormalVec3(&stMyFrustum);
-				fMyDot = D3DXVec3Dot(&m_pPhysicsBody->GetTempPhysicsData().vVelocity, &vMyCrushNorm);
-				vOpponentCrushNorm = -vMyCrushNorm;
-				fOpponentDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vOpponentCrushNorm);
-				bIsCollision = true;
-			}
+			if (CheckSphereIntersectSphere(&stMySphere, &stOpponentSphere))
+				if (CheckFrustumIntersectFrustum(&stMyFrustum, &stOpponentFrustum))
+				{
+					vMyCrushNorm = stOpponentFrustum.GetNearestSideNormalVec3(&stMyFrustum);
+					fMyDot = D3DXVec3Dot(&m_pPhysicsBody->GetTempPhysicsData().vVelocity, &vMyCrushNorm);
+					vOpponentCrushNorm = -vMyCrushNorm;
+					fOpponentDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vOpponentCrushNorm);
+					bIsCollision = true;
+				}
 		}
 	}
 	if (bIsCollision == true)
