@@ -8,8 +8,7 @@
 #include "cGrid.h"
 
 cMapToolScene::cMapToolScene()
-	: m_pGrid(nullptr)
-	, m_pMapToolCamera(nullptr)
+	: m_pMapToolCamera(nullptr)
 	, m_pUILayer(nullptr)
 	, m_pMapData(nullptr)
 	, m_pMapMaker(nullptr)
@@ -23,9 +22,6 @@ cMapToolScene::~cMapToolScene()
 void cMapToolScene::Setup()
 {
 	cGameScene::Setup();
-
-	m_pGrid = new cGrid;
-	m_pGrid->Setup();
 
 	m_pMapToolCamera = new cMapToolCamera;
 	m_pMapToolCamera->Setup();
@@ -55,15 +51,11 @@ void cMapToolScene::Render()
 	D3DXMatrixIdentity(&matI);
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matI);
 
-	m_pGrid->Render();
-
 	cGameScene::Render();
 
 }
 void cMapToolScene::Delete()
 {
-	SAFE_DELETE(m_pGrid);
-
 	SAFE_RELEASE(m_pUILayer);
 	SAFE_RELEASE(m_pMapData);
 	SAFE_RELEASE(m_pMapMaker);

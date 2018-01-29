@@ -216,6 +216,7 @@ public:
 	int GetSizeY()		{ return MAPSIZE_Y; }
 	int GetSizeZ()		{ return MAPSIZE_Z; }
 	int GetZeroStdY()	{ return MAPSIZE_Y_ZEROSTD; }
+	int GetCubeSize()	{ return MAPSIZE_CUBE; }
 
 	bool MakeBox(int x, int y, int z, EN_GRIDBOXKIND kind = GRIDBOXKIND_DEFAULT);
 

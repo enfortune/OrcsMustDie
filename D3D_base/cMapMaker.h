@@ -2,12 +2,14 @@
 #include "cGameNode.h"
 
 class cMapData;
+class cMapToolGrid;
 enum EN_GRIDBOXKIND;
 
 class cMapMaker : public cGameNode 
 {
 protected:
 	cMapData* m_pMapData;
+	cMapToolGrid* m_pGrid;
 	SYNTHESIZE_REF(bool, m_bIsMakingEnable, MakingEnable);
 
 	SYNTHESIZE_REF(RECT, m_rcActiveArea, ActiveArea);

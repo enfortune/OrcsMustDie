@@ -4,20 +4,17 @@
 class cMapToolUILayer;
 class cMapData;
 class cMapMaker;
-class cGrid;
 class cMapToolCamera;
 
 class cMapToolScene : public cGameScene
 {
-	cGrid*			m_pGrid;
 	cMapToolCamera* m_pMapToolCamera;
 
 
 	cMapToolUILayer* m_pUILayer;
 	cMapData*		m_pMapData;
 	cMapMaker*		m_pMapMaker;
-
-
+	
 public:
 	cMapToolScene();
 	virtual ~cMapToolScene();

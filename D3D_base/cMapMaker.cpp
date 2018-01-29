@@ -2,10 +2,12 @@
 #include "cMapMaker.h"
 
 #include "cMapData.h"
+#include "cMapToolGrid.h"
 #include "cRay.h"
 
 cMapMaker::cMapMaker()
 	: m_pMapData(nullptr)
+	, m_pGrid(nullptr)
 	, m_bIsMakingEnable(true)
 	, m_bIsOnMapLayer(false)
 	, m_rcActiveArea({0, 0, 0, 0})
@@ -27,6 +29,10 @@ void cMapMaker::Setup(cMapData* pMapData)
 
 	m_pMapData = pMapData;
 	m_enCurrBoxKind = GRIDBOXKIND_DEFAULT;
+
+	m_pGrid = new cMapToolGrid;
+	if (pMapData) m_pGrid->Setup(pMapData->GetSizeZ(), static_cast<float>(pMapData->GetCubeSize()));
+	else m_pGrid->Setup();
 
 	RECT rcWinSize;
 	GetClientRect(g_hWnd, &rcWinSize);
@@ -54,11 +60,13 @@ void cMapMaker::Update(float fDelta)
 	}
 	
 
+
 	cGameNode::Update(fDelta);
 }
 void cMapMaker::Render()
 {
 
+	if (m_pGrid) m_pGrid->Render();
 	if (m_pMapData && m_bIsMakingEnable && m_bIsOnMapLayer)
 		m_pMapData->DrawVirtualBox(m_nCurrX, m_nCurrY, m_nCurrZ);
 	
@@ -66,6 +74,7 @@ void cMapMaker::Render()
 }
 void cMapMaker::Delete()
 {
+	SAFE_DELETE(m_pGrid);
 }
 
 void cMapMaker::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -111,13 +120,21 @@ void cMapMaker::LayerUp()
 {
 	if (m_pMapData)
 		if (m_nCurrY < m_pMapData->GetSizeY() - 1)
+		{
 			m_nCurrY++;
+			if (m_pGrid) m_pGrid->SetHeight((m_nCurrY - m_pMapData->GetZeroStdY()) * m_pMapData->GetCubeSize());
+		}
+			
 }
 void cMapMaker::LayerDown()
 {
 	if (m_pMapData)
 		if (m_nCurrY > 0)
+		{
 			m_nCurrY--;
+			if (m_pGrid) m_pGrid->SetHeight((m_nCurrY - m_pMapData->GetZeroStdY()) * m_pMapData->GetCubeSize());
+		}
+			
 }
 
 void cMapMaker::SaveData(std::string sFileName)

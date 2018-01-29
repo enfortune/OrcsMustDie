@@ -10,7 +10,7 @@ cMapToolCamera::cMapToolCamera()
 	, m_fCamDist(20.0f)
 	, m_isLButtonDown(false)
 	, m_vCamRotAngle(D3DX_PI / 4.f, D3DX_PI / 4.f, 0)
-	, m_vPos(0.f, 0.f, 0.f)
+	, m_vPos(5.f, 0.f, 5.f)
 	, m_vDir(0.f, 0.f, 1.f)
 {
 	m_ptPrevMouse.x = 0;
