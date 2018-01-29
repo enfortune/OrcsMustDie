@@ -242,13 +242,13 @@ void cGameNode::CollisionWithNode(cGameNode* pNode)
 		{
 			if (fMyDot < 0)
 			{
-				m_pPhysicsBody->GetTempPhysicsData().vVelocity += -(vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity) * pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass ;
-				pBody->GetTempPhysicsData().vVelocity += (vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity)  * m_pPhysicsBody->GetPhysicsData().fMass / pBody->GetPhysicsData().fMass;
+				m_pPhysicsBody->GetTempPhysicsData().vVelocity += -(vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity* pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
+				pBody->GetTempPhysicsData().vVelocity += (vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity * m_pPhysicsBody->GetPhysicsData().fMass / pBody->GetPhysicsData().fMass);
 			}
 			if (fOpponentDot < 0)
 			{
-				pBody->GetTempPhysicsData().vVelocity += -(vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity)* m_pPhysicsBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass;
-				m_pPhysicsBody->GetTempPhysicsData().vVelocity += (vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity)* pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass;
+				pBody->GetTempPhysicsData().vVelocity += -(vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity * m_pPhysicsBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
+				m_pPhysicsBody->GetTempPhysicsData().vVelocity += (vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity * pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
 			}
 		}
 		m_pPhysicsBody->GetPhysicsData().vVelocity = m_pPhysicsBody->GetTempPhysicsData().vVelocity;
