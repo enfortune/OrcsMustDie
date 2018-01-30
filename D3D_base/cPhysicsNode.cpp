@@ -3,7 +3,7 @@
 #include "cPhysicsBody.h"
 #include "iGameMap.h"
 
-#define PHYSICSNODE_ONGROUNDEPSILON 0.001f
+#define PHYSICSNODE_DELTATIME_MAX 0.1f
 
 cPhysicsNode::cPhysicsNode()
 {
@@ -29,16 +29,58 @@ void cPhysicsNode::Update(float fDelta)
 	// 상호작용
 	std::set<cGameNode*>::iterator itSour, itDest;
 
+	float fTotalDelta = fDelta;
+	float fCurrDelta = fDelta;
+	
+	while (fTotalDelta > PHYSICSNODE_DELTATIME_MAX)
+	{
+
+		fCurrDelta = PHYSICSNODE_DELTATIME_MAX;
+		fTotalDelta -= PHYSICSNODE_DELTATIME_MAX;
+
+		for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
+		{
+			(*itSour)->Update(fCurrDelta);
+
+			//if ((*itSour)->GetPhysicsBody()->GetPhysicsData().bOnGround == false)
+			(*itSour)->GetPhysicsBody()->GetPhysicsData().vVelocity += m_stSpaceData.vGravity * fCurrDelta;
+
+			(*itSour)->GetPhysicsBody()->GetPhysicsData().bOnGround = false;
+
+			(*itSour)->UpdateTempPhysics(fCurrDelta);
+		}
+
+		for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
+		{
+			itDest = itSour;
+			itDest++;
+			for (; itDest != m_setChild.end(); itDest++)
+			{
+				(*itSour)->CollisionWithNode(*itDest);
+			}
+		}
+
+		for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
+		{
+			this->CollisionWithMap((*itSour), fCurrDelta);
+
+			(*itSour)->UpdatePhysics(fCurrDelta);
+		}
+	}
+
+
+	fCurrDelta = fTotalDelta;
+
 	for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
 	{
-		(*itSour)->Update(fDelta);
+		(*itSour)->Update(fCurrDelta);
 
 		//if ((*itSour)->GetPhysicsBody()->GetPhysicsData().bOnGround == false)
-			(*itSour)->GetPhysicsBody()->GetPhysicsData().vVelocity += m_stSpaceData.vGravity * fDelta;
+		(*itSour)->GetPhysicsBody()->GetPhysicsData().vVelocity += m_stSpaceData.vGravity * fCurrDelta;
 
 		(*itSour)->GetPhysicsBody()->GetPhysicsData().bOnGround = false;
 
-		(*itSour)->UpdateTempPhysics(fDelta);
+		(*itSour)->UpdateTempPhysics(fCurrDelta);
 	}
 
 	for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
@@ -50,13 +92,16 @@ void cPhysicsNode::Update(float fDelta)
 			(*itSour)->CollisionWithNode(*itDest);
 		}
 	}
-	
+
 	for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
 	{
-		this->CollisionWithMap((*itSour), fDelta);
+		this->CollisionWithMap((*itSour), fCurrDelta);
 
-		(*itSour)->UpdatePhysics(fDelta);
+		(*itSour)->UpdatePhysics(fCurrDelta);
 	}
+
+
+	
 
 	/*for each (cGameNode* node in m_setChild)
 	{

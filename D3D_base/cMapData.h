@@ -16,6 +16,13 @@ typedef enum EN_GRIDBOXKIND
 {
 	GRIDBOXKIND_NONE,    // 박스가 없는 지점
 	GRIDBOXKIND_DEFAULT, // 텍스쳐 씌우고, 오토 높이맵에도 어느정도 영향있을거임 (물일경우 체크를 안한다던지)
+	GRIDBOXKINE_BLOCK1,
+	GRIDBOXKINE_BLOCK2,
+	GRIDBOXKINE_GRASS,
+	GRIDBOXKINE_MARBLE,
+	GRIDBOXKINE_ROCK,
+	GRIDBOXKINE_SOIL,
+	GRIDBOXKINE_WOODEN,
 	GRIDBOXKIND_END
 }GRIDBOXKIND;
 
@@ -59,6 +66,7 @@ struct ST_GRIDBOX
 	EN_GRIDBOXKIND enKind;
 	//ST_CUBE_XYZ stCube;
 	ST_PTN_VERTEX v[36]; // 그리는 버텍스 (추후 버텍스 버퍼로 바꿀 것)
+	LPDIRECT3DVERTEXBUFFER9 pVB;
 	ST_FRUSTUM stCube;
 
 	cTrap* pRight;  //  1  0  0
@@ -108,6 +116,7 @@ struct ST_GRIDBOX
 		stCube.vFar_01 = _011;
 		stCube.vFar_10 = _101;
 		stCube.vFar_11 = _111;
+
 
 		//뒤
 		v[0].p = _000; v[0].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
@@ -197,9 +206,11 @@ class cMapData : public cGameNode, public iGameMap
 {
 protected:
 	ST_GRIDBOX m_arrGridBox[MAPSIZE_X][MAPSIZE_Y][MAPSIZE_Z];
-	// cHeightMap m_hMap;
-	
-	//std::vector<> m_stVirtualBox;
+
+	bool m_bisVBExist;
+	LPDIRECT3DVERTEXBUFFER9 m_arrVB[MAPSIZE_X][MAPSIZE_Y][MAPSIZE_Z];
+	LPDIRECT3DTEXTURE9 m_arrTex[GRIDBOXKIND_END];
+	D3DMATERIAL9 m_arrMtrl[GRIDBOXKIND_END];
 
 public:
 	cMapData();
@@ -227,6 +238,11 @@ public:
 
 	void SaveData(std::string sFileName);
 	void LoadData(std::string sFileName);
+
+
+	void SetupVertexBuffer();
+	void RenderVertexBuffer();
+	void ClearVertexBuffer();
 
 	/* for interface */
 protected: 

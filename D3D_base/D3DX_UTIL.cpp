@@ -138,6 +138,117 @@ namespace D3DX_UTIL
 		return stRet;
 	}
 
+
+	bool CheckOBBCollision(ST_FRUSTUM* pFrustum1, ST_FRUSTUM* pFrustum2)
+	{
+		D3DXVECTOR3 vPolygonNorm_1[3]; // 면의 법선벡터이자 그 면의 수직인 모서리의 벡터
+		D3DXVECTOR3 vPolygonNorm_2[3]; // 면의 법선벡터이자 그 면의 수직인 모서리의 벡터
+
+		D3DXVECTOR3 vSA; // Separating Axis(분리축)
+		float fDistMin_1, fDistMax_1, fDistTemp_1; // 직육면체 1의 분리축 거리상수
+		float fDistMin_2, fDistMax_2, fDistTemp_2; // 직육면체 2의 분리축 거리상수
+
+
+		//1. 각 직육면체의 법선벡터를 준비한다.
+		vPolygonNorm_1[0] = pFrustum1->GetNormalVec3(DIRECTION_6::RIGHT);
+		vPolygonNorm_1[1] = pFrustum1->GetNormalVec3(DIRECTION_6::TOP);
+		vPolygonNorm_1[2] = pFrustum1->GetNormalVec3(DIRECTION_6::FRONT);
+
+		vPolygonNorm_2[0] = pFrustum2->GetNormalVec3(DIRECTION_6::RIGHT);
+		vPolygonNorm_2[1] = pFrustum2->GetNormalVec3(DIRECTION_6::TOP);
+		vPolygonNorm_2[2] = pFrustum2->GetNormalVec3(DIRECTION_6::FRONT);
+
+		//2. 각 면에 대한 분리축을 테스트한다.
+		//2-1 직육면체 1의 면의 법선벡터 테스트
+		for (int i = 0; i < 3; i++)
+		{
+			vSA = vPolygonNorm_1[i]; // 축 하나를 선택한 후
+			for (int j = 0; j < 8; j++) // 직육면체 1의 최대, 최소 거리상수 구함
+			{
+				fDistTemp_1 = D3DXVec3Dot(&(*pFrustum1)[j], &vSA);
+				if (j == 0) fDistMin_1 = fDistMax_1 = fDistTemp_1;
+				else
+				{
+					if (fDistTemp_1 < fDistMin_1) 
+						fDistMin_1 = fDistTemp_1;
+					else if (fDistTemp_1 > fDistMax_1) 
+						fDistMax_1 = fDistTemp_1;
+				}
+			}
+			for (int j = 0; j < 8; j++) // 직육면체 2의 최대, 최소 거리상수 구함
+			{
+				fDistTemp_2 = D3DXVec3Dot(&(*pFrustum2)[j], &vSA);
+				if (j == 0) fDistMin_2 = fDistMax_2 = fDistTemp_2;
+				else
+				{
+					if (fDistTemp_2 < fDistMin_2) fDistMin_2 = fDistTemp_2;
+					else if (fDistTemp_2 > fDistMax_2) fDistMax_2 = fDistTemp_2;
+				}
+			}
+			if (fDistMax_1 < fDistMin_2 || fDistMin_1 > fDistMax_2) return false; // 분리축이 존재하면 false를 리턴
+			else int a = 10;
+		}
+		//2-2 직육면체 2의 면의 법선벡터 테스트
+		for (int i = 0; i < 3; i++)
+		{
+			vSA = vPolygonNorm_2[i]; // 축 하나를 선택한 후
+			for (int j = 0; j < 8; j++) // 직육면체 1의 최대, 최소 거리상수 구함
+			{
+				fDistTemp_1 = D3DXVec3Dot(&(*pFrustum1)[j], &vSA);
+				if (j == 0) fDistMin_1 = fDistMax_1 = fDistTemp_1;
+				else
+				{
+					if (fDistTemp_1 < fDistMin_1) fDistMin_1 = fDistTemp_1;
+					else if (fDistTemp_1 > fDistMax_1) fDistMax_1 = fDistTemp_1;
+				}
+			}
+			for (int j = 0; j < 8; j++) // 직육면체 2의 최대, 최소 거리상수 구함
+			{
+				fDistTemp_2 = D3DXVec3Dot(&(*pFrustum2)[j], &vSA);
+				if (j == 0) fDistMin_2 = fDistMax_2 = fDistTemp_2;
+				else
+				{
+					if (fDistTemp_2 < fDistMin_2) fDistMin_2 = fDistTemp_2;
+					else if (fDistTemp_2 > fDistMax_2) fDistMax_2 = fDistTemp_2;
+				}
+			}
+			if (fDistMax_1 < fDistMin_2 || fDistMin_1 > fDistMax_2) return false; // 분리축이 존재하면 false를 리
+		}
+
+		//3. 두 모서리의 외적으로 생기는 평면에 대한 분리축 테스트
+		for (int _1 = 0; _1 < 3; _1++)
+		{
+			for (int _2 = 0; _2 < 3; _2++)
+			{
+				D3DXVec3Cross(&vSA, &vPolygonNorm_1[_1], &vPolygonNorm_2[_2]);
+				D3DXVec3Normalize(&vSA, &vSA);
+				for (int j = 0; j < 8; j++) // 직육면체 1의 최대, 최소 거리상수 구함
+				{
+					fDistTemp_1 = D3DXVec3Dot(&(*pFrustum1)[j], &vSA);
+					if (j == 0) fDistMin_1 = fDistMax_1 = fDistTemp_1;
+					else
+					{
+						if (fDistTemp_1 < fDistMin_1) fDistMin_1 = fDistTemp_1;
+						else if (fDistTemp_1 > fDistMax_1) fDistMax_1 = fDistTemp_1;
+					}
+				}
+				for (int j = 0; j < 8; j++) // 직육면체 2의 최대, 최소 거리상수 구함
+				{
+					fDistTemp_2 = D3DXVec3Dot(&(*pFrustum2)[j], &vSA);
+					if (j == 0) fDistMin_2 = fDistMax_2 = fDistTemp_2;
+					else
+					{
+						if (fDistTemp_2 < fDistMin_2) fDistMin_2 = fDistTemp_2;
+						else if (fDistTemp_2 > fDistMax_2) fDistMax_2 = fDistTemp_2;
+					}
+				}
+				if (fDistMax_1 < fDistMin_2 || fDistMin_1 > fDistMax_2) return false; // 분리축이 존재하면 false를 리
+			}
+		}
+
+
+		return true;
+	}
 }
 
 

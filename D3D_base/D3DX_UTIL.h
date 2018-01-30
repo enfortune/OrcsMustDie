@@ -40,6 +40,18 @@ namespace D3DX_UTIL
 		D3DXVECTOR3 vFar_10;
 		D3DXVECTOR3 vFar_11;
 
+		D3DXVECTOR3& operator[] (int n)
+		{
+			assert((n >= 0 && n < 8) &&  "FRUSTUMÀÇ ÀÎµ¦½º¸¦ ¹þ¾î³µÀ½");
+			if (n == 0) return vNear_00;
+			if (n == 1) return vNear_01;
+			if (n == 2) return vNear_10;
+			if (n == 3) return vNear_11;
+			if (n == 4) return vFar_00;
+			if (n == 5) return vFar_01;
+			if (n == 6) return vFar_10;
+			if (n == 7) return vFar_11;
+		}
 		ST_FRUSTUM TransformCoord(D3DXMATRIXA16* pMat)
 		{
 			ST_FRUSTUM stRet;
@@ -53,7 +65,57 @@ namespace D3DX_UTIL
 			D3DXVec3TransformCoord(&stRet.vFar_11, &vFar_11, pMat);
 			return stRet;
 		}
+		void Render(LPDIRECT3DDEVICE9 lpDevice)
+		{
+			std::vector<D3DXVECTOR3> vecTemp(8);
+			
+			lpDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+			lpDevice->SetFVF(D3DFVF_XYZ);
 
+			// µÚ
+			vecTemp[0] = vecTemp[7] = vNear_00;
+			vecTemp[2] = vecTemp[1] = vNear_01;
+			vecTemp[4] = vecTemp[3] = vNear_11;
+			vecTemp[6] = vecTemp[5] = vNear_10;
+			lpDevice->DrawPrimitiveUP(D3DPT_LINELIST, 4, &vecTemp[0], sizeof(D3DXVECTOR3));
+
+			// ¾Õ
+			vecTemp[0] = vecTemp[7] = vFar_10;
+			vecTemp[2] = vecTemp[1] = vFar_11;
+			vecTemp[4] = vecTemp[3] = vFar_01;
+			vecTemp[6] = vecTemp[5] = vFar_00;
+			lpDevice->DrawPrimitiveUP(D3DPT_LINELIST, 4, &vecTemp[0], sizeof(D3DXVECTOR3));
+
+			// À§
+			vecTemp[0] = vecTemp[7] = vNear_01;
+			vecTemp[2] = vecTemp[1] = vFar_01;
+			vecTemp[4] = vecTemp[3] = vFar_11;
+			vecTemp[6] = vecTemp[5] = vNear_11;
+			lpDevice->DrawPrimitiveUP(D3DPT_LINELIST, 4, &vecTemp[0], sizeof(D3DXVECTOR3));
+
+			// ¾Æ·¡
+			vecTemp[0] = vecTemp[7] = vNear_10;
+			vecTemp[2] = vecTemp[1] = vFar_10;
+			vecTemp[4] = vecTemp[3] = vFar_00;
+			vecTemp[6] = vecTemp[5] = vNear_00;
+			lpDevice->DrawPrimitiveUP(D3DPT_LINELIST, 4, &vecTemp[0], sizeof(D3DXVECTOR3));
+
+			// ¿À¸¥ÂÊ
+			vecTemp[0] = vecTemp[7] = vNear_10;
+			vecTemp[2] = vecTemp[1] = vNear_11;
+			vecTemp[4] = vecTemp[3] = vFar_11;
+			vecTemp[6] = vecTemp[5] = vFar_10;
+			lpDevice->DrawPrimitiveUP(D3DPT_LINELIST, 4, &vecTemp[0], sizeof(D3DXVECTOR3));
+
+			// ¿ÞÂÊ
+			vecTemp[0] = vecTemp[7] = vFar_00;
+			vecTemp[2] = vecTemp[1] = vFar_01;
+			vecTemp[4] = vecTemp[3] = vNear_01;
+			vecTemp[6] = vecTemp[5] = vNear_00;
+			lpDevice->DrawPrimitiveUP(D3DPT_LINELIST, 4, &vecTemp[0], sizeof(D3DXVECTOR3));
+
+			lpDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+		}
 		D3DXVECTOR3 GetCenterVec3(DIRECTION_6 enDirection)
 		{
 			D3DXVECTOR3 vRet = D3DXVECTOR3(0.f, 0.f, 0.f);
@@ -287,5 +349,6 @@ namespace D3DX_UTIL
 	bool CheckFrustumIntersectSphere(ST_FRUSTUM* pFrustum, ST_SPHERE* pSphere);
 	bool CheckSphereIntersectSphere(ST_SPHERE* pSphere1, ST_SPHERE* pSphere2);
 	bool CheckFrustumIntersectFrustum(ST_FRUSTUM* pFrustum1, ST_FRUSTUM* pFrustum2);
+	bool CheckOBBCollision(ST_FRUSTUM* pFrustum1, ST_FRUSTUM* pFrustum2);
 	ST_FRUSTUM GetViewFrustum();
 }

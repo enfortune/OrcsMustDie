@@ -27,7 +27,7 @@ void cMainGame::Setup()
 	g_pSoundManager->Setup();
 	g_pKeyManager->Setup();
 
-	g_pSceneManager->Setup(new cMapToolScene);
+	g_pSceneManager->Setup(new cPhysicsTestScene);
 }
 
 void cMainGame::Update()

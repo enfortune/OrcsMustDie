@@ -72,7 +72,8 @@ void cSampleChar::Render()
 {
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &this->GetMatrixToWorld());
 
-	m_pSkinnedMesh->Render();
+	//m_pSkinnedMesh->Render();
+	this->m_pPhysicsBody->GetShapeData().stCuboid.Render(g_pD3DDevice);
 
 	cGameNode::Render();
 }

@@ -189,7 +189,7 @@ void cGameNode::CollisionWithNode(cGameNode* pNode)
 		else if (pBody->GetShapeData().enShapeType == PHYSICSSHAPETYPE_CUBOID)
 		{
 			if (CheckSphereIntersectSphere(&stMySphere, &stOpponentSphere))
-				if (CheckFrustumIntersectFrustum(&stMyFrustum, &stOpponentFrustum))
+				if (CheckOBBCollision(&stMyFrustum, &stOpponentFrustum))
 				{
 					vMyCrushNorm = stOpponentFrustum.GetNearestSideNormalVec3(&stMyFrustum);
 					fMyDot = D3DXVec3Dot(&m_pPhysicsBody->GetTempPhysicsData().vVelocity, &vMyCrushNorm);

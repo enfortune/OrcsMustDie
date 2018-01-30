@@ -6,10 +6,25 @@
 
 #include "cPhysicsBody.h"
 
-#define MAPCOLLISION_Y_EPSILON 0.1f
+#define MAPCOLLISION_Y_EPSILON 0.001f
 
 cMapData::cMapData()
+	: m_bisVBExist(false)
 {
+	/*for (int x = 0; x < MAPSIZE_X; x++)
+	{
+		for (int y = 0; y < MAPSIZE_Y; y++)
+		{
+			for (int z = 0; z < MAPSIZE_Z; z++)
+			{
+				m_arrVB[x][y][z] = nullptr;
+			}
+		}
+	}*/
+
+	ZeroMemory(&m_arrVB[0][0][0], sizeof(LPDIRECT3DVERTEXBUFFER9) * MAPSIZE_X * MAPSIZE_Y * MAPSIZE_Z);
+	ZeroMemory(&m_arrTex[0], sizeof(LPDIRECT3DTEXTURE9) * static_cast<int>(GRIDBOXKIND_END));
+	ZeroMemory(&m_arrMtrl[0], sizeof(D3DMATERIAL9) *  static_cast<int>(GRIDBOXKIND_END));
 }
 
 
@@ -17,6 +32,20 @@ cMapData::~cMapData()
 {
 	this->Delete();
 }
+
+void cMapData::SetupVertexBuffer()
+{
+
+}
+void cMapData::RenderVertexBuffer()
+{
+
+}
+void cMapData::ClearVertexBuffer()
+{
+
+}
+
 
 void cMapData::Setup()
 {
@@ -33,6 +62,77 @@ void cMapData::Setup()
 		}
 	}
 
+	for (int i = 0; i < static_cast<int>(GRIDBOXKIND_END); i++)
+	{
+		switch (static_cast<EN_GRIDBOXKIND>(i))
+		{
+			case GRIDBOXKIND_NONE:
+				m_arrTex[i] = nullptr;
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
+				m_arrMtrl[i].Power = 0.f;
+			break;
+			case GRIDBOXKIND_DEFAULT:
+				m_arrTex[i] = nullptr;
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
+				m_arrMtrl[i].Power = 0.f;
+			break;
+			case GRIDBOXKINE_BLOCK1:
+				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_block1.jpg");
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
+				m_arrMtrl[i].Power = 2.f;
+			break;
+			case GRIDBOXKINE_BLOCK2:
+				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_block2.jpg");
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
+				m_arrMtrl[i].Power = 0.f;
+			break;
+			case GRIDBOXKINE_GRASS:
+				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_grass.jpg");
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
+				m_arrMtrl[i].Power = 3.f;
+			break;
+			case GRIDBOXKINE_MARBLE:
+				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_marble.jpg");
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
+				m_arrMtrl[i].Power = 5.f;
+			break;
+			case GRIDBOXKINE_ROCK:
+				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_rock.jpg");
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
+				m_arrMtrl[i].Power = 0.f;
+			break;
+			case GRIDBOXKINE_SOIL:
+				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_soil.jpg");
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
+				m_arrMtrl[i].Power = 0.f;
+			break;
+			case GRIDBOXKINE_WOODEN:
+				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_wooden.jpg");
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
+				m_arrMtrl[i].Power = 0.f;
+			break;
+		}
+
+		if (m_arrTex[i] != nullptr) m_arrTex[i]->AddRef();
+	}
 }
 void cMapData::Update(float fDelta)
 {
@@ -57,7 +157,10 @@ void cMapData::Render()
 }
 void cMapData::Delete()
 {
-
+	for (int i = 0; i < static_cast<int>(GRIDBOXKIND_END); i++)
+	{
+		SAFE_RELEASE(m_arrTex[i]);
+	}
 }
 
 void cMapData::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -390,7 +493,7 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 							continue;
 
 						//2. 다면체 vs 다면체 충돌을 한다d
-						if (CheckFrustumIntersectFrustum(&m_arrGridBox[x][y][z].stCube, &stBodyFrustum))
+						if (CheckOBBCollision(&m_arrGridBox[x][y][z].stCube, &stBodyFrustum))
 						{
 							vCrushNorm = m_arrGridBox[x][y][z].stCube.GetNearestSideNormalVec3(&stBodyFrustum);
 							fDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vCrushNorm);
