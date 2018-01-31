@@ -16,7 +16,7 @@ class cPhysicsTestScene : public cGameScene
 
 	cSampleChar* m_pEnemy;
 	cSampleChar* m_pEnemy2;
-
+	cSampleChar* m_pEnemy3;
 public:
 	cPhysicsTestScene();
 	~cPhysicsTestScene();

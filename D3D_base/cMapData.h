@@ -199,6 +199,16 @@ struct ST_GRIDBOX
 			);
 		g_pD3DDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	}
+	void CopyToVertexBuffer(LPDIRECT3DVERTEXBUFFER9 pVB)
+	{
+		if (pVB)
+		{
+			ST_PTN_VERTEX* pV;
+			pVB->Lock(0, sizeof(ST_PTN_VERTEX) * 36, (void**)&pV, 0);
+			memcpy_s(pV, sizeof(ST_PTN_VERTEX) * 36, &v[0], sizeof(ST_PTN_VERTEX) * 36);
+			pVB->Unlock();
+		}
+	}
 };
 
 
@@ -238,11 +248,6 @@ public:
 
 	void SaveData(std::string sFileName);
 	void LoadData(std::string sFileName);
-
-
-	void SetupVertexBuffer();
-	void RenderVertexBuffer();
-	void ClearVertexBuffer();
 
 	/* for interface */
 protected: 

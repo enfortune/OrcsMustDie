@@ -144,7 +144,9 @@ void cGameNode::CollisionWithNode(cGameNode* pNode)
 	D3DXVECTOR3 vOpponentGroundCheckNorm;
 	float fOpponentDot;
 	bool bIsCollision = false;
-
+	float fVelocityIntervalDot;
+	float fCrushVelocityDot;
+	
 
 	if (m_pPhysicsBody->GetShapeData().enShapeType == PHYSICSSHAPETYPE_SPHERE)
 	{
@@ -193,7 +195,7 @@ void cGameNode::CollisionWithNode(cGameNode* pNode)
 				{
 					vMyCrushNorm = stOpponentFrustum.GetNearestSideNormalVec3(&stMyFrustum);
 					fMyDot = D3DXVec3Dot(&m_pPhysicsBody->GetTempPhysicsData().vVelocity, &vMyCrushNorm);
-					vOpponentCrushNorm = -vMyCrushNorm;
+					vOpponentCrushNorm = stMyFrustum.GetNearestSideNormalVec3(&stOpponentFrustum);
 					fOpponentDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vOpponentCrushNorm);
 					bIsCollision = true;
 				}
@@ -251,21 +253,41 @@ void cGameNode::CollisionWithNode(cGameNode* pNode)
 		else if (m_pPhysicsBody->GetBodyType() == PHYSICSBODYTYPE_DINAMIC &&
 			pBody->GetBodyType() == PHYSICSBODYTYPE_DINAMIC)
 		{
+			
+
 			if (fMyDot < 0)
 			{
-				m_pPhysicsBody->GetTempPhysicsData().vVelocity += -(vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity* pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
-				pBody->GetTempPhysicsData().vVelocity += (vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity * m_pPhysicsBody->GetPhysicsData().fMass / pBody->GetPhysicsData().fMass);
+				fVelocityIntervalDot = D3DXVec3Dot(&vMyCrushNorm, &(m_pPhysicsBody->GetTempPhysicsData().vVelocity - pBody->GetTempPhysicsData().vVelocity));
 
-				m_pPhysicsBody->GetPhysicsData().vVelocity += -(vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity* pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
-				pBody->GetPhysicsData().vVelocity += (vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity * m_pPhysicsBody->GetPhysicsData().fMass / pBody->GetPhysicsData().fMass);
+				m_pPhysicsBody->GetTempPhysicsData().vVelocity += -(vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity/** pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass*/);
+				//pBody->GetTempPhysicsData().vVelocity += (vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity * m_pPhysicsBody->GetPhysicsData().fMass / pBody->GetPhysicsData().fMass);
+
+				m_pPhysicsBody->GetPhysicsData().vVelocity += -(vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity/** pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass*/);
+				//pBody->GetPhysicsData().vVelocity += (vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity * m_pPhysicsBody->GetPhysicsData().fMass / pBody->GetPhysicsData().fMass);
+
+				if (fVelocityIntervalDot < 0)
+				{
+					pBody->GetTempPhysicsData().vVelocity += (vMyCrushNorm* fVelocityIntervalDot) * ((1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity) * m_pPhysicsBody->GetPhysicsData().fMass / pBody->GetPhysicsData().fMass);
+					pBody->GetPhysicsData().vVelocity += (vMyCrushNorm* fVelocityIntervalDot) * ((1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity) * m_pPhysicsBody->GetPhysicsData().fMass / pBody->GetPhysicsData().fMass);
+				}
 			}
 			if (fOpponentDot < 0)
 			{
-				pBody->GetTempPhysicsData().vVelocity += -(vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity * m_pPhysicsBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
-				m_pPhysicsBody->GetTempPhysicsData().vVelocity += (vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity * pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
 
-				pBody->GetPhysicsData().vVelocity += -(vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity * m_pPhysicsBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
-				m_pPhysicsBody->GetPhysicsData().vVelocity += (vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity * pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
+				fVelocityIntervalDot = -D3DXVec3Dot(&vOpponentCrushNorm, &(m_pPhysicsBody->GetTempPhysicsData().vVelocity - pBody->GetTempPhysicsData().vVelocity));
+
+				pBody->GetTempPhysicsData().vVelocity += -(vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity /** m_pPhysicsBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass*/);
+				//m_pPhysicsBody->GetTempPhysicsData().vVelocity += (vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity * pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
+
+				pBody->GetPhysicsData().vVelocity += -(vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity /** m_pPhysicsBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass*/);
+				//m_pPhysicsBody->GetPhysicsData().vVelocity += (vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity * pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
+
+				
+				if (fVelocityIntervalDot < 0)
+				{
+					m_pPhysicsBody->GetTempPhysicsData().vVelocity += (vOpponentCrushNorm * fVelocityIntervalDot) * ((1.f + pBody->GetTempPhysicsData().fElasticity) * pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
+					m_pPhysicsBody->GetPhysicsData().vVelocity += (vOpponentCrushNorm * fVelocityIntervalDot) * ((1.f + pBody->GetTempPhysicsData().fElasticity) * pBody->GetPhysicsData().fMass / m_pPhysicsBody->GetPhysicsData().fMass);
+				}
 			}
 		}
 		//m_pPhysicsBody->GetPhysicsData().vVelocity = m_pPhysicsBody->GetTempPhysicsData().vVelocity;

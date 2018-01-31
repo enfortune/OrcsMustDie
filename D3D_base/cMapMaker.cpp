@@ -41,7 +41,7 @@ void cMapMaker::Setup(cMapData* pMapData)
 	if (pMapData) m_nCurrY = pMapData->GetZeroStdY();
 }
 void cMapMaker::Update(float fDelta)
-{
+{ 
 	if (g_pKeyManager->IsOnceKeyDown('R'))
 	{
 		this->LayerUp();
@@ -52,22 +52,20 @@ void cMapMaker::Update(float fDelta)
 	}
 	else if (g_pKeyManager->IsOnceKeyDown('1'))
 	{
-		this->SaveData("SampleMap.map");
+		this->SaveData("SampleStageMap.map");
 	}
 	else if (g_pKeyManager->IsOnceKeyDown('2'))
 	{
-		this->LoadData("SampleMap.map");
+		this->LoadData("SampleStageMap.map");
 	}
-	
 
 
 	cGameNode::Update(fDelta);
 }
 void cMapMaker::Render()
 {
-
 	if (m_pGrid) m_pGrid->Render();
-	if (m_pMapData && m_bIsMakingEnable && m_bIsOnMapLayer)
+	if (m_pMapData && m_bIsMakingEnable && m_bIsOnMapLayer && !g_pKeyManager->IsStayKeyDown(VK_CONTROL))
 		m_pMapData->DrawVirtualBox(m_nCurrX, m_nCurrY, m_nCurrZ);
 	
 	cGameNode::Render();
@@ -124,7 +122,6 @@ void cMapMaker::LayerUp()
 			m_nCurrY++;
 			if (m_pGrid) m_pGrid->SetHeight((m_nCurrY - m_pMapData->GetZeroStdY()) * m_pMapData->GetCubeSize());
 		}
-			
 }
 void cMapMaker::LayerDown()
 {
@@ -133,8 +130,7 @@ void cMapMaker::LayerDown()
 		{
 			m_nCurrY--;
 			if (m_pGrid) m_pGrid->SetHeight((m_nCurrY - m_pMapData->GetZeroStdY()) * m_pMapData->GetCubeSize());
-		}
-			
+		}	
 }
 
 void cMapMaker::SaveData(std::string sFileName)

@@ -4,6 +4,7 @@
 #include "iGameMap.h"
 
 #define PHYSICSNODE_DELTATIME_MAX 0.1f
+#define PHYSICSNODE_DELTATIME_SKIP 0.5f
 
 cPhysicsNode::cPhysicsNode()
 {
@@ -30,6 +31,7 @@ void cPhysicsNode::Update(float fDelta)
 	std::set<cGameNode*>::iterator itSour, itDest;
 
 	float fTotalDelta = fDelta;
+	if (fTotalDelta > PHYSICSNODE_DELTATIME_SKIP) fTotalDelta = PHYSICSNODE_DELTATIME_SKIP;
 	float fCurrDelta = fDelta;
 	
 	while (fTotalDelta > PHYSICSNODE_DELTATIME_MAX)
@@ -54,8 +56,9 @@ void cPhysicsNode::Update(float fDelta)
 		{
 			itDest = itSour;
 			itDest++;
-			for (; itDest != m_setChild.end(); itDest++)
+			for (/*itDest = m_setChild.begin()*/; itDest != m_setChild.end(); itDest++)
 			{
+				//if (itDest == itSour) continue;
 				(*itSour)->CollisionWithNode(*itDest);
 			}
 		}
@@ -87,8 +90,9 @@ void cPhysicsNode::Update(float fDelta)
 	{
 		itDest = itSour;
 		itDest++;
-		for (; itDest != m_setChild.end(); itDest++)
+		for (/*itDest = m_setChild.begin()*/; itDest != m_setChild.end(); itDest++)
 		{
+			//if (itDest == itSour) continue;
 			(*itSour)->CollisionWithNode(*itDest);
 		}
 	}

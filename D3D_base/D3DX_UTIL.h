@@ -40,6 +40,18 @@ namespace D3DX_UTIL
 		D3DXVECTOR3 vFar_10;
 		D3DXVECTOR3 vFar_11;
 
+		void MakeWithVec3MinMax(D3DXVECTOR3 vMin, D3DXVECTOR3 vMax)
+		{
+			vNear_00 = vMin;
+			vNear_01 = D3DXVECTOR3(vMin.x, vMax.y, vMin.z);
+			vNear_10 = D3DXVECTOR3(vMax.x, vMin.y, vMin.z);
+			vNear_11 = D3DXVECTOR3(vMax.x, vMax.y, vMin.z);
+
+			vFar_00 = D3DXVECTOR3(vMin.x, vMin.y, vMax.z);
+			vFar_01 = D3DXVECTOR3(vMin.x, vMax.y, vMax.z);
+			vFar_10 = D3DXVECTOR3(vMax.x, vMin.y, vMax.z);
+			vFar_11 = vMax;
+		}
 		D3DXVECTOR3& operator[] (int n)
 		{
 			assert((n >= 0 && n < 8) &&  "FRUSTUMÀÇ ÀÎµ¦½º¸¦ ¹þ¾î³µÀ½");

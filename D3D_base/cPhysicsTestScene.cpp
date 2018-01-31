@@ -14,6 +14,7 @@ cPhysicsTestScene::cPhysicsTestScene()
 	, m_pGrid(nullptr)
 	, m_pEnemy(nullptr)
 	, m_pEnemy2(nullptr)
+	, m_pEnemy3(nullptr)
 {
 }
 
@@ -50,6 +51,10 @@ void cPhysicsTestScene::Setup()
 	m_pEnemy2->Setup(false, D3DXVECTOR3(5.f, 5.f, 5.f));
 	m_pSpace->AddChild(m_pEnemy2);
 
+	m_pEnemy3 = new cSampleChar;
+	m_pEnemy3->Setup(false, D3DXVECTOR3(7.f, 5.f, 5.f));
+	m_pSpace->AddChild(m_pEnemy3);
+
 }
 void cPhysicsTestScene::Update(float fDelta)
 {
@@ -72,6 +77,7 @@ void cPhysicsTestScene::Delete()
 	SAFE_RELEASE(m_pSpace);
 	SAFE_RELEASE(m_pEnemy);
 	SAFE_RELEASE(m_pEnemy2);
+	SAFE_RELEASE(m_pEnemy3);
 	SAFE_DELETE(m_pCamera);
 	SAFE_DELETE(m_pGrid);
 }

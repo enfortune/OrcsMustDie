@@ -142,27 +142,45 @@ namespace D3DX_UTIL
 	bool CheckOBBCollision(ST_FRUSTUM* pFrustum1, ST_FRUSTUM* pFrustum2)
 	{
 		D3DXVECTOR3 vPolygonNorm_1[3]; // 면의 법선벡터이자 그 면의 수직인 모서리의 벡터
-		D3DXVECTOR3 vPolygonNorm_2[3]; // 면의 법선벡터이자 그 면의 수직인 모서리의 벡터
+		D3DXVECTOR3 vPolygonNorm_2[3]; 
+		float vEdgeHalfLength_1[3]; // 각 축 모서리의 절반길이.
+		float vEdgeHalfLength_2[3]; 
 
 		D3DXVECTOR3 vSA; // Separating Axis(분리축)
 		float fDistMin_1, fDistMax_1, fDistTemp_1; // 직육면체 1의 분리축 거리상수
 		float fDistMin_2, fDistMax_2, fDistTemp_2; // 직육면체 2의 분리축 거리상수
+		D3DXVECTOR3 vCenterInterval; // 두 정육면체의 중심간 차이 벡터
+		float fCenterDist, fRadius_1, fRadius_2; // 중심간 거리, 직육면체1의 분리축반지름, 직육면체2의 분리축반지름
 
 
-		//1. 각 직육면체의 법선벡터를 준비한다.
-		vPolygonNorm_1[0] = pFrustum1->GetNormalVec3(DIRECTION_6::RIGHT);
-		vPolygonNorm_1[1] = pFrustum1->GetNormalVec3(DIRECTION_6::TOP);
-		vPolygonNorm_1[2] = pFrustum1->GetNormalVec3(DIRECTION_6::FRONT);
+		//1. 필요한 벡터를 준비한다.
+		//1-1 면의 법선벡터
+		vPolygonNorm_1[0] = pFrustum1->GetNormalVec3(DIRECTION_6::RIGHT);	// x축
+		vPolygonNorm_1[1] = pFrustum1->GetNormalVec3(DIRECTION_6::TOP);		// y축
+		vPolygonNorm_1[2] = pFrustum1->GetNormalVec3(DIRECTION_6::FRONT);	// z축
 
 		vPolygonNorm_2[0] = pFrustum2->GetNormalVec3(DIRECTION_6::RIGHT);
 		vPolygonNorm_2[1] = pFrustum2->GetNormalVec3(DIRECTION_6::TOP);
 		vPolygonNorm_2[2] = pFrustum2->GetNormalVec3(DIRECTION_6::FRONT);
+
+		//1-2 엣지의 절반길이
+		vEdgeHalfLength_1[0] = 0.5f * D3DXVec3Length(&(pFrustum1->vNear_10 - pFrustum1->vNear_00));	// x축
+		vEdgeHalfLength_1[1] = 0.5f * D3DXVec3Length(&(pFrustum1->vNear_01 - pFrustum1->vNear_00));	// y축
+		vEdgeHalfLength_1[2] = 0.5f * D3DXVec3Length(&(pFrustum1->vFar_00 - pFrustum1->vNear_00));	// z축
+
+		vEdgeHalfLength_2[0] = 0.5f * D3DXVec3Length(&(pFrustum2->vNear_10 - pFrustum2->vNear_00));	// x축
+		vEdgeHalfLength_2[1] = 0.5f * D3DXVec3Length(&(pFrustum2->vNear_01 - pFrustum2->vNear_00));	// y축
+		vEdgeHalfLength_2[2] = 0.5f * D3DXVec3Length(&(pFrustum2->vFar_00 - pFrustum2->vNear_00));	// z축
+
+		//1-3 중심간 차이
+		vCenterInterval = pFrustum2->GetCenterVec3(DIRECTION_6::END) - pFrustum1->GetCenterVec3(DIRECTION_6::END);
 
 		//2. 각 면에 대한 분리축을 테스트한다.
 		//2-1 직육면체 1의 면의 법선벡터 테스트
 		for (int i = 0; i < 3; i++)
 		{
 			vSA = vPolygonNorm_1[i]; // 축 하나를 선택한 후
+			/*
 			for (int j = 0; j < 8; j++) // 직육면체 1의 최대, 최소 거리상수 구함
 			{
 				fDistTemp_1 = D3DXVec3Dot(&(*pFrustum1)[j], &vSA);
@@ -186,12 +204,25 @@ namespace D3DX_UTIL
 				}
 			}
 			if (fDistMax_1 < fDistMin_2 || fDistMin_1 > fDistMax_2) return false; // 분리축이 존재하면 false를 리턴
-			else int a = 10;
+			*/
+			fCenterDist = fabs(D3DXVec3Dot(&vSA, &vCenterInterval));
+			fRadius_1 =
+				fabs(vEdgeHalfLength_1[0] * D3DXVec3Dot(&vSA, &vPolygonNorm_1[0])) +
+				fabs(vEdgeHalfLength_1[1] * D3DXVec3Dot(&vSA, &vPolygonNorm_1[1])) +
+				fabs(vEdgeHalfLength_1[2] * D3DXVec3Dot(&vSA, &vPolygonNorm_1[2]));
+
+			fRadius_2 = 
+				fabs(vEdgeHalfLength_2[0] * D3DXVec3Dot(&vSA, &vPolygonNorm_2[0])) +
+				fabs(vEdgeHalfLength_2[1] * D3DXVec3Dot(&vSA, &vPolygonNorm_2[1])) +
+				fabs(vEdgeHalfLength_2[2] * D3DXVec3Dot(&vSA, &vPolygonNorm_2[2]));
+
+			if (fCenterDist > fRadius_1 + fRadius_2) return false;
 		}
 		//2-2 직육면체 2의 면의 법선벡터 테스트
 		for (int i = 0; i < 3; i++)
 		{
 			vSA = vPolygonNorm_2[i]; // 축 하나를 선택한 후
+			/*
 			for (int j = 0; j < 8; j++) // 직육면체 1의 최대, 최소 거리상수 구함
 			{
 				fDistTemp_1 = D3DXVec3Dot(&(*pFrustum1)[j], &vSA);
@@ -212,7 +243,21 @@ namespace D3DX_UTIL
 					else if (fDistTemp_2 > fDistMax_2) fDistMax_2 = fDistTemp_2;
 				}
 			}
-			if (fDistMax_1 < fDistMin_2 || fDistMin_1 > fDistMax_2) return false; // 분리축이 존재하면 false를 리
+			if (fDistMax_1 < fDistMin_2 || fDistMin_1 > fDistMax_2) return false; // 분리축이 존재하면 false를 리턴
+			*/
+
+			fCenterDist = fabs(D3DXVec3Dot(&vSA, &vCenterInterval));
+			fRadius_1 =
+				fabs(vEdgeHalfLength_1[0] * D3DXVec3Dot(&vSA, &vPolygonNorm_1[0])) +
+				fabs(vEdgeHalfLength_1[1] * D3DXVec3Dot(&vSA, &vPolygonNorm_1[1])) +
+				fabs(vEdgeHalfLength_1[2] * D3DXVec3Dot(&vSA, &vPolygonNorm_1[2]));
+
+			fRadius_2 =
+				fabs(vEdgeHalfLength_2[0] * D3DXVec3Dot(&vSA, &vPolygonNorm_2[0])) +
+				fabs(vEdgeHalfLength_2[1] * D3DXVec3Dot(&vSA, &vPolygonNorm_2[1])) +
+				fabs(vEdgeHalfLength_2[2] * D3DXVec3Dot(&vSA, &vPolygonNorm_2[2]));
+
+			if (fCenterDist > fRadius_1 + fRadius_2) return false;
 		}
 
 		//3. 두 모서리의 외적으로 생기는 평면에 대한 분리축 테스트
@@ -222,6 +267,7 @@ namespace D3DX_UTIL
 			{
 				D3DXVec3Cross(&vSA, &vPolygonNorm_1[_1], &vPolygonNorm_2[_2]);
 				D3DXVec3Normalize(&vSA, &vSA);
+				/*
 				for (int j = 0; j < 8; j++) // 직육면체 1의 최대, 최소 거리상수 구함
 				{
 					fDistTemp_1 = D3DXVec3Dot(&(*pFrustum1)[j], &vSA);
@@ -242,7 +288,21 @@ namespace D3DX_UTIL
 						else if (fDistTemp_2 > fDistMax_2) fDistMax_2 = fDistTemp_2;
 					}
 				}
-				if (fDistMax_1 < fDistMin_2 || fDistMin_1 > fDistMax_2) return false; // 분리축이 존재하면 false를 리
+				if (fDistMax_1 < fDistMin_2 || fDistMin_1 > fDistMax_2) return false; // 분리축이 존재하면 false를 리턴
+				*/
+
+				fCenterDist = fabs(D3DXVec3Dot(&vSA, &vCenterInterval));
+				fRadius_1 =
+					fabs(vEdgeHalfLength_1[0] * D3DXVec3Dot(&vSA, &vPolygonNorm_1[0])) +
+					fabs(vEdgeHalfLength_1[1] * D3DXVec3Dot(&vSA, &vPolygonNorm_1[1])) +
+					fabs(vEdgeHalfLength_1[2] * D3DXVec3Dot(&vSA, &vPolygonNorm_1[2]));
+
+				fRadius_2 =
+					fabs(vEdgeHalfLength_2[0] * D3DXVec3Dot(&vSA, &vPolygonNorm_2[0])) +
+					fabs(vEdgeHalfLength_2[1] * D3DXVec3Dot(&vSA, &vPolygonNorm_2[1])) +
+					fabs(vEdgeHalfLength_2[2] * D3DXVec3Dot(&vSA, &vPolygonNorm_2[2]));
+
+				if (fCenterDist > fRadius_1 + fRadius_2) return false;
 			}
 		}
 

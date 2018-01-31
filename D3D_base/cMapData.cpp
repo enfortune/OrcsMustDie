@@ -6,7 +6,7 @@
 
 #include "cPhysicsBody.h"
 
-#define MAPCOLLISION_Y_EPSILON 0.001f
+#define MAPCOLLISION_Y_EPSILON 0.005f
 
 cMapData::cMapData()
 	: m_bisVBExist(false)
@@ -33,19 +33,6 @@ cMapData::~cMapData()
 	this->Delete();
 }
 
-void cMapData::SetupVertexBuffer()
-{
-
-}
-void cMapData::RenderVertexBuffer()
-{
-
-}
-void cMapData::ClearVertexBuffer()
-{
-
-}
-
 
 void cMapData::Setup()
 {
@@ -58,6 +45,8 @@ void cMapData::Setup()
 			for (int z = 0; z < MAPSIZE_Z; z++)
 			{
 				m_arrGridBox[x][y][z].MakeBox(x, y, z, GRIDBOXKIND_NONE);
+				g_pD3DDevice->CreateVertexBuffer(sizeof(ST_PTN_VERTEX) * 36, D3DUSAGE_WRITEONLY, ST_PTN_VERTEX::FVF, D3DPOOL_MANAGED, &m_arrVB[x][y][z], NULL);
+				m_arrGridBox[x][y][z].CopyToVertexBuffer(m_arrVB[x][y][z]);
 			}
 		}
 	}
@@ -68,64 +57,64 @@ void cMapData::Setup()
 		{
 			case GRIDBOXKIND_NONE:
 				m_arrTex[i] = nullptr;
-				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 0.f;
 			break;
 			case GRIDBOXKIND_DEFAULT:
 				m_arrTex[i] = nullptr;
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
 				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 0.f;
 			break;
 			case GRIDBOXKINE_BLOCK1:
 				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_block1.jpg");
-				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 2.f;
 			break;
 			case GRIDBOXKINE_BLOCK2:
 				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_block2.jpg");
-				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 0.f;
 			break;
 			case GRIDBOXKINE_GRASS:
 				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_grass.jpg");
-				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 3.f;
 			break;
 			case GRIDBOXKINE_MARBLE:
 				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_marble.jpg");
-				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 5.f;
 			break;
 			case GRIDBOXKINE_ROCK:
 				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_rock.jpg");
-				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 0.f;
 			break;
 			case GRIDBOXKINE_SOIL:
 				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_soil.jpg");
-				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 0.f;
 			break;
 			case GRIDBOXKINE_WOODEN:
 				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_wooden.jpg");
-				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
-				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
+				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
+				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 0.f;
 			break;
@@ -148,7 +137,17 @@ void cMapData::Render()
 		{
 			for (int z = 0; z < MAPSIZE_Z; z++)
 			{
-				m_arrGridBox[x][y][z].RenderBox(nullptr, nullptr);
+				//m_arrGridBox[x][y][z].RenderBox(nullptr, nullptr);
+				if (m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_NONE) continue;
+				g_pD3DDevice->SetTexture(0, m_arrTex[m_arrGridBox[x][y][z].enKind]);
+				g_pD3DDevice->SetMaterial(&m_arrMtrl[m_arrGridBox[x][y][z].enKind]);
+				g_pD3DDevice->SetFVF(ST_PTN_VERTEX::FVF);
+				g_pD3DDevice->SetStreamSource(0, m_arrVB[x][y][z], 0, sizeof(ST_PTN_VERTEX));
+				
+				ST_PTN_VERTEX* pV;
+				m_arrVB[x][y][z]->Lock(0, sizeof(ST_PTN_VERTEX) * 36, (void**)&pV, 0);
+				g_pD3DDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 12);
+				m_arrVB[x][y][z]->Unlock();
 			}
 		}
 	}
@@ -160,6 +159,16 @@ void cMapData::Delete()
 	for (int i = 0; i < static_cast<int>(GRIDBOXKIND_END); i++)
 	{
 		SAFE_RELEASE(m_arrTex[i]);
+	}
+	for (int x = 0; x < MAPSIZE_X; x++)
+	{
+		for (int y = 0; y < MAPSIZE_Y; y++)
+		{
+			for (int z = 0; z < MAPSIZE_Z; z++)
+			{
+				SAFE_RELEASE(m_arrVB[x][y][z]);
+			}
+		}
 	}
 }
 
@@ -216,10 +225,11 @@ bool cMapData::GetPickingIndex(OUT int &nX, IN int nY, OUT int &nZ, cRay ray)
 
 void cMapData::DrawVirtualBox(int x, int y, int z)
 {
+	g_pD3DDevice->SetTransform(D3DTS_WORLD, &this->GetMatrixToWorld());
 	m_arrGridBox[x][y][z].RenderVirtualBox();
 }
 
-void cMapData::SaveData(std::string sFileName)
+void cMapData::SaveData(std::string sFileName) 
 {
 	HANDLE file;
 	DWORD write;

@@ -31,7 +31,7 @@ void cSampleChar::Setup(bool move, D3DXVECTOR3 vPosSetup)
 
 	m_pPhysicsBody = new cPhysicsBody;
 	m_pPhysicsBody->Setup(-PI / 4.f);
-	m_pPhysicsBody->MakeBodyCuboid(0.4f, 1.f, 0.2f, D3DXVECTOR3(0.f, 0.5f, 0.f));
+	m_pPhysicsBody->MakeBodyCuboid(0.6f, 1.f, 0.4f, D3DXVECTOR3(0.f, 0.5f, 0.f));
 	m_pPhysicsBody->GetPhysicsData().vPos = vPosSetup;
 	m_pPhysicsBody->GetPhysicsData().vDamping = D3DXVECTOR3(20.f, 0.f, 20.f);
 	m_pPhysicsBody->SetBodyType(PHYSICSBODYTYPE_DINAMIC); // PHYSICSBODYTYPE_STATIC은 밀어낼 수 없는 속성.
@@ -72,7 +72,7 @@ void cSampleChar::Render()
 {
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &this->GetMatrixToWorld());
 
-	//m_pSkinnedMesh->Render();
+	m_pSkinnedMesh->Render();
 	this->m_pPhysicsBody->GetShapeData().stCuboid.Render(g_pD3DDevice);
 
 	cGameNode::Render();
