@@ -29,7 +29,7 @@ void cMainGame::Setup()
 	g_pSoundManager->Setup();
 	g_pKeyManager->Setup();
 
-	g_pSceneManager->Setup(new cPhysicsTestScene);
+	g_pSceneManager->Setup(new cInGameScene);
 }
 
 void cMainGame::Update()

@@ -29,7 +29,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -206,6 +206,8 @@
     <ClInclude Include="cPhysicsNode.h" />
     <ClInclude Include="cPhysicsSpace.h" />
     <ClInclude Include="cPhysicsTestScene.h" />
+    <ClInclude Include="cPlayerCamera.h" />
+    <ClInclude Include="cPlayerMesh.h" />
     <ClInclude Include="cRay.h" />
     <ClInclude Include="cSampleChar.h" />
     <ClInclude Include="cSceneManager.h" />
@@ -283,6 +285,8 @@
     <ClCompile Include="cPhysicsNode.cpp" />
     <ClCompile Include="cPhysicsSpace.cpp" />
     <ClCompile Include="cPhysicsTestScene.cpp" />
+    <ClCompile Include="cPlayerCamera.cpp" />
+    <ClCompile Include="cPlayerMesh.cpp" />
     <ClCompile Include="cRay.cpp" />
     <ClCompile Include="cSampleChar.cpp" />
     <ClCompile Include="cSceneManager.cpp" />

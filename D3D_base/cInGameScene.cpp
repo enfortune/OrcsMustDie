@@ -3,8 +3,11 @@
 #include "cCamera.h"
 #include "cGrid.h"
 #include "cInGameUILayer.h"
-
-#include "cSkinnedMesh.h"
+#include "cPlayerCamera.h"
+#include "cPlayerMesh.h"
+#include "cPhysicsNode.h"
+#include "cPhysicsBody.h"
+#include "cTransformData.h"
 
 #define SCREEN_WIDTH GetRectWidth(GetScreenRect())
 #define SCREEN_HEIGHT GetRectHeight(GetScreenRect())
@@ -22,9 +25,11 @@ cInGameScene::~cInGameScene()
 void cInGameScene::Setup()
 {
 	cGameScene::Setup();
+	m_pPhysicsNode = new cPhysicsNode;
+	m_pPhysicsNode->Setup(NULL);
+	m_pPhysicsNode->GetSpaceData().vGravity = D3DXVECTOR3(0, 0, 0);
+	this->AddChild(m_pPhysicsNode);
 
-	m_pCamera = new cCamera;
-	m_pCamera->Setup(NULL);
 	m_pGrid = new cGrid;
 	m_pGrid->Setup();
 
@@ -36,18 +41,19 @@ void cInGameScene::Setup()
 	m_pUILayer->SetScale(D3DXVECTOR2(fScaleX, fScaleY));
 	this->AddChild(m_pUILayer);
 
-	m_pSkinnedMesh = new cSkinnedMesh;
-	m_pSkinnedMesh->Setup("XFileSample","XFileSample/sylva.X");
+	m_pPlayerMesh_S = new cPlayerMesh;
+	m_pPlayerMesh_S->Setup();
 
-	m_pSkinnedMesh->SetAnimationSet(0, 6);
+	m_pCamera = new cPlayerCamera;
+	m_pCamera->Setup(&m_pPlayerMesh_S->GetTransformData()->GetPosition(), m_pPlayerMesh_S->GetRotationY());
 
+	m_pPhysicsNode->AddChild(m_pPlayerMesh_S);
 }
 void cInGameScene::Update(float fDelta)
 {
 	m_pCamera->Update();
+	m_pPlayerMesh_S->SetRotationY(m_pCamera->GetCamRotAngle().y);
 
-	m_pSkinnedMesh->Update();
-	m_pSkinnedMesh->UpdateAnimation(fDelta);
 	cGameScene::Update(fDelta);
 
 	
@@ -56,7 +62,6 @@ void cInGameScene::Render()
 {
 	m_pGrid->Render();
 
-	m_pSkinnedMesh->Render();
 
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 
@@ -68,7 +73,7 @@ void cInGameScene::Delete()
 	SAFE_DELETE(m_pGrid);
 
 	SAFE_RELEASE(m_pUILayer);
-	SAFE_DELETE(m_pSkinnedMesh);
+	SAFE_DELETE(m_pPlayerMesh_S);
 
 }
 void cInGameScene::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

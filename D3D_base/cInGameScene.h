@@ -5,16 +5,21 @@ class cInGameUILayer;
 class cSkinnedMesh;
 class cCamera;
 class cGrid;
+class cPlayerMesh;
+class cPlayerCamera;
+class cPhysicsNode;
 
 class cInGameScene : public cGameScene
 {
-	cCamera* m_pCamera;
+	cPlayerCamera* m_pCamera;
 	cGrid* m_pGrid;
 
 	cInGameUILayer* m_pUILayer;
 
 	/* for test */
-	cSkinnedMesh* m_pSkinnedMesh;
+	cPlayerMesh* m_pPlayerMesh_S;
+
+	cPhysicsNode* m_pPhysicsNode;
 	
 public:
 	cInGameScene();

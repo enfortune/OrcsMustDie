@@ -352,6 +352,12 @@
     <ClInclude Include="cMapToolGrid.h">
       <Filter>김완수\MapTool</Filter>
     </ClInclude>
+    <ClInclude Include="cPlayerCamera.h">
+      <Filter>차종서</Filter>
+    </ClInclude>
+    <ClInclude Include="cPlayerMesh.h">
+      <Filter>차종서</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -560,6 +566,12 @@
     </ClCompile>
     <ClCompile Include="cMapToolGrid.cpp">
       <Filter>김완수\MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="cPlayerCamera.cpp">
+      <Filter>차종서</Filter>
+    </ClCompile>
+    <ClCompile Include="cPlayerMesh.cpp">
+      <Filter>차종서</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
