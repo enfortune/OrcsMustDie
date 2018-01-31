@@ -16,7 +16,7 @@ class cPhysicsNode : public cGameNode
 {
 	iGameMap* m_pMap;
 
-	ST_PHYSICSSPACEDATA m_stSpaceData;
+	SYNTHESIZE_REF(ST_PHYSICSSPACEDATA, m_stSpaceData, SpaceData);
 
 public:
 	cPhysicsNode();
