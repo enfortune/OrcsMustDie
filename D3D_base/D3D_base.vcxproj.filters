@@ -358,6 +358,9 @@
     <ClInclude Include="cPlayer.h">
       <Filter>차종서</Filter>
     </ClInclude>
+    <ClInclude Include="cSkinnedMeshEX.h">
+      <Filter>정현식</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -572,6 +575,9 @@
     </ClCompile>
     <ClCompile Include="cPlayer.cpp">
       <Filter>차종서</Filter>
+    </ClCompile>
+    <ClCompile Include="cSkinnedMeshEX.cpp">
+      <Filter>정현식</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

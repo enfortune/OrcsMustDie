@@ -53,7 +53,7 @@ void cPlayerCamera::Update()
 
 	if (m_pvTargetPos)
 	{
-		m_vLookAt = (*m_pvTargetPos);
+		m_vLookAt = (*m_pvTargetPos + D3DXVECTOR3(0,0.7,0));
 		if (!m_pvTargetDir) m_vEye = m_vEye + (*m_pvTargetPos);
 		else
 		{
