@@ -207,7 +207,7 @@
     <ClInclude Include="cPhysicsSpace.h" />
     <ClInclude Include="cPhysicsTestScene.h" />
     <ClInclude Include="cPlayerCamera.h" />
-    <ClInclude Include="cPlayerMesh.h" />
+    <ClInclude Include="cPlayer.h" />
     <ClInclude Include="cRay.h" />
     <ClInclude Include="cSampleChar.h" />
     <ClInclude Include="cSceneManager.h" />
@@ -286,7 +286,7 @@
     <ClCompile Include="cPhysicsSpace.cpp" />
     <ClCompile Include="cPhysicsTestScene.cpp" />
     <ClCompile Include="cPlayerCamera.cpp" />
-    <ClCompile Include="cPlayerMesh.cpp" />
+    <ClCompile Include="cPlayer.cpp" />
     <ClCompile Include="cRay.cpp" />
     <ClCompile Include="cSampleChar.cpp" />
     <ClCompile Include="cSceneManager.cpp" />

@@ -2,7 +2,7 @@
 #include "cGameNode.h"
 
 class cSkinnedMesh;
-class cPlayerMesh : public cGameNode
+class cPlayer : public cGameNode
 {
 protected:
 	cSkinnedMesh *	m_pPlayerMesh;
@@ -13,8 +13,8 @@ protected:
 	SYNTHESIZE_REF(D3DXVECTOR3, m_vPlayerDir, PlayerDir);
 
 public:
-	cPlayerMesh();
-	~cPlayerMesh();
+	cPlayer();
+	~cPlayer();
 
 	virtual void Setup();
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime()) override;

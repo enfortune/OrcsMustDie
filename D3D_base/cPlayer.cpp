@@ -1,22 +1,22 @@
 #include "stdafx.h"
-#include "cPlayerMesh.h"
+#include "cPlayer.h"
 #include "cSkinnedMesh.h"
 #include "cTransformData.h"
 #include "cPhysicsBody.h"
 
-cPlayerMesh::cPlayerMesh()
+cPlayer::cPlayer()
 	: m_pRotationY(0.0f)
 	, m_vPlayerPos(0,0,0)
 	, m_vPlayerDir(0,0,0)
 {
 }
 
-cPlayerMesh::~cPlayerMesh()
+cPlayer::~cPlayer()
 {
 	Delete();
 }
 
-void cPlayerMesh::Setup()
+void cPlayer::Setup()
 {
 	cGameNode::Setup();
 
@@ -35,41 +35,45 @@ void cPlayerMesh::Setup()
 	m_pPhysicsBody->SetBodyType(PHYSICSBODYTYPE_DINAMIC);
 }
 
-void cPlayerMesh::Update(float fDelta)
+void cPlayer::Update(float fDelta)
 {
 	m_pPlayerMesh->Update();
 	m_pPlayerMesh->UpdateAnimation(fDelta);
 
 	float speedX = 0.f;
 	float speedZ = 0.f;
-	float speedY = 0.f;
+
+	D3DXVECTOR3 vLeft;
+	D3DXVec3Cross(&vLeft, &m_vPlayerDir, &D3DXVECTOR3(0, 1, 0));
 
 	if (g_pKeyManager->IsStayKeyDown('W'))
 	{
-		speedZ += 3.f;
+		speedX += 3.f *  m_vPlayerDir.x;
+		speedZ += 3.f * m_vPlayerDir.z;
 		m_pPlayerMesh->SetAnimationSet(0, 10);
 	}
 	if (g_pKeyManager->IsOnceKeyUp('W')) m_pPlayerMesh->SetAnimationSet(0, 11);
 
 	if (g_pKeyManager->IsStayKeyDown('S'))
 	{
-		speedZ -= 3.f;
+		speedX -= 3.f *  m_vPlayerDir.x;
+		speedZ -= 3.f * m_vPlayerDir.z;
 		m_pPlayerMesh->SetAnimationSet(0, 10);
 	}
 	if (g_pKeyManager->IsOnceKeyUp('S')) m_pPlayerMesh->SetAnimationSet(0, 11);
 
-	D3DXVECTOR3 vLeft;
-	D3DXVec3Cross(&vLeft, &m_vPlayerDir, &D3DXVECTOR3(0, 1, 0));
 	if (g_pKeyManager->IsStayKeyDown('A'))
 	{
-		speedX -= 3.f;
+		speedX += 3.f *  vLeft.x;
+		speedZ += 3.f * vLeft.z;
 		m_pPlayerMesh->SetAnimationSet(0, 10);
 	}
 	if (g_pKeyManager->IsOnceKeyUp('A')) m_pPlayerMesh->SetAnimationSet(0, 11);
 
 	if (g_pKeyManager->IsStayKeyDown('D'))
 	{
-		speedX += 3.f;
+		speedX -= 3.f *  vLeft.x;
+		speedZ -= 3.f * vLeft.z;
 		m_pPlayerMesh->SetAnimationSet(0, 10);
 	}
 	if (g_pKeyManager->IsOnceKeyUp('D')) m_pPlayerMesh->SetAnimationSet(0, 11);
@@ -81,16 +85,14 @@ void cPlayerMesh::Update(float fDelta)
 
 	if (g_pKeyManager->IsOnceKeyDown(VK_SPACE))
 	{
-		speedY += 7.f;
+		if (m_pPhysicsBody->GetPhysicsData().bOnGround == true)
+			m_pPhysicsBody->GetPhysicsData().vVelocity.y = 7.f;
 	}
 
 	m_pPhysicsBody->GetPhysicsData().vVelocity.x = speedX;
 	m_pPhysicsBody->GetPhysicsData().vVelocity.z = speedZ;
 
-	if (m_pPhysicsBody->GetPhysicsData().bOnGround == true) 
-		m_pPhysicsBody->GetPhysicsData().vVelocity.y = speedY;
-
-	//GetTransformData()->SetRotAngle(m_pRotationY);
+	m_pPhysicsBody->GetPhysicsData().fRotAngle = m_pRotationY;
 	//GetTransformData()->SetAxis(D3DXVECTOR3(0, 1, 0));
 	//GetTransformData()->SetPosition(m_vPlayerPos);
 	
@@ -102,7 +104,7 @@ void cPlayerMesh::Update(float fDelta)
 	cGameNode::Update(fDelta);
 }
 
-void cPlayerMesh::Render()
+void cPlayer::Render()
 {
 	D3DXMATRIXA16 matMeshWorld;
 
@@ -116,11 +118,11 @@ void cPlayerMesh::Render()
 	cGameNode::Render();
 }
 
-void cPlayerMesh::Delete()
+void cPlayer::Delete()
 {
 	SAFE_DELETE(m_pPlayerMesh);
 }
 
-void cPlayerMesh::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+void cPlayer::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 }

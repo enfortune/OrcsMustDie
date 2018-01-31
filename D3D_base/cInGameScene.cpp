@@ -4,7 +4,7 @@
 #include "cGrid.h"
 #include "cInGameUILayer.h"
 #include "cPlayerCamera.h"
-#include "cPlayerMesh.h"
+#include "cPlayer.h"
 #include "cPhysicsNode.h"
 #include "cPhysicsBody.h"
 #include "cTransformData.h"
@@ -41,18 +41,18 @@ void cInGameScene::Setup()
 	m_pUILayer->SetScale(D3DXVECTOR2(fScaleX, fScaleY));
 	this->AddChild(m_pUILayer);
 
-	m_pPlayerMesh_S = new cPlayerMesh;
-	m_pPlayerMesh_S->Setup();
+	m_pPlayer_S = new cPlayer;
+	m_pPlayer_S->Setup();
 
 	m_pCamera = new cPlayerCamera;
-	m_pCamera->Setup(&m_pPlayerMesh_S->GetTransformData()->GetPosition(), m_pPlayerMesh_S->GetRotationY());
+	m_pCamera->Setup(&m_pPlayer_S->GetTransformData()->GetPosition(), m_pPlayer_S->GetRotationY());
 
-	m_pPhysicsNode->AddChild(m_pPlayerMesh_S);
+	m_pPhysicsNode->AddChild(m_pPlayer_S);
 }
 void cInGameScene::Update(float fDelta)
 {
 	m_pCamera->Update();
-	m_pPlayerMesh_S->SetRotationY(m_pCamera->GetCamRotAngle().y);
+	m_pPlayer_S->SetRotationY(m_pCamera->GetCamRotAngle().y);
 
 	cGameScene::Update(fDelta);
 
@@ -73,7 +73,7 @@ void cInGameScene::Delete()
 	SAFE_DELETE(m_pGrid);
 
 	SAFE_RELEASE(m_pUILayer);
-	SAFE_DELETE(m_pPlayerMesh_S);
+	SAFE_DELETE(m_pPlayer_S);
 
 }
 void cInGameScene::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

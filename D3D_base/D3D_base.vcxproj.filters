@@ -355,7 +355,7 @@
     <ClInclude Include="cPlayerCamera.h">
       <Filter>차종서</Filter>
     </ClInclude>
-    <ClInclude Include="cPlayerMesh.h">
+    <ClInclude Include="cPlayer.h">
       <Filter>차종서</Filter>
     </ClInclude>
   </ItemGroup>
@@ -570,7 +570,7 @@
     <ClCompile Include="cPlayerCamera.cpp">
       <Filter>차종서</Filter>
     </ClCompile>
-    <ClCompile Include="cPlayerMesh.cpp">
+    <ClCompile Include="cPlayer.cpp">
       <Filter>차종서</Filter>
     </ClCompile>
   </ItemGroup>
