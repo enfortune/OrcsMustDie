@@ -7,6 +7,8 @@
 #include "cParticleTestScene.h"
 #include "cPhysicsTestScene.h"
 
+#include "TrapTestScene.h"
+
 cMainGame::cMainGame()
 {
 }
@@ -27,7 +29,7 @@ void cMainGame::Setup()
 	g_pSoundManager->Setup();
 	g_pKeyManager->Setup();
 
-	g_pSceneManager->Setup(new cPhysicsTestScene);
+	g_pSceneManager->Setup(new TrapTestScene);
 }
 
 void cMainGame::Update()

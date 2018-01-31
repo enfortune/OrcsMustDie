@@ -45,7 +45,7 @@ void cGameSprite::Setup(std::string sFileName)
 	m_pTexture = g_pTextureManager->GetTexture(sFileName, &m_stImageInfo);
 	m_pTexture->AddRef();
 
-	m_pCropRect = { 0, 0, m_stImageInfo.Width, m_stImageInfo.Height };
+	m_pCropRect = { 0, 0, static_cast<LONG> (m_stImageInfo.Width), static_cast<LONG> (m_stImageInfo.Height) };
 
 	m_vecContentBox.resize(4);
 
