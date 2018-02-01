@@ -1,6 +1,7 @@
 #pragma once
 #include "cGameNode.h"
 #include "iGameMap.h"
+#include "MapDataEnumList.h"
 
 #define MAPSIZE_X 30
 #define MAPSIZE_Z 30
@@ -12,19 +13,7 @@ class cTrap;
 class cHeightMap;
 class cRay;
 
-typedef enum EN_GRIDBOXKIND
-{
-	GRIDBOXKIND_NONE,    // 박스가 없는 지점
-	GRIDBOXKIND_DEFAULT, // 텍스쳐 씌우고, 오토 높이맵에도 어느정도 영향있을거임 (물일경우 체크를 안한다던지)
-	GRIDBOXKINE_BLOCK1,
-	GRIDBOXKINE_BLOCK2,
-	GRIDBOXKINE_GRASS,
-	GRIDBOXKINE_MARBLE,
-	GRIDBOXKINE_ROCK,
-	GRIDBOXKINE_SOIL,
-	GRIDBOXKINE_WOODEN,
-	GRIDBOXKIND_END
-}GRIDBOXKIND;
+
 
 struct ST_CUBE_XYZ
 {
@@ -119,58 +108,58 @@ struct ST_GRIDBOX
 
 
 		//뒤
-		v[0].p = _000; v[0].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-		v[1].p = _010; v[1].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-		v[2].p = _110; v[2].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+		v[0].p = _000; v[0].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f); v[0].t = D3DXVECTOR2(0.f, 1.f);
+		v[1].p = _010; v[1].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f); v[1].t = D3DXVECTOR2(0.f, 0.f);
+		v[2].p = _110; v[2].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f); v[2].t = D3DXVECTOR2(1.f, 0.f);
 
-		v[3].p = _000; v[3].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-		v[4].p = _110; v[4].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
-		v[5].p = _100; v[5].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+		v[3].p = _000; v[3].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f); v[3].t = D3DXVECTOR2(0.f, 1.f);
+		v[4].p = _110; v[4].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f); v[4].t = D3DXVECTOR2(1.f, 0.f);
+		v[5].p = _100; v[5].n = D3DXVECTOR3(0.0f, 0.0f, -1.0f); v[5].t = D3DXVECTOR2(1.f, 1.f);
 
 		//앞
-		v[6].p = _001; v[3].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
-		v[7].p = _111; v[4].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
-		v[8].p = _011; v[5].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
+		v[6].p = _001; v[3].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f); v[6].t = D3DXVECTOR2(1.f, 1.f);
+		v[7].p = _111; v[4].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f); v[7].t = D3DXVECTOR2(0.f, 0.f);
+		v[8].p = _011; v[5].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f); v[8].t = D3DXVECTOR2(1.f, 0.f);
 
-		v[9].p = _001;	v[9].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
-		v[10].p = _101; v[10].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
-		v[11].p = _111;	v[11].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
+		v[9].p = _001;	v[9].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f);  v[9].t = D3DXVECTOR2(1.f, 1.f);
+		v[10].p = _101; v[10].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f); v[10].t = D3DXVECTOR2(0.f, 0.f);
+		v[11].p = _111;	v[11].n = D3DXVECTOR3(0.0f, 0.0f, 1.0f); v[11].t = D3DXVECTOR2(0.f, 1.f);
 
 		//왼쪽
-		v[12].p = _001;	v[12].n = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
-		v[13].p = _011; v[13].n = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
-		v[14].p = _010; v[14].n = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+		v[12].p = _001;	v[12].n = D3DXVECTOR3(-1.0f, 0.0f, 0.0f); v[12].t = D3DXVECTOR2(0.f, 1.f);
+		v[13].p = _011; v[13].n = D3DXVECTOR3(-1.0f, 0.0f, 0.0f); v[13].t = D3DXVECTOR2(0.f, 0.f);
+		v[14].p = _010; v[14].n = D3DXVECTOR3(-1.0f, 0.0f, 0.0f); v[14].t = D3DXVECTOR2(1.f, 1.f);
 
-		v[15].p = _001; v[15].n = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
-		v[16].p = _010; v[16].n = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
-		v[17].p = _000; v[17].n = D3DXVECTOR3(-1.0f, 0.0f, 0.0f);
+		v[15].p = _001; v[15].n = D3DXVECTOR3(-1.0f, 0.0f, 0.0f); v[15].t = D3DXVECTOR2(0.f, 1.f);
+		v[16].p = _010; v[16].n = D3DXVECTOR3(-1.0f, 0.0f, 0.0f); v[16].t = D3DXVECTOR2(1.f, 1.f);
+		v[17].p = _000; v[17].n = D3DXVECTOR3(-1.0f, 0.0f, 0.0f); v[17].t = D3DXVECTOR2(1.f, 0.f);
 
 		//오른쪽
-		v[18].p = _100; v[18].n = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
-		v[19].p = _110; v[19].n = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
-		v[20].p = _111;  v[20].n = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+		v[18].p = _100; v[18].n = D3DXVECTOR3(1.0f, 0.0f, 0.0f); v[18].t = D3DXVECTOR2(0.f, 1.f);
+		v[19].p = _110; v[19].n = D3DXVECTOR3(1.0f, 0.0f, 0.0f); v[19].t = D3DXVECTOR2(0.f, 0.f);
+		v[20].p = _111;  v[20].n = D3DXVECTOR3(1.0f, 0.0f, 0.0f); v[20].t = D3DXVECTOR2(1.f, 0.f);
 
-		v[21].p = _100; v[21].n = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
-		v[22].p = _111;  v[22].n = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
-		v[23].p = _101; v[23].n = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
+		v[21].p = _100; v[21].n = D3DXVECTOR3(1.0f, 0.0f, 0.0f);  v[21].t = D3DXVECTOR2(0.f, 1.f);
+		v[22].p = _111;  v[22].n = D3DXVECTOR3(1.0f, 0.0f, 0.0f); v[22].t = D3DXVECTOR2(1.f, 0.f);
+		v[23].p = _101; v[23].n = D3DXVECTOR3(1.0f, 0.0f, 0.0f);  v[23].t = D3DXVECTOR2(1.f, 1.f);
 
 		//위
-		v[24].p = _010; v[24].n = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		v[25].p = _011; v[25].n = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		v[26].p = _111;	v[26].n = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+		v[24].p = _010; v[24].n = D3DXVECTOR3(0.0f, 1.0f, 0.0f); v[24].t = D3DXVECTOR2(0.f, 1.f);
+		v[25].p = _011; v[25].n = D3DXVECTOR3(0.0f, 1.0f, 0.0f); v[25].t = D3DXVECTOR2(0.f, 0.f);
+		v[26].p = _111;	v[26].n = D3DXVECTOR3(0.0f, 1.0f, 0.0f); v[26].t = D3DXVECTOR2(1.f, 0.f);
 
-		v[27].p = _010; v[27].n = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		v[28].p = _111;  v[28].n = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-		v[29].p = _110; v[29].n = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+		v[27].p = _010; v[27].n = D3DXVECTOR3(0.0f, 1.0f, 0.0f);  v[27].t = D3DXVECTOR2(0.f, 1.f);
+		v[28].p = _111;  v[28].n = D3DXVECTOR3(0.0f, 1.0f, 0.0f); v[28].t = D3DXVECTOR2(1.f, 0.f);
+		v[29].p = _110; v[29].n = D3DXVECTOR3(0.0f, 1.0f, 0.0f);  v[29].t = D3DXVECTOR2(1.f, 1.f);
 
 		//아래
-		v[30].p = _001;	v[30].n = D3DXVECTOR3(0.0f, -1.0f, 0.0f);
-		v[31].p = _000; v[31].n = D3DXVECTOR3(0.0f, -1.0f, 0.0f);
-		v[32].p = _100; v[32].n = D3DXVECTOR3(0.0f, -1.0f, 0.0f);
+		v[30].p = _001;	v[30].n = D3DXVECTOR3(0.0f, -1.0f, 0.0f); v[30].t = D3DXVECTOR2(1.f, 1.f);
+		v[31].p = _000; v[31].n = D3DXVECTOR3(0.0f, -1.0f, 0.0f); v[31].t = D3DXVECTOR2(1.f, 0.f);
+		v[32].p = _100; v[32].n = D3DXVECTOR3(0.0f, -1.0f, 0.0f); v[32].t = D3DXVECTOR2(0.f, 0.f);
 
-		v[33].p = _001;  v[33].n = D3DXVECTOR3(0.0f, -1.0f, 0.0f);
-		v[34].p = _100; v[34].n = D3DXVECTOR3(0.0f, -1.0f, 0.0f);
-		v[35].p = _101; v[35].n = D3DXVECTOR3(0.0f, -1.0f, 0.0f);
+		v[33].p = _001;  v[33].n = D3DXVECTOR3(0.0f, -1.0f, 0.0f); v[33].t = D3DXVECTOR2(1.f, 1.f);
+		v[34].p = _100; v[34].n = D3DXVECTOR3(0.0f, -1.0f, 0.0f);  v[34].t = D3DXVECTOR2(0.f, 0.f);
+		v[35].p = _101; v[35].n = D3DXVECTOR3(0.0f, -1.0f, 0.0f);  v[35].t = D3DXVECTOR2(0.f, 1.f);
 	}
 
 	void RenderBox(LPDIRECT3DTEXTURE9 pTex, D3DMATERIAL9* pMtrl)
