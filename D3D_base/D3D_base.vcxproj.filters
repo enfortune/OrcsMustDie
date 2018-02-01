@@ -361,6 +361,12 @@
     <ClInclude Include="MapDataEnumList.h">
       <Filter>김완수\MapTool</Filter>
     </ClInclude>
+    <ClInclude Include="cAllocateHierarchyEX.h">
+      <Filter>정현식</Filter>
+    </ClInclude>
+    <ClInclude Include="cSkinnedMeshEX.h">
+      <Filter>정현식</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -575,6 +581,12 @@
     </ClCompile>
     <ClCompile Include="cPlayer.cpp">
       <Filter>차종서</Filter>
+    </ClCompile>
+    <ClCompile Include="cAllocateHierarchyEX.cpp">
+      <Filter>정현식</Filter>
+    </ClCompile>
+    <ClCompile Include="cSkinnedMeshEX.cpp">
+      <Filter>정현식</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
