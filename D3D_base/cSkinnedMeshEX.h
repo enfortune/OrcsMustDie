@@ -10,7 +10,7 @@ protected:
 	std::vector<LPCSTR> m_vecAniSetName;
 	bool		m_isBlend;
 	bool		m_bLoop;
-	bool		m_bFirst;
+
 	int			m_startAniId;
 	float		m_fPassedBlendTime;
 	float		m_fBlendTime;
@@ -23,6 +23,7 @@ protected:
 public:
 	cSkinnedMeshEX();
 	~cSkinnedMeshEX();
+	SYNTHESIZE(bool, m_bAniEnd, AniEnd);
 
 	void Setup(IN char* szFolder, IN char* szFile);
 	void Update();

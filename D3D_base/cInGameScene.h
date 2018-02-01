@@ -8,6 +8,8 @@ class cGrid;
 class cPlayer;
 class cPlayerCamera;
 class cPhysicsNode;
+class cSampleChar;
+class cMapData;
 
 class cInGameScene : public cGameScene
 {
@@ -15,11 +17,13 @@ class cInGameScene : public cGameScene
 	cGrid* m_pGrid;
 
 	cInGameUILayer* m_pUILayer;
+	std::vector<cSampleChar*> m_vEnemy;
 
 	/* for test */
-	cPlayer* m_pPlayer_S;
+	cPlayer*		m_pPlayer_S;
+	cPhysicsNode*	m_pPhysicsNode;
 
-	cPhysicsNode* m_pPhysicsNode;
+	cMapData*		m_pMap;
 	
 public:
 	cInGameScene();

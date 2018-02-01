@@ -2,13 +2,13 @@
 #include "cGameNode.h"
 
 
-class cSkinnedMesh;
+class cSkinnedMeshEX;
 
 class cChaNode : public cGameNode
 {
 protected:
 
-	cSkinnedMesh* m_pSkinnedMesh;
+	cSkinnedMeshEX * m_pSkinnedMesh;
 	D3DXVECTOR3	vPos;
 	D3DXVECTOR3 vDir;
 	float fRotY;

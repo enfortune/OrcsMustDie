@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "cChaNode.h"
-#include "cSkinnedMesh.h"
+#include "cSkinnedMeshEX.h"
 #include "cTransformData.h"
 
 

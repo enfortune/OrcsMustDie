@@ -6,7 +6,7 @@
 cSkinnedMeshEX::cSkinnedMeshEX()
 	: m_pRoot(nullptr)
 	, m_bLoop(true)
-	, m_bFirst(true)
+	, m_bAniEnd(false)
 	, m_fPassedBlendTime(0.f)
 	, m_fBlendTime(0.5f)
 	, m_startAniId(NULL)
@@ -77,11 +77,13 @@ void cSkinnedMeshEX::Update()
 	float AnimationPlayFactor;
 	AnimationPlayFactor = m_stTrackDesc.Position / tempPeriod->GetPeriod();
 	AnimationPlayFactor = fmod(AnimationPlayFactor, 1.f);
+	if (AnimationPlayFactor < 0.9f) m_bAniEnd = false;
 	if (AnimationPlayFactor >= 0.9f)
 	{
 		if (this->m_bLoop == false)
 		{
 			SetAnimationSetBlend(0, m_startAniId, true);
+			m_bAniEnd = true;
 		}
 	}
 	if (m_isBlend)
