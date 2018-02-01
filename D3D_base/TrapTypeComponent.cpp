@@ -5,7 +5,7 @@
 
 TrapComponentAttackable * TrapTypeComponentAttackable::newComponentObject() const
 {
-	TrapComponentAttackable * temp = new TrapComponentAttackable;
+	TrapComponentAttackable * temp = new TrapComponentAttackable(const_cast<TrapTypeComponentAttackable &>(*this));
 
 	temp->frustumAttackWorld_ = frustumAttackLocal_;
 	temp->cooldown_ = cooldownMax_;
@@ -15,7 +15,7 @@ TrapComponentAttackable * TrapTypeComponentAttackable::newComponentObject() cons
 
 TrapComponentBlockable * TrapTypeComponentBlockable::newComponentObject() const
 {
-	TrapComponentBlockable * temp = new TrapComponentBlockable;
+	TrapComponentBlockable * temp = new TrapComponentBlockable(const_cast<TrapTypeComponentBlockable &>(*this));
 	temp->hp_ = hpMax_;
 
 	return temp;

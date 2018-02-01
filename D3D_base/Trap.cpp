@@ -4,6 +4,37 @@
 #include "TrapType.h"
 #include "TrapTypeComponent.h"
 
+void Trap::interaction(std::vector<PlayerDummy>& playerList)
+{
+	if (pType_->isInteractionToArray_[static_cast<size_t> (TrapType::eInteractionTo::PLAYER)])
+	{
+		if (pComponentAttackable_)
+			pComponentAttackable_->attack(playerList);
+
+		if (pComponentTriggerable_)
+			pComponentTriggerable_->trigger();
+	}
+}
+
+void Trap::interaction(std::vector<EnemyDummy>& enemyList)
+{
+	if (pType_->isInteractionToArray_[static_cast<size_t> (TrapType::eInteractionTo::ENEMY)])
+	{
+		if (pComponentAttackable_)
+			pComponentAttackable_->attack(enemyList);
+
+		if (pComponentBlockable_)
+			pComponentBlockable_->hit(enemyList);
+
+		if (pComponentTriggerable_)
+			pComponentTriggerable_->trigger();
+	}
+}
+
+void Trap::interaction(std::vector<ItemDummy>& itemList)
+{
+}
+
 void Trap::init(TrapType & type, D3DXMATRIXA16 & matrixWorld)
 {
 	pType_ = &type;

@@ -20,6 +20,7 @@ public:
 
 protected:
 	cSkinnedMesh * pModel_;
+	D3DXMATRIXA16 matrixLocal_ {};
 
 	FRUSTUM frustumLocal_ {};
 	bool isBlockable_ {};

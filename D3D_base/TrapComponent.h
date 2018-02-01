@@ -4,15 +4,19 @@
 
 class Trap;
 
+struct TrapTypeComponentAttackable;
+
 struct TrapComponentAttackable
 {
 public:
+	TrapTypeComponentAttackable & parent_;
+
 	FRUSTUM frustumAttackWorld_ {};
 
 	float cooldown_ {};
 
 public:
-	TrapComponentAttackable() = default;
+	TrapComponentAttackable(TrapTypeComponentAttackable & parent);
 	virtual ~TrapComponentAttackable() = default;
 
 	//UNCOPYABLE(TrapComponentAttackable);
@@ -25,30 +29,37 @@ public:
 	void update(float fDelta = g_pTimeManager->GetEllapsedTime());
 };
 
+struct TrapTypeComponentBlockable;
+
 struct TrapComponentBlockable
 {
 public:
+	TrapTypeComponentBlockable & parent_;
+
 	int hp_ {};
 
 public:
-	TrapComponentBlockable() = default;
+	TrapComponentBlockable(TrapTypeComponentBlockable & parent);
 	virtual ~TrapComponentBlockable() = default;
 
 	//UNCOPYABLE(TrapComponentBlockable);
 
 public:
-	virtual void onHit(int damage, EnemyDummy * pEnemy = nullptr);
+	virtual void hit(std::vector<EnemyDummy> & enemyList);
 
 public:
 	void update(float fDelta = g_pTimeManager->GetEllapsedTime());
 };
 
+struct TrapTypeComponentTriggerable;
+
 struct TrapComponentTriggerable
 {
 public:
+	TrapTypeComponentTriggerable & parent_;
 
 public:
-	TrapComponentTriggerable() = default;
+	TrapComponentTriggerable(TrapTypeComponentTriggerable & parent);
 	virtual ~TrapComponentTriggerable() = default;
 
 public:
