@@ -40,10 +40,12 @@ LPDIRECT3DTEXTURE9 cTextureManager::GetTexture(std::string sFullPath, OUT D3DXIM
 			D3DX_FILTER_NONE,
 			D3DX_DEFAULT,
 			0,
-			pImageInfo,
+			&m_mapImageInfo[sFullPath],
 			NULL,
 			&m_mapTexture[sFullPath]);
 	}
+
+	memcpy_s(pImageInfo, sizeof(D3DXIMAGE_INFO), &m_mapImageInfo[sFullPath], sizeof(D3DXIMAGE_INFO));
 
 	return m_mapTexture[sFullPath];
 }

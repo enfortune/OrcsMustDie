@@ -8,6 +8,8 @@
 #include "cPhysicsNode.h"
 #include "cPhysicsBody.h"
 #include "cTransformData.h"
+#include "cSampleChar.h"
+#include "cMapData.h"
 
 #define SCREEN_WIDTH GetRectWidth(GetScreenRect())
 #define SCREEN_HEIGHT GetRectHeight(GetScreenRect())
@@ -25,9 +27,15 @@ cInGameScene::~cInGameScene()
 void cInGameScene::Setup()
 {
 	cGameScene::Setup();
+
+	m_pMap = new cMapData;
+	m_pMap->Setup();
+	m_pMap->LoadData("SampleStageMap.map");
+	this->AddChild(m_pMap);
+
 	m_pPhysicsNode = new cPhysicsNode;
-	m_pPhysicsNode->Setup(NULL);
-	m_pPhysicsNode->GetSpaceData().vGravity = D3DXVECTOR3(0, 0, 0);
+	m_pPhysicsNode->Setup(m_pMap);
+	//m_pPhysicsNode->GetSpaceData().vGravity = D3DXVECTOR3(0, 0, 0);
 	this->AddChild(m_pPhysicsNode);
 
 	m_pGrid = new cGrid;
@@ -43,11 +51,25 @@ void cInGameScene::Setup()
 
 	m_pPlayer_S = new cPlayer;
 	m_pPlayer_S->Setup();
+	m_pPlayer_S->GetPhysicsBody()->GetPhysicsData().vPos = D3DXVECTOR3(47, 2, 29);
 
 	m_pCamera = new cPlayerCamera;
 	m_pCamera->Setup(&m_pPlayer_S->GetTransformData()->GetPosition(), m_pPlayer_S->GetRotationY());
-
 	m_pPhysicsNode->AddChild(m_pPlayer_S);
+
+	for (int i = 0; i < 10; i++)
+	{
+		cSampleChar* tempEnemy;
+		tempEnemy = new cSampleChar;
+		tempEnemy->Setup(true, D3DXVECTOR3(27 + i, 8, 53 + i));
+		tempEnemy->setPlayer(m_pPlayer_S);
+		m_pPhysicsNode->AddChild(tempEnemy);
+		
+		m_vEnemy.push_back(tempEnemy);
+
+	}
+
+	m_pPlayer_S->setEnemy(&m_vEnemy);
 }
 void cInGameScene::Update(float fDelta)
 {
@@ -73,8 +95,14 @@ void cInGameScene::Delete()
 	SAFE_DELETE(m_pGrid);
 
 	SAFE_RELEASE(m_pUILayer);
-	SAFE_DELETE(m_pPlayer_S);
+	SAFE_RELEASE(m_pPlayer_S);
+	SAFE_RELEASE(m_pMap);
 
+	for (int i = 0; i < m_vEnemy.size(); i++)
+	{
+		SAFE_RELEASE(m_vEnemy[i]);
+	}
+	m_vEnemy.clear();
 }
 void cInGameScene::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {

@@ -5,7 +5,7 @@ class cMapData;
 class cMapToolGrid;
 enum EN_GRIDBOXKIND;
 
-class cMapMaker : public cGameNode 
+class cMapMaker : public cGameNode
 {
 protected:
 	cMapData* m_pMapData;
@@ -41,6 +41,6 @@ public:
 
 	void SetMapData(cMapData* pMapData);
 
-	
+	void SetBoxKind(EN_GRIDBOXKIND enBoxKind) { m_enCurrBoxKind = enBoxKind; }
 };
 

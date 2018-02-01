@@ -37,6 +37,8 @@ void cMapToolScene::Setup()
 	m_pMapMaker = new cMapMaker;
 	m_pMapMaker->Setup(m_pMapData);
 	this->AddChild(m_pMapMaker);
+
+	m_pUILayer->LinkMapMaker(m_pMapMaker);
 }
 void cMapToolScene::Update(float fDelta)
 {

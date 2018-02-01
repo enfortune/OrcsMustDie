@@ -70,49 +70,49 @@ void cMapData::Setup()
 				m_arrMtrl[i].Power = 0.f;
 			break;
 			case GRIDBOXKINE_BLOCK1:
-				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_block1.jpg");
+				m_arrTex[i] = g_pTextureManager->GetTexture("Resource/Image/MapTool/gridbox_block1.jpg");
 				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
 				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 2.f;
 			break;
 			case GRIDBOXKINE_BLOCK2:
-				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_block2.jpg");
+				m_arrTex[i] = g_pTextureManager->GetTexture("Resource/Image/MapTool/gridbox_block2.jpg");
 				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
 				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 0.f;
 			break;
 			case GRIDBOXKINE_GRASS:
-				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_grass.jpg");
+				m_arrTex[i] = g_pTextureManager->GetTexture("Resource/Image/MapTool/gridbox_grass.jpg");
 				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
 				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 3.f;
 			break;
 			case GRIDBOXKINE_MARBLE:
-				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_marble.jpg");
+				m_arrTex[i] = g_pTextureManager->GetTexture("Resource/Image/MapTool/gridbox_marble.jpg");
 				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
 				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 5.f;
 			break;
 			case GRIDBOXKINE_ROCK:
-				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_rock.jpg");
+				m_arrTex[i] = g_pTextureManager->GetTexture("Resource/Image/MapTool/gridbox_rock.jpg");
 				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
 				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 0.f;
 			break;
 			case GRIDBOXKINE_SOIL:
-				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_soil.jpg");
+				m_arrTex[i] = g_pTextureManager->GetTexture("Resource/Image/MapTool/gridbox_soil.jpg");
 				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
 				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
 				m_arrMtrl[i].Power = 0.f;
 			break;
 			case GRIDBOXKINE_WOODEN:
-				m_arrTex[i] = g_pTextureManager->GetTexture("Resource\Image\MapTool\gridbox_wooden.jpg");
+				m_arrTex[i] = g_pTextureManager->GetTexture("Resource/Image/MapTool/gridbox_wooden.jpg");
 				m_arrMtrl[i].Diffuse = D3DXCOLOR(1.f, 1.f, 1.f, 1.f);
 				m_arrMtrl[i].Ambient = D3DXCOLOR(1.f, 1.f, 1.f, 0.1f);
 				m_arrMtrl[i].Emissive = D3DXCOLOR(1.f, 1.f, 1.f, 0.05f);
