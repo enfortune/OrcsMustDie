@@ -46,6 +46,7 @@ void cMapMaker::Update(float fDelta)
 	{
 		this->LayerUp();
 	}
+
 	else if (g_pKeyManager->IsOnceKeyDown('F'))
 	{
 		this->LayerDown();
