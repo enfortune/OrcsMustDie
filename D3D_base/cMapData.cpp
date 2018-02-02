@@ -6,7 +6,7 @@
 
 #include "cPhysicsBody.h"
 
-#define MAPCOLLISION_Y_EPSILON 0.005f
+#define MAPCOLLISION_Y_EPSILON 1.5f
 
 cMapData::cMapData()
 	: m_bisVBExist(false)
@@ -426,7 +426,7 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 								else
 								{//MAPCOLLISION_Y_EPSILON
 									float fDeltaY = m_arrGridBox[x][y][z].stCube.GetHighestPoint() - (stBodySphere.vCenter.y - stBodySphere.fRadius);
-									if (MAPCOLLISION_Y_EPSILON > fDeltaY && fDeltaY > 0.f)
+									if (MAPCOLLISION_Y_EPSILON * fDelta * pBody->GetTempPhysicsData().vVelocity.y > fDeltaY && fDeltaY > MAPCOLLISION_Y_EPSILON * fDelta * pBody->GetTempPhysicsData().vVelocity.y)
 									{
 										pBody->GetTempPhysicsData().vPos.y += fDeltaY;
 										pBody->GetPhysicsData().vPos.y += fDeltaY;
@@ -507,14 +507,13 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 						{
 							vCrushNorm = m_arrGridBox[x][y][z].stCube.GetNearestSideNormalVec3(&stBodyFrustum);
 							fDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vCrushNorm);
-							if (fDot < 0)
+							if (fDot < 0.0001f)
 							{
 								D3DXVec3Normalize(&vGroundCheckNorm, &vCrushNorm);
 								if (D3DXVec3Dot(&vGroundCheckNorm, &D3DXVECTOR3(0.f, 1.f, 0.f)) > cosf(PI / 4))
 								{
 									pBody->GetTempPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
 									pBody->GetPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
-									D3DXVec3Normalize(&vGroundCheckNorm, &vCrushNorm);
 									pBody->GetPhysicsData().bOnGround = true;
 
 									//pBody->UpdateTempPhysics(fDelta);
@@ -535,7 +534,7 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 								else
 								{
 									float fDeltaY = m_arrGridBox[x][y][z].stCube.GetHighestPoint() - stBodyFrustum.GetLowestPoint();
-									if (MAPCOLLISION_Y_EPSILON > fDeltaY && fDeltaY > 0.f)
+									if (MAPCOLLISION_Y_EPSILON * fDelta * pBody->GetTempPhysicsData().vVelocity.y > fDeltaY && fDeltaY > -MAPCOLLISION_Y_EPSILON * fDelta * pBody->GetTempPhysicsData().vVelocity.y)
 									{
 										pBody->GetTempPhysicsData().vPos.y += fDeltaY;
 										pBody->GetPhysicsData().vPos.y += fDeltaY;

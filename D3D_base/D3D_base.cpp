@@ -7,11 +7,12 @@
 
 #define MAX_LOADSTRING 100
 
-
+void setWindowsSize(int x, int y, int width, int height);
 
 HWND	g_hWnd;
 cMainGame*	g_pMainGame;
 POINT g_ptMouse {};
+bool g_bIsClientActivated;
 
 // 전역 변수:
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
@@ -107,7 +108,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_D3D_BASE));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_D3D_BASE);
+	wcex.lpszMenuName	= NULL;//MAKEINTRESOURCEW(IDC_D3D_BASE);
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
@@ -138,6 +139,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    g_hWnd = hWnd;
 
+
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
@@ -159,6 +161,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	/* 굳이 여기서 해주는 이유는 mainGame의 WndProc 이전에 마우스좌표를 갱신하기 위함임 */
 	switch (message)
 	{
+	case WM_ACTIVATE:
+	{
+		if (LOWORD(wParam) == WA_INACTIVE)
+			g_bIsClientActivated = false;
+		else
+			g_bIsClientActivated = true;
+
+	}
+	break;
 	case WM_MOUSEMOVE:
 		{
 			g_ptMouse.x = LOWORD(lParam);
@@ -226,4 +237,21 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
     return (INT_PTR)FALSE;
+}
+
+////
+
+void setWindowsSize(int x, int y, int width, int height)
+{
+	RECT winRect;
+
+	winRect.left = 0;
+	winRect.top = 0;
+	winRect.right = width;
+	winRect.bottom = height;
+
+	AdjustWindowRect(&winRect, WINSTYLE, false);
+
+	SetWindowPos(g_hWnd, NULL, x, y, (winRect.right - winRect.left),
+		(winRect.bottom - winRect.top), SWP_NOZORDER | SWP_NOMOVE);
 }

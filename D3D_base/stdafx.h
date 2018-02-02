@@ -35,11 +35,17 @@
 #define DRAW_GRID
 #define TEST_1
 //#define TEST_2
-
+#define WINNAME (LPTSTR)(TEXT("Orcs Must Die"))	//윈도우 창 이름
+#define WINSTARTX 20						//윈도우 시작좌표X
+#define WINSTARTY 20						//윈도우 시작좌표Y
+#define WINSIZEX 1280						//윈도우 가로크기
+#define WINSIZEY 800						//윈도우 세로크기
+#define WINSTYLE WS_CAPTION | WS_SYSMENU
 
 /* Extern */
 extern HWND g_hWnd;
 extern POINT g_ptMouse;
+extern bool g_bIsClientActivated;
 
 /* Macro Function List */
 #define SAFE_ADD(p) { if(p) p->AddRef(); }

@@ -38,10 +38,66 @@ void cPlayerCamera::Setup(D3DXVECTOR3* pvTargetPos, float vRotAngle/*, D3DXVECTO
 	//m_pvTargetDir = pvTargetDir;
 	m_pPlayerRotationY_C = vRotAngle;
 
+	RECT rcC; GetClientRect(g_hWnd, &rcC);
+	RECT rcW; GetWindowRect(g_hWnd, &rcW);
+
+	SetCursorPos(GetRectCenter(rcW).x, GetRectCenter(rcW).y);
+	m_ptPrevMouse = GetRectCenter(rcC);
 }
 
 void cPlayerCamera::Update()
 {
+	POINT ptCurrMouse;
+	
+	float fDeltaX = 0.f;
+	float fDeltaY = 0.f;
+
+	if (g_bIsClientActivated)
+	{
+		ptCurrMouse = g_ptMouse;
+
+		if (g_pKeyManager->IsToggleKey(VK_CONTROL))
+		{
+			fDeltaX = (float)ptCurrMouse.x - m_ptPrevMouse.x;
+			fDeltaY = (float)ptCurrMouse.y - m_ptPrevMouse.y;
+
+			RECT rcC; GetClientRect(g_hWnd, &rcC);
+
+			ptCurrMouse = GetRectCenter(rcC);
+			ClientToScreen(g_hWnd, &ptCurrMouse);
+			SetCursorPos(ptCurrMouse.x, ptCurrMouse.y);
+			ptCurrMouse = GetRectCenter(rcC);
+			m_ptPrevMouse = ptCurrMouse;
+		}
+		else
+		{
+			if (g_pKeyManager->IsStayKeyDown(VK_LBUTTON))
+			{
+				ptCurrMouse = g_ptMouse;
+				fDeltaX = (float)ptCurrMouse.x - m_ptPrevMouse.x;
+				fDeltaY = (float)ptCurrMouse.y - m_ptPrevMouse.y;
+			}
+			m_ptPrevMouse = g_ptMouse;
+		}
+	}
+
+	
+
+	if (fabs(fDeltaX) + fabs(fDeltaY) > 0.1f)
+	{
+		m_vCamRotAngle.x += (fDeltaY / 150.0f);
+		m_vCamRotAngle.y += (fDeltaX / 150.0f);
+	}
+
+	if (m_vCamRotAngle.x < -D3DX_PI / 4.0f)
+	{
+		m_vCamRotAngle.x = -D3DX_PI / 4.0f;
+	}
+	if (m_vCamRotAngle.x > D3DX_PI / 4.0f)
+	{
+		m_vCamRotAngle.x = D3DX_PI / 4.0f;
+	}
+	
 	D3DXMATRIXA16	matView, matR, matRX, matRY;
 	D3DXMatrixRotationX(&matRX, m_vCamRotAngle.x);
 	D3DXMatrixRotationY(&matRY, m_vCamRotAngle.y);
@@ -79,44 +135,11 @@ void cPlayerCamera::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	{
 	case WM_LBUTTONDOWN:
 		m_isLButtonDown = true;
-		m_ptPrevMouse.x = LOWORD(lParam);
-		m_ptPrevMouse.y = HIWORD(lParam);
 		break;
 
 	case WM_LBUTTONUP:
 		m_isLButtonDown = false;
 		break;
-
-	case WM_MOUSEMOVE:
-	{
-		POINT ptCurrMouse;
-		ptCurrMouse.x = LOWORD(lParam);
-		ptCurrMouse.y = HIWORD(lParam);
-		float fDeltaX = (float)ptCurrMouse.x - m_ptPrevMouse.x;
-		float fDeltaY = (float)ptCurrMouse.y - m_ptPrevMouse.y;
-
-		m_vCamRotAngle.x += (fDeltaY / 150.0f);
-		m_vCamRotAngle.y += (fDeltaX / 150.0f);
-		//m_pPlayerRotationY_C += (fDeltaX / 150.0f);
-		
-		//if (fDeltaX > 0)
-		//m_pPlayerRotationY_C -= 1.0f;
-		//if (fDeltaX < 0)
-		//m_pPlayerRotationY_C += 1.0f;
-
-		if (m_vCamRotAngle.x < -D3DX_PI / 4.0f)
-		{
-			m_vCamRotAngle.x = -D3DX_PI / 4.0f;
-		}
-		if (m_vCamRotAngle.x > D3DX_PI / 4.0f)
-		{
-			m_vCamRotAngle.x = D3DX_PI / 4.0f;
-		}
-
-		m_ptPrevMouse = ptCurrMouse;
-	}
-		break;
-
 	case WM_MOUSEWHEEL:
 		m_fCamDist -= (GET_WHEEL_DELTA_WPARAM(wParam) / 40.0f);
 		if (m_fCamDist < 0.000001f)
