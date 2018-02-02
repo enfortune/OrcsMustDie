@@ -1,21 +1,21 @@
 #include "stdafx.h"
-#include "cSampleChar.h"
+#include "cEnemy.h"
 #include "cSkinnedMeshEX.h"
 #include "cTransformData.h"
 #include "cPlayer.h"
 #include "cPhysicsBody.h"
 
-cSampleChar::cSampleChar()
+cEnemy::cEnemy()
 {
 }
 
 
-cSampleChar::~cSampleChar()
+cEnemy::~cEnemy()
 {
 	Delete();
 }
 
-void cSampleChar::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
+void cEnemy::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 {
 	cGameNode::Setup(true);
 
@@ -24,13 +24,13 @@ void cSampleChar::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 	m_pPhysicsBody->MakeBodyCuboid(0.7, 1.f, 0.5,D3DXVECTOR3(0, 0.5, 0));
 	m_pPhysicsBody->GetPhysicsData().fElasticity = 0.f;
 	m_pPhysicsBody->GetPhysicsData().vDamping = D3DXVECTOR3(10.f, 0.f, 10.f);
-	m_pPhysicsBody->GetBodyType() = PHYSICSBODYTYPE_DINAMIC;
+	m_pPhysicsBody->GetBodyType() = PHYSICSBODYTYPE_STATIC;
 
 	m_nAtkDamage = 20;
 	nMaxHp = 50;
 	nCurHp = 50;
 	bAttackAction = false;
-
+	bAttack = false;
 	bMove = FALSE;
 	vDir = D3DXVECTOR3(0, 0, -1);
 	fRotY = 0.f;
@@ -42,9 +42,10 @@ void cSampleChar::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 	m_pPhysicsBody->GetPhysicsData().vPos = vPosSetup;
 	m_pPhysicsBody->GetPhysicsData().vAxis = D3DXVECTOR3(0, 1, 0);
 	vPos = vPosSetup;
-
-
-
+	bDead = false;
+	bIdle = true;
+	bDeadbody = false;
+	fDeadCount = 0.f;
 	//for (int i = 0; i < 5; i++)
 	//{
 	//	tp[i].start = false;
@@ -87,59 +88,81 @@ void cSampleChar::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 	EnemyState = IDLE;
 }
 
-void cSampleChar::Update(float fDelta)
+void cEnemy::Update(float fDelta)
 {
 	switch (EnemyState)
 	{
-	case IDLE:
+		case IDLE:
+		{
+			Idle();
+		}
+		break;
+		case MOVE:
+		{
+			//for (int i = 0; i < 5; i++)
+			//{
+			//	if (tp[i].start)
+			//	{
+			//		Dijkstra(i, fDelta);
+			//	}
+			//	if (tp[i].goal)
+			//	{
+			//		find(i, fDelta);
+			//	}
+			//}
+		}
+		break;
+		case ATTACK:
+		{
+			Attack(fDelta);
+		}
+		break;
+		case DEAD:
+		{
+			Dead();
+		}
+	}
+	if (EnemyState != DEAD)
 	{
+		float length;
+		vPlayerPos = D3DXVECTOR3(m_pPlayer->GetTransformData()->GetPosition());
+		vPos = m_pTransformData->GetPosition();
+		length = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - vPlayerPos));
+		if (bAttack == true)
+		{
 
+		}
+		else
+		{
+			if (length > 3.f)
+			{
+				//EnemyState = MOVE;
+				EnemyState = IDLE;
+			}
+			else if (length <= 3.f)
+			{
+				EnemyState = ATTACK;
+			}
+			if (nCurHp < 30)
+			{
+				int a = nCurHp;
+			}
+		}
+		HpManager();
 	}
-	break;
-	case MOVE:
+	if (!bDeadbody)
 	{
-		//for (int i = 0; i < 5; i++)
-		//{
-		//	if (tp[i].start)
-		//	{
-		//		Dijkstra(i, fDelta);
-		//	}
-		//	if (tp[i].goal)
-		//	{
-		//		find(i, fDelta);
-		//	}
-		//}
+		m_pSkinnedMesh->Update();
+		m_pSkinnedMesh->UpdateAnimation(fDelta);
 	}
-	break;
-	case ATTACK:
+	else if (bDeadbody)
 	{
-		Attack(fDelta);
+		fDeadCount += fDelta;
 	}
-	break;
-	}
-	float length;
-	vPlayerPos = D3DXVECTOR3(m_pPlayer->GetTransformData()->GetPosition());
-	vPos = m_pTransformData->GetPosition();
-	length = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - vPlayerPos));
-	if (length > 3.f)
-	{
-		EnemyState = MOVE;
-	}
-	else if (length <= 3.f)
-	{
-		EnemyState = ATTACK;
-	}
-	if (nCurHp < 30)
-	{
-		int a = 0;
-		a = nCurHp;
-	}
-	m_pSkinnedMesh->Update();
-	m_pSkinnedMesh->UpdateAnimation(fDelta);
 	cGameNode::Update(fDelta);
 }
 
-void cSampleChar::Render()
+void cEnemy::Render()
 {
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &this->GetMatrixToWorld());
 
@@ -149,18 +172,18 @@ void cSampleChar::Render()
 	cGameNode::Render();
 }
 
-void cSampleChar::Delete()
+void cEnemy::Delete()
 {
 	SAFE_DELETE(m_pSkinnedMesh);
 
 }
 
-void cSampleChar::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+void cEnemy::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	
 }
 
-void cSampleChar::Move(D3DXVECTOR3 vGoal, float fDelta, int dijkNum)
+void cEnemy::Move(D3DXVECTOR3 vGoal, float fDelta, int dijkNum)
 {
 	D3DXVECTOR3 vTempDir = vGoal - vPos;
 	float tempLength = D3DXVec3Length(&vTempDir);
@@ -208,9 +231,25 @@ void cSampleChar::Move(D3DXVECTOR3 vGoal, float fDelta, int dijkNum)
 	}
 }
 
-void cSampleChar::Move(D3DXVECTOR3 vGoal, float fDelta)
+void cEnemy::Idle()
+{
+	if (!bIdle)
+	{
+		m_pSkinnedMesh->SetAnimationSet(0, 3, true);
+
+		m_pPhysicsBody->GetPhysicsData().vVelocity.x = 0;
+		m_pPhysicsBody->GetPhysicsData().vVelocity.z = 0;
+		m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
+
+		bIdle = true;
+		bMove = false;
+	}
+}
+
+void cEnemy::Move(D3DXVECTOR3 vGoal, float fDelta)
 {
 	D3DXVECTOR3 vTempDir = vGoal - vPos;
+	vTempDir = D3DXVECTOR3(vTempDir.x, 0, vTempDir.z);
 	float tempLength = D3DXVec3Length(&vTempDir);
 	if (!bMove)
 	{
@@ -218,6 +257,7 @@ void cSampleChar::Move(D3DXVECTOR3 vGoal, float fDelta)
 		{
 			bMove = TRUE;
 			m_pSkinnedMesh->SetAnimationSet(0, 2, true);
+			bIdle = false;
 		}
 	}
 	else
@@ -254,20 +294,40 @@ void cSampleChar::Move(D3DXVECTOR3 vGoal, float fDelta)
 	}
 }
 
-void cSampleChar::Attack(float fDelta)
+void cEnemy::Attack(float fDelta)
 {
 	float length;
 	length = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - vPlayerPos));
 
-	if (length > 0.7)
+	D3DXVECTOR3 vDist = m_pPlayer->GetTransformData()->GetPosition() - m_pTransformData->GetPosition();
+
+	D3DXVec3Normalize(&vDist, &vDist);
+	D3DXVec3Normalize(&vDir, &vDir);
+	float fCos = D3DXVec3Dot(&vDist, &vDir);
+
+	if (!bAttack)
 	{
-		Move(vPlayerPos, fDelta);
-		bAttack = false;
-	}
-	else if (length <= 0.7)
-	{
-		if (bAttack == false)
+		if (length > 0.7)
 		{
+			Move(vPlayerPos, fDelta);
+			bAttack = false;
+		}
+
+		else if (length <= 0.7)
+		{
+			D3DXVECTOR3 vTempDir;
+			vTempDir = vPlayerPos - vPos;
+			vTempDir = D3DXVECTOR3(vTempDir.x, 0, vTempDir.z);
+			D3DXVec3Normalize(&vDir, &vTempDir);
+
+			float tempRot;
+			tempRot = atan((-1 * vTempDir.z) / vTempDir.x);
+			if (vTempDir.x < 0) tempRot -= D3DX_PI;
+
+			tempRot = tempRot - (D3DX_PI / 2);
+			GetTransformData()->SetAxis(D3DXVECTOR3(0, 1, 0));
+			GetTransformData()->SetRotAngle(tempRot);
+			bMove = false;
 
 			m_pPhysicsBody->GetPhysicsData().vVelocity.x = 0;
 			m_pPhysicsBody->GetPhysicsData().vVelocity.z = 0;
@@ -275,39 +335,37 @@ void cSampleChar::Attack(float fDelta)
 			m_pSkinnedMesh->SetAnimationSetBlend(0, 0, false);
 			bAttack = true;
 		}
-		else if (bAttackAction)
-		{
-			m_pPhysicsBody->GetPhysicsData().vVelocity.x = 0;
-			m_pPhysicsBody->GetPhysicsData().vVelocity.z = 0;
-			m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
-			m_pSkinnedMesh->SetAnimationSetBlend(0, 0, false);
-			bAttackAction = false;
-		}
-		D3DXVECTOR3 vTempDir;
-		vTempDir = vPlayerPos - vPos;
-		D3DXVec3Normalize(&vDir, &vTempDir);
+	}
+	if (bAttack)
+	{
 
 		if (m_pSkinnedMesh->GetAniEnd() == true)
 		{
-			if (!bAttackAction)
+			if (length <= 0.3 &&  fCos > cosf(D3DX_PI / 4.f))
 			{
 				m_pPlayer->PlayerDamaged(m_nAtkDamage);
-				bAttackAction = true;
 			}
+			bAttack = false;
 		}
 
-		float tempRot;
-		tempRot = atan((-1 * vTempDir.z) / vTempDir.x);
-		if (vTempDir.x < 0) tempRot -= D3DX_PI;
-
-		tempRot = tempRot - (D3DX_PI / 2);
-		GetTransformData()->SetAxis(D3DXVECTOR3(0, 1, 0));
-		GetTransformData()->SetRotAngle(tempRot);
-		bMove = false;
 	}
 }
 
-void cSampleChar::Dijkstra(int temp, float fDelta)
+void cEnemy::Dead()
+{
+	if (!bDead)
+	{
+		m_pSkinnedMesh->SetAnimationSetBlend(0, 1, false);
+		bDead = true;
+	}
+	if (m_pSkinnedMesh->GetAniEnd() == true)
+	{
+		bDeadbody = true;
+		//bAttackAction = true;
+	}
+}
+
+void cEnemy::Dijkstra(int temp, float fDelta)
 {
 	for (int i = 0; i < 3; i++)
 	{
@@ -324,7 +382,7 @@ void cSampleChar::Dijkstra(int temp, float fDelta)
 	}
 }
 
-void cSampleChar::find(int tpNum, float fDelta)
+void cEnemy::find(int tpNum, float fDelta)
 {
 	if (tp[tp[tpNum].prev].start && !tp[tp[tpNum].prev].check)
 	{
@@ -342,13 +400,23 @@ void cSampleChar::find(int tpNum, float fDelta)
 	}
 }
 
-void cSampleChar::setPlayer(cPlayer* pSetPlayer)
+void cEnemy::setPlayer(cPlayer* pSetPlayer)
 {
 	m_pPlayer = pSetPlayer;
 }
 
-void cSampleChar::getDamage(int nDamage)
+void cEnemy::getDamage(int nDamage)
 {
 	nCurHp -= nDamage;
+}
+
+void cEnemy::HpManager()
+{
+	if (nCurHp > nMaxHp) nCurHp = nMaxHp;
+	if (nCurHp <= 0)
+	{
+		nCurHp = 0;
+		EnemyState = DEAD;
+	}
 }
 

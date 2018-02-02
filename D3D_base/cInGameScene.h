@@ -8,7 +8,7 @@ class cGrid;
 class cPlayer;
 class cPlayerCamera;
 class cPhysicsNode;
-class cSampleChar;
+class cEnemy;
 class cMapData;
 
 class cInGameScene : public cGameScene
@@ -17,7 +17,7 @@ class cInGameScene : public cGameScene
 	cGrid* m_pGrid;
 
 	cInGameUILayer* m_pUILayer;
-	std::vector<cSampleChar*> m_vEnemy;
+	std::vector<cEnemy*> m_vEnemy;
 
 	/* for test */
 	cPlayer*		m_pPlayer_S;

@@ -10,6 +10,7 @@ cSkinnedMeshEX::cSkinnedMeshEX()
 	, m_fPassedBlendTime(0.f)
 	, m_fBlendTime(0.5f)
 	, m_startAniId(NULL)
+	, m_bAniStart(false)
 {
 }
 
@@ -251,9 +252,10 @@ void cSkinnedMeshEX::SetAnimationSet(UINT nTrack, LPCSTR szAniSetName)
 void cSkinnedMeshEX::SetAnimationSet(UINT nTrack, int nAniID, bool Loop)
 {
 	if (nTrack >= m_vecAniSetName.size()) return;
-	if (m_startAniId == NULL)
+	if (!m_bAniStart)
 	{
 		m_startAniId = nAniID;
+		m_bAniStart = true;
 	}
 	m_pAniCtrl->SetTrackAnimationSet(nTrack, (m_mapAniSet.find(m_vecAniSetName[nAniID]))->second);
 	(m_mapAniSet.find(m_vecAniSetName[nAniID]))->second->GetPeriod();
@@ -266,6 +268,12 @@ void cSkinnedMeshEX::SetAnimationSetBlend(UINT nTrack, int nAniID, bool Loop)
 	m_isBlend = true;
 	m_fPassedBlendTime = 0.0f;
 	m_bLoop = Loop;
+
+	if (!m_bAniStart)
+	{
+		m_startAniId = nAniID;
+		m_bAniStart = true;
+	}
 
 	int nMax = m_pAniCtrl->GetNumAnimationSets();
 	if (nAniID > nMax)	nAniID = nAniID % nMax;

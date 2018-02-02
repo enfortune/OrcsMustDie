@@ -3,7 +3,7 @@
 #include "cSkinnedMeshEX.h"
 #include "cTransformData.h"
 #include "cPhysicsBody.h"
-#include "cSampleChar.h"
+#include "cEnemy.h"
 
 cPlayer::cPlayer()
 	: m_pRotationY(0.0f)
@@ -353,7 +353,7 @@ void cPlayer::PlayerJumpBlend()
 
 }
 
-void cPlayer::setEnemy(std::vector<cSampleChar*>* Enemy)
+void cPlayer::setEnemy(std::vector<cEnemy*>* Enemy)
 {
 	m_vEnemy = Enemy;
 }
