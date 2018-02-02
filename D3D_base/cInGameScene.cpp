@@ -38,17 +38,6 @@ void cInGameScene::Setup()
 	//m_pPhysicsNode->GetSpaceData().vGravity = D3DXVECTOR3(0, 0, 0);
 	this->AddChild(m_pPhysicsNode);
 
-	m_pGrid = new cGrid;
-	m_pGrid->Setup();
-
-	float fScaleX = static_cast<float>(SCREEN_WIDTH) / 1920.f;
-	float fScaleY = static_cast<float>(SCREEN_HEIGHT) / 1080.f;
-
-	m_pUILayer = new cInGameUILayer;
-	m_pUILayer->Setup(NULL);
-	m_pUILayer->SetScale(D3DXVECTOR2(fScaleX, fScaleY));
-	this->AddChild(m_pUILayer);
-
 	m_pPlayer_S = new cPlayer;
 	m_pPlayer_S->Setup();
 	m_pPlayer_S->GetPhysicsBody()->GetPhysicsData().vPos = D3DXVECTOR3(47, 0, 29);
@@ -56,6 +45,18 @@ void cInGameScene::Setup()
 	m_pCamera = new cPlayerCamera;
 	m_pCamera->Setup(&m_pPlayer_S->GetTransformData()->GetPosition(), m_pPlayer_S->GetRotationY());
 	m_pPhysicsNode->AddChild(m_pPlayer_S);
+
+	m_pGrid = new cGrid;
+	m_pGrid->Setup();
+
+	m_pUILayer = new cInGameUILayer;
+	m_pUILayer->Setup(m_pPlayer_S);
+
+	float fScaleX = static_cast<float>(SCREEN_WIDTH) / 1920.f;
+	float fScaleY = static_cast<float>(SCREEN_HEIGHT) / 1080.f;
+
+	m_pUILayer->SetScale(D3DXVECTOR2(fScaleX, fScaleY));
+	this->AddChild(m_pUILayer);
 
 	for (int i = 0; i < 10; i++)
 	{

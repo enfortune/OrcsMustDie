@@ -2,11 +2,11 @@
 #include "cGameNode.h"
 
 class cGameSprite;
-//class cPlayer;
+class cPlayer;
 
 class cInGameUIGauge : public cGameNode
 {
-	void* m_pPlayer;
+	cPlayer * m_pPlayer;
 
 	float m_fRatioHP; // 0.f~1.f
 	float m_fRatioMP; // 0.f~1.f
@@ -25,7 +25,7 @@ public:
 	cInGameUIGauge();
 	virtual ~cInGameUIGauge();
 
-	virtual void Setup(void* pPlayer);
+	virtual void Setup(cPlayer * pPlayer = nullptr);
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime()) override;
 	virtual void Render()override;
 	virtual void Delete()override;

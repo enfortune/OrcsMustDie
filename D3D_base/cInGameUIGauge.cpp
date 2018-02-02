@@ -2,6 +2,8 @@
 #include "cInGameUIGauge.h"
 #include "cGameSprite.h"
 
+#include "cPlayer.h"
+
 
 cInGameUIGauge::cInGameUIGauge()
 	: m_pPlayer(nullptr)
@@ -26,11 +28,11 @@ void cInGameUIGauge::UpdateRatio()
 {
 	// TODO: 플레이어 클래스 틀 잡히면 코드 추가할 것
 
-	m_fRatioHP = 0.5f;
-	m_fRatioMP = 0.7f;
+	m_fRatioHP = static_cast<float> (m_pPlayer->GetPlayerCurHp()) / static_cast<float> (m_pPlayer->GetPlayerMaxHp());
+	m_fRatioMP = static_cast<float> (m_pPlayer->GetPlayerCurMp()) / static_cast<float> (m_pPlayer->GetPlayerMaxMp());
 }
 
-void cInGameUIGauge::Setup(void* pPlayer)
+void cInGameUIGauge::Setup(cPlayer * pPlayer)
 {
 	cGameNode::Setup(false);
 

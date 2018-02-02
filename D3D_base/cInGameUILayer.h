@@ -4,6 +4,8 @@
 class cInGameUIGauge;
 class cInGameUIScore;
 
+class cPlayer;
+
 class cInGameUILayer : public cGameUILayer
 {
 	void* m_pTarget;
@@ -15,7 +17,7 @@ public:
 	cInGameUILayer();
 	virtual ~cInGameUILayer();
 
-	virtual void Setup(void* m_pTarget);
+	virtual void Setup(cPlayer * pPlayer = nullptr);
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime()) override;
 	virtual void Render() override;
 	virtual void Delete() override;
