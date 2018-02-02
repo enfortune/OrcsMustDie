@@ -39,7 +39,7 @@ protected:
 	float m_fPlayerTargetRot;
 
 	//HP,MP นื ป๓ลย
-	int		nPlayerMaxHp, nPlayerCurHp, nPlayerMaxMp, nPlayerCurMp;
+	//int		nPlayerMaxHp, nPlayerCurHp, nPlayerMaxMp, nPlayerCurMp;
 	BOOL	bPlayerStun, bPlayerMove;
 
 	SYNTHESIZE_REF(int, nPlayerMaxHp, PlayerMaxHp);
