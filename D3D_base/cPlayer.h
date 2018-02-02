@@ -63,6 +63,8 @@ public:
 	void PlayerHPHealed(int HPheal);
 	void playerMPHealed(int MPheal);
 	void PlayerAttacked();
+	void PlayerWhirlWind();
+	void PlayerShiledBash();
 	void PlayerJumpBlend();
 	void setEnemy(std::vector<cSampleChar*>* Enemy);
 	void IsPlayerState();
