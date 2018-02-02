@@ -80,14 +80,10 @@ void cPlayer::Update(float fDelta)
 	m_bIs_D = false;
 	m_fPlayerTargetRot = 0.0f;
 
-	//IsPlayerState();
-	//D3DXVECTOR3 temp;
-	//temp = m_pPhysicsBody->GetPhysicsData().vPos;
-
 	if (g_pKeyManager->IsStayKeyDown('W'))
 	{
-		speedX += 3.f *  m_vPlayerDir.x;
-		speedZ += 3.f * m_vPlayerDir.z;
+		speedX += 5.f *  m_vPlayerDir.x;
+		speedZ += 5.f * m_vPlayerDir.z;
 		if (m_pPlayerState != PLAYERSTATE_MOVE)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
@@ -103,8 +99,8 @@ void cPlayer::Update(float fDelta)
 
 	if (g_pKeyManager->IsStayKeyDown('S'))
 	{
-		speedX -= 3.f *  m_vPlayerDir.x;
-		speedZ -= 3.f * m_vPlayerDir.z;
+		speedX -= 5.f *  m_vPlayerDir.x;
+		speedZ -= 5.f * m_vPlayerDir.z;
 		if (m_pPlayerState != PLAYERSTATE_MOVE)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
@@ -116,8 +112,8 @@ void cPlayer::Update(float fDelta)
 
 	if (g_pKeyManager->IsStayKeyDown('A'))
 	{
-		speedX += 3.f *  vLeft.x;
-		speedZ += 3.f * vLeft.z;
+		speedX += 5.f *  vLeft.x;
+		speedZ += 5.f * vLeft.z;
 		if (m_pPlayerState != PLAYERSTATE_MOVE)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
@@ -129,8 +125,8 @@ void cPlayer::Update(float fDelta)
 
 	if (g_pKeyManager->IsStayKeyDown('D'))
 	{
-		speedX -= 3.f *  vLeft.x;
-		speedZ -= 3.f * vLeft.z;
+		speedX -= 5.f *  vLeft.x;
+		speedZ -= 5.f * vLeft.z;
 		if (m_pPlayerState != PLAYERSTATE_MOVE)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
@@ -149,8 +145,11 @@ void cPlayer::Update(float fDelta)
 
 	if (g_pKeyManager->IsOnceKeyDown(VK_SPACE))
 	{
-		if (m_pPhysicsBody->GetPhysicsData().bOnGround == true)
-			m_pPhysicsBody->GetPhysicsData().vVelocity.y = 7.f;
+		if (m_pPhysicsBody->GetPhysicsData().bOnGround == true && m_pPlayerState != PLAYERSTATE_JUMPSTART)
+		{
+			m_pPhysicsBody->GetPhysicsData().vVelocity.y = 5.f;
+			m_pPlayerState = PLAYERSTATE_JUMPSTART;
+		}
 	}
 
 	//회전블랜딩
@@ -322,12 +321,17 @@ void cPlayer::IsPlayerState()
 		break;
 	case PLAYERSTATE_ATTACK:
 		m_pPlayerMesh->SetAnimationSet(0, 1, false);
-		
 		break;
 	case PLAYERSTATE_HIT:
-		m_pPlayerMesh->SetAnimationSet(0, 3, false);
+		m_pPlayerMesh->SetAnimationSetBlend(0, 3, false);
 		break;
-	case PLAYERSTATE_BACKMOVE:
+	case PLAYERSTATE_JUMPSTART:
+		m_pPlayerMesh->SetAnimationSet(0, 5, true);
+		break;
+	case PLAYERSTATE_JUMPING:
+		m_pPlayerMesh->SetAnimationSet(0, 3, true);
+		break;
+	case PLAYERSTATE_JUMPEND:
 		m_pPlayerMesh->SetAnimationSet(0, 3, true);
 		break;
 	default:

@@ -42,6 +42,11 @@ protected:
 	int		nPlayerMaxHp, nPlayerCurHp, nPlayerMaxMp, nPlayerCurMp;
 	BOOL	bPlayerStun, bPlayerMove;
 
+	SYNTHESIZE_REF(int, nPlayerMaxHp, PlayerMaxHp);
+	SYNTHESIZE_REF(int, nPlayerCurHp, PlayerCurHp);
+	SYNTHESIZE_REF(int, nPlayerMaxMp, PlayerMaxMp);
+	SYNTHESIZE_REF(int, nPlayerCurMp, PlayerCurMp);
+
 	SYNTHESIZE_REF(int, m_nPlayerAtkDamage, PlayerAtkDamage);
 	SYNTHESIZE_REF(int, m_nPlayerExp, PlayerExp);
 	SYNTHESIZE_REF(int, m_nPlayerGold, PlayerGold);

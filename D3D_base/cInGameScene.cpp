@@ -51,7 +51,7 @@ void cInGameScene::Setup()
 
 	m_pPlayer_S = new cPlayer;
 	m_pPlayer_S->Setup();
-	m_pPlayer_S->GetPhysicsBody()->GetPhysicsData().vPos = D3DXVECTOR3(47, 2, 29);
+	m_pPlayer_S->GetPhysicsBody()->GetPhysicsData().vPos = D3DXVECTOR3(47, 0, 29);
 
 	m_pCamera = new cPlayerCamera;
 	m_pCamera->Setup(&m_pPlayer_S->GetTransformData()->GetPosition(), m_pPlayer_S->GetRotationY());
