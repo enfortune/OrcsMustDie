@@ -131,7 +131,8 @@ void cSampleChar::Update(float fDelta)
 	}
 	if (nCurHp < 30)
 	{
-		int a = nCurHp;
+		int a = 0;
+		a = nCurHp;
 	}
 	m_pSkinnedMesh->Update();
 	m_pSkinnedMesh->UpdateAnimation(fDelta);

@@ -26,6 +26,7 @@ cPlayer::cPlayer()
 	, m_nPlayerGold(0)
 	, m_pPlayerState(PLAYERSTATE_STAND)
 	, m_vEnemy(NULL)
+	, isJump(false)
 {
 }
 
@@ -84,7 +85,7 @@ void cPlayer::Update(float fDelta)
 	{
 		speedX += 5.f *  m_vPlayerDir.x;
 		speedZ += 5.f * m_vPlayerDir.z;
-		if (m_pPlayerState != PLAYERSTATE_MOVE)
+		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
 			IsPlayerState();
@@ -101,7 +102,7 @@ void cPlayer::Update(float fDelta)
 	{
 		speedX -= 5.f *  m_vPlayerDir.x;
 		speedZ -= 5.f * m_vPlayerDir.z;
-		if (m_pPlayerState != PLAYERSTATE_MOVE)
+		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
 			IsPlayerState();
@@ -114,7 +115,7 @@ void cPlayer::Update(float fDelta)
 	{
 		speedX += 5.f *  vLeft.x;
 		speedZ += 5.f * vLeft.z;
-		if (m_pPlayerState != PLAYERSTATE_MOVE)
+		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
 			IsPlayerState();
@@ -127,7 +128,7 @@ void cPlayer::Update(float fDelta)
 	{
 		speedX -= 5.f *  vLeft.x;
 		speedZ -= 5.f * vLeft.z;
-		if (m_pPlayerState != PLAYERSTATE_MOVE)
+		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
 			IsPlayerState();
@@ -142,16 +143,31 @@ void cPlayer::Update(float fDelta)
 		IsPlayerState();
 		PlayerAttacked();
 	}
-
 	if (g_pKeyManager->IsOnceKeyDown(VK_SPACE))
 	{
-		if (m_pPhysicsBody->GetPhysicsData().bOnGround == true && m_pPlayerState != PLAYERSTATE_JUMPSTART)
+		if (m_pPhysicsBody->GetPhysicsData().bOnGround == true)
 		{
-			m_pPhysicsBody->GetPhysicsData().vVelocity.y = 5.f;
 			m_pPlayerState = PLAYERSTATE_JUMPSTART;
+			IsPlayerState();
 		}
 	}
+	PlayerJumpBlend();
 
+	int ManaCount = 0;
+
+	if (g_pKeyManager->IsStayKeyDown('R'))
+	{
+		m_pPlayerState = PLAYERSTATE_SKILL_WHIRLWIND;
+		IsPlayerState();
+		PlayerAttacked();
+		ManaCount = 1;
+		if (m_pPlayerState = PLAYERSTATE_SKILL_WHIRLWIND) nPlayerCurMp -= ManaCount;
+	}
+	if (g_pKeyManager->IsOnceKeyUp('R'))
+	{
+		ManaCount = 0;
+		m_pPlayerState = PLAYERSTATE_STAND;
+	}
 	//회전블랜딩
 	if (fDelta)
 	{
@@ -249,7 +265,6 @@ void cPlayer::Render()
 	matPlayerMeshWorld = matPlayeMeshRot * matMeshWorld;
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matPlayerMeshWorld);
 	m_pPlayerMesh->Render();
-
 	//this->m_pPhysicsBody->GetShapeData().stCuboid.Render(g_pD3DDevice);
 
 	cGameNode::Render();
@@ -296,12 +311,46 @@ void cPlayer::PlayerAttacked()
 {
 	for (int i = 0; i < (*m_vEnemy).size(); i++)
 	{
-		(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage);
+		float PlayerLength;
+		D3DXVECTOR3 vDist = (*m_vEnemy)[i]->GetTransformData()->GetPosition() - m_pTransformData->GetPosition();
+		D3DXVECTOR3 vDir = m_vPlayerDir;
+		D3DXVec3Normalize(&vDist, &vDist);
+		D3DXVec3Normalize(&vDir, &vDir);
+		float fCos = D3DXVec3Dot(&vDist, &vDir);
+
+		PlayerLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vEnemy)[i]->GetTransformData()->GetPosition()));
+
+		if (PlayerLength < 0.8 && fCos > cosf(D3DX_PI/4.f))
+		{
+			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage);
+		}
 	}
 }
 
-void cPlayer::PlayerMoveBlending()
+void cPlayer::PlayerJumpBlend()
 {
+	if (m_pPlayerState == PLAYERSTATE_JUMPSTART)
+	{
+		m_pPhysicsBody->GetPhysicsData().vVelocity.y = 5.f;
+		if (m_pPlayerMesh->GetAniEnd() == true)
+		{
+			m_pPlayerState = PLAYERSTATE_JUMPING;
+			IsPlayerState();
+			isJump = true;
+		}
+	}
+	if (m_pPhysicsBody->GetPhysicsData().bOnGround == true && isJump == true)
+	{
+		isJump = false;
+		m_pPlayerState = PLAYERSTATE_JUMPEND;
+		IsPlayerState();
+	}
+	else if (m_pPlayerState == PLAYERSTATE_JUMPEND && m_pPlayerMesh->GetAniEnd() == true)
+	{
+		m_pPlayerState = PLAYERSTATE_STAND;
+		IsPlayerState();
+	}
+
 }
 
 void cPlayer::setEnemy(std::vector<cSampleChar*>* Enemy)
@@ -320,19 +369,22 @@ void cPlayer::IsPlayerState()
 		m_pPlayerMesh->SetAnimationSet(0, 10, true);
 		break;
 	case PLAYERSTATE_ATTACK:
-		m_pPlayerMesh->SetAnimationSet(0, 1, false);
+		m_pPlayerMesh->SetAnimationSet(0, 4, false);
 		break;
 	case PLAYERSTATE_HIT:
-		m_pPlayerMesh->SetAnimationSetBlend(0, 3, false);
+		m_pPlayerMesh->SetAnimationSet(0, 3, false);
 		break;
 	case PLAYERSTATE_JUMPSTART:
-		m_pPlayerMesh->SetAnimationSet(0, 5, true);
+		m_pPlayerMesh->SetAnimationSetBlend(0, 7, false);
 		break;
 	case PLAYERSTATE_JUMPING:
-		m_pPlayerMesh->SetAnimationSet(0, 3, true);
+		m_pPlayerMesh->SetAnimationSetBlend(0, 5, true);
 		break;
-	case PLAYERSTATE_JUMPEND:
-		m_pPlayerMesh->SetAnimationSet(0, 3, true);
+	case PLAYERSTATE_JUMPEND :
+		m_pPlayerMesh->SetAnimationSetBlend(0, 6, false);
+		break;
+	case PLAYERSTATE_SKILL_WHIRLWIND :
+		m_pPlayerMesh->SetAnimationSet(0, 0, false);
 		break;
 	default:
 		break;

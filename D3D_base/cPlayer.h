@@ -12,7 +12,6 @@ enum PLAYERSTATE
 	PLAYERSTATE_JUMPING,
 	PLAYERSTATE_JUMPEND,
 	PLAYERSTATE_SKILL_SHILEDBASH,
-	PLAYERSTATE_SKILL_FIRE,
 	PLAYERSTATE_SKILL_WHIRLWIND
 };
 
@@ -38,6 +37,7 @@ protected:
 	float m_fPlayerCurrRot;
 	float m_fPlayerTargetRot;
 
+	bool isJump;
 	//HP,MP นื ป๓ลย
 	//int		nPlayerMaxHp, nPlayerCurHp, nPlayerMaxMp, nPlayerCurMp;
 	BOOL	bPlayerStun, bPlayerMove;
@@ -63,7 +63,7 @@ public:
 	void PlayerHPHealed(int HPheal);
 	void playerMPHealed(int MPheal);
 	void PlayerAttacked();
-	void PlayerMoveBlending();
+	void PlayerJumpBlend();
 	void setEnemy(std::vector<cSampleChar*>* Enemy);
 	void IsPlayerState();
 
