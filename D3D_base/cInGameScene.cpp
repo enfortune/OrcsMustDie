@@ -8,7 +8,7 @@
 #include "cPhysicsNode.h"
 #include "cPhysicsBody.h"
 #include "cTransformData.h"
-#include "cSampleChar.h"
+#include "cEnemy.h"
 #include "cMapData.h"
 
 #define SCREEN_WIDTH GetRectWidth(GetScreenRect())
@@ -60,8 +60,8 @@ void cInGameScene::Setup()
 
 	for (int i = 0; i < 10; i++)
 	{
-		cSampleChar* tempEnemy;
-		tempEnemy = new cSampleChar;
+		cEnemy* tempEnemy;
+		tempEnemy = new cEnemy;
 		tempEnemy->Setup(true, D3DXVECTOR3(27 + i, 8, 53 + i));
 		tempEnemy->setPlayer(m_pPlayer_S);
 		m_pPhysicsNode->AddChild(tempEnemy);

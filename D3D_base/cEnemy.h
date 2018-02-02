@@ -4,7 +4,7 @@
 class cSkinnedMeshEX;
 class cPlayer;
 
-class cSampleChar : public cChaNode
+class cEnemy : public cChaNode
 {
 private:
 	enum state
@@ -16,7 +16,7 @@ private:
 		DEAD
 	};
 	state EnemyState;
-	bool move1, move2, move3, bAttack, bAttackAction;
+	bool move1, move2, move3, bAttack, bAttackAction, bIdle, bDead, bDeadbody;
 	D3DXVECTOR3 vPlayerPos;
 	cPlayer* m_pPlayer;
 	struct tempPoint
@@ -35,9 +35,10 @@ private:
 	tempPoint tp[5];
 
 public:
-	cSampleChar();
-	virtual ~cSampleChar();
+	cEnemy();
+	virtual ~cEnemy();
 
+	float fDeadCount;
 
 	virtual void Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup);
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime()) override;
@@ -46,13 +47,16 @@ public:
 
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
 
+	void Idle();
 	void Move(D3DXVECTOR3 vGoal, float fDelta);
 	void Move(D3DXVECTOR3 vGoal, float fDelta, int dijkNum);
 	void Attack(float fDelta);
+	void Dead();
 	void Dijkstra(int tpnum, float fDelta);
 	void find(int tpNum, float fDelta);
 	void setPlayer(cPlayer* pSetPlayer);
 	void getDamage(int nDamage);
+	void HpManager();
 
 };
 

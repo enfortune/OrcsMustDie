@@ -4,7 +4,7 @@
 #include "cPhysicsNode.h"
 #include "cCamera.h"
 #include "cGrid.h"
-#include "cSampleChar.h"
+#include "cEnemy.h"
 #include "cPhysicsBody.h"
 
 cPhysicsTestScene::cPhysicsTestScene()
@@ -42,16 +42,16 @@ void cPhysicsTestScene::Setup()
 	m_pGrid->Setup();
 
 
-	m_pEnemy = new cSampleChar;
+	m_pEnemy = new cEnemy;
 	m_pEnemy->Setup(true, D3DXVECTOR3(2.f, 3.f, 2.f));
 	m_pEnemy->GetPhysicsBody()->GetPhysicsData().fRotAngle = PI / 4;
 	m_pSpace->AddChild(m_pEnemy);
 
-	m_pEnemy2 = new cSampleChar;
+	m_pEnemy2 = new cEnemy;
 	m_pEnemy2->Setup(false, D3DXVECTOR3(5.f, 5.f, 5.f));
 	m_pSpace->AddChild(m_pEnemy2);
 
-	m_pEnemy3 = new cSampleChar;
+	m_pEnemy3 = new cEnemy;
 	m_pEnemy3->Setup(false, D3DXVECTOR3(7.f, 5.f, 5.f));
 	m_pSpace->AddChild(m_pEnemy3);
 

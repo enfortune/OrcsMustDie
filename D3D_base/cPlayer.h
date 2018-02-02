@@ -16,12 +16,12 @@ enum PLAYERSTATE
 };
 
 class cSkinnedMeshEX;
-class cSampleChar;
+class cEnemy;
 class cPlayer : public cGameNode
 {
 protected:
 	cSkinnedMeshEX *			m_pPlayerMesh;
-	std::vector<cSampleChar*>	*m_vEnemy;
+	std::vector<cEnemy*>	*m_vEnemy;
 	PLAYERSTATE					m_pPlayerState;
 
 	SYNTHESIZE_REF(float, m_pRotationY, RotationY);
@@ -66,7 +66,7 @@ public:
 	void PlayerWhirlWind();
 	void PlayerShiledBash();
 	void PlayerJumpBlend();
-	void setEnemy(std::vector<cSampleChar*>* Enemy);
+	void setEnemy(std::vector<cEnemy*>* Enemy);
 	void IsPlayerState();
 
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;

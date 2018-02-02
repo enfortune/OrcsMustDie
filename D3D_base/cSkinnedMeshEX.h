@@ -10,6 +10,7 @@ protected:
 	std::vector<LPCSTR> m_vecAniSetName;
 	bool		m_isBlend;
 	bool		m_bLoop;
+	bool		m_bAniStart;
 
 	int			m_startAniId;
 	float		m_fPassedBlendTime;

@@ -343,12 +343,6 @@
     <ClInclude Include="cGameParticleFirework.h">
       <Filter>Foundation\D3D\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="cChaNode.h">
-      <Filter>SampleCode</Filter>
-    </ClInclude>
-    <ClInclude Include="cSampleChar.h">
-      <Filter>SampleCode</Filter>
-    </ClInclude>
     <ClInclude Include="cMapToolGrid.h">
       <Filter>김완수\MapTool</Filter>
     </ClInclude>
@@ -365,6 +359,12 @@
       <Filter>정현식</Filter>
     </ClInclude>
     <ClInclude Include="cSkinnedMeshEX.h">
+      <Filter>정현식</Filter>
+    </ClInclude>
+    <ClInclude Include="cChaNode.h">
+      <Filter>정현식</Filter>
+    </ClInclude>
+    <ClInclude Include="cEnemy.h">
       <Filter>정현식</Filter>
     </ClInclude>
   </ItemGroup>
@@ -567,12 +567,6 @@
     <ClCompile Include="cGameParticleFirework.cpp">
       <Filter>Foundation\D3D\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="cChaNode.cpp">
-      <Filter>SampleCode</Filter>
-    </ClCompile>
-    <ClCompile Include="cSampleChar.cpp">
-      <Filter>SampleCode</Filter>
-    </ClCompile>
     <ClCompile Include="cMapToolGrid.cpp">
       <Filter>김완수\MapTool</Filter>
     </ClCompile>
@@ -586,6 +580,12 @@
       <Filter>정현식</Filter>
     </ClCompile>
     <ClCompile Include="cSkinnedMeshEX.cpp">
+      <Filter>정현식</Filter>
+    </ClCompile>
+    <ClCompile Include="cChaNode.cpp">
+      <Filter>정현식</Filter>
+    </ClCompile>
+    <ClCompile Include="cEnemy.cpp">
       <Filter>정현식</Filter>
     </ClCompile>
   </ItemGroup>

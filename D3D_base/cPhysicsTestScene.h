@@ -4,7 +4,7 @@ class cMapData;
 class cPhysicsNode;
 class cCamera;
 class cGrid;
-class cSampleChar;
+class cEnemy;
 
 class cPhysicsTestScene : public cGameScene
 {
@@ -14,9 +14,9 @@ class cPhysicsTestScene : public cGameScene
 	cMapData* m_pMapData;
 	cPhysicsNode* m_pSpace;
 
-	cSampleChar* m_pEnemy;
-	cSampleChar* m_pEnemy2;
-	cSampleChar* m_pEnemy3;
+	cEnemy* m_pEnemy;
+	cEnemy* m_pEnemy2;
+	cEnemy* m_pEnemy3;
 public:
 	cPhysicsTestScene();
 	~cPhysicsTestScene();
