@@ -85,7 +85,8 @@ void cPlayer::Update(float fDelta)
 	{
 		speedX += 5.f *  m_vPlayerDir.x;
 		speedZ += 5.f * m_vPlayerDir.z;
-		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false)
+		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false &&
+			m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
 			IsPlayerState();
@@ -102,7 +103,7 @@ void cPlayer::Update(float fDelta)
 	{
 		speedX -= 5.f *  m_vPlayerDir.x;
 		speedZ -= 5.f * m_vPlayerDir.z;
-		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false)
+		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false && m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
 			IsPlayerState();
@@ -115,7 +116,7 @@ void cPlayer::Update(float fDelta)
 	{
 		speedX += 5.f *  vLeft.x;
 		speedZ += 5.f * vLeft.z;
-		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false)
+		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false && m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
 			IsPlayerState();
@@ -128,7 +129,7 @@ void cPlayer::Update(float fDelta)
 	{
 		speedX -= 5.f *  vLeft.x;
 		speedZ -= 5.f * vLeft.z;
-		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false)
+		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false && m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
 			IsPlayerState();
@@ -139,8 +140,11 @@ void cPlayer::Update(float fDelta)
 
 	if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON))
 	{
-		m_pPlayerState = PLAYERSTATE_ATTACK;
-		IsPlayerState();
+		if (m_pPlayerState != PLAYERSTATE_ATTACK)
+		{
+			m_pPlayerState = PLAYERSTATE_ATTACK;
+			IsPlayerState();
+		}
 		PlayerAttacked();
 	}
 
@@ -148,22 +152,24 @@ void cPlayer::Update(float fDelta)
 
 	if (g_pKeyManager->IsStayKeyDown('R'))
 	{
-		m_pPlayerState = PLAYERSTATE_SKILL_WHIRLWIND;
-		IsPlayerState();
-		PlayerWhirlWind();
-		ManaCount += 0.1 * fDelta;
-
-		if (m_pPlayerState == PLAYERSTATE_SKILL_WHIRLWIND && ManaCount == 1)
+		if (m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
 		{
-			nPlayerCurMp = nPlayerCurMp - ManaCount; ManaCount = 0;
+			m_pPlayerState = PLAYERSTATE_SKILL_WHIRLWIND;
+			IsPlayerState();
 		}
+		PlayerWhirlWind();
+		//ManaCount += 0.1 * fDelta;
+		//
+		//if (m_pPlayerState == PLAYERSTATE_SKILL_WHIRLWIND && ManaCount == 1)
+		//{
+		//	nPlayerCurMp = nPlayerCurMp - ManaCount; ManaCount = 0;
+		//}
 	}
 	if (g_pKeyManager->IsOnceKeyUp('R'))
 	{
 		ManaCount = 0;
 		m_pPlayerState = PLAYERSTATE_STAND;
 	}
-
 	
 	if (g_pKeyManager->IsOnceKeyDown(VK_SPACE))
 	{
@@ -386,28 +392,28 @@ void cPlayer::IsPlayerState()
 	switch (m_pPlayerState)
 	{
 	case PLAYERSTATE_STAND:
-		m_pPlayerMesh->SetAnimationSet(0, 11, true);
+		m_pPlayerMesh->SetAnimationSetBlend(0, 11, true);
 		break;
 	case PLAYERSTATE_MOVE:
 		m_pPlayerMesh->SetAnimationSet(0, 10, true);
 		break;
 	case PLAYERSTATE_ATTACK:
-		m_pPlayerMesh->SetAnimationSet(0, 4, false);
+		m_pPlayerMesh->SetAnimationSetBlend(0, 4, false);
 		break;
 	case PLAYERSTATE_HIT:
-		m_pPlayerMesh->SetAnimationSet(0, 3, false);
+		m_pPlayerMesh->SetAnimationSetBlend(0, 3, false);
 		break;
 	case PLAYERSTATE_JUMPSTART:
-		m_pPlayerMesh->SetAnimationSet(0, 7, false);
+		m_pPlayerMesh->SetAnimationSetBlend(0, 7, false);
 		break;					
 	case PLAYERSTATE_JUMPING:		  
-		m_pPlayerMesh->SetAnimationSet(0, 5, false);
+		m_pPlayerMesh->SetAnimationSetBlend(0, 5, false);
 		break;						  
 	case PLAYERSTATE_JUMPEND :		  
-		m_pPlayerMesh->SetAnimationSet(0, 6, false);
+		m_pPlayerMesh->SetAnimationSetBlend(0, 6, false);
 		break;
 	case PLAYERSTATE_SKILL_WHIRLWIND :
-		m_pPlayerMesh->SetAnimationSet(0, 0, false);
+		m_pPlayerMesh->SetAnimationSetBlend(0, 0, true);
 		break;
 	default:
 		break;
