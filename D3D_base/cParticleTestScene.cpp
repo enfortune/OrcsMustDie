@@ -4,12 +4,14 @@
 #include "cGrid.h"
 #include "cGameParticleSnow.h"
 #include "cGameParticleFirework.h"
+#include "cGameParticleSpark.h"
 
 
 cParticleTestScene::cParticleTestScene()
 	: m_pSnow(nullptr)
 	, m_pFirework(nullptr)
 	, m_bIsCulling(false)
+	, m_pSpark(nullptr)
 {
 }
 
@@ -22,7 +24,7 @@ cParticleTestScene::~cParticleTestScene()
 void cParticleTestScene::Setup()
 {
 	cGameScene::Setup();
-	this->SetupParticle();
+	//this->SetupParticle();
 
 	/*m_pSnow = new cGameParticleSnow(
 		D3DXVECTOR3(-10.f, 0.f, -10.f),
@@ -34,6 +36,10 @@ void cParticleTestScene::Setup()
 		D3DXVECTOR3(0.f, 5.f, 50.f),
 		1024);
 	m_pFirework->Setup("");*/
+
+	m_pSpark = new cGameParticleSpark;
+	m_pSpark->Setup("");
+
 
 	m_stFrustum.vNear_00 = D3DXVECTOR3(-1.f, -1.f, -1.f);
 	m_stFrustum.vNear_01 = D3DXVECTOR3(-1.f, 1.f, -1.f);
@@ -54,13 +60,24 @@ void cParticleTestScene::Update(float fDelta)
 	m_pCamera->Update();
 	if (m_pSnow) m_pSnow->Update(fDelta);
 	if (m_pFirework) m_pFirework->Update(fDelta);
+	if (m_pSpark) m_pSpark->Update(fDelta);
+
+	if (g_pKeyManager->IsOnceKeyDown('R'))
+	{
+		if (m_pSpark) m_pSpark->MakeSpark(D3DXVECTOR3(0, 1, 0), 10);
+	}
+	if (g_pKeyManager->IsStayKeyDown('T'))
+	{
+		if (m_pSpark) m_pSpark->MakeSpark(D3DXVECTOR3(0,1,0), 10);
+	}
 
 	if (g_pKeyManager->IsOnceKeyDown('1'))
 	{
 		m_bIsCulling = !m_bIsCulling;
 	}
 
-	this->UpdateParticle(fDelta);
+
+	//this->UpdateParticle(fDelta);
 	cGameScene::Update(fDelta);
 }
 void cParticleTestScene::Render()
@@ -70,10 +87,11 @@ void cParticleTestScene::Render()
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
 
 	m_pGrid->Render();
-	if (m_pSnow)m_pSnow->Render();
+	if (m_pSnow) m_pSnow->Render();
 	if (m_pFirework) m_pFirework->Render();
+	if (m_pSpark) m_pSpark->Render();
 
-	this->RenderParticle();
+	//this->RenderParticle();
 	cGameScene::Render();
 }
 void cParticleTestScene::Delete()
@@ -82,11 +100,13 @@ void cParticleTestScene::Delete()
 	SAFE_DELETE(m_pGrid);
 	SAFE_DELETE(m_pSnow);
 	SAFE_DELETE(m_pFirework);
+	SAFE_DELETE(m_pSpark);
 }
 
 void cParticleTestScene::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	m_pCamera->WndProc(hWnd, message, wParam, lParam);
+
 	cGameScene::WndProc(hWnd, message, wParam, lParam);
 }
 

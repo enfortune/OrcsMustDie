@@ -367,6 +367,9 @@
     <ClInclude Include="cEnemy.h">
       <Filter>정현식</Filter>
     </ClInclude>
+    <ClInclude Include="cGameParticleSpark.h">
+      <Filter>Foundation\D3D\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -587,6 +590,9 @@
     </ClCompile>
     <ClCompile Include="cEnemy.cpp">
       <Filter>정현식</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameParticleSpark.cpp">
+      <Filter>Foundation\D3D\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
