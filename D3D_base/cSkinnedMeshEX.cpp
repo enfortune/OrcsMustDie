@@ -101,24 +101,25 @@ void cSkinnedMeshEX::Update()
 		}
 		else
 		{
+			float fWeight = m_fPassedBlendTime / m_fBlendTime;
 			if (aniSet1 != nullptr)
 			{
 				float fTrack1Time = desc1.Position / aniSet1->GetPeriod();
-				if (fTrack1Time > 0.9f)
+				if (fTrack1Time > 0.95f)
 				{
-					m_pAniCtrl->SetTrackWeight(0, 1.0f);
-					m_pAniCtrl->SetTrackWeight(1, 0.0f);
+					desc1.Position = aniSet1->GetPeriod() * 0.95f;
+					m_pAniCtrl->SetTrackDesc(1, &desc1);
+					m_pAniCtrl->SetTrackWeight(0, fWeight);
+					m_pAniCtrl->SetTrackWeight(1, 1.0f - fWeight);
 				}
 				else
 				{
-					float fWeight = m_fPassedBlendTime / m_fBlendTime;
 					m_pAniCtrl->SetTrackWeight(0, fWeight);
 					m_pAniCtrl->SetTrackWeight(1, 1.0f - fWeight);
 				}
 			}
 			else
 			{
-				float fWeight = m_fPassedBlendTime / m_fBlendTime;
 				m_pAniCtrl->SetTrackWeight(0, fWeight);
 				m_pAniCtrl->SetTrackWeight(1, 1.0f - fWeight);
 			}

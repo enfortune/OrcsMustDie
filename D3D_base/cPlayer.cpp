@@ -185,6 +185,11 @@ void cPlayer::Update(float fDelta)
 		}
 		PlayerAttacked();
 	}
+	if (m_pPlayerState == PLAYERSTATE_ATTACK && m_pPlayerMesh->GetAniEnd() == true)
+	{
+		m_pPlayerState = PLAYERSTATE_STAND;
+		IsPlayerState();
+	}
 
 	float ManaCount = 0;
 
@@ -205,7 +210,7 @@ void cPlayer::Update(float fDelta)
 	}
 	if (g_pKeyManager->IsOnceKeyUp('R'))
 	{
-		ManaCount = 0;
+		//ManaCount = 0;
 		m_pPlayerState = PLAYERSTATE_STAND;
 	}
 	
