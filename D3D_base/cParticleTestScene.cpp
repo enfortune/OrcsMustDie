@@ -5,6 +5,7 @@
 #include "cGameParticleSnow.h"
 #include "cGameParticleFirework.h"
 #include "cGameParticleSpark.h"
+#include "cGameParticleShockwave.h"
 
 
 cParticleTestScene::cParticleTestScene()
@@ -12,6 +13,7 @@ cParticleTestScene::cParticleTestScene()
 	, m_pFirework(nullptr)
 	, m_bIsCulling(false)
 	, m_pSpark(nullptr)
+	, m_pWave(nullptr)
 {
 }
 
@@ -37,8 +39,10 @@ void cParticleTestScene::Setup()
 		1024);
 	m_pFirework->Setup("");*/
 
-	m_pSpark = new cGameParticleSpark;
-	m_pSpark->Setup("");
+	//m_pSpark = new cGameParticleSpark;
+	//m_pSpark->Setup("");
+	m_pWave = new cGameParticleShockwave;
+	m_pWave->Setup("");
 
 
 	m_stFrustum.vNear_00 = D3DXVECTOR3(-1.f, -1.f, -1.f);
@@ -61,14 +65,17 @@ void cParticleTestScene::Update(float fDelta)
 	if (m_pSnow) m_pSnow->Update(fDelta);
 	if (m_pFirework) m_pFirework->Update(fDelta);
 	if (m_pSpark) m_pSpark->Update(fDelta);
+	if (m_pWave)  m_pWave->Update(fDelta);
 
 	if (g_pKeyManager->IsOnceKeyDown('R'))
 	{
 		if (m_pSpark) m_pSpark->MakeSpark(D3DXVECTOR3(0, 1, 0), 10);
+		if (m_pWave) m_pWave->MakeShockWave(D3DXVECTOR3(0, 0, 0), 400);
 	}
 	if (g_pKeyManager->IsStayKeyDown('T'))
 	{
 		if (m_pSpark) m_pSpark->MakeSpark(D3DXVECTOR3(0,1,0), 10);
+		if (m_pWave) m_pWave->MakeShockWave(D3DXVECTOR3(0, 0, 0), 400);
 	}
 
 	if (g_pKeyManager->IsOnceKeyDown('1'))
@@ -90,6 +97,7 @@ void cParticleTestScene::Render()
 	if (m_pSnow) m_pSnow->Render();
 	if (m_pFirework) m_pFirework->Render();
 	if (m_pSpark) m_pSpark->Render();
+	if (m_pWave) m_pWave->Render();
 
 	//this->RenderParticle();
 	cGameScene::Render();
@@ -101,6 +109,7 @@ void cParticleTestScene::Delete()
 	SAFE_DELETE(m_pSnow);
 	SAFE_DELETE(m_pFirework);
 	SAFE_DELETE(m_pSpark);
+	SAFE_DELETE(m_pWave);
 }
 
 void cParticleTestScene::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

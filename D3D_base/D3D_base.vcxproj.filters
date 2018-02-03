@@ -370,6 +370,9 @@
     <ClInclude Include="cGameParticleSpark.h">
       <Filter>Foundation\D3D\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="cGameParticleShockwave.h">
+      <Filter>Foundation\D3D\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -592,6 +595,9 @@
       <Filter>정현식</Filter>
     </ClCompile>
     <ClCompile Include="cGameParticleSpark.cpp">
+      <Filter>Foundation\D3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameParticleShockwave.cpp">
       <Filter>Foundation\D3D\Particle</Filter>
     </ClCompile>
   </ItemGroup>
