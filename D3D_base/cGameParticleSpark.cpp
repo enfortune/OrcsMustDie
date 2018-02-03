@@ -4,7 +4,7 @@
 
 cGameParticleSpark::cGameParticleSpark()
 {
-	m_fSize = 0.02f;
+	m_fSize = 0.3f;
 	m_dwVBSize = 4096;
 	m_dwVBOffset = 0;
 	m_dwVBBatchSize = 512;
@@ -110,5 +110,13 @@ void cGameParticleSpark::MakeSpark(D3DXVECTOR3 vPos, int nMount)
 	for (int i = 0; i < nMount; i++)
 	{
 		AddParticles();
+	}
+}
+
+void cGameParticleSpark::ClearSpark()
+{
+	for (std::list<ST_PARTICLEATTRIBUTE>::iterator iter = m_listParticles.begin(); iter != m_listParticles.end(); )
+	{
+		iter = m_listParticles.erase(iter);
 	}
 }

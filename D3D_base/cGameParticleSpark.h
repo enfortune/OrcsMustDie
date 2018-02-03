@@ -13,5 +13,6 @@ public:
 	virtual void PostRender() override;
 	
 	void MakeSpark(D3DXVECTOR3 vPos, int nMount);
+	void ClearSpark();
 };
 

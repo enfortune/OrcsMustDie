@@ -15,6 +15,7 @@ protected:
 	int			m_startAniId;
 	float		m_fPassedBlendTime;
 	float		m_fBlendTime;
+	float		m_fCurPosition;
 
 protected:
 	void SetupBoneMatrixPtrs(LPD3DXFRAME pFrame); // 메시에 영향주는것들 연결
@@ -39,5 +40,7 @@ public:
 	void SetAnimationSetBlend(UINT nTrack, int nAniID, bool Loop);
 
 	void UpdateAnimation(float fDelta);
+
+	float	getCurPosition();
 };
 

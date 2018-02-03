@@ -78,6 +78,8 @@ void cSkinnedMeshEX::Update()
 	float AnimationPlayFactor;
 	AnimationPlayFactor = m_stTrackDesc.Position / tempPeriod->GetPeriod();
 	AnimationPlayFactor = fmod(AnimationPlayFactor, 1.f);
+
+	m_fCurPosition = AnimationPlayFactor;
 	if (AnimationPlayFactor < 0.9f) m_bAniEnd = false;
 	if (AnimationPlayFactor >= 0.9f)
 	{
@@ -144,6 +146,7 @@ void cSkinnedMeshEX::RenderFrames(LPD3DXFRAME pFrame)
 			for (int i = 0; i < pBoneMesh->nNumAttributeGroups; i++)
 			{
 				int nAdj = pBoneMesh->pAttributeTable[i].AttribId;
+				g_pD3DDevice->SetFVF(pBoneMesh->MeshData.pMesh->GetFVF());
 				g_pD3DDevice->SetMaterial(&pBoneMesh->vecMtl[nAdj]);
 				g_pD3DDevice->SetTexture(NULL, pBoneMesh->vecTexture[nAdj]);
 				pBoneMesh->MeshData.pMesh->DrawSubset(nAdj);
@@ -249,6 +252,11 @@ void cSkinnedMeshEX::UpdateAnimation(float fDelta)
 {
 
 	m_pAniCtrl->AdvanceTime(fDelta, NULL);
+}
+
+float cSkinnedMeshEX::getCurPosition()
+{
+	return m_fCurPosition;
 }
 
 void cSkinnedMeshEX::SetupAnimationSet(LPD3DXANIMATIONCONTROLLER pAniCtrl)

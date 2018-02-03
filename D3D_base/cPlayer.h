@@ -11,18 +11,24 @@ enum PLAYERSTATE
 	PLAYERSTATE_JUMPSTART,
 	PLAYERSTATE_JUMPING,
 	PLAYERSTATE_JUMPEND,
+	PLAYERSTATE_DEATH,
 	PLAYERSTATE_SKILL_SHILEDBASH,
 	PLAYERSTATE_SKILL_WHIRLWIND
 };
 
 class cSkinnedMeshEX;
+class cGameParticleSpark;
 class cEnemy;
 class cPlayer : public cGameNode
 {
 protected:
 	cSkinnedMeshEX *			m_pPlayerMesh;
-	std::vector<cEnemy*>	*m_vEnemy;
+	std::vector<cEnemy*>		*m_vEnemy;
 	PLAYERSTATE					m_pPlayerState;
+	cGameParticleSpark*			m_pPlayerParticle;
+
+	D3DXVECTOR3					m_vAtkParticleStart;
+	D3DXVECTOR3					m_vAtkParticleEnd;
 
 	SYNTHESIZE_REF(float, m_pRotationY, RotationY);
 	SYNTHESIZE_REF(D3DXVECTOR3, m_vPlayerPos, PlayerPos);
@@ -70,5 +76,7 @@ public:
 	void IsPlayerState();
 
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
+
+	void PlayerParticleUpdate();
 };
 
