@@ -17,6 +17,7 @@ typedef struct ST_PARTICLEATTRIBUTE
 	float		fLifeTime;
 	float		fAge;
 	D3DXCOLOR	stColor;
+	D3DXCOLOR	stColorOrigin;
 	D3DXCOLOR	stColorFade;
 	bool		bIsAlive;
 

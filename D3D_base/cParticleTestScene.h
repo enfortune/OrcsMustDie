@@ -5,6 +5,7 @@ class cCamera;
 class cGrid;
 class cGameParticleSnow;
 class cGameParticleFirework;
+class cGameParticleSpark;
 
 class cParticleTestScene : public cGameScene
 {
@@ -17,6 +18,7 @@ class cParticleTestScene : public cGameScene
 
 	cGameParticleSnow* m_pSnow;
 	cGameParticleFirework* m_pFirework;
+	cGameParticleSpark* m_pSpark;
 
 	bool m_bIsCulling;
 

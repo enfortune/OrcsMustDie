@@ -83,7 +83,7 @@ void cPlayerCamera::Update()
 
 	
 
-	if (fabs(fDeltaX) + fabs(fDeltaY) > 0.1f)
+	if (fabs(fDeltaX) + fabs(fDeltaY) > 1.f)
 	{
 		m_vCamRotAngle.x += (fDeltaY / 150.0f);
 		m_vCamRotAngle.y += (fDeltaX / 150.0f);

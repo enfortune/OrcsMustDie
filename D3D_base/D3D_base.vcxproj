@@ -29,7 +29,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -175,6 +175,7 @@
     <ClInclude Include="cGameParticleEnumList.h" />
     <ClInclude Include="cGameParticleFirework.h" />
     <ClInclude Include="cGameParticleSnow.h" />
+    <ClInclude Include="cGameParticleSpark.h" />
     <ClInclude Include="cGameText.h" />
     <ClInclude Include="cGameNode.h" />
     <ClInclude Include="cGameUILabel.h" />
@@ -258,6 +259,7 @@
     <ClCompile Include="cGameParticle.cpp" />
     <ClCompile Include="cGameParticleFirework.cpp" />
     <ClCompile Include="cGameParticleSnow.cpp" />
+    <ClCompile Include="cGameParticleSpark.cpp" />
     <ClCompile Include="cGameText.cpp" />
     <ClCompile Include="cGameNode.cpp" />
     <ClCompile Include="cGameUILabel.cpp" />
