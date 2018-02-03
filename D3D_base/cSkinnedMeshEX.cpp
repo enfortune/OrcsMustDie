@@ -83,12 +83,16 @@ void cSkinnedMeshEX::Update()
 	{
 		if (this->m_bLoop == false)
 		{
-			SetAnimationSetBlend(0, m_startAniId, true);
+			//SetAnimationSetBlend(0, m_startAniId, true);
 			m_bAniEnd = true;
 		}
 	}
 	if (m_isBlend)
 	{
+		D3DXTRACK_DESC desc1;
+		LPD3DXANIMATIONSET aniSet1;
+		m_pAniCtrl->GetTrackDesc(1, &desc1);
+		m_pAniCtrl->GetTrackAnimationSet(1, &aniSet1);
 		m_fPassedBlendTime += g_pTimeManager->GetEllapsedTime();
 		if (m_fPassedBlendTime >= m_fBlendTime)
 		{
@@ -97,9 +101,27 @@ void cSkinnedMeshEX::Update()
 		}
 		else
 		{
-			float fWeight = m_fPassedBlendTime / m_fBlendTime;
-			m_pAniCtrl->SetTrackWeight(0, fWeight);
-			m_pAniCtrl->SetTrackWeight(1, 1.0f - fWeight);
+			if (aniSet1 != nullptr)
+			{
+				float fTrack1Time = desc1.Position / aniSet1->GetPeriod();
+				if (fTrack1Time > 0.9f)
+				{
+					m_pAniCtrl->SetTrackWeight(0, 1.0f);
+					m_pAniCtrl->SetTrackWeight(1, 0.0f);
+				}
+				else
+				{
+					float fWeight = m_fPassedBlendTime / m_fBlendTime;
+					m_pAniCtrl->SetTrackWeight(0, fWeight);
+					m_pAniCtrl->SetTrackWeight(1, 1.0f - fWeight);
+				}
+			}
+			else
+			{
+				float fWeight = m_fPassedBlendTime / m_fBlendTime;
+				m_pAniCtrl->SetTrackWeight(0, fWeight);
+				m_pAniCtrl->SetTrackWeight(1, 1.0f - fWeight);
+			}
 		}
 	}
 

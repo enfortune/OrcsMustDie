@@ -85,8 +85,9 @@ void cPlayer::Update(float fDelta)
 	{
 		speedX += 5.f *  m_vPlayerDir.x;
 		speedZ += 5.f * m_vPlayerDir.z;
-		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false &&
-			m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
+		if (m_pPlayerState != PLAYERSTATE_MOVE && m_pPlayerState != PLAYERSTATE_JUMPSTART &&
+			m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND && m_pPlayerState != PLAYERSTATE_JUMPEND
+			&& m_pPlayerState != PLAYERSTATE_JUMPING)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
 			IsPlayerState();
@@ -95,48 +96,85 @@ void cPlayer::Update(float fDelta)
 	}
 	if (g_pKeyManager->IsOnceKeyUp('W'))
 	{
-		m_pPlayerState = PLAYERSTATE_STAND;
-		IsPlayerState();
+		if (m_pPlayerState != PLAYERSTATE_MOVE && m_pPlayerState != PLAYERSTATE_JUMPSTART &&
+			m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND && m_pPlayerState != PLAYERSTATE_JUMPEND
+			&& m_pPlayerState != PLAYERSTATE_JUMPING)
+		{
+			m_pPlayerState = PLAYERSTATE_STAND;
+			IsPlayerState();
+		}
 	}
 
 	if (g_pKeyManager->IsStayKeyDown('S') && m_pPlayerState != PLAYERSTATE_ATTACK)
 	{
 		speedX -= 5.f *  m_vPlayerDir.x;
 		speedZ -= 5.f * m_vPlayerDir.z;
-		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false && m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
+		if (m_pPlayerState != PLAYERSTATE_MOVE && m_pPlayerState != PLAYERSTATE_JUMPSTART &&
+			m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND && m_pPlayerState != PLAYERSTATE_JUMPEND
+			&& m_pPlayerState != PLAYERSTATE_JUMPING)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
 			IsPlayerState();
 		}
 		m_bIs_S = true;
 	}
-	if (g_pKeyManager->IsOnceKeyUp('S')) m_pPlayerState = PLAYERSTATE_STAND;
-
+	if (g_pKeyManager->IsOnceKeyUp('S'))
+	{
+		if (m_pPlayerState != PLAYERSTATE_MOVE && m_pPlayerState != PLAYERSTATE_JUMPSTART &&
+			m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND && m_pPlayerState != PLAYERSTATE_JUMPEND
+			&& m_pPlayerState != PLAYERSTATE_JUMPING)
+		{
+			m_pPlayerState = PLAYERSTATE_STAND;
+			IsPlayerState();
+		}
+	}
 	if (g_pKeyManager->IsStayKeyDown('A') && m_pPlayerState != PLAYERSTATE_ATTACK)
 	{
 		speedX += 5.f *  vLeft.x;
 		speedZ += 5.f * vLeft.z;
-		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false && m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
+		if (m_pPlayerState != PLAYERSTATE_MOVE && m_pPlayerState != PLAYERSTATE_JUMPSTART &&
+			m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND && m_pPlayerState != PLAYERSTATE_JUMPEND
+			&& m_pPlayerState != PLAYERSTATE_JUMPING)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
 			IsPlayerState();
 		}
 		m_bIs_A = true;
 	}
-	if (g_pKeyManager->IsOnceKeyUp('A')) m_pPlayerState = PLAYERSTATE_STAND;
+	if (g_pKeyManager->IsOnceKeyUp('A'))
+	{
+		if (m_pPlayerState != PLAYERSTATE_MOVE && m_pPlayerState != PLAYERSTATE_JUMPSTART &&
+			m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND && m_pPlayerState != PLAYERSTATE_JUMPEND
+			&& m_pPlayerState != PLAYERSTATE_JUMPING)
+		{
+			m_pPlayerState = PLAYERSTATE_STAND;
+			IsPlayerState();
+		}
+	}
 
 	if (g_pKeyManager->IsStayKeyDown('D') && m_pPlayerState != PLAYERSTATE_ATTACK)
 	{
 		speedX -= 5.f *  vLeft.x;
 		speedZ -= 5.f * vLeft.z;
-		if (m_pPlayerState != PLAYERSTATE_MOVE && isJump == false && m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
+		if (m_pPlayerState != PLAYERSTATE_MOVE && m_pPlayerState != PLAYERSTATE_JUMPSTART &&
+			m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND && m_pPlayerState != PLAYERSTATE_JUMPEND
+			&& m_pPlayerState != PLAYERSTATE_JUMPING)
 		{
 			m_pPlayerState = PLAYERSTATE_MOVE;
 			IsPlayerState();
 		}
 		m_bIs_D = true;
 	}
-	if (g_pKeyManager->IsOnceKeyUp('D')) m_pPlayerState = PLAYERSTATE_STAND;
+	if (g_pKeyManager->IsOnceKeyUp('D'))
+	{
+		if (m_pPlayerState != PLAYERSTATE_MOVE && m_pPlayerState != PLAYERSTATE_JUMPSTART &&
+			m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND && m_pPlayerState != PLAYERSTATE_JUMPEND
+			&& m_pPlayerState != PLAYERSTATE_JUMPING)
+		{
+			m_pPlayerState = PLAYERSTATE_STAND;
+			IsPlayerState();
+		}
+	}
 
 	if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON))
 	{
@@ -375,7 +413,6 @@ void cPlayer::PlayerJumpBlend()
 	}
 	else if (m_pPlayerState == PLAYERSTATE_JUMPEND && m_pPlayerMesh->GetAniEnd() == true)
 	{
-		isJump = false;
 		m_pPlayerState = PLAYERSTATE_STAND;
 		IsPlayerState();
 	}
@@ -407,7 +444,7 @@ void cPlayer::IsPlayerState()
 		m_pPlayerMesh->SetAnimationSetBlend(0, 7, false);
 		break;					
 	case PLAYERSTATE_JUMPING:		  
-		m_pPlayerMesh->SetAnimationSetBlend(0, 5, false);
+		m_pPlayerMesh->SetAnimationSet(0, 5, false);
 		break;						  
 	case PLAYERSTATE_JUMPEND :		  
 		m_pPlayerMesh->SetAnimationSetBlend(0, 6, false);
