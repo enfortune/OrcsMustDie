@@ -35,7 +35,7 @@ void TrapTestScene::Update(float fDelta)
 {
 	camera_.Update();
 
-	trapList_[0].update();
+	//trapList_[0].update();
 
 	/*for (int i = 0; i < static_cast<int> (trapList_.size()); ++i)
 		trapList_[i].update();*/
@@ -47,7 +47,7 @@ void TrapTestScene::Render()
 {
 	grid_.Render();
 
-	trapList_[0].render();
+	//trapList_[0].render();
 
 	/*for (int i = 0; i < static_cast<int> (trapList_.size()); ++i)
 		trapList_[i].render();*/

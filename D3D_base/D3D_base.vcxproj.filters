@@ -121,9 +121,6 @@
     <Filter Include="엄윤호\Graph">
       <UniqueIdentifier>{5556ef56-cd51-437c-81f2-489e4e677432}</UniqueIdentifier>
     </Filter>
-    <Filter Include="엄윤호\Loading">
-      <UniqueIdentifier>{64a15202-43eb-4184-a9fe-256d64e6e94e}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -431,7 +428,7 @@
       <Filter>엄윤호\Graph</Filter>
     </ClInclude>
     <ClInclude Include="Loading.h">
-      <Filter>엄윤호\Loading</Filter>
+      <Filter>엄윤호</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -700,7 +697,7 @@
       <Filter>엄윤호\Graph</Filter>
     </ClCompile>
     <ClCompile Include="Loading.cpp">
-      <Filter>엄윤호\Loading</Filter>
+      <Filter>엄윤호</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
