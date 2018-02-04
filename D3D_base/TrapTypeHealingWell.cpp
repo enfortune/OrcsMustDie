@@ -8,6 +8,9 @@ TrapTypeHealingWell::TrapTypeHealingWell()
 	frustumLocal_;
 	isBlockable_ = false;
 
+	width_ = 2;
+	height_ = 3;
+
 	frustumInteractionLocal_;
 
 	isInstallPositionArray_[static_cast<size_t> (TrapType::eInstallPosition::WALL)] = true;

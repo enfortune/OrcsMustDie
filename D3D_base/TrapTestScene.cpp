@@ -20,6 +20,8 @@ void TrapTestScene::Setup()
 	camera_.Setup();
 	grid_.Setup();
 
+	barricade_.Setup("", "Resource/Trap/Barricade/Barricade.X");
+
 	D3DXMATRIXA16 matrixIdentity {};
 	D3DXMatrixIdentity(&matrixIdentity);
 
@@ -33,7 +35,7 @@ void TrapTestScene::Update(float fDelta)
 {
 	camera_.Update();
 
-	trapList_[0].render();
+	trapList_[0].update();
 
 	/*for (int i = 0; i < static_cast<int> (trapList_.size()); ++i)
 		trapList_[i].update();*/

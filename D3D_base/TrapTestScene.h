@@ -8,7 +8,7 @@
 
 #include "Trap.h"
 
-class cSkinnedMesh;
+#include "cSkinnedMeshEX.h"
 
 class TrapTestScene : public cGameScene
 {
@@ -17,6 +17,8 @@ private:
 
 	cGrid grid_;
 	cCamera camera_;
+
+	cSkinnedMeshEX barricade_;
 
 	std::vector<Trap> trapList_;
 

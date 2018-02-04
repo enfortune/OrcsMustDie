@@ -23,32 +23,32 @@
     <ProjectGuid>{DF3DCD04-F9E1-4763-895D-3CA5373AB3EE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>D3D_base</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
@@ -189,6 +189,11 @@
     <ClInclude Include="cInGameUIScore.h" />
     <ClInclude Include="cMapData.h" />
     <ClInclude Include="cSkinnedMeshEX.h" />
+    <ClInclude Include="Graph.h" />
+    <ClInclude Include="Graph.hpp" />
+    <ClInclude Include="GraphDijkstra.h" />
+    <ClInclude Include="GraphDijkstra.hpp" />
+    <ClInclude Include="Loading.h" />
     <ClInclude Include="MapDataEnumList.h" />
     <ClInclude Include="cMapMaker.h" />
     <ClInclude Include="cMapToolCamera.h" />
@@ -234,11 +239,22 @@
     <ClInclude Include="iGameUIDelegate.h" />
     <ClInclude Include="iMap.h" />
     <ClInclude Include="iTimer.h" />
+    <ClInclude Include="nCommon.h" />
     <ClInclude Include="OBJC_UTIL.h" />
     <ClInclude Include="PhysicsTagDefine.h" />
+    <ClInclude Include="QuickSlot.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Trap.h" />
+    <ClInclude Include="TrapComponent.h" />
+    <ClInclude Include="TrapTestScene.h" />
+    <ClInclude Include="TrapType.h" />
+    <ClInclude Include="TrapTypeBarricade.h" />
+    <ClInclude Include="TrapTypeComponent.h" />
+    <ClInclude Include="TrapTypeHealingWell.h" />
+    <ClInclude Include="TrapTypeManager.h" />
+    <ClInclude Include="TrapTypeSpike.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -311,16 +327,30 @@
     <ClCompile Include="cTrap.cpp" />
     <ClCompile Include="D3DX_UTIL.cpp" />
     <ClCompile Include="D3D_base.cpp" />
+    <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="GraphDijkstra.cpp" />
     <ClCompile Include="iGameMap.cpp" />
     <ClCompile Include="iGameUIDelegate.cpp" />
     <ClCompile Include="iMap.cpp" />
     <ClCompile Include="iTimer.cpp" />
+    <ClCompile Include="Loading.cpp" />
+    <ClCompile Include="nCommon.cpp" />
+    <ClCompile Include="QuickSlot.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Trap.cpp" />
+    <ClCompile Include="TrapComponent.cpp" />
+    <ClCompile Include="TrapTestScene.cpp" />
+    <ClCompile Include="TrapType.cpp" />
+    <ClCompile Include="TrapTypeBarricade.cpp" />
+    <ClCompile Include="TrapTypeComponent.cpp" />
+    <ClCompile Include="TrapTypeHealingWell.cpp" />
+    <ClCompile Include="TrapTypeManager.cpp" />
+    <ClCompile Include="TrapTypeSpike.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>

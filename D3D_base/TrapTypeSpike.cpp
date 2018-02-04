@@ -10,6 +10,9 @@ TrapTypeSpike::TrapTypeSpike()
 	frustumLocal_;
 	isBlockable_ = false;
 
+	width_ = 2;
+	height_ = 2;
+
 	frustumInteractionLocal_ = frustumLocal_;
 
 	isInstallPositionArray_[static_cast<size_t> (TrapType::eInstallPosition::FLOOR)] = true;

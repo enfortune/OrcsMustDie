@@ -18,6 +18,9 @@ TrapTypeBarricade::TrapTypeBarricade()
 
 	isBlockable_ = true;
 
+	width_ = 2;
+	height_ = 2;
+
 	frustumInteractionLocal_ = frustumLocal_;
 
 	isInstallPositionArray_[static_cast<size_t> (TrapType::eInstallPosition::FLOOR)] = true;

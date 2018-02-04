@@ -6,7 +6,7 @@
 void TrapType::render(D3DXMATRIXA16 & matrixWorld)
 {
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matrixWorld);
-	//pModel_->Render(matrixWorld);
+	pModel_->Render();
 
 	frustumInteractionLocal_.Render(g_pD3DDevice);
 }

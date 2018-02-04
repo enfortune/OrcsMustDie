@@ -3,9 +3,9 @@
 // conceptual class
 
 class Trap;
-class TrapTypeComponentAttackable;
-class TrapTypeComponentBlockable;
-class TrapTypeComponentTriggerable;
+struct TrapTypeComponentAttackable;
+struct TrapTypeComponentBlockable;
+struct TrapTypeComponentTriggerable;
 
 class cSkinnedMesh;
 
@@ -21,6 +21,9 @@ public:
 protected:
 	cSkinnedMesh * pModel_;
 	D3DXMATRIXA16 matrixLocal_ {};
+
+	int width_ {};
+	int height_ {};
 
 	FRUSTUM frustumLocal_ {};
 	bool isBlockable_ {};
@@ -48,6 +51,8 @@ public:
 	friend Trap;
 
 public:
+	inline int getWidth() const { return width_; }
+	inline int getHeight() const { return height_; }
 	inline FRUSTUM getFrustum() const { return frustumLocal_; }
 
 //public:

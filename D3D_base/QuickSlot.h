@@ -2,25 +2,37 @@
 
 #include "cGameNode.h"
 
+#include "cGameUIButton.h"
+#include "TrapType.h"
+
 class cGameUIButton;
-class TrapType;
+struct TrapType;
+
+class WeaponDummy;
+
+enum class eCategory { NONE, WEAPON, TRAP, TRINKET };
 
 class QuickSlot : public cGameNode
 {
-public:
-	enum class eCategory { NONE, WEAPON, TRAP, TRINKET };
-
 private:
 	enum { QUICKSLOT_COUNT = 10 };
 
 private:
-	union uQuickSlotData;
-	struct QuickSlotData;
+	union uQuickSlotData
+	{
+		WeaponDummy * pWeapon {};
+		TrapType * pTrap;
+	};
+
+	struct QuickSlotData
+	{
+		eCategory category_ {eCategory::NONE};
+		uQuickSlotData data_ {};
+		cGameUIButton * pButton_ {};
+	};
 
 private:
-	cGameUIButton * pButtonArray_[QUICKSLOT_COUNT] {};
-
-	
+	QuickSlotData data[QUICKSLOT_COUNT];
 
 public:
 	
@@ -29,14 +41,4 @@ public:
 	void init();
 	void update();
 	void render();
-};
-
-union QuickSlot::uQuickSlotData
-{
-
-};
-
-struct QuickSlotData
-{
-
 };

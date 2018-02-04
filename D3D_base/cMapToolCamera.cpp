@@ -92,7 +92,7 @@ void cMapToolCamera::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 		break;
 
 	case WM_MOUSEMOVE:
-		if (!GetAsyncKeyState(VK_CONTROL) & 0x8000) m_isLButtonDown = false;
+		if (!(GetAsyncKeyState(VK_CONTROL) & 0x8000)) m_isLButtonDown = false;
 		if (m_isLButtonDown)
 		{
 			POINT ptCurrMouse;

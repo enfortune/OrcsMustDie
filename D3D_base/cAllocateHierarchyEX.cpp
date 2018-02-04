@@ -55,8 +55,28 @@ STDMETHODIMP cAllocateHierarchyEX::CreateMeshContainer(
 			g_pTextureManager->GetTexture(sFullPath));
 	}
 
-	pSkinInfo->AddRef();
-	pBoneMesh->pSkinInfo = pSkinInfo;
+	if (pSkinInfo)
+	{
+		pSkinInfo->AddRef();
+		pBoneMesh->pSkinInfo = pSkinInfo;
+
+		DWORD dwNumBones = pSkinInfo->GetNumBones();
+		pBoneMesh->pBoneOffsetMatrix = new D3DXMATRIX[dwNumBones];
+		pBoneMesh->pCurrBoneMatrix = new D3DXMATRIX[dwNumBones];
+		pBoneMesh->ppBoneMatrixPtrs = new D3DXMATRIX*[dwNumBones];
+
+		for (DWORD i = 0; i < dwNumBones; i++)
+		{
+			pBoneMesh->pBoneOffsetMatrix[i] =
+				(*pSkinInfo->GetBoneOffsetMatrix(i));
+		}
+	}
+	else
+	{
+		pBoneMesh->pBoneOffsetMatrix = nullptr;
+		pBoneMesh->pCurrBoneMatrix = nullptr;
+		pBoneMesh->ppBoneMatrixPtrs = nullptr;
+	}
 
 	pMeshData->pMesh->AddRef();
 	pBoneMesh->MeshData.pMesh = pMeshData->pMesh;
@@ -66,21 +86,9 @@ STDMETHODIMP cAllocateHierarchyEX::CreateMeshContainer(
 		g_pD3DDevice,
 		&pBoneMesh->pOrigMesh);
 
-	DWORD dwNumBones = pSkinInfo->GetNumBones();
-	pBoneMesh->pBoneOffsetMatrix = new D3DXMATRIX[dwNumBones];
-	pBoneMesh->pCurrBoneMatrix = new D3DXMATRIX[dwNumBones];
-	pBoneMesh->ppBoneMatrixPtrs = new D3DXMATRIX*[dwNumBones];
-
 	pBoneMesh->MeshData.pMesh->GetAttributeTable(NULL, &pBoneMesh->nNumAttributeGroups);
 	pBoneMesh->pAttributeTable = new D3DXATTRIBUTERANGE[pBoneMesh->nNumAttributeGroups];
 	pBoneMesh->MeshData.pMesh->GetAttributeTable(pBoneMesh->pAttributeTable, NULL);
-
-
-	for (DWORD i = 0; i < dwNumBones; i++)
-	{
-		pBoneMesh->pBoneOffsetMatrix[i] =
-			(*pSkinInfo->GetBoneOffsetMatrix(i));
-	}
 
 	*ppNewMeshContainer = pBoneMesh;
 
