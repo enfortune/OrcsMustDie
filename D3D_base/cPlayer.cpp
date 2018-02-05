@@ -42,7 +42,7 @@ void cPlayer::Setup()
 	cGameNode::Setup();
 
 	m_pPlayerMesh = new cSkinnedMeshEX;
-	m_pPlayerMesh->Setup("XFileSample","XFileSample/True_King.X");
+	m_pPlayerMesh->Setup("Resource/XFile/Player","Resource/XFile/Player/True_King.X");
 	m_pPlayerState = PLAYERSTATE_STAND;
 	IsPlayerState();
 	m_vPlayerPos = GetTransformData()->GetPosition();
