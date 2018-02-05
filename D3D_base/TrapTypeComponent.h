@@ -9,7 +9,7 @@ struct TrapTypeComponentAttackable
 public:
 	FRUSTUM frustumAttackLocal_ {};
 
-	int damage_ {};	
+	int damage_ {};
 	float duration_ {};
 	float cooldownMax_ {};
 

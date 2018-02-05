@@ -7,7 +7,7 @@ struct TrapTypeComponentAttackable;
 struct TrapTypeComponentBlockable;
 struct TrapTypeComponentTriggerable;
 
-class cSkinnedMesh;
+#include "cSkinnedMeshEX.h"
 
 struct TrapType
 {
@@ -19,7 +19,7 @@ public:
 	enum class eTimerType { NONE, COOLDOWN, REPAIR, ALWAYS };
 
 protected:
-	cSkinnedMesh * pModel_;
+	std::vector<cSkinnedMeshEX> modelList_;
 	D3DXMATRIXA16 matrixLocal_ {};
 
 	int width_ {};
@@ -35,25 +35,29 @@ protected:
 
 	eTimerType timerType_ {};
 
-	TrapTypeComponentAttackable * pComponentAttackable_ {};
-	TrapTypeComponentBlockable * pComponentBlockable_ {};
-	TrapTypeComponentTriggerable * pComponentTriggerable_ {};
+	TrapTypeComponentAttackable * pTypeComponentAttackable_ {};
+	TrapTypeComponentBlockable * pTypeComponentBlockable_ {};
+	TrapTypeComponentTriggerable * pTypeComponentTriggerable_ {};
 	
 	//std::vector<LPDIRECT3DTEXTURE9> pTextureList_ {};
 	//std::vector<std::string> soundList_ {};
 	
 public:
 	TrapType() = default;
-	virtual ~TrapType() = default;
+	virtual ~TrapType();
 
 	//UNCOPYABLE(TrapType);
 
 	friend Trap;
 
 public:
+	inline bool isBlockable() const { return isBlockable_; }
+
 	inline int getWidth() const { return width_; }
 	inline int getHeight() const { return height_; }
+
 	inline FRUSTUM getFrustum() const { return frustumLocal_; }
+	inline FRUSTUM getInteractionArea() const { return frustumInteractionLocal_; }
 
 //public:
 	//void onTrigger();

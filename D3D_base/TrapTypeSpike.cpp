@@ -20,10 +20,10 @@ TrapTypeSpike::TrapTypeSpike()
 
 	timerType_ = TrapType::eTimerType::COOLDOWN;
 
-	pComponentAttackable_ = new TrapTypeComponentAttackable;
+	pTypeComponentAttackable_ = new TrapTypeComponentAttackable;
 
-	pComponentAttackable_->cooldownMax_ = 3.0f;
-	pComponentAttackable_->damage_ = 3;
-	pComponentAttackable_->duration_ = 1.5f;
-	pComponentAttackable_->frustumAttackLocal_ = frustumInteractionLocal_;
+	pTypeComponentAttackable_->cooldownMax_ = 3.0f;
+	pTypeComponentAttackable_->damage_ = 3;
+	pTypeComponentAttackable_->duration_ = 1.5f;
+	pTypeComponentAttackable_->frustumAttackLocal_ = frustumInteractionLocal_;
 }

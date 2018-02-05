@@ -6,7 +6,7 @@ class TrapTypeBarricade : public TrapType
 {
 public:
 	TrapTypeBarricade();
-	virtual ~TrapTypeBarricade();
+	virtual ~TrapTypeBarricade() = default;
 
 	//UNCOPYABLE(TrapTypeBarricade);
 };

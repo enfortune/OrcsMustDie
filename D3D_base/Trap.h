@@ -23,12 +23,17 @@ private:
 
 public:
 	Trap() = default;
+	~Trap();
 
 public:
 	inline bool isConstructible(TrapType::eInstallPosition installPosition) const
 	{ return pType_->isInstallPositionArray_[static_cast<int> (installPosition)]; }
-	
+
 	inline bool isBlockable() const { return pType_->isBlockable_; }
+
+	inline int getWidth() const { return pType_->width_; }
+	inline int getHeight() const { return pType_->height_; }
+
 	inline FRUSTUM getFrustum() const { return frustumWorld_; }
 	inline FRUSTUM getInteractionArea() const { return frustumInteractionWorld_; }
 

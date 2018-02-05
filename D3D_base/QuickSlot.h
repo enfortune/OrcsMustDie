@@ -2,12 +2,20 @@
 
 #include "cGameNode.h"
 
+class cGameUIButton;
+
 class QuickSlot : public cGameNode
 {
 private:
 	enum { QUICKSLOT_COUNT = 10 };
 
 private:
+	cGameUIButton * pButtonArray_[QUICKSLOT_COUNT] {};
+
+public:
+	QuickSlot();
+
+public:
 
 };
 

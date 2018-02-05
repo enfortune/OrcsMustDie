@@ -4,6 +4,13 @@
 #include "TrapType.h"
 #include "TrapTypeComponent.h"
 
+Trap::~Trap()
+{
+	delete pComponentAttackable_;
+	delete pComponentBlockable_;
+	delete pComponentTriggerable_;
+}
+
 void Trap::interaction(std::vector<PlayerDummy>& playerList)
 {
 	if (pType_->isInteractionToArray_[static_cast<size_t> (TrapType::eInteractionTo::PLAYER)])
@@ -38,22 +45,22 @@ void Trap::interaction(std::vector<ItemDummy>& itemList)
 void Trap::init(TrapType & type, D3DXMATRIXA16 & matrixWorld)
 {
 	pType_ = &type;
-	matrixWorld_ = matrixWorld;
+	matrixWorld_ = matrixWorld * type.matrixLocal_;
 
 	frustumWorld_ = type.frustumLocal_.TransformCoord(&matrixWorld);
 	frustumInteractionWorld_ = type.frustumInteractionLocal_.TransformCoord(&matrixWorld);
 
-	if (type.pComponentAttackable_)
+	if (type.pTypeComponentAttackable_)
 	{
-		pComponentAttackable_ = type.pComponentAttackable_->newComponentObject();
+		pComponentAttackable_ = type.pTypeComponentAttackable_->newComponentObject();
 		frustumInteractionWorld_ = pComponentAttackable_->frustumAttackWorld_.TransformCoord(&matrixWorld);
 	}
 
-	if (type.pComponentBlockable_)
-		pComponentBlockable_ = type.pComponentBlockable_->newComponentObject();
+	if (type.pTypeComponentBlockable_)
+		pComponentBlockable_ = type.pTypeComponentBlockable_->newComponentObject();
 
-	if (type.pComponentTriggerable_)
-		pComponentTriggerable_ = type.pComponentTriggerable_->newComponentObject();
+	if (type.pTypeComponentTriggerable_)
+		pComponentTriggerable_ = type.pTypeComponentTriggerable_->newComponentObject();
 }
 
 void Trap::update(float fDelta)

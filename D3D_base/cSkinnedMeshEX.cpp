@@ -24,7 +24,14 @@ void cSkinnedMeshEX::Setup(IN char* szFolder, IN char* szFile)
 	cAllocateHierarchyEX boneHierarchy;
 	boneHierarchy.SetFolder(szFolder);
 
-	D3DXLoadMeshHierarchyFromX(szFile,
+	std::string sFullPath;
+	
+	if (strlen(szFolder) > 0)
+		sFullPath = szFolder + std::string("/") + szFile;
+	else
+		sFullPath = szFile;
+	
+	D3DXLoadMeshHierarchyFromX(sFullPath.c_str(),
 		D3DXMESH_MANAGED | D3DXMESH_32BIT,
 		g_pD3DDevice,
 		&boneHierarchy,
@@ -149,7 +156,11 @@ void cSkinnedMeshEX::RenderFrames(LPD3DXFRAME pFrame)
 				g_pD3DDevice->SetFVF(pBoneMesh->MeshData.pMesh->GetFVF());
 				g_pD3DDevice->SetMaterial(&pBoneMesh->vecMtl[nAdj]);
 				g_pD3DDevice->SetTexture(NULL, pBoneMesh->vecTexture[nAdj]);
-				pBoneMesh->MeshData.pMesh->DrawSubset(nAdj);
+				
+				if (pBoneMesh->pSkinInfo)
+					pBoneMesh->MeshData.pMesh->DrawSubset(nAdj);
+				else
+					pBoneMesh->pOrigMesh->DrawSubset(nAdj);
 			}
 		}
 	}
