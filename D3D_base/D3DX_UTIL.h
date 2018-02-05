@@ -9,7 +9,7 @@ namespace D3DX_UTIL
 		REAR,
 		LEFT,	// left
 		RIGHT,	// right
-		TOP,		// top
+		TOP,	// top
 		BOTTOM,	// bottom
 		END
 	}DI6; // 4πÊ«‚

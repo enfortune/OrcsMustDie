@@ -13,7 +13,14 @@ enum PLAYERSTATE
 	PLAYERSTATE_JUMPEND,
 	PLAYERSTATE_DEATH,
 	PLAYERSTATE_SKILL_SHILEDBASH,
-	PLAYERSTATE_SKILL_WHIRLWIND
+	PLAYERSTATE_SKILL_WHIRLWIND,
+};
+
+enum PLAYERTRAPTYPE
+{
+	PLAYERTRAPTYPE_BARRICADE,
+	PLAYERTRAPTYPE_SPIKE,
+	PLAYERTRAPTYPE_HEALINGWELL
 };
 
 class cSkinnedMeshEX;
@@ -30,10 +37,11 @@ protected:
 	D3DXVECTOR3					m_vAtkParticleStart;
 	D3DXVECTOR3					m_vAtkParticleEnd;
 
+	SYNTHESIZE_REF(bool, m_bIsBattle, IsBattle)
 	SYNTHESIZE_REF(float, m_pRotationY, RotationY);
 	SYNTHESIZE_REF(D3DXVECTOR3, m_vPlayerPos, PlayerPos);
 	SYNTHESIZE_REF(D3DXVECTOR3, m_vPlayerDir, PlayerDir);
-
+	SYNTHESIZE_REF(PLAYERTRAPTYPE, m_ePlayerTrapType, PlayerTrapType);
 	//KeyCheck
 	bool m_bIs_W;
 	bool m_bIs_S;
@@ -45,7 +53,7 @@ protected:
 
 	float m_fPlayerRestore;
 	float speedX, speedZ;
-	bool isJump;
+
 	//HP,MP นื ป๓ลย
 	//int		nPlayerMaxHp, nPlayerCurHp, nPlayerMaxMp, nPlayerCurMp;
 	BOOL	bPlayerStun, bPlayerMove;
@@ -71,7 +79,7 @@ public:
 	void PlayerHPHealed(int HPheal);
 	void playerMPHealed(int MPheal);
 	void PlayerAttacked();
-	void PlayerWhirlWind();
+	void PlayerWhirlWind(float fDelta);
 	void PlayerShiledBash();
 	void PlayerJumpBlend();
 	void PlayerRotationBlend(float fDelta);

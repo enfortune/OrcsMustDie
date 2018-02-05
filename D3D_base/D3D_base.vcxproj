@@ -175,6 +175,7 @@
     <ClInclude Include="cFontManager.h" />
     <ClInclude Include="cGameParticle.h" />
     <ClInclude Include="cGameParticleEnumList.h" />
+    <ClInclude Include="cGameParticleEruption.h" />
     <ClInclude Include="cGameParticleFirework.h" />
     <ClInclude Include="cGameParticleShockwave.h" />
     <ClInclude Include="cGameParticleSnow.h" />
@@ -232,7 +233,6 @@
     <ClInclude Include="cTimer_GetTickCount.h" />
     <ClInclude Include="cTimer_QueryPerformanceFrequency.h" />
     <ClInclude Include="cTransformData.h" />
-    <ClInclude Include="cTrap.h" />
     <ClInclude Include="D3DX_UTIL.h" />
     <ClInclude Include="D3D_base.h" />
     <ClInclude Include="enPhysicsBody.h" />
@@ -278,6 +278,7 @@
     <ClCompile Include="cEnemy2.cpp" />
     <ClCompile Include="cFontManager.cpp" />
     <ClCompile Include="cGameParticle.cpp" />
+    <ClCompile Include="cGameParticleEruption.cpp" />
     <ClCompile Include="cGameParticleFirework.cpp" />
     <ClCompile Include="cGameParticleShockwave.cpp" />
     <ClCompile Include="cGameParticleSnow.cpp" />
@@ -328,7 +329,6 @@
     <ClCompile Include="cTimer_GetTickCount.cpp" />
     <ClCompile Include="cTimer_QueryPerformanceFrequency.cpp" />
     <ClCompile Include="cTransformData.cpp" />
-    <ClCompile Include="cTrap.cpp" />
     <ClCompile Include="D3DX_UTIL.cpp" />
     <ClCompile Include="D3D_base.cpp" />
     <ClCompile Include="Graph.cpp" />

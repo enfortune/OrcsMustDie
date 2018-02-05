@@ -100,9 +100,6 @@
     <Filter Include="김완수\MapTool">
       <UniqueIdentifier>{65bbc7f0-8e7a-4c58-b523-03636f24b4a4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="김완수\Trap">
-      <UniqueIdentifier>{92dc699f-f39c-4351-8644-21aafe980161}</UniqueIdentifier>
-    </Filter>
     <Filter Include="김완수\UI\InGame">
       <UniqueIdentifier>{56d6c34b-cac0-4a41-8d97-dbb3e2bead32}</UniqueIdentifier>
     </Filter>
@@ -292,9 +289,6 @@
     <ClInclude Include="cGameUISprite.h">
       <Filter>Foundation\cGameUI</Filter>
     </ClInclude>
-    <ClInclude Include="cTrap.h">
-      <Filter>김완수\Trap</Filter>
-    </ClInclude>
     <ClInclude Include="cMapToolScene.h">
       <Filter>김완수\MapTool</Filter>
     </ClInclude>
@@ -435,6 +429,9 @@
     </ClInclude>
     <ClInclude Include="cEnemy2.h">
       <Filter>정현식</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameParticleEruption.h">
+      <Filter>SampleCode</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -579,9 +576,6 @@
     <ClCompile Include="cGameUISprite.cpp">
       <Filter>Foundation\cGameUI</Filter>
     </ClCompile>
-    <ClCompile Include="cTrap.cpp">
-      <Filter>김완수\Trap</Filter>
-    </ClCompile>
     <ClCompile Include="cMapToolScene.cpp">
       <Filter>김완수\MapTool</Filter>
     </ClCompile>
@@ -710,6 +704,9 @@
     </ClCompile>
     <ClCompile Include="cEnemy2.cpp">
       <Filter>정현식</Filter>
+    </ClCompile>
+    <ClCompile Include="cGameParticleEruption.cpp">
+      <Filter>SampleCode</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

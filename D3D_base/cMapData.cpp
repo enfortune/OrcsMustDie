@@ -575,7 +575,7 @@ bool cMapData::IsEnableToBuild(int nX, int nY, int nZ, DIRECTION_6 enDir, int nW
 
 	return true;
 }
-bool cMapData::IsEnableToBuild(OUT DIRECTION_6& enPickingDir, cRay ray, float fDistMax, int nWidth, int nHeight)
+bool cMapData::IsEnableToBuild(OUT D3DXVECTOR3& vCenter, OUT DIRECTION_6& enPickingDir, cRay ray, float fDistMax, int nWidth, int nHeight)
 {
 	int nX, nY, nZ;
 	bool bRet = false;
@@ -585,12 +585,81 @@ bool cMapData::IsEnableToBuild(OUT DIRECTION_6& enPickingDir, cRay ray, float fD
 		return false;
 
 	bRet = this->IsEnableToBuild(nX, nY, nZ, enDir, nWidth, nHeight);
+
+	//vCenter = m_arrGridBox[nX][nY][nZ].stCube.GetCenterVec3(enDir);
+
+
+	int nMinX, nMinY, nMinZ;
+	int nMaxX, nMaxY, nMaxZ;
+	D3DXVECTOR3 vTemp(0.f, 0.f, 0.f);
+
+	switch (enDir)
+	{
+	case D3DX_UTIL::DIRECTION_6::FRONT:
+		nMinX = nX - nWidth / 2;
+		nMaxX = nX + (nWidth - 1) / 2;
+		nMinY = nY - nHeight / 2;
+		nMaxY = nY + (nHeight - 1) / 2;
+		nMinZ = nMaxZ = nZ;
+		break;
+	case D3DX_UTIL::DIRECTION_6::REAR:
+		nMinX = nX - (nWidth - 1) / 2;
+		nMaxX = nX + nWidth / 2;
+		nMinY = nY - (nHeight - 1) / 2;
+		nMaxY = nY + nHeight / 2;
+		nMinZ = nMaxZ = nZ;
+		break;
+	case D3DX_UTIL::DIRECTION_6::LEFT:
+		nMinX = nMaxX = nX;
+		nMinY = nY - nHeight / 2;
+		nMaxY = nY + (nHeight - 1) / 2;
+		nMinZ = nZ - nWidth / 2;
+		nMaxZ = nZ + (nWidth - 1) / 2;
+		break;
+	case D3DX_UTIL::DIRECTION_6::RIGHT:
+		nMinX = nMaxX = nX;
+		nMinY = nY - (nHeight - 1) / 2;
+		nMaxY = nY + nHeight / 2;
+		nMinZ = nZ - (nWidth - 1) / 2;
+		nMaxZ = nZ + nWidth / 2;
+		break;
+	case D3DX_UTIL::DIRECTION_6::TOP:
+		nMinX = nX - (nWidth - 1) / 2;
+		nMaxX = nX + nWidth / 2;
+		nMinY = nMaxY = nY;
+		nMinZ = nZ - (nHeight - 1) / 2;
+		nMaxZ = nZ + nHeight / 2;
+		break;
+	case D3DX_UTIL::DIRECTION_6::BOTTOM:
+		nMinX = nX - nWidth / 2;
+		nMaxX = nX + (nWidth - 1) / 2;
+		nMinY = nMaxY = nY;
+		nMinZ = nZ - nHeight / 2;
+		nMaxZ = nZ + (nHeight - 1) / 2;
+		break;
+	}
+
+	for (int x = nMinX; x <= nMaxX; x++)
+	{
+		for (int y = nMinY; y <= nMaxY; y++)
+		{
+			for (int z = nMinZ; z <= nMaxZ; z++)
+			{
+				vTemp += m_arrGridBox[x][y][z].stCube.GetCenterVec3(enDir);
+			}
+		}
+	}
+
+	vTemp /= nWidth * nHeight;
+
+	vCenter = vTemp;
+
 	enPickingDir = enDir;
 
 	return bRet;
 }
 
-bool cMapData::BuildTrap(cTrap* pTrap, cRay ray, float fDistMax, int nWidth, int nHeight)
+bool cMapData::BuildTrap(Trap* pTrap, cRay ray, float fDistMax, int nWidth, int nHeight)
 {
 	int nX, nY, nZ;
 	DIRECTION_6 enDir;
@@ -686,9 +755,9 @@ bool cMapData::BuildTrap(cTrap* pTrap, cRay ray, float fDistMax, int nWidth, int
 
 	return true;
 }
-bool cMapData::ClearTrap(cTrap* pTrap)
+bool cMapData::ClearTrap(Trap* pTrap)
 {
-	std::map<cTrap*, ST_TRAPBUILDDATA>::iterator iter;
+	std::map<Trap*, ST_TRAPBUILDDATA>::iterator iter;
 	iter = m_mapTrapBuildData.find(pTrap);
 
 	if (iter == m_mapTrapBuildData.end())

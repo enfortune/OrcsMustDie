@@ -9,7 +9,7 @@
 #define MAPSIZE_Y_ZEROSTD 4
 #define MAPSIZE_CUBE 2
 
-class cTrap;
+class Trap;
 class cHeightMap;
 class cRay;
 
@@ -26,12 +26,12 @@ struct ST_GRIDBOX
 	LPDIRECT3DVERTEXBUFFER9 pVB;
 	ST_FRUSTUM stCube;
 
-	cTrap* pRight;  //  1  0  0
-	cTrap* pLeft;	// -1  0  0
-	cTrap* pTop;	//  0  1  0
-	cTrap* pBottom; //  0 -1  0
-	cTrap* pFront;  //  0  0  1
-	cTrap* pRear;   //  0  0 -1
+	Trap* pRight;  //  1  0  0
+	Trap* pLeft;	// -1  0  0
+	Trap* pTop;	//  0  1  0
+	Trap* pBottom; //  0 -1  0
+	Trap* pFront;  //  0  0  1
+	Trap* pRear;   //  0  0 -1
 
 	ST_GRIDBOX()
 	{
@@ -180,7 +180,7 @@ protected:
 	D3DMATERIAL9 m_arrMtrl[GRIDBOXKIND_END];
 
 	/* for Trap */
-	std::map<cTrap*, ST_TRAPBUILDDATA> m_mapTrapBuildData;
+	std::map<Trap*, ST_TRAPBUILDDATA> m_mapTrapBuildData;
 
 public:
 	cMapData();
@@ -212,9 +212,9 @@ public:
 	bool GetPickingBox(OUT int& nX, OUT int& nY, OUT int& nZ, OUT DIRECTION_6& enPickingDir, IN cRay ray, IN float fDistMax);
 	bool IsEnableToBuild(OUT int nX, int nY, int nZ, DIRECTION_6 enDir, int nWidth, int nHeight);
 
-	bool IsEnableToBuild(OUT DIRECTION_6& enPickingDir, cRay ray, float fDistMax, int nWidth, int nHeight);
-	bool BuildTrap(cTrap* pTrap, cRay ray, float fDistMax, int nWidth, int nHeight);
-	bool ClearTrap(cTrap* pTrap);
+	bool IsEnableToBuild(OUT D3DXVECTOR3& vCenter, OUT DIRECTION_6& enPickingDir, cRay ray, float fDistMax, int nWidth, int nHeight);
+	bool BuildTrap(Trap* pTrap, cRay ray, float fDistMax, int nWidth, int nHeight);
+	bool ClearTrap(Trap* pTrap);
 
 	/* for interface */
 protected: 

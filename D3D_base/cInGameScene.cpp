@@ -10,6 +10,9 @@
 #include "cTransformData.h"
 #include "cEnemy.h"
 #include "cMapData.h"
+#include "TrapTypeManager.h"
+#include "cRay.h"
+#include "TrapType.h"
 
 #define SCREEN_WIDTH GetRectWidth(GetScreenRect())
 #define SCREEN_HEIGHT GetRectHeight(GetScreenRect())
@@ -37,6 +40,9 @@ void cInGameScene::Setup()
 	m_pPhysicsNode->Setup(m_pMap);
 	//m_pPhysicsNode->GetSpaceData().vGravity = D3DXVECTOR3(0, 0, 0);
 	this->AddChild(m_pPhysicsNode);
+
+	m_pTrapTypeManager = new TrapTypeManager;
+	m_pTrapTypeManager->init();
 
 	m_pPlayer_S = new cPlayer;
 	m_pPlayer_S->Setup();
@@ -97,6 +103,33 @@ void cInGameScene::Update(float fDelta)
 			i++;
 		}
 	}
+	cRay rayRay = cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y);
+
+	if (g_pKeyManager->IsOnceKeyDown('1'))
+	{
+		m_pPlayer_S->SetIsBattle(true);
+	}
+	if (g_pKeyManager->IsOnceKeyDown('2'))
+	{
+		m_pPlayer_S->SetIsBattle(false);
+		m_pPlayer_S->SetPlayerTrapType(PLAYERTRAPTYPE_BARRICADE);
+	}
+
+	if (m_pPlayer_S->GetIsBattle() == false)
+	{
+		if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON))
+		{
+			if (m_pPlayer_S->GetPlayerTrapType() == PLAYERTRAPTYPE_BARRICADE)
+			{
+				MakeTrap(m_pTrapTypeManager->find("Barricade"), cRay::RayAtWorldSpace(g_ptMouse.x,g_ptMouse.y));
+			}
+		}
+	}
+
+	//if (g_pKeyManager->IsOnceKeyDown('2'))
+	//{
+	//	m_pPlayer_S->SetIsBattle(false);
+	//}
 
 	cGameScene::Update(fDelta);
 
@@ -105,7 +138,10 @@ void cInGameScene::Update(float fDelta)
 void cInGameScene::Render()
 {
 	m_pGrid->Render();
-
+	for (int i = 0; i < m_vTrap.size(); i++)
+	{
+		m_vTrap[i].render();
+	}
 
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 
@@ -119,12 +155,84 @@ void cInGameScene::Delete()
 	SAFE_RELEASE(m_pUILayer);
 	SAFE_RELEASE(m_pPlayer_S);
 	SAFE_RELEASE(m_pMap);
+	SAFE_DELETE(m_pTrapTypeManager);
 
 	for (int i = 0; i < m_vEnemy.size(); i++)
 	{
 		SAFE_RELEASE(m_vEnemy[i]);
 	}
 	m_vEnemy.clear();
+}
+
+bool cInGameScene::IsMakeTrap(OUT D3DXVECTOR3 &center,TrapType* tType, cRay ray)
+{
+	D3DXVECTOR3 vCenterPos = { 0,0,0 };
+	if (tType->isConstructible(TrapType::eInstallPosition::FLOOR))
+	{
+		DIRECTION_6 Dir_6;
+		Dir_6 = DIRECTION_6::TOP;
+		if (m_pMap->IsEnableToBuild(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight()))
+		{
+			center = vCenterPos;
+			return true;
+		}
+	}
+	if (tType->isConstructible(TrapType::eInstallPosition::CEILING))
+	{
+		DIRECTION_6 Dir_6;
+		Dir_6 = DIRECTION_6::BOTTOM;
+		if (m_pMap->IsEnableToBuild(vCenterPos,Dir_6, ray, 100, tType->getWidth(), tType->getHeight()))
+		{
+			center = vCenterPos;
+			return true;
+		}
+	}
+	if (tType->isConstructible(TrapType::eInstallPosition::WALL))
+	{
+		DIRECTION_6 Dir_6;
+		Dir_6 = DIRECTION_6::LEFT;
+		if(m_pMap->IsEnableToBuild(vCenterPos,Dir_6, ray, 10, tType->getWidth(), tType->getHeight()))
+		{
+			center = vCenterPos;
+			return true;
+		}
+		Dir_6 = DIRECTION_6::RIGHT;
+		if (m_pMap->IsEnableToBuild(vCenterPos,Dir_6, ray, 10, tType->getWidth(), tType->getHeight()))
+		{
+			center = vCenterPos;
+			return true;
+		}
+		Dir_6 = DIRECTION_6::FRONT;
+		if (m_pMap->IsEnableToBuild(vCenterPos,Dir_6, ray, 10, tType->getWidth(), tType->getHeight()))
+		{
+			center = vCenterPos;
+			return true;
+		}
+		Dir_6 = DIRECTION_6::REAR;
+		if (m_pMap->IsEnableToBuild(vCenterPos,Dir_6, ray, 10, tType->getWidth(), tType->getHeight()))
+		{
+			center = vCenterPos;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+void cInGameScene::MakeTrap(TrapType* tType, cRay ray)
+{
+	D3DXVECTOR3 vCenter = { 0,0,0 };
+	if (IsMakeTrap(vCenter,tType, ray))
+	{
+		D3DXMATRIXA16 matT;
+		D3DXMatrixTranslation(&matT, vCenter.x, vCenter.y, vCenter.z);
+
+		m_vTrap.emplace_back();
+		m_vTrap[m_vTrap.size() - 1].init(*tType, matT);
+
+		m_pMap->BuildTrap(&m_vTrap[m_vTrap.size() - 1],ray,10, tType->getWidth(), tType->getHeight());
+	}
+
 }
 void cInGameScene::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {

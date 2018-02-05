@@ -51,6 +51,9 @@ public:
 	friend Trap;
 
 public:
+	inline bool isConstructible(TrapType::eInstallPosition installPosition) const
+	{ return isInstallPositionArray_[static_cast<int> (installPosition)]; }
+
 	inline bool isBlockable() const { return isBlockable_; }
 
 	inline int getWidth() const { return width_; }

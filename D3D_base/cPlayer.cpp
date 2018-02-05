@@ -26,8 +26,9 @@ cPlayer::cPlayer()
 	, m_nPlayerExp(0)
 	, m_nPlayerGold(0)
 	, m_pPlayerState(PLAYERSTATE_STAND)
+	, m_ePlayerTrapType(PLAYERTRAPTYPE_BARRICADE)
 	, m_vEnemy(NULL)
-	, isJump(false)
+	, m_bIsBattle(true)
 	, m_pPlayerParticle(NULL)
 	, speedX(0.f)
 	, speedZ(0.f)
@@ -116,7 +117,7 @@ void cPlayer::Update(float fDelta)
 
 	if (g_pKeyManager->IsStayKeyDown('W') && m_pPlayerState != PLAYERSTATE_ATTACK && m_pPlayerState != PLAYERSTATE_JUMPEND)
 	{
-		speedX += 5.f *  m_vPlayerDir.x;
+		speedX += 5.f * m_vPlayerDir.x;
 		speedZ += 5.f * m_vPlayerDir.z;
 		if (m_pPlayerState != PLAYERSTATE_MOVE && m_pPlayerState != PLAYERSTATE_JUMPSTART &&
 			m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND && m_pPlayerState != PLAYERSTATE_JUMPEND
@@ -201,80 +202,90 @@ void cPlayer::Update(float fDelta)
 		}
 	}
 
-	if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON))
+	if (m_bIsBattle)
 	{
-		if (m_pPlayerState != PLAYERSTATE_ATTACK)
+		if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON))
 		{
-			m_pPlayerState = PLAYERSTATE_ATTACK;
-			IsPlayerState();
+			if (m_pPlayerState != PLAYERSTATE_ATTACK)
+			{
+				m_pPlayerState = PLAYERSTATE_ATTACK;
+				IsPlayerState();
+			}
+			PlayerAttacked();
 		}
-		PlayerAttacked();
-	}
-	if (m_pPlayerState == PLAYERSTATE_ATTACK && m_pPlayerMesh->GetAniEnd() == true)
-	{
-		m_pPlayerState = PLAYERSTATE_STAND;
-		IsPlayerState();
-	}
-
-	if (g_pKeyManager->IsOnceKeyDown(VK_RBUTTON) && nPlayerCurMp > 100 && m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
-	{
-		m_pPlayerState = PLAYERSTATE_SKILL_SHILEDBASH;
-		IsPlayerState();
-
-		ManaCount = 100;
-
-		if (m_pPlayerState == PLAYERSTATE_SKILL_SHILEDBASH)
-		{
-			nPlayerCurMp = nPlayerCurMp - ManaCount;
-		}
-		PlayerShiledBash();
-	}
-	if (m_pPlayerState == PLAYERSTATE_SKILL_SHILEDBASH && m_pPlayerMesh->GetAniEnd() == true)
-	{
-		m_pPlayerState = PLAYERSTATE_STAND;
-		IsPlayerState();
-	}
-
-	if (g_pKeyManager->IsStayKeyDown('R') && nPlayerCurMp > 50)
-	{
-		if (m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
-		{
-			m_pPlayerState = PLAYERSTATE_SKILL_WHIRLWIND;
-			IsPlayerState();
-		}
-		PlayerWhirlWind();
-		nPlayerCurMp - 50;
-		ManaCount += 2;
-		nPlayerCurMp = nPlayerCurMp - ManaCount;
-
-		if (nPlayerCurMp <= 2)
+		if (m_pPlayerState == PLAYERSTATE_ATTACK && m_pPlayerMesh->GetAniEnd() == true)
 		{
 			m_pPlayerState = PLAYERSTATE_STAND;
 			IsPlayerState();
 		}
-	}
 
-
-	if (g_pKeyManager->IsOnceKeyUp('R'))
-	{
-		ManaCount = 0;
-		m_pPlayerState = PLAYERSTATE_STAND;
-		IsPlayerState();
-	}
-
-	if (g_pKeyManager->IsOnceKeyDown(VK_SPACE))
-	{
-		if (m_pPhysicsBody->GetPhysicsData().bOnGround == true)
+		if (g_pKeyManager->IsOnceKeyDown(VK_RBUTTON) && nPlayerCurMp > 100 && m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
 		{
-			isJump = true;
-			m_pPhysicsBody->GetPhysicsData().vVelocity.y = 5.f;
+			m_pPlayerState = PLAYERSTATE_SKILL_SHILEDBASH;
+			IsPlayerState();
+
+			ManaCount = 100;
+
+			if (m_pPlayerState == PLAYERSTATE_SKILL_SHILEDBASH)
+			{
+				nPlayerCurMp = nPlayerCurMp - ManaCount;
+			}
+			PlayerShiledBash();
+		}
+		if (m_pPlayerState == PLAYERSTATE_SKILL_SHILEDBASH && m_pPlayerMesh->GetAniEnd() == true)
+		{
+			m_pPlayerState = PLAYERSTATE_STAND;
+			IsPlayerState();
+		}
+
+		if (g_pKeyManager->IsStayKeyDown('R') && nPlayerCurMp > 50)
+		{
 			if (m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
 			{
-				m_pPlayerState = PLAYERSTATE_JUMPSTART;
+				m_pPlayerState = PLAYERSTATE_SKILL_WHIRLWIND;
+				IsPlayerState();
+			}
+			nPlayerCurMp - 50;
+			ManaCount += 2;
+			nPlayerCurMp = nPlayerCurMp - ManaCount;
+
+			m_fPlayerRestore += fDelta;
+
+			if (m_fPlayerRestore >= 1.f)
+			{
+				PlayerWhirlWind(fDelta);
+				//m_fPlayerRestore = 0;
+			}
+
+			if (nPlayerCurMp <= 2)
+			{
+				m_pPlayerState = PLAYERSTATE_STAND;
 				IsPlayerState();
 			}
 		}
+
+
+		if (g_pKeyManager->IsOnceKeyUp('R'))
+		{
+			ManaCount = 0;
+			m_pPlayerState = PLAYERSTATE_STAND;
+			IsPlayerState();
+		}
+
+		if (g_pKeyManager->IsOnceKeyDown(VK_SPACE))
+		{
+			if (m_pPhysicsBody->GetPhysicsData().bOnGround == true)
+			{
+				m_pPhysicsBody->GetPhysicsData().vVelocity.y = 5.f;
+				if (m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
+				{
+					m_pPlayerState = PLAYERSTATE_JUMPSTART;
+					IsPlayerState();
+				}
+			}
+		}
 	}
+
 	PlayerRotationBlend(fDelta);
 	PlayerJumpBlend();
 	PlayerParticleUpdate();
@@ -289,6 +300,7 @@ void cPlayer::Update(float fDelta)
 
 	m_pPhysicsBody->GetPhysicsData().vVelocity.x = speedX;
 	m_pPhysicsBody->GetPhysicsData().vVelocity.z = speedZ;
+	
 
 	m_pPhysicsBody->GetPhysicsData().fRotAngle = m_pRotationY;
 	//GetTransformData()->SetAxis(D3DXVECTOR3(0, 1, 0));
@@ -392,12 +404,13 @@ void cPlayer::PlayerAttacked()
 	}
 }
 
-void cPlayer::PlayerWhirlWind()
+void cPlayer::PlayerWhirlWind(float fDelta)
 {
 	for (int i = 0; i < (*m_vEnemy).size(); i++)
 	{
 		float PlayerLength;
 		PlayerLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vEnemy)[i]->GetTransformData()->GetPosition()));
+		
 		if (PlayerLength < 1.5f)
 		{
 			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage);
@@ -552,10 +565,9 @@ void cPlayer::IsPlayerState()
 	case PLAYERSTATE_DEATH :
 		m_pPlayerMesh->SetAnimationSetBlend(0, 9, false);
 		break;
-	default:
+		default:
 		break;
 	}
-
 }
 
 void cPlayer::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
