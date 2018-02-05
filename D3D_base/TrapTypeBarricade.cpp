@@ -17,13 +17,18 @@ TrapTypeBarricade::TrapTypeBarricade()
 	matrixLocal_ = matrixScale * matrixRotation;
 
 	frustumLocal_.vNear_00 = {-1.0f, 0.0f, -1.0f};
-	frustumLocal_.vNear_01 = {-1.0f, 0.3f, -1.0f};
+	frustumLocal_.vNear_01 = {-1.0f, 0.6f, -1.0f};
 	frustumLocal_.vNear_10 = {-1.0f, 0.0f, +1.0f};
-	frustumLocal_.vNear_11 = {-1.0f, 0.3f, +1.0f};
+	frustumLocal_.vNear_11 = {-1.0f, 0.6f, +1.0f};
 	frustumLocal_.vFar_00 = {1.0f, 0.0f, -1.0f};
-	frustumLocal_.vFar_01 = {1.0f, 0.3f, -1.0f};
+	frustumLocal_.vFar_01 = {1.0f, 0.6f, -1.0f};
 	frustumLocal_.vFar_10 = {1.0f, 0.0f, +1.0f};
-	frustumLocal_.vFar_11 = {1.0f, 0.3f, +1.0f};
+	frustumLocal_.vFar_11 = {1.0f, 0.6f, +1.0f};
+
+	D3DXMATRIXA16 matrixInverse {};
+	D3DXMatrixInverse(&matrixInverse, nullptr, &matrixLocal_);
+
+	frustumLocal_ = frustumLocal_.TransformCoord(&matrixInverse);
 
 	isBlockable_ = true;
 
