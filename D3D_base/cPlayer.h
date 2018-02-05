@@ -43,6 +43,8 @@ protected:
 	float m_fPlayerCurrRot;
 	float m_fPlayerTargetRot;
 
+	float m_fPlayerRestore;
+	float speedX, speedZ;
 	bool isJump;
 	//HP,MP นื ป๓ลย
 	//int		nPlayerMaxHp, nPlayerCurHp, nPlayerMaxMp, nPlayerCurMp;
@@ -72,6 +74,7 @@ public:
 	void PlayerWhirlWind();
 	void PlayerShiledBash();
 	void PlayerJumpBlend();
+	void PlayerRotationBlend(float fDelta);
 	void setEnemy(std::vector<cEnemy*>* Enemy);
 	void IsPlayerState();
 
@@ -79,4 +82,3 @@ public:
 
 	void PlayerParticleUpdate();
 };
-

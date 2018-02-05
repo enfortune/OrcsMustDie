@@ -29,6 +29,9 @@ cPlayer::cPlayer()
 	, m_vEnemy(NULL)
 	, isJump(false)
 	, m_pPlayerParticle(NULL)
+	, speedX(0.f)
+	, speedZ(0.f)
+	, m_fPlayerRestore(0.0f)
 {
 }
 
@@ -76,19 +79,19 @@ void cPlayer::Update(float fDelta)
 
 	m_pPlayerParticle->Update(fDelta);
 
-	float speedX = 0.f;
-	float speedZ = 0.f;
-
 	int ManaCount = 0;
+	
+	speedX = 0;
+	speedZ = 0;
 
-	if (nPlayerMaxMp < nPlayerCurMp) nPlayerMaxMp = nPlayerCurMp;
-	if (nPlayerMaxMp != nPlayerCurMp) nPlayerCurMp += 1;
+	if (nPlayerCurMp == 0) nPlayerCurMp = 0;
 
 	if (nPlayerMaxHp < nPlayerCurHp) nPlayerMaxHp = nPlayerCurHp;
-	if (nPlayerMaxHp != nPlayerCurHp) nPlayerCurHp += 1;
+	if (nPlayerMaxMp < nPlayerCurMp) nPlayerMaxMp = nPlayerCurMp;
 
 	if (nPlayerCurHp == 0)
 	{
+		nPlayerCurHp = 0;
 		m_pPlayerState = PLAYERSTATE_DEATH;
 		IsPlayerState();
 	}
@@ -111,7 +114,7 @@ void cPlayer::Update(float fDelta)
 	m_bIs_D = false;
 	m_fPlayerTargetRot = 0.0f;
 
-	if (g_pKeyManager->IsStayKeyDown('W') && m_pPlayerState != PLAYERSTATE_ATTACK)
+	if (g_pKeyManager->IsStayKeyDown('W') && m_pPlayerState != PLAYERSTATE_ATTACK && m_pPlayerState != PLAYERSTATE_JUMPEND)
 	{
 		speedX += 5.f *  m_vPlayerDir.x;
 		speedZ += 5.f * m_vPlayerDir.z;
@@ -133,7 +136,7 @@ void cPlayer::Update(float fDelta)
 		}
 	}
 
-	if (g_pKeyManager->IsStayKeyDown('S') && m_pPlayerState != PLAYERSTATE_ATTACK)
+	if (g_pKeyManager->IsStayKeyDown('S') && m_pPlayerState != PLAYERSTATE_ATTACK && m_pPlayerState != PLAYERSTATE_JUMPEND)
 	{
 		speedX -= 5.f *  m_vPlayerDir.x;
 		speedZ -= 5.f * m_vPlayerDir.z;
@@ -154,7 +157,7 @@ void cPlayer::Update(float fDelta)
 			IsPlayerState();
 		}
 	}
-	if (g_pKeyManager->IsStayKeyDown('A') && m_pPlayerState != PLAYERSTATE_ATTACK)
+	if (g_pKeyManager->IsStayKeyDown('A') && m_pPlayerState != PLAYERSTATE_ATTACK && m_pPlayerState != PLAYERSTATE_JUMPEND)
 	{
 		speedX += 5.f *  vLeft.x;
 		speedZ += 5.f * vLeft.z;
@@ -176,7 +179,7 @@ void cPlayer::Update(float fDelta)
 		}
 	}
 
-	if (g_pKeyManager->IsStayKeyDown('D') && m_pPlayerState != PLAYERSTATE_ATTACK)
+	if (g_pKeyManager->IsStayKeyDown('D') && m_pPlayerState != PLAYERSTATE_ATTACK && m_pPlayerState != PLAYERSTATE_JUMPEND)
 	{
 		speedX -= 5.f *  vLeft.x;
 		speedZ -= 5.f * vLeft.z;
@@ -213,7 +216,7 @@ void cPlayer::Update(float fDelta)
 		IsPlayerState();
 	}
 
-	if (g_pKeyManager->IsOnceKeyDown(VK_RBUTTON) && nPlayerCurMp > 100)
+	if (g_pKeyManager->IsOnceKeyDown(VK_RBUTTON) && nPlayerCurMp > 100 && m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
 	{
 		m_pPlayerState = PLAYERSTATE_SKILL_SHILEDBASH;
 		IsPlayerState();
@@ -232,7 +235,7 @@ void cPlayer::Update(float fDelta)
 		IsPlayerState();
 	}
 
-	if (g_pKeyManager->IsStayKeyDown('R') && nPlayerCurMp > 20)
+	if (g_pKeyManager->IsStayKeyDown('R') && nPlayerCurMp > 50)
 	{
 		if (m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
 		{
@@ -240,17 +243,23 @@ void cPlayer::Update(float fDelta)
 			IsPlayerState();
 		}
 		PlayerWhirlWind();
+		nPlayerCurMp - 50;
 		ManaCount += 2;
-		
-		if (m_pPlayerState == PLAYERSTATE_SKILL_WHIRLWIND)
+		nPlayerCurMp = nPlayerCurMp - ManaCount;
+
+		if (nPlayerCurMp <= 2)
 		{
-			nPlayerCurMp = nPlayerCurMp - ManaCount;
+			m_pPlayerState = PLAYERSTATE_STAND;
+			IsPlayerState();
 		}
 	}
-	else if (g_pKeyManager->IsOnceKeyUp('R'))
+
+
+	if (g_pKeyManager->IsOnceKeyUp('R'))
 	{
 		ManaCount = 0;
 		m_pPlayerState = PLAYERSTATE_STAND;
+		IsPlayerState();
 	}
 
 	if (g_pKeyManager->IsOnceKeyDown(VK_SPACE))
@@ -266,74 +275,16 @@ void cPlayer::Update(float fDelta)
 			}
 		}
 	}
+	PlayerRotationBlend(fDelta);
 	PlayerJumpBlend();
 	PlayerParticleUpdate();
 
-	//회전블랜딩
-	if (fDelta)
+	m_fPlayerRestore += fDelta;
+	if (m_fPlayerRestore >= 1.0f)
 	{
-		if (!m_bIs_A && !m_bIs_S && !m_bIs_D) m_fPlayerTargetRot = 0.f;
-		else if (m_bIs_A)
-		{
-			if (m_bIs_W) m_fPlayerTargetRot = -D3DX_PI / 4.f;
-			else if (m_bIs_S) m_fPlayerTargetRot = -D3DX_PI * 3.f / 4.f;
-			else m_fPlayerTargetRot = -D3DX_PI / 2.f;
-		}
-		else if (m_bIs_D)
-		{
-			if (m_bIs_W) m_fPlayerTargetRot = +D3DX_PI / 4.f;
-			else if (m_bIs_S) m_fPlayerTargetRot = +D3DX_PI * 3.f / 4.f;
-			else m_fPlayerTargetRot = +D3DX_PI / 2.f;
-		}
-		else if (m_bIs_S)
-		{
-			m_fPlayerTargetRot = D3DX_PI;
-		}
-
-		while (m_fPlayerCurrRot <= -D3DX_PI || m_fPlayerCurrRot > D3DX_PI)
-		{
-			if (m_fPlayerCurrRot <= -D3DX_PI) m_fPlayerCurrRot += D3DX_PI * 2.f;
-			if (m_fPlayerCurrRot > D3DX_PI) m_fPlayerCurrRot -= D3DX_PI * 2.f;
-		}
-
-		float fRotSpeed = 3.0f;
-		float fRotEpsilon = D3DX_PI * fRotSpeed * fDelta * 1.99f;
-
-		if (m_fPlayerCurrRot >= 0.f)
-		{
-			if (m_fPlayerCurrRot > m_fPlayerTargetRot && m_fPlayerCurrRot - D3DX_PI < m_fPlayerTargetRot)
-			{
-				m_fPlayerCurrRot -= D3DX_PI * fRotSpeed * fDelta;
-				//if (m_fPlayerCurrRot < m_fPlayerTargetRot) m_fPlayerCurrRot = m_fPlayerTargetRot;
-			}
-			else
-			{
-				m_fPlayerCurrRot += D3DX_PI * fRotSpeed * fDelta;
-				//if (m_fPlayerCurrRot > m_fPlayerTargetRot) m_fPlayerCurrRot = m_fPlayerTargetRot;
-			}
-		}
-		else
-		{
-			if (m_fPlayerCurrRot < m_fPlayerTargetRot && m_fPlayerCurrRot + D3DX_PI > m_fPlayerTargetRot)
-			{
-				m_fPlayerCurrRot += D3DX_PI * fRotSpeed * fDelta;
-				//if (m_fPlayerCurrRot > m_fPlayerTargetRot) m_fPlayerCurrRot = m_fPlayerTargetRot;
-			}
-			else
-			{
-				m_fPlayerCurrRot -= D3DX_PI * fRotSpeed * fDelta;
-				//if (m_fPlayerCurrRot < m_fPlayerTargetRot) m_fPlayerCurrRot = m_fPlayerTargetRot;
-			}
-		}
-		if (fabs(m_fPlayerCurrRot - m_fPlayerTargetRot) <= fRotEpsilon ||
-			fabs(m_fPlayerCurrRot - m_fPlayerTargetRot) >= (D3DX_PI * 2.f - fRotEpsilon))
-			m_fPlayerCurrRot = m_fPlayerTargetRot;
-
-		while (m_fPlayerCurrRot <= -D3DX_PI || m_fPlayerCurrRot > D3DX_PI)
-		{
-			if (m_fPlayerCurrRot <= -D3DX_PI) m_fPlayerCurrRot += D3DX_PI * 2.f;
-			if (m_fPlayerCurrRot > D3DX_PI) m_fPlayerCurrRot -= D3DX_PI * 2.f;
-		}
+		if (nPlayerMaxHp != nPlayerCurHp) nPlayerCurHp += 5;
+		if (nPlayerMaxMp != nPlayerCurMp) nPlayerCurMp += 5;
+		m_fPlayerRestore = 0;
 	}
 
 	m_pPhysicsBody->GetPhysicsData().vVelocity.x = speedX;
@@ -494,6 +445,72 @@ void cPlayer::PlayerJumpBlend()
 		IsPlayerState();
 	}
 
+}
+
+void cPlayer::PlayerRotationBlend(float fDelta)
+{
+	if (!m_bIs_A && !m_bIs_S && !m_bIs_D) m_fPlayerTargetRot = 0.f;
+	else if (m_bIs_A)
+	{
+		if (m_bIs_W) m_fPlayerTargetRot = -D3DX_PI / 4.f;
+		else if (m_bIs_S) m_fPlayerTargetRot = -D3DX_PI * 3.f / 4.f;
+		else m_fPlayerTargetRot = -D3DX_PI / 2.f;
+	}
+	else if (m_bIs_D)
+	{
+		if (m_bIs_W) m_fPlayerTargetRot = +D3DX_PI / 4.f;
+		else if (m_bIs_S) m_fPlayerTargetRot = +D3DX_PI * 3.f / 4.f;
+		else m_fPlayerTargetRot = +D3DX_PI / 2.f;
+	}
+	else if (m_bIs_S)
+	{
+		m_fPlayerTargetRot = D3DX_PI;
+	}
+
+	while (m_fPlayerCurrRot <= -D3DX_PI || m_fPlayerCurrRot > D3DX_PI)
+	{
+		if (m_fPlayerCurrRot <= -D3DX_PI) m_fPlayerCurrRot += D3DX_PI * 2.f;
+		if (m_fPlayerCurrRot > D3DX_PI) m_fPlayerCurrRot -= D3DX_PI * 2.f;
+	}
+
+	float fRotSpeed = 3.0f;
+	float fRotEpsilon = D3DX_PI * fRotSpeed * fDelta * 1.99f;
+
+	if (m_fPlayerCurrRot >= 0.f)
+	{
+		if (m_fPlayerCurrRot > m_fPlayerTargetRot && m_fPlayerCurrRot - D3DX_PI < m_fPlayerTargetRot)
+		{
+			m_fPlayerCurrRot -= D3DX_PI * fRotSpeed * fDelta;
+			//if (m_fPlayerCurrRot < m_fPlayerTargetRot) m_fPlayerCurrRot = m_fPlayerTargetRot;
+		}
+		else
+		{
+			m_fPlayerCurrRot += D3DX_PI * fRotSpeed * fDelta;
+			//if (m_fPlayerCurrRot > m_fPlayerTargetRot) m_fPlayerCurrRot = m_fPlayerTargetRot;
+		}
+	}
+	else
+	{
+		if (m_fPlayerCurrRot < m_fPlayerTargetRot && m_fPlayerCurrRot + D3DX_PI > m_fPlayerTargetRot)
+		{
+			m_fPlayerCurrRot += D3DX_PI * fRotSpeed * fDelta;
+			//if (m_fPlayerCurrRot > m_fPlayerTargetRot) m_fPlayerCurrRot = m_fPlayerTargetRot;
+		}
+		else
+		{
+			m_fPlayerCurrRot -= D3DX_PI * fRotSpeed * fDelta;
+			//if (m_fPlayerCurrRot < m_fPlayerTargetRot) m_fPlayerCurrRot = m_fPlayerTargetRot;
+		}
+	}
+	if (fabs(m_fPlayerCurrRot - m_fPlayerTargetRot) <= fRotEpsilon ||
+		fabs(m_fPlayerCurrRot - m_fPlayerTargetRot) >= (D3DX_PI * 2.f - fRotEpsilon))
+		m_fPlayerCurrRot = m_fPlayerTargetRot;
+
+	while (m_fPlayerCurrRot <= -D3DX_PI || m_fPlayerCurrRot > D3DX_PI)
+	{
+		if (m_fPlayerCurrRot <= -D3DX_PI) m_fPlayerCurrRot += D3DX_PI * 2.f;
+		if (m_fPlayerCurrRot > D3DX_PI) m_fPlayerCurrRot -= D3DX_PI * 2.f;
+	}
 }
 
 void cPlayer::setEnemy(std::vector<cEnemy*>* Enemy)
