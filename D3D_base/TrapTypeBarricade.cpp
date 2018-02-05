@@ -7,9 +7,8 @@
 
 TrapTypeBarricade::TrapTypeBarricade()
 {
-	//pModel_ = ;
 	modelList_.resize(1);
-	modelList_[0].Setup("Resource/Trap/Barricade", "Barricade.X");
+	modelList_[0].Setup("Resource/Trap/Barricade", "Resource/Trap/Barricade/Barricade.X");
 
 	D3DXMATRIXA16 matrixScale {}, matrixRotation {};
 	D3DXMatrixScaling(&matrixScale, 0.005f, 0.005f, 0.005f);
@@ -17,14 +16,14 @@ TrapTypeBarricade::TrapTypeBarricade()
 
 	matrixLocal_ = matrixScale * matrixRotation;
 
-	frustumLocal_.vNear_00 = {-0.5f, 0.0f, -0.5f};
-	frustumLocal_.vNear_01 = {-0.5f, 0.3f, -0.5f};
-	frustumLocal_.vNear_10 = {-0.5f, 0.0f, +0.5f};
-	frustumLocal_.vNear_11 = {-0.5f, 0.3f, +0.5f};
-	frustumLocal_.vFar_00 = {0.5f, 0.0f, -0.5f};
-	frustumLocal_.vFar_01 = {0.5f, 0.3f, -0.5f};
-	frustumLocal_.vFar_10 = {0.5f, 0.0f, +0.5f};
-	frustumLocal_.vFar_11 = {0.5f, 0.3f, +0.5f};
+	frustumLocal_.vNear_00 = {-1.0f, 0.0f, -1.0f};
+	frustumLocal_.vNear_01 = {-1.0f, 0.3f, -1.0f};
+	frustumLocal_.vNear_10 = {-1.0f, 0.0f, +1.0f};
+	frustumLocal_.vNear_11 = {-1.0f, 0.3f, +1.0f};
+	frustumLocal_.vFar_00 = {1.0f, 0.0f, -1.0f};
+	frustumLocal_.vFar_01 = {1.0f, 0.3f, -1.0f};
+	frustumLocal_.vFar_10 = {1.0f, 0.0f, +1.0f};
+	frustumLocal_.vFar_11 = {1.0f, 0.3f, +1.0f};
 
 	isBlockable_ = true;
 

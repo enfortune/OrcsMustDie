@@ -14,8 +14,8 @@ void TrapType::render(D3DXMATRIXA16 & matrixWorld)
 {
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matrixWorld);
 
-	for (int i = 0; i < static_cast<int> (modelList_.size()); ++i)
-		modelList_[i].Render();
+	/*for (int i = 0; i < static_cast<int> (modelList_.size()); ++i)
+		modelList_[i].Render();*/
 
 	frustumInteractionLocal_.Render(g_pD3DDevice);
 }

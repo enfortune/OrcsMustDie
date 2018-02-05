@@ -31,7 +31,7 @@ void cSkinnedMeshEX::Setup(IN char* szFolder, IN char* szFile)
 	else
 		sFullPath = szFile;
 	
-	D3DXLoadMeshHierarchyFromX(sFullPath.c_str(),
+	D3DXLoadMeshHierarchyFromX(szFile,
 		D3DXMESH_MANAGED | D3DXMESH_32BIT,
 		g_pD3DDevice,
 		&boneHierarchy,
