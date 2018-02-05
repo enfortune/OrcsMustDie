@@ -13,7 +13,14 @@ namespace D3DX_UTIL
 		BOTTOM,	// bottom
 		END
 	}DI6; // 4πÊ«‚
-	
+	typedef struct ST_INDEX_XYZ
+	{
+		int x;
+		int y;
+		int z;
+		ST_INDEX_XYZ(int nX = 0, int nY = 0, int nZ = 0) : x(nX), y(nY), z(nZ)
+		{}
+	}INDEX_XYZ;
 	/* struct */
 	typedef struct ST_SPHERE
 	{

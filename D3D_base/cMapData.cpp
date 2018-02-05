@@ -25,6 +25,8 @@ cMapData::cMapData()
 	ZeroMemory(&m_arrVB[0][0][0], sizeof(LPDIRECT3DVERTEXBUFFER9) * MAPSIZE_X * MAPSIZE_Y * MAPSIZE_Z);
 	ZeroMemory(&m_arrTex[0], sizeof(LPDIRECT3DTEXTURE9) * static_cast<int>(GRIDBOXKIND_END));
 	ZeroMemory(&m_arrMtrl[0], sizeof(D3DMATERIAL9) *  static_cast<int>(GRIDBOXKIND_END));
+
+	m_mapTrapBuildData.clear();
 }
 
 
@@ -170,6 +172,8 @@ void cMapData::Delete()
 			}
 		}
 	}
+
+	m_mapTrapBuildData.clear();
 }
 
 void cMapData::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -248,6 +252,482 @@ void cMapData::LoadData(std::string sFileName)
 	ReadFile(file, m_arrGridBox, sizeof(ST_GRIDBOX) * MAPSIZE_X * MAPSIZE_Y * MAPSIZE_Z, &read, NULL);
 	CloseHandle(file);
 }
+
+bool cMapData::GetPickingBox(OUT int& nX, OUT int& nY, OUT int& nZ, OUT DIRECTION_6& enPickingDir, IN cRay ray, IN float fDistMax)
+{
+	bool bRet = false;
+	float u, v, dist;
+	float fMinDist = -1.f;
+	DIRECTION_6 enRetDir = DIRECTION_6::END;
+	int nRetX, nRetY, nRetZ;
+	for (int x = 0; x < MAPSIZE_X; x++)
+	{
+		for (int y = 0; y < MAPSIZE_Y; y++)
+		{
+			for (int z = 0; z < MAPSIZE_Z; z++)
+			{
+				if ((float)MAPSIZE_CUBE * sqrtf(3) / 2.f + fDistMax > D3DXVec3Length(&(ray.GetPosition() - m_arrGridBox[x][y][z].stCube.GetCenterVec3(DIRECTION_6::END))))
+					continue;
+
+				// 1. rear
+				if (D3DXIntersectTri(
+					&m_arrGridBox[x][y][z].stCube.vNear_00,
+					&m_arrGridBox[x][y][z].stCube.vNear_01,
+					&m_arrGridBox[x][y][z].stCube.vNear_10,
+					&ray.GetPosition(), &ray.GetDirection(),
+					&u, &v, &dist) )
+				{
+					if (fMinDist < -0.001f || dist < fMinDist)
+					{
+						fMinDist = dist;
+						enRetDir = DIRECTION_6::REAR;
+						nRetX = x; nRetY = y; nRetZ = z;
+						bRet = true;
+					}
+				}
+				else if (D3DXIntersectTri(
+					&m_arrGridBox[x][y][z].stCube.vNear_01,
+					&m_arrGridBox[x][y][z].stCube.vNear_11,
+					&m_arrGridBox[x][y][z].stCube.vNear_10,
+					&ray.GetPosition(), &ray.GetDirection(),
+					&u, &v, &dist))
+				{
+					if (fMinDist < -0.001f || dist < fMinDist)
+					{
+						fMinDist = dist;
+						enRetDir = DIRECTION_6::REAR;
+						nRetX = x; nRetY = y; nRetZ = z;
+						bRet = true;
+					}
+				}
+
+				// 2. front
+				if (D3DXIntersectTri(
+					&m_arrGridBox[x][y][z].stCube.vFar_10,
+					&m_arrGridBox[x][y][z].stCube.vFar_01,
+					&m_arrGridBox[x][y][z].stCube.vFar_00,
+					&ray.GetPosition(), &ray.GetDirection(),
+					&u, &v, &dist))
+				{
+					if (fMinDist < -0.001f || dist < fMinDist)
+					{
+						fMinDist = dist;
+						enRetDir = DIRECTION_6::FRONT;
+						nRetX = x; nRetY = y; nRetZ = z;
+						bRet = true;
+					}
+				}
+				else if (D3DXIntersectTri(
+					&m_arrGridBox[x][y][z].stCube.vFar_10,
+					&m_arrGridBox[x][y][z].stCube.vFar_11,
+					&m_arrGridBox[x][y][z].stCube.vFar_01,
+					&ray.GetPosition(), &ray.GetDirection(),
+					&u, &v, &dist))
+				{
+					if (fMinDist < -0.001f || dist < fMinDist)
+					{
+						fMinDist = dist;
+						enRetDir = DIRECTION_6::FRONT;
+						nRetX = x; nRetY = y; nRetZ = z;
+						bRet = true;
+					}
+				}
+
+				// 3. left
+				if (D3DXIntersectTri(
+					&m_arrGridBox[x][y][z].stCube.vNear_00,
+					&m_arrGridBox[x][y][z].stCube.vNear_01,
+					&m_arrGridBox[x][y][z].stCube.vFar_00,
+					&ray.GetPosition(), &ray.GetDirection(),
+					&u, &v, &dist))
+				{
+					if (fMinDist < -0.001f || dist < fMinDist)
+					{
+						fMinDist = dist;
+						enRetDir = DIRECTION_6::LEFT;
+						nRetX = x; nRetY = y; nRetZ = z;
+						bRet = true;
+					}
+				}
+				else if (D3DXIntersectTri(
+					&m_arrGridBox[x][y][z].stCube.vNear_01,
+					&m_arrGridBox[x][y][z].stCube.vFar_01,
+					&m_arrGridBox[x][y][z].stCube.vFar_00,
+					&ray.GetPosition(), &ray.GetDirection(),
+					&u, &v, &dist))
+				{
+					if (fMinDist < -0.001f || dist < fMinDist)
+					{
+						fMinDist = dist;
+						enRetDir = DIRECTION_6::LEFT;
+						nRetX = x; nRetY = y; nRetZ = z;
+						bRet = true;
+					}
+				}
+
+				// 4. right
+				if (D3DXIntersectTri(
+					&m_arrGridBox[x][y][z].stCube.vNear_10,
+					&m_arrGridBox[x][y][z].stCube.vNear_11,
+					&m_arrGridBox[x][y][z].stCube.vFar_10,
+					&ray.GetPosition(), &ray.GetDirection(),
+					&u, &v, &dist))
+				{
+					if (fMinDist < -0.001f || dist < fMinDist)
+					{
+						fMinDist = dist;
+						enRetDir = DIRECTION_6::RIGHT;
+						nRetX = x; nRetY = y; nRetZ = z;
+						bRet = true;
+					}
+				}
+				else if (D3DXIntersectTri(
+					&m_arrGridBox[x][y][z].stCube.vNear_11,
+					&m_arrGridBox[x][y][z].stCube.vFar_11,
+					&m_arrGridBox[x][y][z].stCube.vFar_10,
+					&ray.GetPosition(), &ray.GetDirection(),
+					&u, &v, &dist))
+				{
+					if (fMinDist < -0.001f || dist < fMinDist)
+					{
+						fMinDist = dist;
+						enRetDir = DIRECTION_6::RIGHT;
+						nRetX = x; nRetY = y; nRetZ = z;
+						bRet = true;
+					}
+				}
+				// 5. top
+				if (D3DXIntersectTri(
+					&m_arrGridBox[x][y][z].stCube.vNear_01,
+					&m_arrGridBox[x][y][z].stCube.vFar_01,
+					&m_arrGridBox[x][y][z].stCube.vNear_11,
+					&ray.GetPosition(), &ray.GetDirection(),
+					&u, &v, &dist))
+				{
+					if (fMinDist < -0.001f || dist < fMinDist)
+					{
+						fMinDist = dist;
+						enRetDir = DIRECTION_6::TOP;
+						nRetX = x; nRetY = y; nRetZ = z;
+						bRet = true;
+					}
+				}
+				else if (D3DXIntersectTri(
+					&m_arrGridBox[x][y][z].stCube.vFar_01,
+					&m_arrGridBox[x][y][z].stCube.vFar_11,
+					&m_arrGridBox[x][y][z].stCube.vNear_11,
+					&ray.GetPosition(), &ray.GetDirection(),
+					&u, &v, &dist))
+				{
+					if (fMinDist < -0.001f || dist < fMinDist)
+					{
+						fMinDist = dist;
+						enRetDir = DIRECTION_6::TOP;
+						nRetX = x; nRetY = y; nRetZ = z;
+						bRet = true;
+					}
+				}
+
+				// 6. bottom
+				if (D3DXIntersectTri(
+					&m_arrGridBox[x][y][z].stCube.vNear_00,
+					&m_arrGridBox[x][y][z].stCube.vFar_00,
+					&m_arrGridBox[x][y][z].stCube.vNear_10,
+					&ray.GetPosition(), &ray.GetDirection(),
+					&u, &v, &dist))
+				{
+					if (fMinDist < -0.001f || dist < fMinDist)
+					{
+						fMinDist = dist;
+						enRetDir = DIRECTION_6::BOTTOM;
+						nRetX = x; nRetY = y; nRetZ = z;
+						bRet = true;
+					}
+				}
+				else if (D3DXIntersectTri(
+					&m_arrGridBox[x][y][z].stCube.vFar_00,
+					&m_arrGridBox[x][y][z].stCube.vFar_10,
+					&m_arrGridBox[x][y][z].stCube.vNear_10,
+					&ray.GetPosition(), &ray.GetDirection(),
+					&u, &v, &dist))
+				{
+					if (fMinDist < -0.001f || dist < fMinDist)
+					{
+						fMinDist = dist;
+						enRetDir = DIRECTION_6::BOTTOM;
+						nRetX = x; nRetY = y; nRetZ = z;
+						bRet = true;
+					}
+				}
+			}
+		}
+	}
+
+	if (bRet)
+	{
+		nX = nRetX; nY = nRetY; nZ = nRetZ;
+		enPickingDir = enRetDir;
+	}
+
+	return bRet;
+}
+bool cMapData::IsEnableToBuild(int nX, int nY, int nZ, DIRECTION_6 enDir, int nWidth, int nHeight)
+{
+	if (enDir == DIRECTION_6::END || nWidth == 0 || nHeight == 0) return false;
+
+	int nMinX, nMinY, nMinZ;
+	int nMaxX, nMaxY, nMaxZ;
+
+	switch (enDir)
+	{
+		case D3DX_UTIL::DIRECTION_6::FRONT:
+			nMinX = nX - nWidth / 2;
+			nMaxX = nX + (nWidth - 1) / 2;
+			nMinY = nY - nHeight / 2;
+			nMaxY = nY + (nHeight - 1) / 2;
+			nMinZ = nMaxZ = nZ;
+		break;
+		case D3DX_UTIL::DIRECTION_6::REAR:
+			nMinX = nX - (nWidth - 1) / 2;
+			nMaxX = nX + nWidth / 2;
+			nMinY = nY - (nHeight - 1) / 2;
+			nMaxY = nY + nHeight / 2;
+			nMinZ = nMaxZ = nZ;
+		break;
+		case D3DX_UTIL::DIRECTION_6::LEFT:
+			nMinX = nMaxX = nX;
+			nMinY = nY - nHeight / 2;
+			nMaxY = nY + (nHeight - 1) / 2;
+			nMinZ = nZ - nWidth / 2;
+			nMaxZ = nZ + (nWidth - 1) / 2;
+		break;
+		case D3DX_UTIL::DIRECTION_6::RIGHT:
+			nMinX = nMaxX = nX;
+			nMinY = nY - (nHeight - 1) / 2;
+			nMaxY = nY + nHeight / 2;
+			nMinZ = nZ - (nWidth - 1) / 2;
+			nMaxZ = nZ + nWidth / 2;
+		break;
+		case D3DX_UTIL::DIRECTION_6::TOP:
+			nMinX = nX - (nWidth - 1) / 2;
+			nMaxX = nX + nWidth / 2;
+			nMinY = nMaxY = nY;
+			nMinZ = nZ - (nHeight - 1) / 2;
+			nMaxZ = nZ + nHeight / 2;
+		break;
+		case D3DX_UTIL::DIRECTION_6::BOTTOM:
+			nMinX = nX - nWidth / 2;
+			nMaxX = nX + (nWidth - 1) / 2;
+			nMinY = nMaxY = nY;
+			nMinZ = nZ - nHeight / 2;
+			nMaxZ = nZ + (nHeight - 1) / 2;
+		break;
+	}
+
+	for (int x = nMinX; x <= nMaxX; x++)
+	{
+		for (int y = nMinY; y <= nMaxY; y++)
+		{
+			for (int z = nMinZ; z <= nMaxZ; z++)
+			{
+				switch (enDir)
+				{
+					case D3DX_UTIL::DIRECTION_6::FRONT:
+						if (m_arrGridBox[x][y][z].pFront != nullptr ||
+							m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_NONE ||
+							m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_END)
+							return false;
+					break;
+					case D3DX_UTIL::DIRECTION_6::REAR:
+						if (m_arrGridBox[x][y][z].pRear != nullptr ||
+							m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_NONE ||
+							m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_END)
+							return false;
+					break;
+					case D3DX_UTIL::DIRECTION_6::LEFT:
+						if (m_arrGridBox[x][y][z].pLeft != nullptr ||
+							m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_NONE ||
+							m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_END)
+							return false;
+					break;
+					case D3DX_UTIL::DIRECTION_6::RIGHT:
+						if (m_arrGridBox[x][y][z].pRight != nullptr ||
+							m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_NONE ||
+							m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_END)
+							return false;
+					break;
+					case D3DX_UTIL::DIRECTION_6::TOP:
+						if (m_arrGridBox[x][y][z].pTop != nullptr ||
+							m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_NONE ||
+							m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_END)
+							return false;
+					break;
+					case D3DX_UTIL::DIRECTION_6::BOTTOM:
+						if (m_arrGridBox[x][y][z].pBottom != nullptr ||
+							m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_NONE ||
+							m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_END)
+							return false;
+					break;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+bool cMapData::IsEnableToBuild(cRay ray, float fDistMax, int nWidth, int nHeight)
+{
+	int nX, nY, nZ;
+	DIRECTION_6 enDir;
+
+	if (!this->GetPickingBox(nX, nY, nZ, enDir, ray, fDistMax))
+		return false;
+
+	return this->IsEnableToBuild(nX, nY, nZ, enDir, nWidth, nHeight);
+}
+
+bool cMapData::BuildTrap(cTrap* pTrap, cRay ray, float fDistMax, int nWidth, int nHeight)
+{
+	int nX, nY, nZ;
+	DIRECTION_6 enDir;
+
+	if (!this->GetPickingBox(nX, nY, nZ, enDir, ray, fDistMax))
+		return false;
+
+	if (!this->IsEnableToBuild(nX, nY, nZ, enDir, nWidth, nHeight))
+		return false;
+
+	int nMinX, nMinY, nMinZ;
+	int nMaxX, nMaxY, nMaxZ;
+
+	switch (enDir)
+	{
+	case D3DX_UTIL::DIRECTION_6::FRONT:
+		nMinX = nX - nWidth / 2;
+		nMaxX = nX + (nWidth - 1) / 2;
+		nMinY = nY - nHeight / 2;
+		nMaxY = nY + (nHeight - 1) / 2;
+		nMinZ = nMaxZ = nZ;
+		break;
+	case D3DX_UTIL::DIRECTION_6::REAR:
+		nMinX = nX - (nWidth - 1) / 2;
+		nMaxX = nX + nWidth / 2;
+		nMinY = nY - (nHeight - 1) / 2;
+		nMaxY = nY + nHeight / 2;
+		nMinZ = nMaxZ = nZ;
+		break;
+	case D3DX_UTIL::DIRECTION_6::LEFT:
+		nMinX = nMaxX = nX;
+		nMinY = nY - nHeight / 2;
+		nMaxY = nY + (nHeight - 1) / 2;
+		nMinZ = nZ - nWidth / 2;
+		nMaxZ = nZ + (nWidth - 1) / 2;
+		break;
+	case D3DX_UTIL::DIRECTION_6::RIGHT:
+		nMinX = nMaxX = nX;
+		nMinY = nY - (nHeight - 1) / 2;
+		nMaxY = nY + nHeight / 2;
+		nMinZ = nZ - (nWidth - 1) / 2;
+		nMaxZ = nZ + nWidth / 2;
+		break;
+	case D3DX_UTIL::DIRECTION_6::TOP:
+		nMinX = nX - (nWidth - 1) / 2;
+		nMaxX = nX + nWidth / 2;
+		nMinY = nMaxY = nY;
+		nMinZ = nZ - (nHeight - 1) / 2;
+		nMaxZ = nZ + nHeight / 2;
+		break;
+	case D3DX_UTIL::DIRECTION_6::BOTTOM:
+		nMinX = nX - nWidth / 2;
+		nMaxX = nX + (nWidth - 1) / 2;
+		nMinY = nMaxY = nY;
+		nMinZ = nZ - nHeight / 2;
+		nMaxZ = nZ + (nHeight - 1) / 2;
+		break;
+	}
+
+	m_mapTrapBuildData[pTrap].enDir = enDir;
+
+	for (int x = nMinX; x <= nMaxX; x++)
+	{
+		for (int y = nMinY; y <= nMaxY; y++)
+		{
+			for (int z = nMinZ; z <= nMaxZ; z++)
+			{
+				switch (enDir)
+				{
+					case D3DX_UTIL::DIRECTION_6::FRONT:
+						m_arrGridBox[x][y][z].pFront = pTrap;
+					break;
+					case D3DX_UTIL::DIRECTION_6::REAR:
+						m_arrGridBox[x][y][z].pRear = pTrap;
+					break;
+					case D3DX_UTIL::DIRECTION_6::LEFT:
+						m_arrGridBox[x][y][z].pLeft = pTrap;
+					break;
+					case D3DX_UTIL::DIRECTION_6::RIGHT:
+						m_arrGridBox[x][y][z].pRight = pTrap;
+					break;
+					case D3DX_UTIL::DIRECTION_6::TOP:
+						m_arrGridBox[x][y][z].pTop = pTrap;
+					break;
+					case D3DX_UTIL::DIRECTION_6::BOTTOM:
+						m_arrGridBox[x][y][z].pBottom = pTrap;
+					break;
+				}
+				m_mapTrapBuildData[pTrap].vecXYZ.push_back(ST_INDEX_XYZ(x, y, z));
+			}
+		}
+	}
+
+	
+	
+
+	return true;
+}
+bool cMapData::ClearTrap(cTrap* pTrap)
+{
+	std::map<cTrap*, ST_TRAPBUILDDATA>::iterator iter;
+	iter = m_mapTrapBuildData.find(pTrap);
+
+	if (iter == m_mapTrapBuildData.end())
+		return false;
+
+	int nX, nY, nZ;
+	for (size_t i = 0; i = iter->second.vecXYZ.size(); i++)
+	{
+		nX = iter->second.vecXYZ[i].x;
+		nY = iter->second.vecXYZ[i].y;
+		nZ = iter->second.vecXYZ[i].z;
+
+		switch (iter->second.enDir)
+		{
+			case D3DX_UTIL::DIRECTION_6::FRONT:
+				m_arrGridBox[nX][nY][nZ].pFront = nullptr;
+			break;
+			case D3DX_UTIL::DIRECTION_6::REAR:
+				m_arrGridBox[nX][nY][nZ].pRear = nullptr;
+			break;
+			case D3DX_UTIL::DIRECTION_6::LEFT:
+				m_arrGridBox[nX][nY][nZ].pLeft = nullptr;
+			break;
+			case D3DX_UTIL::DIRECTION_6::RIGHT:
+				m_arrGridBox[nX][nY][nZ].pRight = nullptr;
+			break;
+			case D3DX_UTIL::DIRECTION_6::TOP:
+				m_arrGridBox[nX][nY][nZ].pTop = nullptr;
+			break;
+			case D3DX_UTIL::DIRECTION_6::BOTTOM:
+				m_arrGridBox[nX][nY][nZ].pBottom = nullptr;
+			break;
+		}
+
+	}
+
+	iter = m_mapTrapBuildData.erase(iter);
+	return true;
+}
+
 
 //bool cMapData::OctaTreeCollisionCheck(cPhysicsBody* body, int nStartX, int nEndX, int nStartY, int nEndY, int nStartZ, int nEndZ)
 //{

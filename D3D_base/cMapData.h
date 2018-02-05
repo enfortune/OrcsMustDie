@@ -13,47 +13,15 @@ class cTrap;
 class cHeightMap;
 class cRay;
 
-
-
-struct ST_CUBE_XYZ
+struct ST_TRAPBUILDDATA
 {
-	/*ST_PTN_VERTEX _000;
-	ST_PTN_VERTEX _100;
-	ST_PTN_VERTEX _110;
-	ST_PTN_VERTEX _010;
-	ST_PTN_VERTEX _001;
-	ST_PTN_VERTEX _101;
-	ST_PTN_VERTEX _111;
-	ST_PTN_VERTEX _011;*/
-	/*ST_CUBE_XYZ()
-	{
-		_000.p = _100.p = _110.p = _010.p =
-			_001 = _101 = _111 = _011 = D3DXVECTOR3(0.f, 0.f, 0.f);
-	}*/
-	/*ST_PTN_VERTEX& operator [] (int n) // 포문 돌리기 용
-	{
-		switch (n)
-		{
-			assert((n >= 0 && n < 8) && "큐브인덱스는 0~7까지만 접근가능");
-		case 0:	return _000;  break;
-		case 1:	return _100; break;
-		case 2:	return _110; break;
-		case 3:	return _010; break;
-		case 4:	return _001; break;
-		case 5:	return _101; break;
-		case 6:	return _111; break;
-		case 7:	return _011; break;
-
-		default: return ST_PTN_VERTEX(); break; // 어짜피 assert 걸림
-		}
-	}*/
-
+	DIRECTION_6 enDir;
+	std::vector<INDEX_XYZ> vecXYZ;
 };
 
 struct ST_GRIDBOX
 {
 	EN_GRIDBOXKIND enKind;
-	//ST_CUBE_XYZ stCube;
 	ST_PTN_VERTEX v[36]; // 그리는 버텍스 (추후 버텍스 버퍼로 바꿀 것)
 	LPDIRECT3DVERTEXBUFFER9 pVB;
 	ST_FRUSTUM stCube;
@@ -211,6 +179,9 @@ protected:
 	LPDIRECT3DTEXTURE9 m_arrTex[GRIDBOXKIND_END];
 	D3DMATERIAL9 m_arrMtrl[GRIDBOXKIND_END];
 
+	/* for Trap */
+	std::map<cTrap*, ST_TRAPBUILDDATA> m_mapTrapBuildData;
+
 public:
 	cMapData();
 	~cMapData();
@@ -237,6 +208,13 @@ public:
 
 	void SaveData(std::string sFileName);
 	void LoadData(std::string sFileName);
+
+	bool GetPickingBox(OUT int& nX, OUT int& nY, OUT int& nZ, OUT DIRECTION_6& enPickingDir, IN cRay ray, IN float fDistMax);
+	bool IsEnableToBuild(int nX, int nY, int nZ, DIRECTION_6 enDir, int nWidth, int nHeight);
+	bool IsEnableToBuild(cRay ray, float fDistMax, int nWidth, int nHeight);
+
+	bool BuildTrap(cTrap* pTrap, cRay ray, float fDistMax, int nWidth, int nHeight);
+	bool ClearTrap(cTrap* pTrap);
 
 	/* for interface */
 protected: 
