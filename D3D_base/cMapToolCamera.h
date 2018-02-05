@@ -22,6 +22,5 @@ public:
 	void Update(float fDelta);
 
 	void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
 };
 

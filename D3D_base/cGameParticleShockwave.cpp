@@ -19,7 +19,6 @@ cGameParticleShockwave::~cGameParticleShockwave()
 void cGameParticleShockwave::ResetParticle(ST_PARTICLEATTRIBUTE* pAttr)
 {
 	pAttr->bIsAlive = true;
-
 	
 	D3DXVECTOR3 vTemp = D3DXVECTOR3(0, 0, 1);
 

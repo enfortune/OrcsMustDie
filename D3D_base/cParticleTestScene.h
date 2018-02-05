@@ -7,6 +7,7 @@ class cGameParticleSnow;
 class cGameParticleFirework;
 class cGameParticleSpark;
 class cGameParticleShockwave;
+class cGameParticleEruption;
 
 class cParticleTestScene : public cGameScene
 {
@@ -21,6 +22,7 @@ class cParticleTestScene : public cGameScene
 	cGameParticleFirework* m_pFirework;
 	cGameParticleSpark* m_pSpark;
 	cGameParticleShockwave* m_pWave;
+	cGameParticleEruption* m_pEruption;
 
 	bool m_bIsCulling;
 

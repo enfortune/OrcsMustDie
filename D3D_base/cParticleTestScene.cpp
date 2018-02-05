@@ -6,6 +6,7 @@
 #include "cGameParticleFirework.h"
 #include "cGameParticleSpark.h"
 #include "cGameParticleShockwave.h"
+#include "cGameParticleEruption.h"
 
 
 cParticleTestScene::cParticleTestScene()
@@ -14,6 +15,7 @@ cParticleTestScene::cParticleTestScene()
 	, m_bIsCulling(false)
 	, m_pSpark(nullptr)
 	, m_pWave(nullptr)
+	, m_pEruption(nullptr)
 {
 }
 
@@ -41,8 +43,10 @@ void cParticleTestScene::Setup()
 
 	//m_pSpark = new cGameParticleSpark;
 	//m_pSpark->Setup("");
-	m_pWave = new cGameParticleShockwave;
-	m_pWave->Setup("");
+	//m_pWave = new cGameParticleShockwave;
+	//m_pWave->Setup("");
+	m_pEruption = new cGameParticleEruption;
+	m_pEruption->Setup("");
 
 
 	m_stFrustum.vNear_00 = D3DXVECTOR3(-1.f, -1.f, -1.f);
@@ -66,16 +70,19 @@ void cParticleTestScene::Update(float fDelta)
 	if (m_pFirework) m_pFirework->Update(fDelta);
 	if (m_pSpark) m_pSpark->Update(fDelta);
 	if (m_pWave)  m_pWave->Update(fDelta);
+	if (m_pEruption) m_pEruption->Update(fDelta);
 
 	if (g_pKeyManager->IsOnceKeyDown('R'))
 	{
 		if (m_pSpark) m_pSpark->MakeSpark(D3DXVECTOR3(0, 1, 0), 10);
 		if (m_pWave) m_pWave->MakeShockWave(D3DXVECTOR3(0, 0, 0), 400);
+		if (m_pEruption) m_pEruption->MakeEruption(D3DXVECTOR3(0, 0, 0), 200);
 	}
 	if (g_pKeyManager->IsStayKeyDown('T'))
 	{
 		if (m_pSpark) m_pSpark->MakeSpark(D3DXVECTOR3(0,1,0), 10);
 		if (m_pWave) m_pWave->MakeShockWave(D3DXVECTOR3(0, 0, 0), 400);
+		if (m_pEruption) m_pEruption->MakeEruption(D3DXVECTOR3(0, 0, 0), 50);
 	}
 
 	if (g_pKeyManager->IsOnceKeyDown('1'))
@@ -98,6 +105,7 @@ void cParticleTestScene::Render()
 	if (m_pFirework) m_pFirework->Render();
 	if (m_pSpark) m_pSpark->Render();
 	if (m_pWave) m_pWave->Render();
+	if (m_pEruption) m_pEruption->Render();
 
 	//this->RenderParticle();
 	cGameScene::Render();
@@ -110,6 +118,7 @@ void cParticleTestScene::Delete()
 	SAFE_DELETE(m_pFirework);
 	SAFE_DELETE(m_pSpark);
 	SAFE_DELETE(m_pWave);
+	SAFE_DELETE(m_pEruption);
 }
 
 void cParticleTestScene::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)

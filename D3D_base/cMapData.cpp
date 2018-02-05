@@ -575,15 +575,19 @@ bool cMapData::IsEnableToBuild(int nX, int nY, int nZ, DIRECTION_6 enDir, int nW
 
 	return true;
 }
-bool cMapData::IsEnableToBuild(cRay ray, float fDistMax, int nWidth, int nHeight)
+bool cMapData::IsEnableToBuild(OUT DIRECTION_6& enPickingDir, cRay ray, float fDistMax, int nWidth, int nHeight)
 {
 	int nX, nY, nZ;
+	bool bRet = false;
 	DIRECTION_6 enDir;
 
 	if (!this->GetPickingBox(nX, nY, nZ, enDir, ray, fDistMax))
 		return false;
 
-	return this->IsEnableToBuild(nX, nY, nZ, enDir, nWidth, nHeight);
+	bRet = this->IsEnableToBuild(nX, nY, nZ, enDir, nWidth, nHeight);
+	enPickingDir = enDir;
+
+	return bRet;
 }
 
 bool cMapData::BuildTrap(cTrap* pTrap, cRay ray, float fDistMax, int nWidth, int nHeight)
@@ -679,9 +683,6 @@ bool cMapData::BuildTrap(cTrap* pTrap, cRay ray, float fDistMax, int nWidth, int
 			}
 		}
 	}
-
-	
-	
 
 	return true;
 }
