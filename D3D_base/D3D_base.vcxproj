@@ -23,32 +23,32 @@
     <ProjectGuid>{DF3DCD04-F9E1-4763-895D-3CA5373AB3EE}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>D3D_base</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
@@ -166,10 +166,12 @@
     <ClInclude Include="cAllocateHierarchyEX.h" />
     <ClInclude Include="cAseLoader.h" />
     <ClInclude Include="cAseNode.h" />
+    <ClInclude Include="cBoss.h" />
     <ClInclude Include="cCamera.h" />
     <ClInclude Include="cChaNode.h" />
     <ClInclude Include="cDeviceManager.h" />
     <ClInclude Include="cEnemy.h" />
+    <ClInclude Include="cEnemy2.h" />
     <ClInclude Include="cFontManager.h" />
     <ClInclude Include="cGameParticle.h" />
     <ClInclude Include="cGameParticleEnumList.h" />
@@ -268,10 +270,12 @@
     <ClCompile Include="cAllocateHierarchyEX.cpp" />
     <ClCompile Include="cAseLoader.cpp" />
     <ClCompile Include="cAseNode.cpp" />
+    <ClCompile Include="cBoss.cpp" />
     <ClCompile Include="cCamera.cpp" />
     <ClCompile Include="cChaNode.cpp" />
     <ClCompile Include="cDeviceManager.cpp" />
     <ClCompile Include="cEnemy.cpp" />
+    <ClCompile Include="cEnemy2.cpp" />
     <ClCompile Include="cFontManager.cpp" />
     <ClCompile Include="cGameParticle.cpp" />
     <ClCompile Include="cGameParticleFirework.cpp" />

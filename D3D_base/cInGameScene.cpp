@@ -62,12 +62,18 @@ void cInGameScene::Setup()
 	{
 		cEnemy* tempEnemy;
 		tempEnemy = new cEnemy;
-		tempEnemy->Setup(true, D3DXVECTOR3(27 + i, 8, 53 + i));
+		if (i < 5)
+		{
+			tempEnemy->Setup(true, D3DXVECTOR3(27 + i, 2, 53));
+		}
+		else
+		{
+			tempEnemy->Setup(true, D3DXVECTOR3(22 + i, 2, 54));
+		}
 		tempEnemy->setPlayer(m_pPlayer_S);
 		m_pPhysicsNode->AddChild(tempEnemy);
-		
-		m_vEnemy.push_back(tempEnemy);
 
+		m_vEnemy.push_back(tempEnemy);
 	}
 
 	m_pPlayer_S->setEnemy(&m_vEnemy);
@@ -76,6 +82,21 @@ void cInGameScene::Update(float fDelta)
 {
 	m_pCamera->Update();
 	m_pPlayer_S->SetRotationY(m_pCamera->GetCamRotAngle().y);
+
+	for (std::vector<cEnemy*>::iterator i = m_vEnemy.begin(); i != m_vEnemy.end();)
+	{
+
+		if ((*i)->fDeadCount > 4.f)
+		{
+			(*i)->RemoveFromParent();
+			SAFE_RELEASE((*i));
+			i = m_vEnemy.erase(i);
+		}
+		else
+		{
+			i++;
+		}
+	}
 
 	cGameScene::Update(fDelta);
 

@@ -430,6 +430,12 @@
     <ClInclude Include="Loading.h">
       <Filter>엄윤호</Filter>
     </ClInclude>
+    <ClInclude Include="cBoss.h">
+      <Filter>정현식</Filter>
+    </ClInclude>
+    <ClInclude Include="cEnemy2.h">
+      <Filter>정현식</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -698,6 +704,12 @@
     </ClCompile>
     <ClCompile Include="Loading.cpp">
       <Filter>엄윤호</Filter>
+    </ClCompile>
+    <ClCompile Include="cBoss.cpp">
+      <Filter>정현식</Filter>
+    </ClCompile>
+    <ClCompile Include="cEnemy2.cpp">
+      <Filter>정현식</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

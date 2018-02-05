@@ -7,16 +7,6 @@ class cPlayer;
 class cEnemy : public cChaNode
 {
 private:
-	enum state
-	{
-		IDLE,
-		MOVE,
-		ATTACK,
-		JUMP,
-		DEAD
-	};
-	state EnemyState;
-	bool move1, move2, move3, bAttack, bAttackAction, bIdle, bDead, bDeadbody;
 	D3DXVECTOR3 vPlayerPos;
 	cPlayer* m_pPlayer;
 	struct tempPoint
@@ -33,6 +23,7 @@ private:
 	};
 
 	tempPoint tp[5];
+
 
 public:
 	cEnemy();
@@ -52,6 +43,7 @@ public:
 	void Move(D3DXVECTOR3 vGoal, float fDelta, int dijkNum);
 	void Attack(float fDelta);
 	void Dead();
+	void Jump();
 	void Dijkstra(int tpnum, float fDelta);
 	void find(int tpNum, float fDelta);
 	void setPlayer(cPlayer* pSetPlayer);

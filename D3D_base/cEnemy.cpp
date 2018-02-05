@@ -5,6 +5,7 @@
 #include "cPlayer.h"
 #include "cPhysicsBody.h"
 
+
 cEnemy::cEnemy()
 {
 }
@@ -19,24 +20,35 @@ void cEnemy::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 {
 	cGameNode::Setup(true);
 
+	nIdleAni = 11;
+	nAttackAni = 2;
+	nDeadAni = 9;
+	nMoveAni = 0;
+	nAttackMoveAni = 10;
+	nJumpStartAni = 7;
+	nJumpAni = 5;
+	nJumpEndAni = 6;
+	nHitAni = 3;
+	nSkillAni = 1;
+
 	m_pPhysicsBody = new cPhysicsBody;
 	m_pPhysicsBody->Setup(0.0f);
-	m_pPhysicsBody->MakeBodyCuboid(0.7, 1.f, 0.5,D3DXVECTOR3(0, 0.5, 0));
+	m_pPhysicsBody->MakeBodyCuboid(0.6, 1.f, 0.5,D3DXVECTOR3(0, 0.5, 0));
 	m_pPhysicsBody->GetPhysicsData().fElasticity = 0.f;
 	m_pPhysicsBody->GetPhysicsData().vDamping = D3DXVECTOR3(10.f, 0.f, 10.f);
 	m_pPhysicsBody->GetBodyType() = PHYSICSBODYTYPE_STATIC;
 
 	m_nAtkDamage = 20;
-	nMaxHp = 50;
-	nCurHp = 50;
+	nMaxHp = 40;
+	nCurHp = 40;
 	bAttackAction = false;
 	bAttack = false;
 	bMove = FALSE;
 	vDir = D3DXVECTOR3(0, 0, -1);
 	fRotY = 0.f;
 	m_pSkinnedMesh = new cSkinnedMeshEX;
-	m_pSkinnedMesh->Setup("XFileSample", "XFileSample/chockchock.X");
-	m_pSkinnedMesh->SetAnimationSet(0, 3, true);
+	m_pSkinnedMesh->Setup("Resource/XFile/Enemy", "Resource/XFile/Enemy/Orc_Sword.X");
+	m_pSkinnedMesh->SetAnimationSet(0, nIdleAni, true);
 	vDir = D3DXVECTOR3(0, 0, -1);
 	fRotY = 0.f;
 	m_pPhysicsBody->GetPhysicsData().vPos = vPosSetup;
@@ -121,6 +133,31 @@ void cEnemy::Update(float fDelta)
 		{
 			Dead();
 		}
+		case SKILL:
+		{
+
+		}
+		break;
+		case HIT:
+		{
+
+		}
+		break;
+		case JUMP_START:
+		{
+
+		}
+		break;
+		case JUMP:
+		{
+			Jump();
+		}
+		break;
+		case JUMP_END:
+		{
+			Jump();
+		}
+		break;
 	}
 	if (EnemyState != DEAD)
 	{
@@ -149,6 +186,11 @@ void cEnemy::Update(float fDelta)
 			}
 		}
 		HpManager();
+	}
+
+	if (m_pTransformData->GetPosition().y <= -1)
+	{
+		EnemyState = DEAD;
 	}
 	if (!bDeadbody)
 	{
@@ -192,7 +234,7 @@ void cEnemy::Move(D3DXVECTOR3 vGoal, float fDelta, int dijkNum)
 		if (tempLength > 0.1)
 		{
 			bMove = TRUE;
-			m_pSkinnedMesh->SetAnimationSet(0, 2, true);
+			m_pSkinnedMesh->SetAnimationSetBlend(0, nMoveAni, true);
 		}
 	}
 	else
@@ -224,7 +266,7 @@ void cEnemy::Move(D3DXVECTOR3 vGoal, float fDelta, int dijkNum)
 		{
 			vPos = vGoal;
 			bMove = FALSE;
-			m_pSkinnedMesh->SetAnimationSet(0, 3, true);
+			m_pSkinnedMesh->SetAnimationSetBlend(0, nIdleAni, true);
 			tp[dijkNum].bmove = false;
 			tp[dijkNum].check = true;
 		}
@@ -235,7 +277,7 @@ void cEnemy::Idle()
 {
 	if (!bIdle)
 	{
-		m_pSkinnedMesh->SetAnimationSet(0, 3, true);
+		m_pSkinnedMesh->SetAnimationSet(0, nIdleAni, true);
 
 		m_pPhysicsBody->GetPhysicsData().vVelocity.x = 0;
 		m_pPhysicsBody->GetPhysicsData().vVelocity.z = 0;
@@ -256,7 +298,7 @@ void cEnemy::Move(D3DXVECTOR3 vGoal, float fDelta)
 		if (tempLength > 0.1)
 		{
 			bMove = TRUE;
-			m_pSkinnedMesh->SetAnimationSet(0, 2, true);
+			m_pSkinnedMesh->SetAnimationSetBlend(0, nAttackMoveAni, true);
 			bIdle = false;
 		}
 	}
@@ -285,12 +327,6 @@ void cEnemy::Move(D3DXVECTOR3 vGoal, float fDelta)
 				m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
 
 		}
-		else
-		{
-			vPos = vGoal;
-			bMove = FALSE;
-			m_pSkinnedMesh->SetAnimationSet(0, 3, true);
-		}
 	}
 }
 
@@ -313,7 +349,7 @@ void cEnemy::Attack(float fDelta)
 			bAttack = false;
 		}
 
-		else if (length <= 0.7)
+		else if (length <= 0.7 && m_pPhysicsBody->GetPhysicsData().bOnGround == true)
 		{
 			D3DXVECTOR3 vTempDir;
 			vTempDir = vPlayerPos - vPos;
@@ -332,7 +368,7 @@ void cEnemy::Attack(float fDelta)
 			m_pPhysicsBody->GetPhysicsData().vVelocity.x = 0;
 			m_pPhysicsBody->GetPhysicsData().vVelocity.z = 0;
 			m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
-			m_pSkinnedMesh->SetAnimationSetBlend(0, 0, false);
+			m_pSkinnedMesh->SetAnimationSetBlend(0, nAttackAni, false);
 			bAttack = true;
 		}
 	}
@@ -341,7 +377,7 @@ void cEnemy::Attack(float fDelta)
 
 		if (m_pSkinnedMesh->GetAniEnd() == true)
 		{
-			if (length <= 0.3 &&  fCos > cosf(D3DX_PI / 4.f))
+			if (length <= 0.7 &&  fCos > cosf(D3DX_PI / 4.f))
 			{
 				m_pPlayer->PlayerDamaged(m_nAtkDamage);
 			}
@@ -355,13 +391,41 @@ void cEnemy::Dead()
 {
 	if (!bDead)
 	{
-		m_pSkinnedMesh->SetAnimationSetBlend(0, 1, false);
+		m_pPhysicsBody->GetPhysicsData().vVelocity.x = 0;
+		m_pPhysicsBody->GetPhysicsData().vVelocity.z = 0;
+		m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
+		m_pSkinnedMesh->SetAnimationSetBlend(0, nDeadAni, false);
+
+		m_pPhysicsBody->GetBodyType() = PHYSICSBODYTYPE_NOCHECK;
 		bDead = true;
 	}
 	if (m_pSkinnedMesh->GetAniEnd() == true)
 	{
 		bDeadbody = true;
 		//bAttackAction = true;
+	}
+}
+
+void cEnemy::Jump()
+{
+	if (m_pPhysicsBody->GetPhysicsData().bOnGround == true)
+	{
+		m_pPhysicsBody->GetPhysicsData().vVelocity.y = 5.f;
+		m_pSkinnedMesh->SetAnimationSetBlend(0, nJumpStartAni, false);
+	}
+	if (EnemyState == JUMP_START && m_pSkinnedMesh->GetAniEnd() == true)
+	{
+		EnemyState = JUMP;
+		m_pSkinnedMesh->SetAnimationSetBlend(0, nJumpAni, false);
+	}
+	else if (EnemyState == JUMP && m_pPhysicsBody->GetPhysicsData().bOnGround == true)
+	{
+		EnemyState = JUMP_END;
+		m_pSkinnedMesh->SetAnimationSetBlend(0, nJumpEndAni, false);
+	}
+	else if (EnemyState == JUMP_END && m_pSkinnedMesh->GetAniEnd() == true)
+	{
+		EnemyState = IDLE;
 	}
 }
 
