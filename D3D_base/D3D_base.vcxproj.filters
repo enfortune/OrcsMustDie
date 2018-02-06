@@ -431,7 +431,7 @@
       <Filter>정현식</Filter>
     </ClInclude>
     <ClInclude Include="cGameParticleEruption.h">
-      <Filter>SampleCode</Filter>
+      <Filter>Foundation\D3D\Particle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -706,7 +706,7 @@
       <Filter>정현식</Filter>
     </ClCompile>
     <ClCompile Include="cGameParticleEruption.cpp">
-      <Filter>SampleCode</Filter>
+      <Filter>Foundation\D3D\Particle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
