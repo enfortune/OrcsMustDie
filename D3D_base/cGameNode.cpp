@@ -352,6 +352,30 @@ void cGameNode::RemoveFromParent()
 	//this->Release();
 
 }
+ST_FRUSTUM cGameNode::GetFrustumInWorld()
+{
+	D3DXMATRIXA16 matWorld, matParentWorld, matR, matT;
+
+	if (m_pPhysicsBody == nullptr) 	return ST_FRUSTUM();
+
+	if (m_pParent == nullptr)
+		D3DXMatrixIdentity(&matParentWorld);
+	else
+		matParentWorld = m_pParent->GetMatrixToWorld();
+
+	D3DXMatrixRotationAxis(&matR,
+		&m_pPhysicsBody->GetTempPhysicsData().vAxis,
+		m_pPhysicsBody->GetTempPhysicsData().fRotAngle);
+	D3DXMatrixTranslation(&matT,
+		m_pPhysicsBody->GetTempPhysicsData().vPos.x,
+		m_pPhysicsBody->GetTempPhysicsData().vPos.y,
+		m_pPhysicsBody->GetTempPhysicsData().vPos.z);
+
+	matWorld = matR * matT * matParentWorld;
+
+	return m_pPhysicsBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
+}
+
 D3DXMATRIXA16 cGameNode::GetMatirixToParent()
 {
 	if (m_pTransformData)

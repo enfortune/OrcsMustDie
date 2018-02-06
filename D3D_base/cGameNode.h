@@ -46,6 +46,9 @@ public:
 	void RemoveAllChildren();
 	void RemoveFromParent();
 
+	ST_FRUSTUM GetFrustumInWorld();
+	ST_SPHERE GetSphereInWorld();
+
 	virtual D3DXMATRIXA16 GetMatirixToParent();
 	D3DXMATRIXA16 GetMatrixToWorld(); 
 	//D3DXMATRIXA16 GetMatrixToViewPort();

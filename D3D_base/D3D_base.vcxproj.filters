@@ -295,9 +295,6 @@
     <ClInclude Include="cInGameUIGauge.h">
       <Filter>김완수\UI\InGame</Filter>
     </ClInclude>
-    <ClInclude Include="cInGameUILayer.h">
-      <Filter>김완수\UI\InGame</Filter>
-    </ClInclude>
     <ClInclude Include="cInGameUIScore.h">
       <Filter>김완수\UI\InGame</Filter>
     </ClInclude>
@@ -435,6 +432,9 @@
     </ClInclude>
     <ClInclude Include="cEnemyBase.h">
       <Filter>정현식</Filter>
+    </ClInclude>
+    <ClInclude Include="cInGameUILayer.h">
+      <Filter>김완수\UI\InGame</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
