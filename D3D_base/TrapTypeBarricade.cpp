@@ -25,17 +25,12 @@ TrapTypeBarricade::TrapTypeBarricade()
 	frustumLocal_.vFar_10 = {1.0f, 0.0f, +1.0f};
 	frustumLocal_.vFar_11 = {1.0f, 0.6f, +1.0f};
 
-	D3DXMATRIXA16 matrixInverse {};
-	D3DXMatrixInverse(&matrixInverse, nullptr, &matrixLocal_);
-
-	frustumLocal_ = frustumLocal_.TransformCoord(&matrixInverse);
+	frustumInteractionLocal_ = frustumLocal_;
 
 	isBlockable_ = true;
 
 	width_ = 2;
 	height_ = 2;
-
-	frustumInteractionLocal_ = frustumLocal_;
 
 	isInstallPositionArray_[static_cast<size_t> (TrapType::eInstallPosition::FLOOR)] = true;
 

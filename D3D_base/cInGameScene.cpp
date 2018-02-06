@@ -215,17 +215,6 @@ void cInGameScene::Update(float fDelta)
 		if (m_pPlayer_S->GetPlayerTrapType() == PLAYERTRAPTYPE_BARRICADE)
 		{
 			TrapType * pTrapType = m_pTrapTypeManager->find("Barricade");
-			cRay ray = cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y);
-
-			DIRECTION_6 direction = DIRECTION_6::TOP;
-
-			D3DXVECTOR3 vertexCenter {};
-			D3DXMATRIXA16 matrixRender {};
-
-			m_pMap->GetBuildPostion(vertexCenter, direction, ray, 100, pTrapType->getWidth(), pTrapType->getHeight());
-			D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
-
-			pTrapType->render(matrixRender);
 
 			if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON))
 			{
