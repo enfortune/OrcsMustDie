@@ -14,9 +14,14 @@ private:
 
 public:
 	QuickSlot();
+	~QuickSlot();
 
 public:
+	void init();
+	void update();
+	void render();
 
+	void resetButton();
 };
 
 //#include "cGameNode.h"

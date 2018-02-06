@@ -20,6 +20,7 @@ private:
 	TrapComponentAttackable * pComponentAttackable_ {};
 	TrapComponentBlockable * pComponentBlockable_ {};
 	TrapComponentTriggerable * pComponentTriggerable_ {};
+	TrapComponentRender * pComponentRender_ {};
 
 public:
 	Trap() = default;
@@ -41,8 +42,6 @@ public:
 	void interaction(std::vector<PlayerDummy> & playerList);
 	void interaction(std::vector<EnemyDummy> & enemyList);
 	void interaction(std::vector<ItemDummy> & itemList);
-
-	void onTrigger();
 
 public:
 	void init(TrapType & type, D3DXMATRIXA16 & matrixWorld);

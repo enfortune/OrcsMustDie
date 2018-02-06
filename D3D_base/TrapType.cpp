@@ -3,6 +3,12 @@
 
 #include "cSkinnedMeshEX.h"
 
+void TrapType::render(D3DXMATRIXA16 & matrixWorld, int modelIndex, TrapComponentRender & checkAuthority)
+{
+	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matrixWorld);
+	modelList_[modelIndex].Render();
+}
+
 TrapType::~TrapType()
 {
 	delete pTypeComponentAttackable_;
@@ -14,12 +20,6 @@ void TrapType::render(D3DXMATRIXA16 & matrixWorld)
 {
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matrixWorld);
 
-	for (int i = 0; i < static_cast<int> (modelList_.size()); ++i)
-		modelList_[i].Render();
-
-	D3DXMATRIXA16 matrixIdentity {};
-	D3DXMatrixIdentity(&matrixIdentity);
-
-	//g_pD3DDevice->SetTransform(D3DTS_WORLD, &matrixIdentity);
+	modelList_[0].Render();
 	frustumInteractionLocal_.Render(g_pD3DDevice);
 }

@@ -68,3 +68,13 @@ public:
 public:
 	void update(float fDelta = g_pTimeManager->GetEllapsedTime());
 };
+
+struct TrapComponentRender
+{
+public:
+	TrapComponentRender() = default;
+	virtual ~TrapComponentRender() = default;
+
+public:
+	virtual void render(TrapType & trapType, D3DXMATRIXA16 & matrixWorld) = 0;
+};

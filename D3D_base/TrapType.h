@@ -6,6 +6,7 @@ class Trap;
 struct TrapTypeComponentAttackable;
 struct TrapTypeComponentBlockable;
 struct TrapTypeComponentTriggerable;
+struct TrapComponentRender;
 
 #include "cSkinnedMeshEX.h"
 
@@ -66,5 +67,10 @@ public:
 	//void onTrigger();
 
 public:
-	void render(D3DXMATRIXA16 & matrixWorld);
+	void render(D3DXMATRIXA16 & matrixWorld);	// rendering virtual object
+
+	// inner model index of specific trap
+	// trick to friend function for non-inheritance class
+	void render(D3DXMATRIXA16 & matrixWorld, int modelIndex, TrapComponentRender & checkAuthority);
+	
 };
