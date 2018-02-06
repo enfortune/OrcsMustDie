@@ -1,10 +1,11 @@
 #pragma once
 #include "cChaNode.h"
+#include "cEnemyBase.h"
 
 class cSkinnedMeshEX;
 class cPlayer;
 
-class cEnemy : public cChaNode
+class cEnemy : public cEnemyBase
 {
 private:
 	D3DXVECTOR3 vPlayerPos;
@@ -47,7 +48,7 @@ public:
 	void Dijkstra(int tpnum, float fDelta);
 	void find(int tpNum, float fDelta);
 	void setPlayer(cPlayer* pSetPlayer);
-	void getDamage(int nDamage);
+	virtual void getDamage(int nDamage);
 	void HpManager();
 
 };
