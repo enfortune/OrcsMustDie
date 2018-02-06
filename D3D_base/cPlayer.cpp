@@ -4,6 +4,8 @@
 #include "cTransformData.h"
 #include "cPhysicsBody.h"
 #include "cEnemy.h"
+#include "cEnemy2.h"
+#include "cBoss.h"
 #include "cGameParticleSpark.h"
 
 cPlayer::cPlayer()
@@ -28,6 +30,8 @@ cPlayer::cPlayer()
 	, m_pPlayerState(PLAYERSTATE_STAND)
 	, m_ePlayerTrapType(PLAYERTRAPTYPE_BARRICADE)
 	, m_vEnemy(NULL)
+	, m_vEnemy2(NULL)
+	, m_vBoss(NULL)
 	, m_bIsBattle(true)
 	, m_pPlayerParticle(NULL)
 	, speedX(0.f)
@@ -85,12 +89,12 @@ void cPlayer::Update(float fDelta)
 	speedX = 0;
 	speedZ = 0;
 
-	if (nPlayerCurMp == 0) nPlayerCurMp = 0;
+	if (nPlayerCurMp <= 0) nPlayerCurMp = 0;
 
 	if (nPlayerMaxHp < nPlayerCurHp) nPlayerMaxHp = nPlayerCurHp;
 	if (nPlayerMaxMp < nPlayerCurMp) nPlayerMaxMp = nPlayerCurMp;
 
-	if (nPlayerCurHp == 0)
+	if (nPlayerCurHp <= 0)
 	{
 		nPlayerCurHp = 0;
 		m_pPlayerState = PLAYERSTATE_DEATH;
@@ -402,6 +406,40 @@ void cPlayer::PlayerAttacked()
 			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage);
 		}
 	}
+
+	for (int i = 0; i < (*m_vEnemy2).size(); i++)
+	{
+		float PlayerLength;
+		D3DXVECTOR3 vDist = (*m_vEnemy2)[i]->GetTransformData()->GetPosition() - m_pTransformData->GetPosition();
+		D3DXVECTOR3 vDir = m_vPlayerDir;
+		D3DXVec3Normalize(&vDist, &vDist);
+		D3DXVec3Normalize(&vDir, &vDir);
+		float fCos = D3DXVec3Dot(&vDist, &vDir);
+
+		PlayerLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vEnemy2)[i]->GetTransformData()->GetPosition()));
+
+		if (PlayerLength < 0.8 && fCos > cosf(D3DX_PI / 4.f))
+		{
+			(*m_vEnemy2)[i]->getDamage(m_nPlayerAtkDamage);
+		}
+	}
+
+	for (int i = 0; i < (*m_vBoss).size(); i++)
+	{
+		float PlayerLength;
+		D3DXVECTOR3 vDist = (*m_vBoss)[i]->GetTransformData()->GetPosition() - m_pTransformData->GetPosition();
+		D3DXVECTOR3 vDir = m_vPlayerDir;
+		D3DXVec3Normalize(&vDist, &vDist);
+		D3DXVec3Normalize(&vDir, &vDir);
+		float fCos = D3DXVec3Dot(&vDist, &vDir);
+
+		PlayerLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vBoss)[i]->GetTransformData()->GetPosition()));
+
+		if (PlayerLength < 0.8 && fCos > cosf(D3DX_PI / 4.f))
+		{
+			(*m_vBoss)[i]->getDamage(m_nPlayerAtkDamage);
+		}
+	}
 }
 
 void cPlayer::PlayerWhirlWind(float fDelta)
@@ -414,6 +452,28 @@ void cPlayer::PlayerWhirlWind(float fDelta)
 		if (PlayerLength < 1.5f)
 		{
 			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage);
+		}
+	}
+
+	for (int i = 0; i < (*m_vEnemy2).size(); i++)
+	{
+		float PlayerLength;
+		PlayerLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vEnemy2)[i]->GetTransformData()->GetPosition()));
+
+		if (PlayerLength < 1.5f)
+		{
+			(*m_vEnemy2)[i]->getDamage(m_nPlayerAtkDamage);
+		}
+	}
+
+	for (int i = 0; i < (*m_vBoss).size(); i++)
+	{
+		float PlayerLength;
+		PlayerLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vBoss)[i]->GetTransformData()->GetPosition()));
+
+		if (PlayerLength < 1.5f)
+		{
+			(*m_vBoss)[i]->getDamage(m_nPlayerAtkDamage);
 		}
 	}
 }
@@ -435,6 +495,42 @@ void cPlayer::PlayerShiledBash()
 		{
 			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage);
 			(*m_vEnemy)[i]->GetPhysicsBody()->GetPhysicsData().vVelocity = (vDist * 15.f) + D3DXVECTOR3(0.f, 5.f, 0.f);
+		}
+	}
+
+	for (int i = 0; i < (*m_vEnemy2).size(); i++)
+	{
+		float PlayerLength;
+		D3DXVECTOR3 vDist = (*m_vEnemy2)[i]->GetTransformData()->GetPosition() - m_pTransformData->GetPosition();
+		D3DXVECTOR3 vDir = m_vPlayerDir;
+		D3DXVec3Normalize(&vDist, &vDist);
+		D3DXVec3Normalize(&vDir, &vDir);
+		float fCos = D3DXVec3Dot(&vDist, &vDir);
+
+		PlayerLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vEnemy2)[i]->GetTransformData()->GetPosition()));
+
+		if (PlayerLength < 0.8 && fCos > cosf(D3DX_PI / 4.f))
+		{
+			(*m_vEnemy2)[i]->getDamage(m_nPlayerAtkDamage);
+			(*m_vEnemy2)[i]->GetPhysicsBody()->GetPhysicsData().vVelocity = (vDist * 15.f) + D3DXVECTOR3(0.f, 5.f, 0.f);
+		}
+	}
+
+	for (int i = 0; i < (*m_vBoss).size(); i++)
+	{
+		float PlayerLength;
+		D3DXVECTOR3 vDist = (*m_vBoss)[i]->GetTransformData()->GetPosition() - m_pTransformData->GetPosition();
+		D3DXVECTOR3 vDir = m_vPlayerDir;
+		D3DXVec3Normalize(&vDist, &vDist);
+		D3DXVec3Normalize(&vDir, &vDir);
+		float fCos = D3DXVec3Dot(&vDist, &vDir);
+
+		PlayerLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vBoss)[i]->GetTransformData()->GetPosition()));
+
+		if (PlayerLength < 0.8 && fCos > cosf(D3DX_PI / 4.f))
+		{
+			(*m_vBoss)[i]->getDamage(m_nPlayerAtkDamage);
+			(*m_vBoss)[i]->GetPhysicsBody()->GetPhysicsData().vVelocity = (vDist * 15.f) + D3DXVECTOR3(0.f, 5.f, 0.f);
 		}
 	}
 }
@@ -526,9 +622,11 @@ void cPlayer::PlayerRotationBlend(float fDelta)
 	}
 }
 
-void cPlayer::setEnemy(std::vector<cEnemy*>* Enemy)
+void cPlayer::setEnemy(std::vector<cEnemy*>* Enemy, std::vector<cEnemy2*>* Enemy2, std::vector<cBoss*>* Boss)
 {
-	m_vEnemy = Enemy;
+	m_vEnemy	= Enemy;
+	m_vEnemy2	= Enemy2;
+	m_vBoss		= Boss;
 }
 
 void cPlayer::IsPlayerState()

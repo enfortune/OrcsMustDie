@@ -26,11 +26,15 @@ enum PLAYERTRAPTYPE
 class cSkinnedMeshEX;
 class cGameParticleSpark;
 class cEnemy;
+class cEnemy2;
+class cBoss;
 class cPlayer : public cGameNode
 {
 protected:
 	cSkinnedMeshEX *			m_pPlayerMesh;
 	std::vector<cEnemy*>		*m_vEnemy;
+	std::vector<cEnemy2*>		*m_vEnemy2;
+	std::vector<cBoss*>			*m_vBoss;
 	PLAYERSTATE					m_pPlayerState;
 	cGameParticleSpark*			m_pPlayerParticle;
 
@@ -83,7 +87,7 @@ public:
 	void PlayerShiledBash();
 	void PlayerJumpBlend();
 	void PlayerRotationBlend(float fDelta);
-	void setEnemy(std::vector<cEnemy*>* Enemy);
+	void setEnemy(std::vector<cEnemy*>* Enemy, std::vector<cEnemy2*>* Enemy2, std::vector<cBoss*>* Boss);
 	void IsPlayerState();
 
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
