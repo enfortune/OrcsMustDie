@@ -34,7 +34,7 @@ void cInGameScene::Setup()
 	m_pMap = new cMapData;
 	m_pMap->Setup();
 	m_pMap->LoadData("SampleStageMap.map");
-	this->AddChild(m_pMap);
+	//this->AddChild(m_pMap);
 
 	m_pPhysicsNode = new cPhysicsNode;
 	m_pPhysicsNode->Setup(m_pMap);
@@ -87,6 +87,7 @@ void cInGameScene::Setup()
 void cInGameScene::Update(float fDelta)
 {
 	m_pCamera->Update();
+	m_pMap->Update(fDelta);
 	m_pPlayer_S->SetRotationY(m_pCamera->GetCamRotAngle().y);
 
 	for (std::vector<cEnemy*>::iterator i = m_vEnemy.begin(); i != m_vEnemy.end();)
@@ -138,6 +139,7 @@ void cInGameScene::Update(float fDelta)
 void cInGameScene::Render()
 {
 	m_pGrid->Render();
+	m_pMap->Render();
 	for (int i = 0; i < m_vTrap.size(); i++)
 	{
 		m_vTrap[i].render();

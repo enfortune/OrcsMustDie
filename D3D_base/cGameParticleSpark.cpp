@@ -4,7 +4,7 @@
 
 cGameParticleSpark::cGameParticleSpark()
 {
-	m_fSize = 0.3f;
+	m_fSize = 0.1f;
 	m_dwVBSize = 4096;
 	m_dwVBOffset = 0;
 	m_dwVBBatchSize = 512;
@@ -46,12 +46,12 @@ void cGameParticleSpark::ResetParticle(ST_PARTICLEATTRIBUTE* pAttr)
 		GetRandomFloat(0.0f, 0.3f),
 		GetRandomFloat(0.0f, 0.3f),
 		GetRandomFloat(0.8f, 1.0f),
-		GetRandomFloat(0.9f, 1.0f));
+		GetRandomFloat(0.95f, 1.0f));
 	pAttr->stColorFade = D3DXCOLOR(
 		GetRandomFloat(0.0f, 0.01f),
 		GetRandomFloat(0.0f, 0.01f),
 		GetRandomFloat(0.0f, 0.05f),
-		GetRandomFloat(0.8f, 0.9f));
+		GetRandomFloat(0.7f, 0.75f));
 
 	pAttr->fAge = 0.0f;
 	pAttr->fLifeTime = GetRandomFloat(0.0f, 0.2f) + 0.3f;
@@ -96,12 +96,12 @@ void cGameParticleSpark::PreRender()
 	g_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
 	g_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
-	g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, false);
+	//g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, false);
 }
 void cGameParticleSpark::PostRender()
 {
 	cGameParticle::PostRender();
-	g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
+	//g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
 }
 
 void cGameParticleSpark::MakeSpark(D3DXVECTOR3 vPos, int nMount)

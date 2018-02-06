@@ -474,7 +474,7 @@ bool cMapData::GetPickingBox(OUT int& nX, OUT int& nY, OUT int& nZ, OUT DIRECTIO
 
 	return bRet;
 }
-bool cMapData::IsEnableToBuild(int nX, int nY, int nZ, DIRECTION_6 enDir, int nWidth, int nHeight)
+bool cMapData::IsEnableToBuild(OUT int nX, int nY, int nZ, DIRECTION_6 enDir, int nWidth, int nHeight)
 {
 	if (enDir == DIRECTION_6::END || nWidth == 0 || nHeight == 0) return false;
 
