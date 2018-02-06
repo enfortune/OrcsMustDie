@@ -3,7 +3,7 @@
 
 #include "cSkinnedMeshEX.h"
 
-void TrapType::render(D3DXMATRIXA16 & matrixWorld, int modelIndex, TrapComponentRender & checkAuthority)
+void TrapType::render(D3DXMATRIXA16 & matrixWorld, int modelIndex)
 {
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matrixWorld);
 	modelList_[modelIndex].Render();

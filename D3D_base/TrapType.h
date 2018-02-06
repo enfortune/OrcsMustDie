@@ -6,7 +6,6 @@ class Trap;
 struct TrapTypeComponentAttackable;
 struct TrapTypeComponentBlockable;
 struct TrapTypeComponentTriggerable;
-struct TrapComponentRender;
 
 #include "cSkinnedMeshEX.h"
 
@@ -42,6 +41,9 @@ protected:
 	
 	//std::vector<LPDIRECT3DTEXTURE9> pTextureList_ {};
 	//std::vector<std::string> soundList_ {};
+
+private:
+	void render(D3DXMATRIXA16 & matrixWorld, int modelIndex);		// inner model index of specific trap
 	
 public:
 	TrapType() = default;
@@ -68,9 +70,4 @@ public:
 
 public:
 	void render(D3DXMATRIXA16 & matrixWorld);	// rendering virtual object
-
-	// inner model index of specific trap
-	// trick to friend function for non-inheritance class
-	void render(D3DXMATRIXA16 & matrixWorld, int modelIndex, TrapComponentRender & checkAuthority);
-	
 };

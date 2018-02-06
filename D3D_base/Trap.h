@@ -17,10 +17,11 @@ private:
 	FRUSTUM frustumWorld_ {};
 	FRUSTUM frustumInteractionWorld_ {};
 
+	int renderModelIndex {};
+
 	TrapComponentAttackable * pComponentAttackable_ {};
 	TrapComponentBlockable * pComponentBlockable_ {};
 	TrapComponentTriggerable * pComponentTriggerable_ {};
-	TrapComponentRender * pComponentRender_ {};
 
 public:
 	Trap() = default;
