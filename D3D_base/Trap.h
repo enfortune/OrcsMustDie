@@ -11,7 +11,7 @@ class Trap
 {
 private:
 	TrapType * pType_ {};
-	D3DXMATRIXA16 matrixWorld_ {};
+	std::vector<D3DXMATRIXA16> matrixWorldList_ {};
 
 	// cache
 	FRUSTUM frustumWorld_ {};
@@ -19,9 +19,9 @@ private:
 
 	int renderModelIndex_ {};
 
-	TrapComponentAttackable * pComponentAttackable_ {};
-	TrapComponentBlockable * pComponentBlockable_ {};
-	TrapComponentTriggerable * pComponentTriggerable_ {};
+	std::unique_ptr<TrapComponentAttackable> pComponentAttackable_ {};
+	std::unique_ptr<TrapComponentBlockable> pComponentBlockable_ {};
+	std::unique_ptr<TrapComponentTriggerable> pComponentTriggerable_ {};
 
 public:
 	Trap() = default;
@@ -37,6 +37,9 @@ public:
 
 	inline FRUSTUM getFrustum() const { return frustumWorld_; }
 	inline FRUSTUM getInteractionArea() const { return frustumInteractionWorld_; }
+
+public:		// for component
+	inline void setRenderModelIndex(int index) { renderModelIndex_ = index; }
 
 public:
 	void interaction(std::vector<PlayerDummy> & playerList);

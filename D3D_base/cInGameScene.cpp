@@ -183,6 +183,9 @@ void cInGameScene::Update(float fDelta)
 		m_bRound3 = true;
 	}
 
+	for (int i = 0; i < static_cast<int> (m_vTrap.size()); ++i)
+		m_vTrap[i].update();
+
 	for (std::vector<cEnemyBase*>::iterator i = m_vEnemyBase.begin(); i != m_vEnemyBase.end();)
 	{
 
@@ -204,21 +207,33 @@ void cInGameScene::Update(float fDelta)
 	{
 		m_pPlayer_S->SetIsBattle(true);
 	}
+
 	if (g_pKeyManager->IsOnceKeyDown('2'))
 	{
 		m_pPlayer_S->SetIsBattle(false);
 		m_pPlayer_S->SetPlayerTrapType(PLAYERTRAPTYPE_BARRICADE);
 	}
 
+	if (g_pKeyManager->IsOnceKeyDown('3'))
+	{
+		m_pPlayer_S->SetIsBattle(false);
+		m_pPlayer_S->SetPlayerTrapType(PLAYERTRAPTYPE_SPIKE);
+	}
+
 	if (m_pPlayer_S->GetIsBattle() == false)
 	{
 		if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON))
 		{
-			if (m_pPlayer_S->GetPlayerTrapType() == PLAYERTRAPTYPE_BARRICADE)
+			TrapType * pTrapType {};
+
+			switch (m_pPlayer_S->GetPlayerTrapType())
 			{
-				TrapType * pTrapType = m_pTrapTypeManager->find("Barricade");
-				MakeTrap(pTrapType, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y));
+			case PLAYERTRAPTYPE_BARRICADE: pTrapType = m_pTrapTypeManager->find("Barricade"); break;
+			case PLAYERTRAPTYPE_SPIKE: pTrapType = m_pTrapTypeManager->find("Spike"); break;
+			case PLAYERTRAPTYPE_HEALINGWELL: pTrapType = m_pTrapTypeManager->find("HealingWell"); break;
 			}
+
+			MakeTrap(pTrapType, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y));
 		}
 	}
 
@@ -243,12 +258,92 @@ void cInGameScene::Render()
 
 	if (m_pPlayer_S->GetIsBattle() == false)
 	{
-		if (m_pPlayer_S->GetPlayerTrapType() == PLAYERTRAPTYPE_BARRICADE)
+		TrapType * pTrapType {};
+
+		switch (m_pPlayer_S->GetPlayerTrapType())
 		{
-			TrapType * pTrapType = m_pTrapTypeManager->find("Barricade");
+		case PLAYERTRAPTYPE_BARRICADE: pTrapType = m_pTrapTypeManager->find("Barricade"); break;
+		case PLAYERTRAPTYPE_SPIKE: pTrapType = m_pTrapTypeManager->find("Spike"); break;
+		case PLAYERTRAPTYPE_HEALINGWELL: pTrapType = m_pTrapTypeManager->find("HealingWell"); break;
+		}
+
+		DIRECTION_6 direction {};
+		D3DXVECTOR3 vertexCenter {};
+
+		bool check = true;
+
+		if (pTrapType->isConstructible(TrapType::eInstallPosition::WALL) && check)
+		{
+			bool check2 = true;
 			
-			DIRECTION_6 direction = DIRECTION_6::TOP;
-			D3DXVECTOR3 vertexCenter {};
+			if (check2)
+			{
+				direction = DIRECTION_6::LEFT;
+
+				if (m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
+					100, pTrapType->getWidth(), pTrapType->getHeight()))
+				{
+					D3DXMATRIXA16 matrixRender {};
+					D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
+
+					pTrapType->render(matrixRender);
+					check = false;
+					check2 = false;
+				}
+			}
+
+			if (check2)
+			{
+				direction = DIRECTION_6::RIGHT;
+
+				if (m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
+					100, pTrapType->getWidth(), pTrapType->getHeight()))
+				{
+					D3DXMATRIXA16 matrixRender {};
+					D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
+
+					pTrapType->render(matrixRender);
+					check = false;
+					check2 = false;
+				}
+			}
+
+			if (check2)
+			{
+				direction = DIRECTION_6::FRONT;
+
+				if (m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
+					100, pTrapType->getWidth(), pTrapType->getHeight()))
+				{
+					D3DXMATRIXA16 matrixRender {};
+					D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
+
+					pTrapType->render(matrixRender);
+					check = false;
+					check2 = false;
+				}
+			}
+
+			if (check2)
+			{
+				direction = DIRECTION_6::REAR;
+
+				if (m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
+					100, pTrapType->getWidth(), pTrapType->getHeight()))
+				{
+					D3DXMATRIXA16 matrixRender {};
+					D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
+
+					pTrapType->render(matrixRender);
+					check = false;
+					check2 = false;
+				}
+			}
+		}
+
+		if (pTrapType->isConstructible(TrapType::eInstallPosition::CEILING) && check)
+		{
+			direction = DIRECTION_6::TOP;
 
 			if (m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
 				100, pTrapType->getWidth(), pTrapType->getHeight()))
@@ -257,8 +352,26 @@ void cInGameScene::Render()
 				D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
 
 				pTrapType->render(matrixRender);
+				check = false;
 			}
 		}
+
+		if (pTrapType->isConstructible(TrapType::eInstallPosition::FLOOR) && check)
+		{
+			direction = DIRECTION_6::TOP;
+
+			if (m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
+				100, pTrapType->getWidth(), pTrapType->getHeight()))
+			{
+				D3DXMATRIXA16 matrixRender {};
+				D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
+
+				pTrapType->render(matrixRender);
+				check = false;
+			}
+		}
+		
+		
 	}
 
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);

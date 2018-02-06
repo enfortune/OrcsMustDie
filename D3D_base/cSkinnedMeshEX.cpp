@@ -272,15 +272,18 @@ float cSkinnedMeshEX::getCurPosition()
 
 void cSkinnedMeshEX::SetupAnimationSet(LPD3DXANIMATIONCONTROLLER pAniCtrl)
 {
-	UINT nNumSet = pAniCtrl->GetMaxNumAnimationSets();
-
-	for (UINT i = 0; i < nNumSet; i++)
+	if (pAniCtrl)
 	{
-		LPD3DXANIMATIONSET aniSet;
-		LPTSTR	szName;
-		pAniCtrl->GetAnimationSet(i, &aniSet);
-		m_mapAniSet[aniSet->GetName()] = aniSet;
-		m_vecAniSetName.push_back(aniSet->GetName());
+		UINT nNumSet = pAniCtrl->GetMaxNumAnimationSets();
+
+		for (UINT i = 0; i < nNumSet; i++)
+		{
+			LPD3DXANIMATIONSET aniSet;
+			LPTSTR	szName;
+			pAniCtrl->GetAnimationSet(i, &aniSet);
+			m_mapAniSet[aniSet->GetName()] = aniSet;
+			m_vecAniSetName.push_back(aniSet->GetName());
+		}
 	}
 }
 

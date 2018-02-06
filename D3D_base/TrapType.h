@@ -20,7 +20,7 @@ public:
 
 protected:
 	std::vector<cSkinnedMeshEX> modelList_;
-	D3DXMATRIXA16 matrixLocal_ {};
+	std::vector<D3DXMATRIXA16> matrixLocalList_ {};
 
 	int width_ {};
 	int height_ {};

@@ -3,8 +3,6 @@
 
 TrapComponentAttackable::TrapComponentAttackable(TrapTypeComponentAttackable * pParent) : pParent_(pParent) {}
 
-TrapComponentAttackable::~TrapComponentAttackable() { delete this; }
-
 void TrapComponentAttackable::attack(std::vector<PlayerDummy> & playerList)
 {
 }
@@ -18,7 +16,7 @@ void TrapComponentAttackable::attack(std::vector<EnemyDummy> & enemyList)
 	}
 }
 
-void TrapComponentAttackable::update(float fDelta)
+void TrapComponentAttackable::update(Trap & trap, float fDelta)
 {
 	cooldown_ -= fDelta;
 
@@ -28,8 +26,6 @@ void TrapComponentAttackable::update(float fDelta)
 
 TrapComponentBlockable::TrapComponentBlockable(TrapTypeComponentBlockable * pParent) : pParent_(pParent) {}
 
-TrapComponentBlockable::~TrapComponentBlockable() { delete this; }
-
 void TrapComponentBlockable::hit(std::vector<EnemyDummy> & enemyList)
 {
 	//hp_ -= damage - defense_;
@@ -38,14 +34,8 @@ void TrapComponentBlockable::hit(std::vector<EnemyDummy> & enemyList)
 		hp_ = 0;
 }
 
-void TrapComponentBlockable::update(float fDelta)
+void TrapComponentBlockable::update(Trap & trap, float fDelta)
 {
 }
 
 TrapComponentTriggerable::TrapComponentTriggerable(TrapTypeComponentTriggerable * pParent) : pParent_(pParent) {}
-
-TrapComponentTriggerable::~TrapComponentTriggerable() { delete this; }
-
-void TrapComponentTriggerable::update(float fDelta)
-{
-}

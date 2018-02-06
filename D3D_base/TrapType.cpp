@@ -23,7 +23,7 @@ TrapType::~TrapType()
 
 void TrapType::render(D3DXMATRIXA16 & matrixWorld)
 {
-	D3DXMATRIXA16 matrixTotal = matrixLocal_ * matrixWorld;
+	D3DXMATRIXA16 matrixTotal = matrixLocalList_[0] * matrixWorld;
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matrixTotal);
 
 	modelList_[0].Render();

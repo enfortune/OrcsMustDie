@@ -18,7 +18,7 @@ public:
 
 public:
 	TrapComponentAttackable(TrapTypeComponentAttackable * pParent = nullptr);
-	virtual ~TrapComponentAttackable();
+	virtual ~TrapComponentAttackable() = default;
 
 	//UNCOPYABLE(TrapComponentAttackable);
 
@@ -27,7 +27,7 @@ public:
 	virtual void attack(std::vector<EnemyDummy> & enemyList);
 
 public:
-	virtual void update(float fDelta = g_pTimeManager->GetEllapsedTime());
+	virtual void update(Trap & trap, float fDelta = g_pTimeManager->GetEllapsedTime());
 };
 
 struct TrapTypeComponentBlockable;
@@ -41,7 +41,7 @@ public:
 
 public:
 	TrapComponentBlockable(TrapTypeComponentBlockable * pParent = nullptr);
-	virtual ~TrapComponentBlockable();
+	virtual ~TrapComponentBlockable() = default;
 
 	//UNCOPYABLE(TrapComponentBlockable);
 
@@ -49,7 +49,7 @@ public:
 	virtual void hit(std::vector<EnemyDummy> & enemyList);
 
 public:
-	virtual void update(float fDelta = g_pTimeManager->GetEllapsedTime());
+	virtual void update(Trap & trap, float fDelta = g_pTimeManager->GetEllapsedTime());
 };
 
 struct TrapTypeComponentTriggerable;
@@ -61,8 +61,8 @@ public:
 
 public:
 	TrapComponentTriggerable(TrapTypeComponentTriggerable * pParent = nullptr);
-	virtual ~TrapComponentTriggerable();
+	virtual ~TrapComponentTriggerable() = default;
 
 public:
-	virtual void update(float fDelta = g_pTimeManager->GetEllapsedTime());
+	virtual void update(Trap & trap, float fDelta = g_pTimeManager->GetEllapsedTime()) = 0;
 };

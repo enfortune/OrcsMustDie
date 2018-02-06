@@ -26,9 +26,13 @@ public:
 
 class TrapComponentAttackableSpike : public TrapComponentAttackable
 {
-public:
-	TrapComponentAttackableSpike(TrapTypeComponentAttackable * pParent = nullptr);
-	virtual ~TrapComponentAttackableSpike();
+private:
+
 
 public:
+	TrapComponentAttackableSpike(TrapTypeComponentAttackable * pParent = nullptr);
+	virtual ~TrapComponentAttackableSpike() = default;
+
+public:
+	virtual void update(Trap & trap, float fDelta = g_pTimeManager->GetEllapsedTime()) override;
 };
