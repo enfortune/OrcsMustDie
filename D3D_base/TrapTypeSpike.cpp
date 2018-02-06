@@ -60,3 +60,5 @@ TrapComponentAttackable * TrapTypeComponentAttackableSpike::newComponentObject()
 
 TrapComponentAttackableSpike::TrapComponentAttackableSpike(TrapTypeComponentAttackable * pParent)
 { TrapComponentAttackable::TrapComponentAttackable(pParent); }
+
+TrapComponentAttackableSpike::~TrapComponentAttackableSpike() {	delete this; }
