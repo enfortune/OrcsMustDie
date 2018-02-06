@@ -36,19 +36,15 @@ void cPhysicsNode::Update(float fDelta)
 	
 	while (fTotalDelta > PHYSICSNODE_DELTATIME_MAX)
 	{
-
+		
 		fCurrDelta = PHYSICSNODE_DELTATIME_MAX;
 		fTotalDelta -= PHYSICSNODE_DELTATIME_MAX;
 
 		for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
 		{
 			(*itSour)->Update(fCurrDelta);
-
-			//if ((*itSour)->GetPhysicsBody()->GetPhysicsData().bOnGround == false)
 			(*itSour)->GetPhysicsBody()->GetPhysicsData().vVelocity += m_stSpaceData.vGravity * fCurrDelta;
-
 			(*itSour)->GetPhysicsBody()->GetPhysicsData().bOnGround = false;
-
 			(*itSour)->UpdateTempPhysics(fCurrDelta);
 		}
 
@@ -56,9 +52,8 @@ void cPhysicsNode::Update(float fDelta)
 		{
 			itDest = itSour;
 			itDest++;
-			for (/*itDest = m_setChild.begin()*/; itDest != m_setChild.end(); itDest++)
+			for (; itDest != m_setChild.end(); itDest++)
 			{
-				//if (itDest == itSour) continue;
 				(*itSour)->CollisionWithNode(*itDest);
 			}
 		}
@@ -78,7 +73,6 @@ void cPhysicsNode::Update(float fDelta)
 	{
 		(*itSour)->Update(fCurrDelta);
 
-		//if ((*itSour)->GetPhysicsBody()->GetPhysicsData().bOnGround == false)
 		(*itSour)->GetPhysicsBody()->GetPhysicsData().vVelocity += m_stSpaceData.vGravity * fCurrDelta;
 
 		(*itSour)->GetPhysicsBody()->GetPhysicsData().bOnGround = false;
@@ -90,9 +84,8 @@ void cPhysicsNode::Update(float fDelta)
 	{
 		itDest = itSour;
 		itDest++;
-		for (/*itDest = m_setChild.begin()*/; itDest != m_setChild.end(); itDest++)
+		for (; itDest != m_setChild.end(); itDest++)
 		{
-			//if (itDest == itSour) continue;
 			(*itSour)->CollisionWithNode(*itDest);
 		}
 	}
@@ -103,15 +96,6 @@ void cPhysicsNode::Update(float fDelta)
 
 		(*itSour)->UpdatePhysics(fCurrDelta);
 	}
-
-
-	
-
-	/*for each (cGameNode* node in m_setChild)
-	{
-		node->UpdatePhysics(fDelta);
-		node->Update(fDelta);
-	}*/
 }
 void cPhysicsNode::Render()
 {

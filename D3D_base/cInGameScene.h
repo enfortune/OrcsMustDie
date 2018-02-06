@@ -8,7 +8,7 @@ class cCamera;
 class cGrid;
 class cPlayer;
 class cPlayerCamera;
-class cPhysicsNode;
+class cPhysicsSpace;
 class cEnemy;
 class cEnemyBase;
 class cMapData;
@@ -27,7 +27,7 @@ class cInGameScene : public cGameScene
 
 	/* for test */
 	cPlayer*			m_pPlayer_S;
-	cPhysicsNode*		m_pPhysicsNode;
+	cPhysicsSpace*		m_pPhysicsNode;
 	std::vector<Trap>	m_vTrap;
 	TrapTypeManager*	m_pTrapTypeManager;
 	cMapData*			m_pMap;
@@ -43,7 +43,6 @@ public:
 	virtual void Render() override;
 	virtual void Delete() override;
 
-	void CheckTrapCollisionEnemy(float fDelta);
 	bool IsMakeTrap(OUT D3DXVECTOR3 &center, TrapType* tType, cRay ray);
 	void MakeTrap(TrapType* tType, cRay ray);
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
