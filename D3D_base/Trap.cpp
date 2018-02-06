@@ -75,10 +75,7 @@ void Trap::update(float fDelta)
 		pComponentTriggerable_->update(fDelta);
 }
 
-void Trap::render() 
+void Trap::render()
 {
-	if (pComponentRender_)
-		pComponentRender_->render(*pType_, matrixWorld_);
-	else
-		pType_->render(matrixWorld_);
+	pType_->render(matrixWorld_);
 }

@@ -2,7 +2,7 @@
 
 #include "TrapType.h"
 
-class TrapTypeBarricade : public TrapType
+struct TrapTypeBarricade : public TrapType
 {
 public:
 	TrapTypeBarricade();

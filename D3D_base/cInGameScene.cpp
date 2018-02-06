@@ -171,8 +171,10 @@ bool cInGameScene::IsMakeTrap(OUT D3DXVECTOR3 &center,TrapType* tType, cRay ray)
 	{
 		DIRECTION_6 Dir_6;
 		Dir_6 = DIRECTION_6::TOP;
-		if (m_pMap->IsEnableToBuild(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight()))
+		if (m_pMap->IsEnableToBuild(ray, 100, tType->getWidth(), tType->getHeight()))
 		{
+			m_pMap->GetBuildPostion(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight());
+
 			center = vCenterPos;
 			return true;
 		}
@@ -181,8 +183,10 @@ bool cInGameScene::IsMakeTrap(OUT D3DXVECTOR3 &center,TrapType* tType, cRay ray)
 	{
 		DIRECTION_6 Dir_6;
 		Dir_6 = DIRECTION_6::BOTTOM;
-		if (m_pMap->IsEnableToBuild(vCenterPos,Dir_6, ray, 100, tType->getWidth(), tType->getHeight()))
+		if (m_pMap->IsEnableToBuild(ray, 100, tType->getWidth(), tType->getHeight()))
 		{
+			m_pMap->GetBuildPostion(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight());
+
 			center = vCenterPos;
 			return true;
 		}
@@ -191,26 +195,34 @@ bool cInGameScene::IsMakeTrap(OUT D3DXVECTOR3 &center,TrapType* tType, cRay ray)
 	{
 		DIRECTION_6 Dir_6;
 		Dir_6 = DIRECTION_6::LEFT;
-		if(m_pMap->IsEnableToBuild(vCenterPos,Dir_6, ray, 10, tType->getWidth(), tType->getHeight()))
+		if (m_pMap->IsEnableToBuild(ray, 100, tType->getWidth(), tType->getHeight()))
 		{
+			m_pMap->GetBuildPostion(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight());
+
 			center = vCenterPos;
 			return true;
 		}
 		Dir_6 = DIRECTION_6::RIGHT;
-		if (m_pMap->IsEnableToBuild(vCenterPos,Dir_6, ray, 10, tType->getWidth(), tType->getHeight()))
+		if (m_pMap->IsEnableToBuild(ray, 100, tType->getWidth(), tType->getHeight()))
 		{
+			m_pMap->GetBuildPostion(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight());
+
 			center = vCenterPos;
 			return true;
 		}
 		Dir_6 = DIRECTION_6::FRONT;
-		if (m_pMap->IsEnableToBuild(vCenterPos,Dir_6, ray, 10, tType->getWidth(), tType->getHeight()))
+		if (m_pMap->IsEnableToBuild(ray, 100, tType->getWidth(), tType->getHeight()))
 		{
+			m_pMap->GetBuildPostion(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight());
+
 			center = vCenterPos;
 			return true;
 		}
 		Dir_6 = DIRECTION_6::REAR;
-		if (m_pMap->IsEnableToBuild(vCenterPos,Dir_6, ray, 10, tType->getWidth(), tType->getHeight()))
+		if (m_pMap->IsEnableToBuild(ray, 100, tType->getWidth(), tType->getHeight()))
 		{
+			m_pMap->GetBuildPostion(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight());
+
 			center = vCenterPos;
 			return true;
 		}

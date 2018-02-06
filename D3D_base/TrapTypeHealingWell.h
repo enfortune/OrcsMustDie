@@ -2,7 +2,7 @@
 
 #include "TrapType.h"
 
-class TrapTypeHealingWell : public TrapType
+struct TrapTypeHealingWell : public TrapType
 {
 public:
 	TrapTypeHealingWell();
