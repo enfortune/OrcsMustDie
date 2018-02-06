@@ -4,6 +4,8 @@
 #include "TrapTypeComponent.h"
 #include "TrapComponent.h"
 
+class cEnemyBase;
+
 struct TrapTypeSpike : public TrapType
 {
 public:
@@ -32,6 +34,9 @@ private:
 public:
 	TrapComponentAttackableSpike(TrapTypeComponentAttackable * pParent = nullptr);
 	virtual ~TrapComponentAttackableSpike() = default;
+
+public:
+	virtual void attack(std::vector<cEnemyBase *> & enemyList) override;
 
 public:
 	virtual void update(Trap & trap, float fDelta = g_pTimeManager->GetEllapsedTime()) override;

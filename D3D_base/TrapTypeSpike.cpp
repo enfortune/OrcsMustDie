@@ -2,8 +2,9 @@
 #include "TrapTypeSpike.h"
 
 #include "TrapTypeComponent.h"
-
 #include "Trap.h"
+
+#include "cEnemyBase.h"
 
 TrapTypeSpike::TrapTypeSpike()
 {
@@ -61,6 +62,7 @@ TrapComponentAttackable * TrapTypeComponentAttackableSpike::newComponentObject()
 {
 	TrapComponentAttackable * temp = new TrapComponentAttackableSpike(const_cast<TrapTypeComponentAttackableSpike *>(this));
 
+	temp->pParent_ = const_cast<TrapTypeComponentAttackableSpike *>(this);
 	temp->frustumAttackWorld_ = frustumAttackLocal_;
 	temp->cooldown_ = cooldownMax_;
 
@@ -70,10 +72,27 @@ TrapComponentAttackable * TrapTypeComponentAttackableSpike::newComponentObject()
 TrapComponentAttackableSpike::TrapComponentAttackableSpike(TrapTypeComponentAttackable * pParent)
 { TrapComponentAttackable::TrapComponentAttackable(pParent); }
 
+void TrapComponentAttackableSpike::attack(std::vector<cEnemyBase*> & enemyList)
+{
+	if (cooldown_ <= 0.0f)
+	{
+		for (int i = 0; i < static_cast<int> (enemyList.size()); ++i)
+		{
+			if (CheckOBBCollision(&(enemyList[i]->GetFrustumInWorld()), &frustumAttackWorld_))
+			{
+				enemyList[i]->getDamage(pParent_->damage_);
+			
+				cooldown_ = pParent_->cooldownMax_;
+				pTrap_->setRenderModelIndex(0);
+			}
+		}
+	}
+}
+
 void TrapComponentAttackableSpike::update(Trap & trap, float fDelta)
 {
 	TrapComponentAttackable::update(trap, fDelta);
 
-	if (cooldown_ <= 0.0f)
+	if (cooldown_ <= pParent_->cooldownMax_ - pParent_->duration_)
 		trap.setRenderModelIndex(1);
 }

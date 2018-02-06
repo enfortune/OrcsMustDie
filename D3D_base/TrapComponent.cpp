@@ -1,18 +1,30 @@
 #include "stdafx.h"
 #include "TrapComponent.h"
 
+#include "TrapTypeComponent.h"
+#include "Trap.h"
+
+#include "cPlayer.h"
+#include "cEnemyBase.h"
+
 TrapComponentAttackable::TrapComponentAttackable(TrapTypeComponentAttackable * pParent) : pParent_(pParent) {}
 
-void TrapComponentAttackable::attack(std::vector<PlayerDummy> & playerList)
+void TrapComponentAttackable::attack(cPlayer & player)
 {
 }
 
-void TrapComponentAttackable::attack(std::vector<EnemyDummy> & enemyList)
+void TrapComponentAttackable::attack(std::vector<cEnemyBase *> & enemyList)
 {
-	for (int i = 0; i < static_cast<int> (enemyList.size()); ++i)
+	if (cooldown_ <= 0.0f)
 	{
-		//if (enemyList[i].isAttack() && isCollision(frustumAttackWorld_, enemyList[i].frustum))
-		//enemyList[i].hit(damage_);
+		for (int i = 0; i < static_cast<int> (enemyList.size()); ++i)
+		{
+			if (CheckOBBCollision(&(enemyList[i]->GetFrustumInWorld()), &frustumAttackWorld_))
+			{
+				enemyList[i]->getDamage(pParent_->damage_);
+				cooldown_ = pParent_->cooldownMax_;
+			}
+		}
 	}
 }
 
@@ -26,9 +38,9 @@ void TrapComponentAttackable::update(Trap & trap, float fDelta)
 
 TrapComponentBlockable::TrapComponentBlockable(TrapTypeComponentBlockable * pParent) : pParent_(pParent) {}
 
-void TrapComponentBlockable::hit(std::vector<EnemyDummy> & enemyList)
+void TrapComponentBlockable::hit(std::vector<cEnemyBase *> & enemyList)
 {
-	//hp_ -= damage - defense_;
+	//hp_ -= damage_ - defense_;
 
 	if (hp_ < 0)
 		hp_ = 0;

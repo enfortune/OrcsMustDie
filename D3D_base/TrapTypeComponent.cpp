@@ -7,7 +7,7 @@ TrapComponentAttackable * TrapTypeComponentAttackable::newComponentObject() cons
 {
 	TrapComponentAttackable * temp = new TrapComponentAttackable(const_cast<TrapTypeComponentAttackable *>(this));
 
-	//temp->matrixAttackWorld_
+	
 	temp->frustumAttackWorld_ = frustumAttackLocal_;
 	temp->cooldown_ = cooldownMax_;
 

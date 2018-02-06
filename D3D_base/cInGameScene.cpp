@@ -186,6 +186,9 @@ void cInGameScene::Update(float fDelta)
 	for (int i = 0; i < static_cast<int> (m_vTrap.size()); ++i)
 		m_vTrap[i].update();
 
+	for (int i = 0; i < static_cast<int> (m_vTrap.size()); ++i)
+		m_vTrap[i].interaction(m_vEnemyBase);
+
 	for (std::vector<cEnemyBase*>::iterator i = m_vEnemyBase.begin(); i != m_vEnemyBase.end();)
 	{
 

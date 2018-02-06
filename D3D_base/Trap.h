@@ -5,7 +5,8 @@
 #include "TrapType.h"
 #include "TrapComponent.h"
 
-#include "ClassDummy.h"
+class cPlayer;
+class cEnemyBase;
 
 class Trap
 {
@@ -42,8 +43,8 @@ public:		// for component
 	inline void setRenderModelIndex(int index) { renderModelIndex_ = index; }
 
 public:
-	void interaction(std::vector<PlayerDummy> & playerList);
-	void interaction(std::vector<EnemyDummy> & enemyList);
+	void interaction(cPlayer & player);
+	void interaction(std::vector<cEnemyBase *> & enemyList);
 	void interaction(std::vector<ItemDummy> & itemList);
 
 public:
