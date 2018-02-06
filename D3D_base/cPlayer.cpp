@@ -73,6 +73,10 @@ void cPlayer::Setup()
 
 	m_vAtkParticleStart = D3DXVECTOR3(0.5f, 1.f, 1.f);
 	m_vAtkParticleEnd = D3DXVECTOR3(-0.5f, 0.2f, 1.f);
+
+	g_pSoundManager->AddSound("PlayerAttackHit", "Resource/Sound/Player/2HSwordHitFlesh03.ogg", false, false);
+	g_pSoundManager->AddSound("PlayerWhirlwind", "Resource/Sound/Player/PlayerWhirlwind.ogg", false, true);
+	g_pSoundManager->AddSound("PlayerAttack", "Resource/Sound/Player/HumanMaleAttackA.ogg", false, false);
 }
 
 void cPlayer::Update(float fDelta)
@@ -240,24 +244,23 @@ void cPlayer::Update(float fDelta)
 			IsPlayerState();
 		}
 
-		if (g_pKeyManager->IsStayKeyDown('R') && nPlayerCurMp > 50)
+		if (g_pKeyManager->IsOnceKeyDown('R') && nPlayerCurMp > 50)
 		{
 			if (m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
 			{
 				m_pPlayerState = PLAYERSTATE_SKILL_WHIRLWIND;
 				IsPlayerState();
 			}
+
+
+			
+		}
+		if (m_pPlayerState == PLAYERSTATE_SKILL_WHIRLWIND)
+		{
+
 			nPlayerCurMp - 50;
 			ManaCount += 2;
 			nPlayerCurMp = nPlayerCurMp - ManaCount;
-
-			m_fPlayerRestore += fDelta;
-
-			if (m_fPlayerRestore >= 1.f)
-			{
-				PlayerWhirlWind(fDelta);
-				//m_fPlayerRestore = 0;
-			}
 
 			if (nPlayerCurMp <= 2)
 			{
@@ -265,7 +268,6 @@ void cPlayer::Update(float fDelta)
 				IsPlayerState();
 			}
 		}
-
 
 		if (g_pKeyManager->IsOnceKeyUp('R'))
 		{
@@ -291,6 +293,14 @@ void cPlayer::Update(float fDelta)
 	PlayerRotationBlend(fDelta);
 	PlayerJumpBlend();
 	PlayerParticleUpdate();
+
+	if (m_pPlayerState == PLAYERSTATE_SKILL_WHIRLWIND)
+	{
+		if (m_fPlayerRestore >= 1.0f)
+		{
+			PlayerWhirlWind(fDelta);
+		}
+	}
 
 	m_fPlayerRestore += fDelta;
 	if (m_fPlayerRestore >= 1.0f)
@@ -402,6 +412,7 @@ void cPlayer::PlayerAttacked()
 		if (PlayerLength < 0.8 && fCos > cosf(D3DX_PI/4.f))
 		{
 			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage);
+			g_pSoundManager->Play("PlayerAttackHit");
 		}
 	}
 }
@@ -539,12 +550,15 @@ void cPlayer::IsPlayerState()
 	{
 	case PLAYERSTATE_STAND:
 		m_pPlayerMesh->SetAnimationSetBlend(0, 11, true);
+		g_pSoundManager->Stop("PlayerWhirlwind");
 		break;
 	case PLAYERSTATE_MOVE:
 		m_pPlayerMesh->SetAnimationSetBlend(0, 10, true);
+		g_pSoundManager->Stop("PlayerWhirlwind");
 		break;
 	case PLAYERSTATE_ATTACK:
 		m_pPlayerMesh->SetAnimationSetBlend(0, 4, false);
+		g_pSoundManager->Play("PlayerAttack");
 		break;
 	case PLAYERSTATE_HIT:
 		m_pPlayerMesh->SetAnimationSetBlend(0, 3, false);
@@ -560,6 +574,7 @@ void cPlayer::IsPlayerState()
 		break;
 	case PLAYERSTATE_SKILL_WHIRLWIND :
 		m_pPlayerMesh->SetAnimationSetBlend(0, 0, true);
+		g_pSoundManager->Play("PlayerWhirlwind");
 		break;
 	case PLAYERSTATE_SKILL_SHILEDBASH :
 		m_pPlayerMesh->SetAnimationSetBlend(0, 2, false);
@@ -567,7 +582,7 @@ void cPlayer::IsPlayerState()
 	case PLAYERSTATE_DEATH :
 		m_pPlayerMesh->SetAnimationSetBlend(0, 9, false);
 		break;
-		default:
+	default:
 		break;
 	}
 }
