@@ -575,19 +575,17 @@ bool cMapData::IsEnableToBuild(int nX, int nY, int nZ, DIRECTION_6 enDir, int nW
 
 	return true;
 }
-bool cMapData::IsEnableToBuild(OUT D3DXVECTOR3& vCenter, OUT DIRECTION_6& enPickingDir, cRay ray, float fDistMax, int nWidth, int nHeight)
+
+bool cMapData::GetBuildPostion(OUT D3DXVECTOR3& vCenter, OUT DIRECTION_6& enPickingDir, cRay ray, float fDistMax, int nWidth, int nHeight)
 {
 	int nX, nY, nZ;
-	bool bRet = false;
 	DIRECTION_6 enDir;
 
 	if (!this->GetPickingBox(nX, nY, nZ, enDir, ray, fDistMax))
 		return false;
 
-	bRet = this->IsEnableToBuild(nX, nY, nZ, enDir, nWidth, nHeight);
-
+	//IsEnableToBuild(nX, nY, nZ, enDir, nWidth, nHeight);
 	//vCenter = m_arrGridBox[nX][nY][nZ].stCube.GetCenterVec3(enDir);
-
 
 	int nMinX, nMinY, nMinZ;
 	int nMaxX, nMaxY, nMaxZ;
@@ -651,12 +649,23 @@ bool cMapData::IsEnableToBuild(OUT D3DXVECTOR3& vCenter, OUT DIRECTION_6& enPick
 	}
 
 	vTemp /= nWidth * nHeight;
-
 	vCenter = vTemp;
-
 	enPickingDir = enDir;
 
-	return bRet;
+	return true;
+}
+
+
+bool cMapData::IsEnableToBuild(cRay ray, float fDistMax, int nWidth, int nHeight)
+{
+	int nX, nY, nZ;
+	bool bRet = false;
+	DIRECTION_6 enDir;
+
+	if (!this->GetPickingBox(nX, nY, nZ, enDir, ray, fDistMax))
+		return false;
+
+	return this->IsEnableToBuild(nX, nY, nZ, enDir, nWidth, nHeight);
 }
 
 bool cMapData::BuildTrap(Trap* pTrap, cRay ray, float fDistMax, int nWidth, int nHeight)

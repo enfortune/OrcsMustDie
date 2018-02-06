@@ -211,8 +211,9 @@ public:
 
 	bool GetPickingBox(OUT int& nX, OUT int& nY, OUT int& nZ, OUT DIRECTION_6& enPickingDir, IN cRay ray, IN float fDistMax);
 	bool IsEnableToBuild(OUT int nX, int nY, int nZ, DIRECTION_6 enDir, int nWidth, int nHeight);
-
-	bool IsEnableToBuild(OUT D3DXVECTOR3& vCenter, OUT DIRECTION_6& enPickingDir, cRay ray, float fDistMax, int nWidth, int nHeight);
+	
+	bool GetBuildPostion(OUT D3DXVECTOR3& vCenter, OUT DIRECTION_6& enPickingDir, cRay ray, float fDistMax, int nWidth, int nHeight);
+	bool IsEnableToBuild(cRay ray, float fDistMax, int nWidth, int nHeight);
 	bool BuildTrap(Trap* pTrap, cRay ray, float fDistMax, int nWidth, int nHeight);
 	bool ClearTrap(Trap* pTrap);
 
