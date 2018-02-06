@@ -4,8 +4,10 @@
 #include "cGameUILabel.h"
 #include "cGameText.h"
 
+#include "cPlayer.h"
+
 cInGameUIScore::cInGameUIScore()
-	: m_pScoreBoard(nullptr)
+	: m_pPlayer(nullptr)
 	, m_nScore(0)
 	, m_pSpriteBack(nullptr)
 	, m_pLabel(nullptr)
@@ -19,9 +21,11 @@ cInGameUIScore::~cInGameUIScore()
 	this->Delete();
 }
 
-void cInGameUIScore::Setup(void* pScoreBoard)
+void cInGameUIScore::Setup(cPlayer * pPlayer)
 {
 	cGameNode::Setup(false);
+
+	m_pPlayer = pPlayer;
 
 	m_pSpriteBack = new cGameUISprite;
 	m_pSpriteBack->Setup("Resource/Image/UI/score.png");
@@ -35,9 +39,7 @@ void cInGameUIScore::Setup(void* pScoreBoard)
 }
 void cInGameUIScore::Update(float fDelta)
 {
-	// TODO: 스코어를 보드로부터 갱신하는 코드 추가 할 것
-	/*임시*/m_nScore = 123456;
-
+	m_nScore = m_pPlayer->GetPlayerGold();
 	m_pLabel->SetText(std::to_string(m_nScore));
 
 	cGameNode::Update(fDelta);

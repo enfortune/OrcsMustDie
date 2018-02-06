@@ -28,7 +28,7 @@ void cInGameUILayer::Setup(cPlayer * pPlayer)
 	this->AddChild(m_pUIGauge);
 
 	m_pUIScore = new cInGameUIScore;
-	m_pUIScore->Setup(nullptr/*m_pTarget->GetScoreBoard*/);
+	m_pUIScore->Setup(pPlayer);
 	m_pUIScore->SetPosition(D3DXVECTOR2(155, 1080 - 57));
 	this->AddChild(m_pUIScore);
 }

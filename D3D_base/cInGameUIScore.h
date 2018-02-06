@@ -4,9 +4,11 @@
 class cGameUISprite;
 class cGameUILabel;
 
+class cPlayer;
+
 class cInGameUIScore : public cGameNode
 {
-	void*	m_pScoreBoard;
+	cPlayer *	m_pPlayer;
 
 	int		m_nScore;
 
@@ -20,7 +22,7 @@ public:
 	cInGameUIScore();
 	~cInGameUIScore();
 
-	virtual void Setup(void* pScoreBoard);
+	virtual void Setup(cPlayer * pPlayer = nullptr);
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime()) override;
 	virtual void Render()override;
 	virtual void Delete()override;

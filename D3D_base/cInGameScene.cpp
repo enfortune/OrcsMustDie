@@ -212,12 +212,11 @@ void cInGameScene::Update(float fDelta)
 
 	if (m_pPlayer_S->GetIsBattle() == false)
 	{
-		if (m_pPlayer_S->GetPlayerTrapType() == PLAYERTRAPTYPE_BARRICADE)
+		if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON))
 		{
-			TrapType * pTrapType = m_pTrapTypeManager->find("Barricade");
-
-			if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON))
+			if (m_pPlayer_S->GetPlayerTrapType() == PLAYERTRAPTYPE_BARRICADE)
 			{
+				TrapType * pTrapType = m_pTrapTypeManager->find("Barricade");
 				MakeTrap(pTrapType, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y));
 			}
 		}
@@ -236,9 +235,29 @@ void cInGameScene::Render()
 {
 	m_pGrid->Render();
 	m_pMap->Render();
+
 	for (int i = 0; i < m_vTrap.size(); i++)
 	{
 		m_vTrap[i].render();
+	}
+
+	if (m_pPlayer_S->GetIsBattle() == false)
+	{
+		if (m_pPlayer_S->GetPlayerTrapType() == PLAYERTRAPTYPE_BARRICADE)
+		{
+			TrapType * pTrapType = m_pTrapTypeManager->find("Barricade");
+			
+			DIRECTION_6 direction = DIRECTION_6::TOP;
+			D3DXVECTOR3 vertexCenter {};
+
+			m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
+				100, pTrapType->getWidth(), pTrapType->getHeight());
+
+			D3DXMATRIXA16 matrixRender {};
+			D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
+
+			pTrapType->render(matrixRender);
+		}
 	}
 
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
