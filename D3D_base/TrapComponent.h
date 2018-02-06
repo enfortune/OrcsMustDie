@@ -18,7 +18,7 @@ public:
 
 public:
 	TrapComponentAttackable(TrapTypeComponentAttackable * pParent = nullptr);
-	virtual ~TrapComponentAttackable() = default;
+	virtual ~TrapComponentAttackable();
 
 	//UNCOPYABLE(TrapComponentAttackable);
 
@@ -41,7 +41,7 @@ public:
 
 public:
 	TrapComponentBlockable(TrapTypeComponentBlockable * pParent = nullptr);
-	virtual ~TrapComponentBlockable() = default;
+	virtual ~TrapComponentBlockable();
 
 	//UNCOPYABLE(TrapComponentBlockable);
 
@@ -61,7 +61,7 @@ public:
 
 public:
 	TrapComponentTriggerable(TrapTypeComponentTriggerable * pParent = nullptr);
-	virtual ~TrapComponentTriggerable() = default;
+	virtual ~TrapComponentTriggerable();
 
 public:
 	virtual void update(float fDelta = g_pTimeManager->GetEllapsedTime());

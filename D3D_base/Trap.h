@@ -25,7 +25,6 @@ private:
 
 public:
 	Trap() = default;
-	~Trap();
 
 public:
 	inline bool isConstructible(TrapType::eInstallPosition installPosition) const

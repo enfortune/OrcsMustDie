@@ -5,13 +5,6 @@
 #include "TrapTypeComponent.h"
 #include "TrapComponent.h"
 
-Trap::~Trap()
-{
-	delete pComponentAttackable_; pComponentAttackable_ = nullptr;
-	delete pComponentBlockable_; pComponentBlockable_ = nullptr;
-	delete pComponentTriggerable_; pComponentTriggerable_ = nullptr;
-}
-
 void Trap::interaction(std::vector<PlayerDummy>& playerList)
 {
 	if (pType_->isInteractionToArray_[static_cast<size_t> (TrapType::eInteractionTo::PLAYER)])

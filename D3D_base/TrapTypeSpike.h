@@ -28,7 +28,7 @@ class TrapComponentAttackableSpike : public TrapComponentAttackable
 {
 public:
 	TrapComponentAttackableSpike(TrapTypeComponentAttackable * pParent = nullptr);
-	virtual ~TrapComponentAttackableSpike() = default;
+	virtual ~TrapComponentAttackableSpike();
 
 public:
 };
