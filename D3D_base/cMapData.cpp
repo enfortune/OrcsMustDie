@@ -269,6 +269,9 @@ bool cMapData::GetPickingBox(OUT int& nX, OUT int& nY, OUT int& nZ, OUT DIRECTIO
 				if ((float)MAPSIZE_CUBE * sqrtf(3) / 4.f + fDistMax < D3DXVec3Length(&(ray.GetPosition() - m_arrGridBox[x][y][z].stCube.GetCenterVec3(DIRECTION_6::END))))
 					continue;
 
+				if (m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_NONE ||
+					m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_END) continue;
+
 				// 1. rear
 				if (D3DXIntersectTri(
 					&m_arrGridBox[x][y][z].stCube.vNear_00,
@@ -524,6 +527,10 @@ bool cMapData::IsEnableToBuild(int nX, int nY, int nZ, DIRECTION_6 enDir, int nW
 		break;
 	}
 
+	if (nMinX < 0) nMinX = 0; if (nMaxX > MAPSIZE_X - 1) nMaxX = MAPSIZE_X - 1;
+	if (nMinY < 0) nMinY = 0; if (nMaxY > MAPSIZE_Y - 1) nMaxY = MAPSIZE_Y - 1;
+	if (nMinZ < 0) nMinZ = 0; if (nMaxZ > MAPSIZE_Z - 1) nMaxZ = MAPSIZE_Z - 1;
+
 	for (int x = nMinX; x <= nMaxX; x++)
 	{
 		for (int y = nMinY; y <= nMaxY; y++)
@@ -659,7 +666,6 @@ bool cMapData::GetBuildPostion(OUT D3DXVECTOR3& vCenter, OUT DIRECTION_6& enPick
 bool cMapData::IsEnableToBuild(cRay ray, float fDistMax, int nWidth, int nHeight)
 {
 	int nX, nY, nZ;
-	bool bRet = false;
 	DIRECTION_6 enDir;
 
 	if (!this->GetPickingBox(nX, nY, nZ, enDir, ray, fDistMax))
@@ -727,6 +733,10 @@ bool cMapData::BuildTrap(Trap* pTrap, cRay ray, float fDistMax, int nWidth, int 
 		nMaxZ = nZ + (nHeight - 1) / 2;
 		break;
 	}
+
+	if (nMinX < 0) nMinX = 0; if (nMaxX > MAPSIZE_X - 1) nMaxX = MAPSIZE_X - 1;
+	if (nMinY < 0) nMinY = 0; if (nMaxY > MAPSIZE_Y - 1) nMaxY = MAPSIZE_Y - 1;
+	if (nMinZ < 0) nMinZ = 0; if (nMaxZ > MAPSIZE_Z - 1) nMaxZ = MAPSIZE_Z - 1;
 
 	m_mapTrapBuildData[pTrap].enDir = enDir;
 
