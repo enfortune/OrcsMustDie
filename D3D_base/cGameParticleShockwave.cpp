@@ -97,12 +97,12 @@ void cGameParticleShockwave::PreRender()
 	g_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_ONE);
 	g_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
-	g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, false);
+	//g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, false);
 }
 void cGameParticleShockwave::PostRender()
 {
 	cGameParticle::PostRender();
-	g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
+	//g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
 }
 
 void cGameParticleShockwave::MakeShockWave(D3DXVECTOR3 vPos, int nMount)

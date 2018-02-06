@@ -9,6 +9,9 @@
 #include "cPhysicsBody.h"
 #include "cTransformData.h"
 #include "cEnemy.h"
+#include "cEnemy2.h"
+#include "cBoss.h"
+#include "cEnemyBase.h"
 #include "cMapData.h"
 #include "TrapTypeManager.h"
 #include "cRay.h"
@@ -34,7 +37,7 @@ void cInGameScene::Setup()
 	m_pMap = new cMapData;
 	m_pMap->Setup();
 	m_pMap->LoadData("SampleStageMap.map");
-	this->AddChild(m_pMap);
+	//this->AddChild(m_pMap);
 
 	m_pPhysicsNode = new cPhysicsNode;
 	m_pPhysicsNode->Setup(m_pMap);
@@ -64,39 +67,128 @@ void cInGameScene::Setup()
 	m_pUILayer->SetScale(D3DXVECTOR2(fScaleX, fScaleY));
 	this->AddChild(m_pUILayer);
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 30; i++)
 	{
 		cEnemy* tempEnemy;
 		tempEnemy = new cEnemy;
+		tempEnemy->setPlayer(m_pPlayer_S);
+
+		tempEnemy->Setup(true, D3DXVECTOR3(0, 0, 0));
+
+		m_vEnemyBase.push_back(tempEnemy);
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		cEnemy2* tempEnemy;
+		tempEnemy = new cEnemy2;
+		tempEnemy->setPlayer(m_pPlayer_S);
+
+		tempEnemy->Setup(true, D3DXVECTOR3(0, 0, 0));
+		m_vEnemyBase.push_back(tempEnemy);
+	}
+
+	for (int i = 0; i < 10; i++)
+	{
 		if (i < 5)
 		{
-			tempEnemy->Setup(true, D3DXVECTOR3(27 + i, 2, 53));
+			m_vEnemyBase[i]->GetPhysicsBody()->GetPhysicsData().vPos = D3DXVECTOR3(27 + i, 2, 53);
 		}
 		else
 		{
-			tempEnemy->Setup(true, D3DXVECTOR3(22 + i, 2, 54));
+			m_vEnemyBase[i]->GetPhysicsBody()->GetPhysicsData().vPos = D3DXVECTOR3(22 + i, 2, 54);
 		}
-		tempEnemy->setPlayer(m_pPlayer_S);
-		m_pPhysicsNode->AddChild(tempEnemy);
 
-		m_vEnemy.push_back(tempEnemy);
+		m_pPhysicsNode->AddChild(m_vEnemyBase[i]);
+
 	}
 
-	m_pPlayer_S->setEnemy(&m_vEnemy);
+	cBoss* tempEnemy;
+	tempEnemy = new cBoss;
+	tempEnemy->setPlayer(m_pPlayer_S);
+
+	tempEnemy->Setup(true, D3DXVECTOR3(0, 0, 0));
+
+	m_vEnemyBase.push_back(tempEnemy);
+
+	m_pPlayer_S->setEnemy(&m_vEnemyBase);
+
+	m_fRoundTime = 0;
+	m_bRound1 = false;
+	m_bRound2 = false;
+	m_bRound3 = false;
+
+	m_nEnemyDeadCount = 0;
+
 }
 void cInGameScene::Update(float fDelta)
 {
 	m_pCamera->Update();
+	m_pMap->Update(fDelta);
 	m_pPlayer_S->SetRotationY(m_pCamera->GetCamRotAngle().y);
 
-	for (std::vector<cEnemy*>::iterator i = m_vEnemy.begin(); i != m_vEnemy.end();)
+	m_fRoundTime += fDelta;
+
+	if (m_fRoundTime >= 10 && m_bRound1 == false)
+	{
+		for (int i = 0; i < 15; i++)
+		{
+			if (i < 5)
+			{
+				m_vEnemyBase[10 + i - m_nEnemyDeadCount]->GetPhysicsBody()->GetPhysicsData().vPos = D3DXVECTOR3(27 + i, 2, 52);
+			}
+			else if (i < 10)
+			{
+				m_vEnemyBase[10 + i - m_nEnemyDeadCount]->GetPhysicsBody()->GetPhysicsData().vPos = D3DXVECTOR3(22 + i, 2, 53);
+			}
+			else
+			{
+				m_vEnemyBase[10 + i - m_nEnemyDeadCount]->GetPhysicsBody()->GetPhysicsData().vPos = D3DXVECTOR3(17 + i, 2, 54);
+			}
+			m_pPhysicsNode->AddChild(m_vEnemyBase[10 + i - m_nEnemyDeadCount]);
+		}
+
+		m_bRound1 = true;
+	}
+	if (m_fRoundTime >= 20 && m_bRound2 == false)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			m_vEnemyBase[25 + i - m_nEnemyDeadCount]->GetPhysicsBody()->GetPhysicsData().vPos = D3DXVECTOR3(27 + i, 2, 53);
+
+			m_pPhysicsNode->AddChild(m_vEnemyBase[25 + i - m_nEnemyDeadCount]);
+		}
+		for (int i = 0; i < 10; i++)
+		{
+			if (i < 5)
+			{
+				m_vEnemyBase[30 + i - m_nEnemyDeadCount]->GetPhysicsBody()->GetPhysicsData().vPos = D3DXVECTOR3(27 + i, 2, 54);
+			}
+			else
+			{
+				m_vEnemyBase[30 + i - m_nEnemyDeadCount]->GetPhysicsBody()->GetPhysicsData().vPos = D3DXVECTOR3(22 + i, 2, 55);
+			}
+
+			m_pPhysicsNode->AddChild(m_vEnemyBase[30 + i - m_nEnemyDeadCount]);
+		}
+
+		m_bRound2 = true;
+	}
+	if (m_fRoundTime >= 30 && m_bRound3 == false)
+	{
+		m_vEnemyBase[40 - m_nEnemyDeadCount]->GetPhysicsBody()->GetPhysicsData().vPos = D3DXVECTOR3(32, 2, 55);
+		m_pPhysicsNode->AddChild(m_vEnemyBase[40 - m_nEnemyDeadCount]);
+		m_bRound3 = true;
+	}
+
+	for (std::vector<cEnemyBase*>::iterator i = m_vEnemyBase.begin(); i != m_vEnemyBase.end();)
 	{
 
 		if ((*i)->fDeadCount > 4.f)
 		{
 			(*i)->RemoveFromParent();
 			SAFE_RELEASE((*i));
-			i = m_vEnemy.erase(i);
+			i = m_vEnemyBase.erase(i);
+			m_nEnemyDeadCount++;
 		}
 		else
 		{
@@ -138,6 +230,7 @@ void cInGameScene::Update(float fDelta)
 void cInGameScene::Render()
 {
 	m_pGrid->Render();
+	m_pMap->Render();
 	for (int i = 0; i < m_vTrap.size(); i++)
 	{
 		m_vTrap[i].render();
@@ -157,11 +250,11 @@ void cInGameScene::Delete()
 	SAFE_RELEASE(m_pMap);
 	SAFE_DELETE(m_pTrapTypeManager);
 
-	for (int i = 0; i < m_vEnemy.size(); i++)
+	for (int i = 0; i < m_vEnemyBase.size(); i++)
 	{
-		SAFE_RELEASE(m_vEnemy[i]);
+		SAFE_RELEASE(m_vEnemyBase[i]);
 	}
-	m_vEnemy.clear();
+	m_vEnemyBase.clear();
 }
 
 bool cInGameScene::IsMakeTrap(OUT D3DXVECTOR3 &center,TrapType* tType, cRay ray)

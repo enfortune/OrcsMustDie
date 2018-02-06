@@ -10,6 +10,7 @@ class cPlayer;
 class cPlayerCamera;
 class cPhysicsNode;
 class cEnemy;
+class cEnemyBase;
 class cMapData;
 class TrapTypeManager;
 class cRay;
@@ -20,7 +21,8 @@ class cInGameScene : public cGameScene
 	cGrid* m_pGrid;
 
 	cInGameUILayer* m_pUILayer;
-	std::vector<cEnemy*> m_vEnemy;
+	std::vector<cEnemyBase*>	m_vEnemyBase;
+	int						m_nEnemyDeadCount;
 
 	/* for test */
 	cPlayer*			m_pPlayer_S;
@@ -28,6 +30,8 @@ class cInGameScene : public cGameScene
 	std::vector<Trap>	m_vTrap;
 	TrapTypeManager*	m_pTrapTypeManager;
 	cMapData*			m_pMap;
+	float				m_fRoundTime;
+	bool				m_bRound1, m_bRound2, m_bRound3;
 	
 public:
 	cInGameScene();

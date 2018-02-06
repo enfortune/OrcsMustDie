@@ -33,7 +33,7 @@ void cEnemy2::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 
 	m_pPhysicsBody = new cPhysicsBody;
 	m_pPhysicsBody->Setup(0.0f);
-	m_pPhysicsBody->MakeBodyCuboid(0.6, 0.5, 1.0,D3DXVECTOR3(0, 0.25, 0));
+	m_pPhysicsBody->MakeBodyCuboid(0.6, 0.5, 1.5,D3DXVECTOR3(0, 0.25, 0));
 	m_pPhysicsBody->GetPhysicsData().fElasticity = 0.f;
 	m_pPhysicsBody->GetPhysicsData().vDamping = D3DXVECTOR3(10.f, 0.f, 10.f);
 	m_pPhysicsBody->GetBodyType() = PHYSICSBODYTYPE_STATIC;
@@ -102,8 +102,10 @@ void cEnemy2::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 
 void cEnemy2::Update(float fDelta)
 {
-	switch (EnemyState)
+	if (m_pTransformData->GetPosition() != nullptr)
 	{
+		switch (EnemyState)
+		{
 		case IDLE:
 		{
 			Idle();
@@ -158,50 +160,51 @@ void cEnemy2::Update(float fDelta)
 			Jump();
 		}
 		break;
-	}
-	if (EnemyState != DEAD)
-	{
-		float length;
-		vPlayerPos = D3DXVECTOR3(m_pPlayer->GetTransformData()->GetPosition());
-		vPos = m_pTransformData->GetPosition();
-		length = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - vPlayerPos));
-		if (bAttack == true)
-		{
-
 		}
-		else
+		if (EnemyState != DEAD)
 		{
-			if (length > 4.f)
+			float length;
+			vPlayerPos = D3DXVECTOR3(m_pPlayer->GetTransformData()->GetPosition());
+			vPos = m_pTransformData->GetPosition();
+			length = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - vPlayerPos));
+			if (bAttack == true)
 			{
-				//EnemyState = MOVE;
-				EnemyState = IDLE;
-			}
-			else if (length <= 4.f)
-			{
-				EnemyState = ATTACK;
-			}
-			if (nCurHp < 30)
-			{
-				int a = nCurHp;
-			}
-		}
-		HpManager();
-	}
 
-	if (m_pTransformData->GetPosition().y <= -1)
-	{
-		EnemyState = DEAD;
+			}
+			else
+			{
+				if (length > 4.f)
+				{
+					//EnemyState = MOVE;
+					EnemyState = IDLE;
+				}
+				else if (length <= 4.f)
+				{
+					EnemyState = ATTACK;
+				}
+				if (nCurHp < 30)
+				{
+					int a = nCurHp;
+				}
+			}
+			HpManager();
+		}
+
+		if (m_pTransformData->GetPosition().y <= -1)
+		{
+			EnemyState = DEAD;
+		}
+		if (!bDeadbody)
+		{
+			m_pSkinnedMesh->Update();
+			m_pSkinnedMesh->UpdateAnimation(fDelta);
+		}
+		else if (bDeadbody)
+		{
+			fDeadCount += fDelta;
+		}
+		cGameNode::Update(fDelta);
 	}
-	if (!bDeadbody)
-	{
-		m_pSkinnedMesh->Update();
-		m_pSkinnedMesh->UpdateAnimation(fDelta);
-	}
-	else if (bDeadbody)
-	{
-		fDeadCount += fDelta;
-	}
-	cGameNode::Update(fDelta);
 }
 
 void cEnemy2::Render()
@@ -251,16 +254,18 @@ void cEnemy2::Move(D3DXVECTOR3 vGoal, float fDelta, int dijkNum)
 			m_pPhysicsBody->GetPhysicsData().vAxis = D3DXVECTOR3(0, 1, 0);
 			m_pPhysicsBody->GetPhysicsData().fRotAngle = tempRot;
 
-			float dot = D3DXVec2Dot(&D3DXVECTOR2(
-				m_pPhysicsBody->GetPhysicsData().vVelocity.x,
-				m_pPhysicsBody->GetPhysicsData().vVelocity.z), &D3DXVECTOR2(vDir.x, vDir.z));
+			if (m_pPhysicsBody->GetPhysicsData().bOnGround == true)
+			{
+				float dot = D3DXVec2Dot(&D3DXVECTOR2(
+					m_pPhysicsBody->GetPhysicsData().vVelocity.x,
+					m_pPhysicsBody->GetPhysicsData().vVelocity.z), &D3DXVECTOR2(vDir.x, vDir.z));
 
-			if (dot < 2)
-				m_pPhysicsBody->GetPhysicsData().vAccel
-				= vDir * (30.f + D3DXVec3Length(&m_pPhysicsBody->GetPhysicsData().vDamping));
-			else
-				m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
-			
+				if (dot < 2)
+					m_pPhysicsBody->GetPhysicsData().vAccel
+					= vDir * (30.f + D3DXVec3Length(&m_pPhysicsBody->GetPhysicsData().vDamping));
+				else
+					m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
+			}
 		}
 		else
 		{
@@ -279,8 +284,6 @@ void cEnemy2::Idle()
 	{
 		m_pSkinnedMesh->SetAnimationSet(0, nIdleAni, true);
 
-		m_pPhysicsBody->GetPhysicsData().vVelocity.x = 0;
-		m_pPhysicsBody->GetPhysicsData().vVelocity.z = 0;
 		m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
 
 		bIdle = true;
@@ -316,16 +319,18 @@ void cEnemy2::Move(D3DXVECTOR3 vGoal, float fDelta)
 			m_pPhysicsBody->GetPhysicsData().vAxis = D3DXVECTOR3(0, 1, 0);
 			m_pPhysicsBody->GetPhysicsData().fRotAngle = tempRot;
 
-			float dot = D3DXVec2Dot(&D3DXVECTOR2(
-				m_pPhysicsBody->GetPhysicsData().vVelocity.x,
-				m_pPhysicsBody->GetPhysicsData().vVelocity.z), &D3DXVECTOR2(vDir.x, vDir.z));
+			if (m_pPhysicsBody->GetPhysicsData().bOnGround == true)
+			{
+				float dot = D3DXVec2Dot(&D3DXVECTOR2(
+					m_pPhysicsBody->GetPhysicsData().vVelocity.x,
+					m_pPhysicsBody->GetPhysicsData().vVelocity.z), &D3DXVECTOR2(vDir.x, vDir.z));
 
-			if (dot < 3)
-				m_pPhysicsBody->GetPhysicsData().vAccel
-				= vDir * (30.f + D3DXVec3Length(&m_pPhysicsBody->GetPhysicsData().vDamping));
-			else
-				m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
-
+				if (dot < 2)
+					m_pPhysicsBody->GetPhysicsData().vAccel
+					= vDir * (30.f + D3DXVec3Length(&m_pPhysicsBody->GetPhysicsData().vDamping));
+				else
+					m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
+			}
 		}
 	}
 }
@@ -343,13 +348,13 @@ void cEnemy2::Attack(float fDelta)
 
 	if (!bAttack)
 	{
-		if (length > 0.7)
+		if (length > 1.3)
 		{
 			Move(vPlayerPos, fDelta);
 			bAttack = false;
 		}
 
-		else if (length <= 0.7 && m_pPhysicsBody->GetPhysicsData().bOnGround == true)
+		else if (length <= 1.3 && m_pPhysicsBody->GetPhysicsData().bOnGround == true)
 		{
 			D3DXVECTOR3 vTempDir;
 			vTempDir = vPlayerPos - vPos;
@@ -377,7 +382,7 @@ void cEnemy2::Attack(float fDelta)
 
 		if (m_pSkinnedMesh->GetAniEnd() == true)
 		{
-			if (length <= 0.7 &&  fCos > cosf(D3DX_PI / 4.f))
+			if (length <= 1.3 &&  fCos > cosf(D3DX_PI / 4.f))
 			{
 				m_pPlayer->PlayerDamaged(m_nAtkDamage);
 			}
@@ -391,8 +396,6 @@ void cEnemy2::Dead()
 {
 	if (!bDead)
 	{
-		m_pPhysicsBody->GetPhysicsData().vVelocity.x = 0;
-		m_pPhysicsBody->GetPhysicsData().vVelocity.z = 0;
 		m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
 		m_pSkinnedMesh->SetAnimationSetBlend(0, nDeadAni, false);
 

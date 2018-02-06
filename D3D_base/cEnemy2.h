@@ -1,10 +1,11 @@
 #pragma once
 #include "cChaNode.h"
+#include "cEnemyBase.h"
 
 class cSkinnedMeshEX;
 class cPlayer;
 
-class cEnemy2 : public cChaNode
+class cEnemy2 : public cEnemyBase
 {
 private:
 	D3DXVECTOR3 vPlayerPos;
