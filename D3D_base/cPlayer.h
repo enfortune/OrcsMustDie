@@ -79,7 +79,7 @@ public:
 	void PlayerHPHealed(int HPheal);
 	void playerMPHealed(int MPheal);
 	void PlayerAttacked();
-	void PlayerWhirlWind(float fDelta);
+	void PlayerWhirlWind();
 	void PlayerShiledBash();
 	void PlayerJumpBlend();
 	void PlayerRotationBlend(float fDelta);

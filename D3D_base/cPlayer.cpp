@@ -227,12 +227,13 @@ void cPlayer::Update(float fDelta)
 			IsPlayerState();
 
 			ManaCount = 100;
+			nPlayerCurMp = nPlayerCurMp - ManaCount;
 
-			if (m_pPlayerState == PLAYERSTATE_SKILL_SHILEDBASH)
-			{
-				nPlayerCurMp = nPlayerCurMp - ManaCount;
-			}
 			PlayerShiledBash();
+
+			//if (m_pPlayerState == PLAYERSTATE_SKILL_SHILEDBASH)
+			//{
+			//}
 		}
 		if (m_pPlayerState == PLAYERSTATE_SKILL_SHILEDBASH && m_pPlayerMesh->GetAniEnd() == true)
 		{
@@ -247,6 +248,7 @@ void cPlayer::Update(float fDelta)
 				m_pPlayerState = PLAYERSTATE_SKILL_WHIRLWIND;
 				IsPlayerState();
 			}
+			PlayerWhirlWind();
 		}
 		if (m_pPlayerState == PLAYERSTATE_SKILL_WHIRLWIND)
 		{
@@ -287,17 +289,10 @@ void cPlayer::Update(float fDelta)
 	PlayerJumpBlend();
 	PlayerParticleUpdate();
 
-	if (m_pPlayerState == PLAYERSTATE_SKILL_WHIRLWIND)
-	{
-		if (m_fPlayerRestore >= 1.0f)
-		{
-			PlayerWhirlWind(fDelta);
-		}
-	}
-
 	m_fPlayerRestore += fDelta;
 	if (m_fPlayerRestore >= 1.0f)
 	{
+		if(m_pPlayerState == PLAYERSTATE_SKILL_WHIRLWIND) PlayerWhirlWind();
 		if (nPlayerMaxHp != nPlayerCurHp) nPlayerCurHp += 5;
 		if (nPlayerMaxMp != nPlayerCurMp) nPlayerCurMp += 5;
 		m_fPlayerRestore = 0;
@@ -404,13 +399,13 @@ void cPlayer::PlayerAttacked()
 
 		if (PlayerLength < 0.8 && fCos > cosf(D3DX_PI/4.f))
 		{
-			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage);
+			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage * 2);
 			g_pSoundManager->Play("PlayerAttackHit");
 		}
 	}
 }
 
-void cPlayer::PlayerWhirlWind(float fDelta)
+void cPlayer::PlayerWhirlWind()
 {
 	for (int i = 0; i < (*m_vEnemy).size(); i++)
 	{
@@ -437,7 +432,7 @@ void cPlayer::PlayerShiledBash()
 
 		PlayerLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vEnemy)[i]->GetTransformData()->GetPosition()));
 
-		if (PlayerLength < 0.8 && fCos > cosf(D3DX_PI / 4.f))
+		if (PlayerLength < 1.5f && fCos > cosf(D3DX_PI / 4.f))
 		{
 			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage);
 			(*m_vEnemy)[i]->GetPhysicsBody()->GetPhysicsData().vVelocity = (vDist * 15.f) + D3DXVECTOR3(0.f, 5.f, 0.f);
@@ -458,7 +453,7 @@ void cPlayer::PlayerJumpBlend()
 		m_pPlayerState = PLAYERSTATE_JUMPEND;
 		IsPlayerState();
 	}
-	else if (m_pPlayerState == PLAYERSTATE_JUMPEND && m_pPlayerMesh->GetAniEnd() == true)
+	else if (m_pPlayerState == PLAYERSTATE_JUMPEND && m_pPlayerMesh->getCurPosition() >= 0.4)
 	{
 		m_pPlayerState = PLAYERSTATE_STAND;
 		IsPlayerState();
