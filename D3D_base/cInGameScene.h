@@ -22,6 +22,7 @@ class cInGameScene : public cGameScene
 
 	cInGameUILayer* m_pUILayer;
 	std::vector<cEnemyBase*>	m_vEnemyBase;
+
 	int						m_nEnemyDeadCount;
 
 	/* for test */
@@ -42,6 +43,7 @@ public:
 	virtual void Render() override;
 	virtual void Delete() override;
 
+	void CheckTrapCollisionEnemy(float fDelta);
 	bool IsMakeTrap(OUT D3DXVECTOR3 &center, TrapType* tType, cRay ray);
 	void MakeTrap(TrapType* tType, cRay ray);
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;

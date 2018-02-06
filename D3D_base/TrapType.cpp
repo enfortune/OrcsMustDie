@@ -20,8 +20,9 @@ TrapType::~TrapType()
 
 void TrapType::render(D3DXMATRIXA16 & matrixWorld)
 {
-	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matrixWorld);
+	D3DXMATRIXA16 matrixTotal = matrixWorld * matrixLocal_;
+	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matrixTotal);
 
 	modelList_[0].Render();
-	frustumInteractionLocal_.Render(g_pD3DDevice);
+	//frustumInteractionLocal_.Render(g_pD3DDevice);
 }

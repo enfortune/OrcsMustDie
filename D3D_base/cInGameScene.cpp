@@ -212,11 +212,24 @@ void cInGameScene::Update(float fDelta)
 
 	if (m_pPlayer_S->GetIsBattle() == false)
 	{
-		if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON))
+		if (m_pPlayer_S->GetPlayerTrapType() == PLAYERTRAPTYPE_BARRICADE)
 		{
-			if (m_pPlayer_S->GetPlayerTrapType() == PLAYERTRAPTYPE_BARRICADE)
+			TrapType * pTrapType = m_pTrapTypeManager->find("Barricade");
+			cRay ray = cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y);
+
+			DIRECTION_6 direction = DIRECTION_6::TOP;
+
+			D3DXVECTOR3 vertexCenter {};
+			D3DXMATRIXA16 matrixRender {};
+
+			m_pMap->GetBuildPostion(vertexCenter, direction, ray, 100, pTrapType->getWidth(), pTrapType->getHeight());
+			D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
+
+			pTrapType->render(matrixRender);
+
+			if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON))
 			{
-				MakeTrap(m_pTrapTypeManager->find("Barricade"), cRay::RayAtWorldSpace(g_ptMouse.x,g_ptMouse.y));
+				MakeTrap(pTrapType, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y));
 			}
 		}
 	}
@@ -225,6 +238,9 @@ void cInGameScene::Update(float fDelta)
 	//{
 	//	m_pPlayer_S->SetIsBattle(false);
 	//}
+
+
+	CheckTrapCollisionEnemy(fDelta);
 
 	cGameScene::Update(fDelta);
 
@@ -258,6 +274,69 @@ void cInGameScene::Delete()
 		SAFE_RELEASE(m_vEnemyBase[i]);
 	}
 	m_vEnemyBase.clear();
+}
+
+void cInGameScene::CheckTrapCollisionEnemy(float fDelta)
+{
+	cPhysicsBody* pBody;
+	D3DXMATRIXA16 matWorld, matParentWorld, matR, matT;
+	D3DXVECTOR3 vEnemyCrushNorm;
+	D3DXVECTOR3 vEnemyGroundCheckNorm;
+	float fEnemyDot;
+	bool bIsCollision = false;
+	float fVelocityIntervalDot;
+	float fCrushVelocityDot;
+
+
+	for (size_t i = 0; i < m_vEnemyBase.size(); ++i)
+	{
+		if (m_vEnemyBase[i]->GetParentNode() == nullptr) continue;
+		m_vEnemyBase[i]->UpdateTempPhysics(fDelta);
+		pBody = m_vEnemyBase[i]->GetPhysicsBody();
+		if (pBody == nullptr) return;
+
+	
+		if ( m_vEnemyBase[i]->GetParentNode() == nullptr)
+			D3DXMatrixIdentity(&matParentWorld);
+		else
+			matParentWorld = m_vEnemyBase[i]->GetParentNode()->GetMatrixToWorld();
+
+		D3DXMatrixRotationAxis(&matR,
+			&pBody->GetTempPhysicsData().vAxis,
+			pBody->GetTempPhysicsData().fRotAngle);
+		D3DXMatrixTranslation(&matT,
+			pBody->GetTempPhysicsData().vPos.x,
+			pBody->GetTempPhysicsData().vPos.y,
+			pBody->GetTempPhysicsData().vPos.z);
+
+		matWorld = matR * matT * matParentWorld;
+
+
+		ST_FRUSTUM stEnemyFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
+		ST_SPHERE  stEnemySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);
+
+
+
+		for (size_t j = 0; j < m_vTrap.size(); ++j)
+		{
+			//if (CheckSphereIntersectSphere(&stMySphere, &stEnemySphere))
+				if (CheckOBBCollision(&m_vTrap[j].getFrustum(), &stEnemyFrustum))
+				{
+					vEnemyCrushNorm = m_vTrap[j].getFrustum().GetNearestSideNormalVec3(&stEnemyFrustum);
+					fEnemyDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vEnemyCrushNorm);
+					bIsCollision = true;
+
+					if (fEnemyDot < -0.01f)
+					{
+						pBody->GetTempPhysicsData().vVelocity += -(vEnemyCrushNorm * 2.f) * (1.f);
+						pBody->GetPhysicsData().vVelocity += -(vEnemyCrushNorm * 2.f) * (1.f);
+					}
+				}	
+		}
+	}
+
+
+
 }
 
 bool cInGameScene::IsMakeTrap(OUT D3DXVECTOR3 &center,TrapType* tType, cRay ray)
