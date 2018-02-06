@@ -4,6 +4,7 @@
 
 class Trap;
 
+struct TrapType;
 struct TrapTypeComponentAttackable;
 
 struct TrapComponentAttackable

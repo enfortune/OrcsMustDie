@@ -266,7 +266,7 @@ bool cMapData::GetPickingBox(OUT int& nX, OUT int& nY, OUT int& nZ, OUT DIRECTIO
 		{
 			for (int z = 0; z < MAPSIZE_Z; z++)
 			{
-				if ((float)MAPSIZE_CUBE * sqrtf(3) / 2.f + fDistMax > D3DXVec3Length(&(ray.GetPosition() - m_arrGridBox[x][y][z].stCube.GetCenterVec3(DIRECTION_6::END))))
+				if ((float)MAPSIZE_CUBE * sqrtf(3) / 4.f + fDistMax < D3DXVec3Length(&(ray.GetPosition() - m_arrGridBox[x][y][z].stCube.GetCenterVec3(DIRECTION_6::END))))
 					continue;
 
 				// 1. rear
@@ -303,9 +303,9 @@ bool cMapData::GetPickingBox(OUT int& nX, OUT int& nY, OUT int& nZ, OUT DIRECTIO
 
 				// 2. front
 				if (D3DXIntersectTri(
+					&m_arrGridBox[x][y][z].stCube.vFar_00,
 					&m_arrGridBox[x][y][z].stCube.vFar_10,
 					&m_arrGridBox[x][y][z].stCube.vFar_01,
-					&m_arrGridBox[x][y][z].stCube.vFar_00,
 					&ray.GetPosition(), &ray.GetDirection(),
 					&u, &v, &dist))
 				{
@@ -319,8 +319,8 @@ bool cMapData::GetPickingBox(OUT int& nX, OUT int& nY, OUT int& nZ, OUT DIRECTIO
 				}
 				else if (D3DXIntersectTri(
 					&m_arrGridBox[x][y][z].stCube.vFar_10,
-					&m_arrGridBox[x][y][z].stCube.vFar_11,
 					&m_arrGridBox[x][y][z].stCube.vFar_01,
+					&m_arrGridBox[x][y][z].stCube.vFar_11,
 					&ray.GetPosition(), &ray.GetDirection(),
 					&u, &v, &dist))
 				{
@@ -336,8 +336,8 @@ bool cMapData::GetPickingBox(OUT int& nX, OUT int& nY, OUT int& nZ, OUT DIRECTIO
 				// 3. left
 				if (D3DXIntersectTri(
 					&m_arrGridBox[x][y][z].stCube.vNear_00,
-					&m_arrGridBox[x][y][z].stCube.vNear_01,
 					&m_arrGridBox[x][y][z].stCube.vFar_00,
+					&m_arrGridBox[x][y][z].stCube.vNear_01,
 					&ray.GetPosition(), &ray.GetDirection(),
 					&u, &v, &dist))
 				{
@@ -351,8 +351,8 @@ bool cMapData::GetPickingBox(OUT int& nX, OUT int& nY, OUT int& nZ, OUT DIRECTIO
 				}
 				else if (D3DXIntersectTri(
 					&m_arrGridBox[x][y][z].stCube.vNear_01,
-					&m_arrGridBox[x][y][z].stCube.vFar_01,
 					&m_arrGridBox[x][y][z].stCube.vFar_00,
+					&m_arrGridBox[x][y][z].stCube.vFar_01,
 					&ray.GetPosition(), &ray.GetDirection(),
 					&u, &v, &dist))
 				{
@@ -430,9 +430,9 @@ bool cMapData::GetPickingBox(OUT int& nX, OUT int& nY, OUT int& nZ, OUT DIRECTIO
 
 				// 6. bottom
 				if (D3DXIntersectTri(
-					&m_arrGridBox[x][y][z].stCube.vNear_00,
-					&m_arrGridBox[x][y][z].stCube.vFar_00,
 					&m_arrGridBox[x][y][z].stCube.vNear_10,
+					&m_arrGridBox[x][y][z].stCube.vFar_00,
+					&m_arrGridBox[x][y][z].stCube.vNear_00,
 					&ray.GetPosition(), &ray.GetDirection(),
 					&u, &v, &dist))
 				{
@@ -445,9 +445,9 @@ bool cMapData::GetPickingBox(OUT int& nX, OUT int& nY, OUT int& nZ, OUT DIRECTIO
 					}
 				}
 				else if (D3DXIntersectTri(
-					&m_arrGridBox[x][y][z].stCube.vFar_00,
-					&m_arrGridBox[x][y][z].stCube.vFar_10,
 					&m_arrGridBox[x][y][z].stCube.vNear_10,
+					&m_arrGridBox[x][y][z].stCube.vFar_10,
+					&m_arrGridBox[x][y][z].stCube.vFar_00,
 					&ray.GetPosition(), &ray.GetDirection(),
 					&u, &v, &dist))
 				{
