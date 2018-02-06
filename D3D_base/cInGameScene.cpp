@@ -119,6 +119,9 @@ void cInGameScene::Setup()
 
 	m_nEnemyDeadCount = 0;
 
+	g_pSoundManager->AddSound("MainBGM", "Resource/Sound/Map/WrathGate.mp3", true, false);
+	g_pSoundManager->Play("MainBGM",0.3f);
+
 }
 void cInGameScene::Update(float fDelta)
 {

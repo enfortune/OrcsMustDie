@@ -208,13 +208,11 @@ void cPlayer::Update(float fDelta)
 
 	if (m_bIsBattle)
 	{
-		if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON))
+		if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON) && m_pPlayerState != PLAYERSTATE_ATTACK)
 		{
-			if (m_pPlayerState != PLAYERSTATE_ATTACK)
-			{
-				m_pPlayerState = PLAYERSTATE_ATTACK;
-				IsPlayerState();
-			}
+			m_pPlayerState = PLAYERSTATE_ATTACK;
+			IsPlayerState();
+			
 			PlayerAttacked();
 		}
 		if (m_pPlayerState == PLAYERSTATE_ATTACK && m_pPlayerMesh->GetAniEnd() == true)
@@ -249,9 +247,6 @@ void cPlayer::Update(float fDelta)
 				m_pPlayerState = PLAYERSTATE_SKILL_WHIRLWIND;
 				IsPlayerState();
 			}
-
-
-			
 		}
 		if (m_pPlayerState == PLAYERSTATE_SKILL_WHIRLWIND)
 		{
