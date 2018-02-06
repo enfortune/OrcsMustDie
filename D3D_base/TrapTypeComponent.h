@@ -15,7 +15,7 @@ public:
 
 public:
 	TrapTypeComponentAttackable() = default;
-	~TrapTypeComponentAttackable() = default;
+	virtual ~TrapTypeComponentAttackable() = default;
 
 public:
 	virtual TrapComponentAttackable * newComponentObject() const;
@@ -34,7 +34,7 @@ public:
 
 public:
 	TrapTypeComponentBlockable() = default;
-	~TrapTypeComponentBlockable() = default;
+	virtual ~TrapTypeComponentBlockable() = default;
 
 public:
 	virtual TrapComponentBlockable * newComponentObject() const;

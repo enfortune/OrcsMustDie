@@ -2,6 +2,7 @@
 
 #include "TrapType.h"
 #include "TrapTypeComponent.h"
+#include "TrapComponent.h"
 
 struct TrapTypeSpike : public TrapType
 {
@@ -13,12 +14,21 @@ public:
 	//virtual void render(D3DXMATRIXA16 & matrixWorld) override;
 };
 
-struct TrapTypeAttackableSpike : public TrapTypeComponentAttackable
+struct TrapTypeComponentAttackableSpike : public TrapTypeComponentAttackable
 {
 public:
-	TrapTypeAttackableSpike() = default;
-	virtual ~TrapTypeAttackableSpike() = default;
+	TrapTypeComponentAttackableSpike() = default;
+	virtual ~TrapTypeComponentAttackableSpike() = default;
 
 public:
-	virtual TrapComponentAttackable * newComponentObject() const;
+	virtual TrapComponentAttackable * newComponentObject() const override;
+};
+
+class TrapComponentAttackableSpike : public TrapComponentAttackable
+{
+public:
+	TrapComponentAttackableSpike(TrapTypeComponentAttackable * pParent);
+	virtual ~TrapComponentAttackableSpike() = default;
+
+public:
 };

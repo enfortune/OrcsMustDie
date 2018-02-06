@@ -10,14 +10,14 @@ struct TrapTypeComponentAttackable;
 struct TrapComponentAttackable
 {
 public:
-	TrapTypeComponentAttackable & parent_;
+	TrapTypeComponentAttackable * pParent_ {};
 
 	FRUSTUM frustumAttackWorld_ {};
 
 	float cooldown_ {};
 
 public:
-	TrapComponentAttackable(TrapTypeComponentAttackable & parent);
+	TrapComponentAttackable(TrapTypeComponentAttackable * pParent = nullptr);
 	virtual ~TrapComponentAttackable() = default;
 
 	//UNCOPYABLE(TrapComponentAttackable);
@@ -27,7 +27,7 @@ public:
 	virtual void attack(std::vector<EnemyDummy> & enemyList);
 
 public:
-	void update(float fDelta = g_pTimeManager->GetEllapsedTime());
+	virtual void update(float fDelta = g_pTimeManager->GetEllapsedTime());
 };
 
 struct TrapTypeComponentBlockable;
@@ -35,12 +35,12 @@ struct TrapTypeComponentBlockable;
 struct TrapComponentBlockable
 {
 public:
-	TrapTypeComponentBlockable & parent_;
+	TrapTypeComponentBlockable * pParent_ {};
 
 	int hp_ {};
 
 public:
-	TrapComponentBlockable(TrapTypeComponentBlockable & parent);
+	TrapComponentBlockable(TrapTypeComponentBlockable * pParent = nullptr);
 	virtual ~TrapComponentBlockable() = default;
 
 	//UNCOPYABLE(TrapComponentBlockable);
@@ -49,7 +49,7 @@ public:
 	virtual void hit(std::vector<EnemyDummy> & enemyList);
 
 public:
-	void update(float fDelta = g_pTimeManager->GetEllapsedTime());
+	virtual void update(float fDelta = g_pTimeManager->GetEllapsedTime());
 };
 
 struct TrapTypeComponentTriggerable;
@@ -57,15 +57,12 @@ struct TrapTypeComponentTriggerable;
 struct TrapComponentTriggerable
 {
 public:
-	TrapTypeComponentTriggerable & parent_;
+	TrapTypeComponentTriggerable * pParent_ {};
 
 public:
-	TrapComponentTriggerable(TrapTypeComponentTriggerable & parent);
+	TrapComponentTriggerable(TrapTypeComponentTriggerable * pParent = nullptr);
 	virtual ~TrapComponentTriggerable() = default;
 
 public:
-	virtual void trigger() = 0;
-
-public:
-	void update(float fDelta = g_pTimeManager->GetEllapsedTime());
+	virtual void update(float fDelta = g_pTimeManager->GetEllapsedTime());
 };

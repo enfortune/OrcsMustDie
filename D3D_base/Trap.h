@@ -17,7 +17,7 @@ private:
 	FRUSTUM frustumWorld_ {};
 	FRUSTUM frustumInteractionWorld_ {};
 
-	int renderModelIndex {};
+	int renderModelIndex_ {};
 
 	TrapComponentAttackable * pComponentAttackable_ {};
 	TrapComponentBlockable * pComponentBlockable_ {};

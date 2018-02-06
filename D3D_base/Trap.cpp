@@ -17,9 +17,6 @@ void Trap::interaction(std::vector<PlayerDummy>& playerList)
 	{
 		if (pComponentAttackable_)
 			pComponentAttackable_->attack(playerList);
-
-		if (pComponentTriggerable_)
-			pComponentTriggerable_->trigger();
 	}
 }
 
@@ -32,9 +29,6 @@ void Trap::interaction(std::vector<EnemyDummy>& enemyList)
 
 		if (pComponentBlockable_)
 			pComponentBlockable_->hit(enemyList);
-
-		if (pComponentTriggerable_)
-			pComponentTriggerable_->trigger();
 	}
 }
 
@@ -77,5 +71,5 @@ void Trap::update(float fDelta)
 
 void Trap::render()
 {
-	pType_->render(matrixWorld_);
+	pType_->render(matrixWorld_, renderModelIndex_);
 }

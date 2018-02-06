@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "TrapComponent.h"
 
-
-TrapComponentAttackable::TrapComponentAttackable(TrapTypeComponentAttackable & parent) : parent_(parent) {}
+TrapComponentAttackable::TrapComponentAttackable(TrapTypeComponentAttackable * pParent) : pParent_(pParent) {}
 
 void TrapComponentAttackable::attack(std::vector<PlayerDummy> & playerList)
 {
@@ -19,10 +18,13 @@ void TrapComponentAttackable::attack(std::vector<EnemyDummy> & enemyList)
 
 void TrapComponentAttackable::update(float fDelta)
 {
+	cooldown_ -= fDelta;
+
+	if (cooldown_ < 0.0f)
+		cooldown_ = 0.0f;
 }
 
-
-TrapComponentBlockable::TrapComponentBlockable(TrapTypeComponentBlockable & parent) : parent_(parent) {}
+TrapComponentBlockable::TrapComponentBlockable(TrapTypeComponentBlockable * pParent) : pParent_(pParent) {}
 
 void TrapComponentBlockable::hit(std::vector<EnemyDummy> & enemyList)
 {
@@ -36,7 +38,7 @@ void TrapComponentBlockable::update(float fDelta)
 {
 }
 
-TrapComponentTriggerable::TrapComponentTriggerable(TrapTypeComponentTriggerable & parent) : parent_(parent) {}
+TrapComponentTriggerable::TrapComponentTriggerable(TrapTypeComponentTriggerable * pParent) : pParent_(pParent) {}
 
 void TrapComponentTriggerable::update(float fDelta)
 {

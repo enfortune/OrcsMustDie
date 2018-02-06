@@ -47,3 +47,16 @@ TrapTypeSpike::TrapTypeSpike()
 	pTypeComponentAttackable_->duration_ = 1.5f;
 	pTypeComponentAttackable_->frustumAttackLocal_ = frustumInteractionLocal_;
 }
+
+TrapComponentAttackable * TrapTypeComponentAttackableSpike::newComponentObject() const
+{
+	TrapComponentAttackable * temp = new TrapComponentAttackableSpike(const_cast<TrapTypeComponentAttackableSpike *>(this));
+
+	temp->frustumAttackWorld_ = frustumAttackLocal_;
+	temp->cooldown_ = cooldownMax_;
+
+	return temp;
+}
+
+TrapComponentAttackableSpike::TrapComponentAttackableSpike(TrapTypeComponentAttackable * pParent)
+{ TrapComponentAttackable::TrapComponentAttackable(pParent); }
