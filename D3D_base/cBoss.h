@@ -24,13 +24,12 @@ private:
 	};
 
 	tempPoint tp[5];
+	bool bPhase1, bPhase2, bPhase3;
 
 
 public:
 	cBoss();
 	virtual ~cBoss();
-
-	float fDeadCount;
 
 	virtual void Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup);
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime()) override;

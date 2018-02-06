@@ -20,6 +20,8 @@ void cBoss::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 {
 	cGameNode::Setup(true);
 
+	m_bBoss = true;
+
 	nIdleAni = 7;
 	nAttackAni = 2;
 	nDeadAni = 5;
@@ -39,10 +41,11 @@ void cBoss::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 	m_pPhysicsBody->GetBodyType() = PHYSICSBODYTYPE_STATIC;
 
 	m_nAtkDamage = 50;
-	nMaxHp = 300;
-	nCurHp = 300;
-	nMaxMp = 200;
-	nCurMp = 200;
+	m_nSkillDamage = 100;
+	nMaxHp = 400;
+	nCurHp = 400;
+	nMaxMp = 150;
+	nCurMp = 150;
 	bAttackAction = false;
 	bAttack = false;
 	bMove = FALSE;
@@ -98,7 +101,9 @@ void cBoss::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 	//tp[2].cost = 8;
 	//tp[3].cost = 6;
 	//tp[4].cost = 5;
-
+	bPhase1 = true;
+	bPhase2 = false;
+	bPhase3 = false;
 	EnemyState = IDLE;
 }
 
@@ -304,7 +309,14 @@ void cBoss::Move(D3DXVECTOR3 vGoal, float fDelta)
 		if (tempLength > 0.1)
 		{
 			bMove = true;
-			m_pSkinnedMesh->SetAnimationSetBlend(0, nMoveAni, true);
+			if (!bPhase3)
+			{
+				m_pSkinnedMesh->SetAnimationSetBlend(0, nMoveAni, true);
+			}
+			else if (bPhase3)
+			{
+				m_pSkinnedMesh->SetAnimationSetBlend(0, nAttackMoveAni, true);
+			}
 			bIdle = false;
 		}
 	}
@@ -322,21 +334,33 @@ void cBoss::Move(D3DXVECTOR3 vGoal, float fDelta)
 			m_pPhysicsBody->GetPhysicsData().vAxis = D3DXVECTOR3(0, 1, 0);
 			m_pPhysicsBody->GetPhysicsData().fRotAngle = tempRot;
 
-			float dot = D3DXVec2Dot(&D3DXVECTOR2(
-				m_pPhysicsBody->GetPhysicsData().vVelocity.x,
-				m_pPhysicsBody->GetPhysicsData().vVelocity.z), &D3DXVECTOR2(vDir.x, vDir.z));
-
 			if (m_pPhysicsBody->GetPhysicsData().bOnGround == true)
 			{
 				float dot = D3DXVec2Dot(&D3DXVECTOR2(
 					m_pPhysicsBody->GetPhysicsData().vVelocity.x,
 					m_pPhysicsBody->GetPhysicsData().vVelocity.z), &D3DXVECTOR2(vDir.x, vDir.z));
+				if (!bPhase3)
+				{
+					if (dot < 1.3)
+						m_pPhysicsBody->GetPhysicsData().vAccel
+						= vDir * (30.f + D3DXVec3Length(&m_pPhysicsBody->GetPhysicsData().vDamping));
 
-				if (dot < 1.3)
-					m_pPhysicsBody->GetPhysicsData().vAccel
-					= vDir * (30.f + D3DXVec3Length(&m_pPhysicsBody->GetPhysicsData().vDamping));
-				else
-					m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
+					else
+						m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
+				}
+				else if (bPhase3)
+				{
+					if (dot < 2.3)
+						m_pPhysicsBody->GetPhysicsData().vAccel
+						= vDir * (30.f + D3DXVec3Length(&m_pPhysicsBody->GetPhysicsData().vDamping));
+
+					else
+						m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
+				}
+			}
+			else
+			{
+				m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
 			}
 
 		}
@@ -381,7 +405,22 @@ void cBoss::Attack(float fDelta)
 			m_pPhysicsBody->GetPhysicsData().vVelocity.x = 0;
 			m_pPhysicsBody->GetPhysicsData().vVelocity.z = 0;
 			m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
-			m_pSkinnedMesh->SetAnimationSetBlend(0, nAttackAni, false);
+			if (!bPhase2)
+			{
+				m_pSkinnedMesh->SetAnimationSetBlend(0, nAttackAni, false);
+			}
+			else if (!bPhase3 && nCurMp >= 30)
+			{
+				m_pSkinnedMesh->SetAnimationSetBlend(0, nSkillAni, false);
+			}
+			else if (!bPhase3 && nCurMp < 30)
+			{
+				m_pSkinnedMesh->SetAnimationSetBlend(0, nAttackAni, false);
+			}
+			else if (bPhase3)
+			{
+				m_pSkinnedMesh->SetAnimationSetBlend(0, nSkillAni, false);
+			}
 			bAttack = true;
 		}
 	}
@@ -390,9 +429,33 @@ void cBoss::Attack(float fDelta)
 
 		if (m_pSkinnedMesh->GetAniEnd() == true)
 		{
-			if (length <= 2.3f &&  fCos > cosf(D3DX_PI / 4.f))
+			if (!bPhase2)
 			{
-				m_pPlayer->PlayerDamaged(m_nAtkDamage);
+				if (length <= 2.3f &&  fCos > cosf(D3DX_PI / 4.f))
+				{
+					m_pPlayer->PlayerDamaged(m_nAtkDamage);
+				}
+			}
+			else if (!bPhase3 && nCurMp < 30)
+			{
+				if (length <= 2.3f &&  fCos > cosf(D3DX_PI / 4.f))
+				{
+					m_pPlayer->PlayerDamaged(m_nAtkDamage);
+				}
+			}
+			else if (!bPhase3 && nCurMp >= 30)
+			{
+				if (length <= 3.f)
+				{
+					m_pPlayer->PlayerDamaged(m_nSkillDamage);
+				}
+			}
+			else if (bPhase3)
+			{
+				if (length <= 3.f)
+				{
+					m_pPlayer->PlayerDamaged(m_nSkillDamage);
+				}
 			}
 			bAttack = false;
 		}
@@ -488,6 +551,18 @@ void cBoss::getDamage(int nDamage)
 void cBoss::HpManager()
 {
 	if (nCurHp > nMaxHp) nCurHp = nMaxHp;
+	if (nCurHp <= 200 && bPhase2 == false)
+	{
+		EnemyState = HIT;
+		m_pSkinnedMesh->SetAnimationSetBlend(0, nHitAni, false);
+		bPhase2 = true;
+	}
+	else if (nCurHp <= 100 && bPhase3 == false)
+	{
+		EnemyState = HIT;
+		m_pSkinnedMesh->SetAnimationSetBlend(0, nHitAni, false);
+		bPhase3 = true;
+	}
 	if (nCurHp <= 0)
 	{
 		nCurHp = 0;
@@ -497,5 +572,11 @@ void cBoss::HpManager()
 
 void cBoss::Hit()
 {
+	m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
+	if (m_pSkinnedMesh->GetAniEnd() == true)
+	{
+		EnemyState = IDLE;
+		bAttack = false;
+	}
 }
 

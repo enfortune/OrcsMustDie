@@ -37,6 +37,8 @@ protected:
 	SYNTHESIZE_REF(int, m_nAtkDamage, AtkDamage);
 	SYNTHESIZE_REF(int, m_nExp, Exp);
 	SYNTHESIZE_REF(int, m_nGold, Gold);
+	SYNTHESIZE_REF(int, m_nSkillDamage, SkillDamage);
+	SYNTHESIZE(bool, m_bBoss, Boss);
 
 public:
 	cChaNode();

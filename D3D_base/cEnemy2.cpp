@@ -20,6 +20,8 @@ void cEnemy2::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 {
 	cGameNode::Setup(true);
 
+	m_bBoss = false;
+
 	nIdleAni = 9;
 	nAttackAni = 4;
 	nDeadAni = 7;

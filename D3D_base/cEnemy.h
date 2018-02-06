@@ -30,8 +30,6 @@ public:
 	cEnemy();
 	virtual ~cEnemy();
 
-	float fDeadCount;
-
 	virtual void Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup);
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime()) override;
 	virtual void Render() override;

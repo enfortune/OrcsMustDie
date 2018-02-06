@@ -94,6 +94,7 @@ void cPlayer::Update(float fDelta)
 	if (nPlayerMaxHp < nPlayerCurHp) nPlayerMaxHp = nPlayerCurHp;
 	if (nPlayerMaxMp < nPlayerCurMp) nPlayerMaxMp = nPlayerCurMp;
 
+	nPlayerCurMp = nPlayerMaxMp;
 	if (nPlayerCurHp <= 0)
 	{
 		nPlayerCurHp = 0;
