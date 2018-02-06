@@ -34,6 +34,7 @@ protected:
 	std::bitset<static_cast<size_t> (eInteractionTo::MAX_COUNT)> isInteractionToArray_ {};
 
 	eTimerType timerType_ {};
+	int moneyCost_ {};
 
 	TrapTypeComponentAttackable * pTypeComponentAttackable_ {};
 	TrapTypeComponentBlockable * pTypeComponentBlockable_ {};
@@ -64,6 +65,8 @@ public:
 
 	inline FRUSTUM getFrustum() const { return frustumLocal_; }
 	inline FRUSTUM getInteractionArea() const { return frustumInteractionLocal_; }
+
+	inline int getMoneyCost() const { return moneyCost_; }
 
 public:
 	void render(D3DXMATRIXA16 & matrixWorld);	// rendering virtual object

@@ -27,5 +27,7 @@ void TrapType::render(D3DXMATRIXA16 & matrixWorld)
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matrixTotal);
 
 	modelList_[0].Render();
-	frustumInteractionLocal_.Render(g_pD3DDevice);
+	
+	FRUSTUM frustum = frustumInteractionLocal_.TransformCoord(&matrixWorld);
+	frustum.Render(g_pD3DDevice);
 }

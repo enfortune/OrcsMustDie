@@ -250,13 +250,14 @@ void cInGameScene::Render()
 			DIRECTION_6 direction = DIRECTION_6::TOP;
 			D3DXVECTOR3 vertexCenter {};
 
-			m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
-				100, pTrapType->getWidth(), pTrapType->getHeight());
+			if (m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
+				100, pTrapType->getWidth(), pTrapType->getHeight()))
+			{
+				D3DXMATRIXA16 matrixRender {};
+				D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
 
-			D3DXMATRIXA16 matrixRender {};
-			D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
-
-			pTrapType->render(matrixRender);
+				pTrapType->render(matrixRender);
+			}
 		}
 	}
 

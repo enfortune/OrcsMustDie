@@ -36,4 +36,6 @@ TrapTypeBarricade::TrapTypeBarricade()
 
 	pTypeComponentBlockable_ = new TrapTypeComponentBlockable;
 	pTypeComponentBlockable_->hpMax_ = 80;
+
+	moneyCost_ = 600;
 }
