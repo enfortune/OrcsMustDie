@@ -77,8 +77,5 @@ void Trap::update(float fDelta)
 
 void Trap::render() 
 {
-	if (pComponentRender_)
-		pComponentRender_->render(matrixWorld_);
-	else
-		pType_->render(matrixWorld_, 0);
+	pType_->render(matrixWorld_, renderModelIndex);
 }

@@ -47,8 +47,3 @@ TrapTypeSpike::TrapTypeSpike()
 	pTypeComponentAttackable_->duration_ = 1.5f;
 	pTypeComponentAttackable_->frustumAttackLocal_ = frustumInteractionLocal_;
 }
-
-void TrapComponentRenderSpike::render(TrapType & trapType, D3DXMATRIXA16 & matrixWorld)
-{
-	trapType.render(matrixWorld, 1, *this);
-}
