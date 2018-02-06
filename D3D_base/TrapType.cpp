@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "TrapType.h"
 
+#include "TrapTypeComponent.h"
+
 #include "cSkinnedMeshEX.h"
 
 void TrapType::render(D3DXMATRIXA16 & matrixWorld, int modelIndex)

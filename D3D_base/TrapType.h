@@ -42,8 +42,8 @@ protected:
 	//std::vector<LPDIRECT3DTEXTURE9> pTextureList_ {};
 	//std::vector<std::string> soundList_ {};
 
-private:
-	void render(D3DXMATRIXA16 & matrixWorld, int modelIndex);		// inner model index of specific trap
+protected:
+	virtual void render(D3DXMATRIXA16 & matrixWorld, int modelIndex);		// inner model index of specific trap
 	
 public:
 	TrapType() = default;
@@ -64,9 +64,6 @@ public:
 
 	inline FRUSTUM getFrustum() const { return frustumLocal_; }
 	inline FRUSTUM getInteractionArea() const { return frustumInteractionLocal_; }
-
-//public:
-	//void onTrigger();
 
 public:
 	void render(D3DXMATRIXA16 & matrixWorld);	// rendering virtual object

@@ -3,12 +3,13 @@
 
 #include "TrapType.h"
 #include "TrapTypeComponent.h"
+#include "TrapComponent.h"
 
 Trap::~Trap()
 {
-	delete pComponentAttackable_;
-	delete pComponentBlockable_;
-	delete pComponentTriggerable_;
+	delete pComponentAttackable_; pComponentAttackable_ = nullptr;
+	delete pComponentBlockable_; pComponentBlockable_ = nullptr;
+	delete pComponentTriggerable_; pComponentTriggerable_ = nullptr;
 }
 
 void Trap::interaction(std::vector<PlayerDummy>& playerList)
@@ -39,7 +40,7 @@ void Trap::interaction(std::vector<ItemDummy>& itemList)
 void Trap::init(TrapType & type, D3DXMATRIXA16 & matrixWorld)
 {
 	pType_ = &type;
-	matrixWorld_ = matrixWorld * type.matrixLocal_;
+	matrixWorld_ = type.matrixLocal_ * matrixWorld;
 
 	frustumWorld_ = type.frustumLocal_.TransformCoord(&matrixWorld);
 	frustumInteractionWorld_ = type.frustumInteractionLocal_.TransformCoord(&matrixWorld);

@@ -5,9 +5,9 @@
 
 TrapTypeSpike::TrapTypeSpike()
 {
-	modelList_.resize(1);
+	modelList_.resize(2);
 	modelList_[0].Setup("Resource/Trap/Barricade", "Resource/Trap/Barricade/Barricade.X");
-	//modelList_[1].Setup("Resource/Trap/Barricade", "Resource/Trap/Barricade/Barricade.X");
+	modelList_[1].Setup("Resource/Trap/Barricade", "Resource/Trap/Barricade/Barricade.X");
 
 	D3DXMATRIXA16 matrixScale {}, matrixRotation {};
 	D3DXMatrixScaling(&matrixScale, 0.005f, 0.005f, 0.005f);

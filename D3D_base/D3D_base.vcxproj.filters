@@ -433,6 +433,9 @@
     <ClInclude Include="cGameParticleEruption.h">
       <Filter>Foundation\D3D\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="cEnemyBase.h">
+      <Filter>정현식</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -707,6 +710,9 @@
     </ClCompile>
     <ClCompile Include="cGameParticleEruption.cpp">
       <Filter>Foundation\D3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="cEnemyBase.cpp">
+      <Filter>정현식</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

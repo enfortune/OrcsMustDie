@@ -3,9 +3,7 @@
 #include "cSkinnedMeshEX.h"
 #include "cTransformData.h"
 #include "cPhysicsBody.h"
-#include "cEnemy.h"
-#include "cEnemy2.h"
-#include "cBoss.h"
+#include "cEnemyBase.h"
 #include "cGameParticleSpark.h"
 
 cPlayer::cPlayer()
@@ -539,7 +537,7 @@ void cPlayer::PlayerRotationBlend(float fDelta)
 	}
 }
 
-void cPlayer::setEnemy(std::vector<cEnemy*>* Enemy)
+void cPlayer::setEnemy(std::vector<cEnemyBase*>* Enemy)
 {
 	m_vEnemy	= Enemy;
 }

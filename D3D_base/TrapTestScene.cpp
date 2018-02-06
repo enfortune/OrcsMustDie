@@ -25,8 +25,11 @@ void TrapTestScene::Setup()
 	D3DXMATRIXA16 matrixIdentity {};
 	D3DXMatrixIdentity(&matrixIdentity);
 
+	D3DXMATRIXA16 matrixTranslation {};
+	D3DXMatrixTranslation(&matrixTranslation, 10, 0, 5);
+
 	trapList_.resize(16);
-	trapList_[0].init(*(trapTypeManager_.find("Barricade")), matrixIdentity);
+	trapList_[0].init(*(trapTypeManager_.find("Barricade")), matrixTranslation);
 
 	int i = 0;
 }
