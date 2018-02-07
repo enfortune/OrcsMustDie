@@ -67,6 +67,9 @@ void cInGameScene::Setup()
 	m_pUILayer = new cInGameUILayer;
 	m_pUILayer->Setup(m_pPlayer_S);
 
+	pGraphFindPath_ = new GraphFindPath;
+	pGraphFindPath_->init();
+
 	float fScaleX = static_cast<float>(SCREEN_WIDTH) / 1920.f;
 	float fScaleY = static_cast<float>(SCREEN_HEIGHT) / 1080.f;
 
@@ -130,9 +133,6 @@ void cInGameScene::Setup()
 
 	pQuickSlot_ = new QuickSlot;
 	pQuickSlot_->init();
-
-	pGraphFindPath_ = new GraphFindPath;
-	pGraphFindPath_->init();
 }
 void cInGameScene::Update(float fDelta)
 {
@@ -256,8 +256,9 @@ void cInGameScene::Update(float fDelta)
 	//	m_pPlayer_S->SetIsBattle(false);
 	//}
 
-	std::vector<D3DXVECTOR3> test;
-	pGraphFindPath_->findPath(0, 4, &test);
+	// 이렇게 받으면 됨 (다익스트라)
+	//std::vector<D3DXVECTOR3> test;
+	//pGraphFindPath_->findPath(0, 4, &test);
 
 	pQuickSlot_->update();
 

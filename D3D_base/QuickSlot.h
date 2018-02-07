@@ -20,6 +20,7 @@ private:
 	cGameUIButton * pButtonArray_[QUICKSLOT_COUNT] {};
 
 private:
+	void selectButton(int indexButton);
 	void changeButton(IconType iconType, int indexButton);
 	void removeButton(int indexButton);
 

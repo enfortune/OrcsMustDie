@@ -73,7 +73,7 @@ template<typename T> bool GraphDijkstra<T>::findPath(const T & start, const T & 
 	{
 		isCheckedMap[iterCheck->first] = iterCheck->first == start ? true : false;
 
-		if(start != iterCheck->first)
+		if (start != iterCheck->first)
 		{
 			calcTable_.emplace(std::make_pair(start, iterCheck->first),
 				std::make_pair(std::vector<T>(iterStart->first), INFINITY_FLOAT));

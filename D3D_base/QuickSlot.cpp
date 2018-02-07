@@ -5,6 +5,21 @@
 #include "cGameUISprite.h"
 #include "cGameSprite.h"
 
+void QuickSlot::selectButton(int indexButton)
+{
+	assert(indexButton >= 0 && indexButton < QUICKSLOT_COUNT);
+
+	if (pButtonArray_[indexButton])
+	{
+		if (pSpriteSelect_->GetParentNode() == nullptr)
+			pSpriteBar_->AddChild(pSpriteSelect_);
+
+		pSpriteSelect_->SetPosition({indexButton * 59.1f - 290 + 25.0f, 0.0f});
+	}
+	else if (pSpriteSelect_->GetParentNode())
+		pSpriteSelect_->RemoveFromParent();
+}
+
 void QuickSlot::changeButton(IconType iconType, int indexButton)
 {
 	assert(indexButton >= 0 && indexButton < QUICKSLOT_COUNT);
@@ -27,9 +42,11 @@ void QuickSlot::changeButton(IconType iconType, int indexButton)
 	
 	pButtonArray_[indexButton] = new cGameUIButton;
 	pButtonArray_[indexButton]->Setup("QuickSlotButton" + std::to_string(indexButton), nullptr, imagePath);
-	pButtonArray_[indexButton]->SetPosition({(indexButton - 5) * 99 * 0.5f, 0.0f});
+	pButtonArray_[indexButton]->SetPosition({indexButton * 59.1f - 290 + 25.0f, 0.0f});
 
 	pSpriteBar_->AddChild(pButtonArray_[indexButton]);
+
+	selectButton(0);
 }
 
 void QuickSlot::removeButton(int indexButton)
@@ -70,6 +87,15 @@ void QuickSlot::init()
 
 void QuickSlot::update()
 {
+	for (int i = 0; i < 9; ++i)
+	{
+		if (g_pKeyManager->IsOnceKeyDown(static_cast<char> ('1' + i)))
+			selectButton(i);
+	}
+
+	if (g_pKeyManager->IsOnceKeyDown('0'))
+		selectButton(9);
+
 	cGameNode::Update(g_pTimeManager->GetEllapsedTime());
 }
 
@@ -88,6 +114,9 @@ void QuickSlot::Delete()
 {
 	resetButton();
 
-	SAFE_DELETE(pSpriteBar_);
+	if (pSpriteSelect_->GetParentNode())
+		pSpriteSelect_->RemoveFromParent();
+
 	SAFE_DELETE(pSpriteSelect_);
+	SAFE_DELETE(pSpriteBar_);
 }
