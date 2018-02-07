@@ -37,7 +37,6 @@ class cInGameScene : public cGameScene
 	float				m_fRoundTime;
 	bool				m_bRound1, m_bRound2, m_bRound3;
 
-	GraphFindPath pGraphFindPath_;
 	QuickSlot * pQuickSlot_ {};
 	
 public:

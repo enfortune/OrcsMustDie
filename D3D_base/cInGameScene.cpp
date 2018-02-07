@@ -128,8 +128,6 @@ void cInGameScene::Setup()
 	g_pSoundManager->AddSound("MainBGM", "Resource/Sound/Map/WrathGate.mp3", true, false);
 	g_pSoundManager->Play("MainBGM",0.3f);
 
-	pGraphFindPath_.init();
-
 	pQuickSlot_ = new QuickSlot;
 	pQuickSlot_->init();
 }
