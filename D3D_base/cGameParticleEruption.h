@@ -3,6 +3,8 @@
 class cGameParticleEruption :
 	public cGameParticle
 {
+	D3DXVECTOR3 m_vAxis;
+	float m_fRotAngle;
 public:
 	cGameParticleEruption();
 	virtual ~cGameParticleEruption();
@@ -12,7 +14,7 @@ public:
 	virtual void PreRender() override;
 	virtual void PostRender() override;
 
-	void MakeEruption(D3DXVECTOR3 vPos, int nMount);
+	void MakeEruption(D3DXVECTOR3 vPos, D3DXVECTOR3 vAxis, float fRotAngle, int nMount);
 	void ClearEruption();
 };
 

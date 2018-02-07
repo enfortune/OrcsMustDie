@@ -34,6 +34,7 @@ cPlayer::cPlayer()
 	, speedX(0.f)
 	, speedZ(0.f)
 	, m_fPlayerRestore(0.0f)
+	, isShiledP(false)
 {
 	D3DXMatrixIdentity(&m_mMatSword);
 	D3DXMatrixIdentity(&m_mMatShield);
@@ -242,6 +243,7 @@ void cPlayer::Update(float fDelta)
 			m_pPlayerState = PLAYERSTATE_STAND;
 			IsPlayerState();
 		}
+		isShiledP = false;
 
 		if (g_pKeyManager->IsOnceKeyDown(VK_RBUTTON) && nPlayerCurMp > 100 
 			&& m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
@@ -252,6 +254,7 @@ void cPlayer::Update(float fDelta)
 			ManaCount = 100;
 			nPlayerCurMp = nPlayerCurMp - ManaCount;
 
+			isShiledP = true;
 			PlayerShiledBash();
 
 			//if (m_pPlayerState == PLAYERSTATE_SKILL_SHILEDBASH)
@@ -634,6 +637,8 @@ void cPlayer::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void cPlayer::PlayerParticleUpdate()
 {
+	bool isparticle = false;
+
 	switch (m_pPlayerState)
 	{
 		case PLAYERSTATE_STAND:
@@ -666,12 +671,11 @@ void cPlayer::PlayerParticleUpdate()
 		case PLAYERSTATE_DEATH:
 		break;
 		case PLAYERSTATE_SKILL_SHILEDBASH:
-			if (m_pPlayerMesh->getCurPosition() >= 0.2f)
+			if (m_pPlayerMesh->getCurPosition() >= 0.2f && m_pPlayerMesh->getCurPosition() <= 0.4f)
 			{
 				D3DXVECTOR3 vMakePos(-0., 0.5, 0);
 				D3DXVec3TransformCoord(&vMakePos, &vMakePos, &this->GetMatrixToWorld());
-
-				m_pPlaterParticleEruption->MakeEruption(vMakePos, 200);
+				if (isShiledP) m_pPlaterParticleEruption->MakeEruption(vMakePos, 200);
 			}
 		break;
 		case PLAYERSTATE_SKILL_WHIRLWIND:

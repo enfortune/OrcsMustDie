@@ -62,6 +62,8 @@ protected:
 	float m_fPlayerRestore;
 	float speedX, speedZ;
 
+	bool isShiledP;
+
 	//HP,MP นื ป๓ลย
 	//int		nPlayerMaxHp, nPlayerCurHp, nPlayerMaxMp, nPlayerCurMp;
 	BOOL	bPlayerStun, bPlayerMove;
