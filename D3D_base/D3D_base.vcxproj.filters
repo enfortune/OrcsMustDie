@@ -436,6 +436,9 @@
     <ClInclude Include="cInGameUILayer.h">
       <Filter>김완수\UI\InGame</Filter>
     </ClInclude>
+    <ClInclude Include="cSky.h">
+      <Filter>차종서</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -713,6 +716,9 @@
     </ClCompile>
     <ClCompile Include="cEnemyBase.cpp">
       <Filter>정현식</Filter>
+    </ClCompile>
+    <ClCompile Include="cSky.cpp">
+      <Filter>차종서</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

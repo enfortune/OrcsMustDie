@@ -5,7 +5,6 @@
 class cInGameUILayer;
 class cSkinnedMesh;
 class cCamera;
-class cGrid;
 class cPlayer;
 class cPlayerCamera;
 class cPhysicsSpace;
@@ -14,11 +13,11 @@ class cEnemyBase;
 class cMapData;
 class TrapTypeManager;
 class cRay;
+class cSky;
 
 class cInGameScene : public cGameScene
 {
 	cPlayerCamera* m_pCamera;
-	cGrid* m_pGrid;
 
 	cInGameUILayer* m_pUILayer;
 	std::vector<cEnemyBase*>	m_vEnemyBase;
@@ -31,6 +30,7 @@ class cInGameScene : public cGameScene
 	std::vector<Trap>	m_vTrap;
 	TrapTypeManager*	m_pTrapTypeManager;
 	cMapData*			m_pMap;
+	cSky*				m_pSkyMap;
 	float				m_fRoundTime;
 	bool				m_bRound1, m_bRound2, m_bRound3;
 	
