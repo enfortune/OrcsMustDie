@@ -6,7 +6,7 @@
 
 #include "cPhysicsBody.h"
 
-#define MAPCOLLISION_Y_EPSILON 2.0f
+#define MAPCOLLISION_Y_EPSILON 3.0f
 
 cMapData::cMapData()
 	: m_bisVBExist(false)
@@ -999,10 +999,10 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 									{
 										pBody->GetTempPhysicsData().vPos.y += fDeltaY;
 										pBody->GetPhysicsData().vPos.y += fDeltaY;
-										if (pBody->GetTempPhysicsData().vVelocity.y < 0)
+										if (pBody->GetTempPhysicsData().vVelocity.y < 0.f)
 										{
-											pBody->GetTempPhysicsData().vVelocity.y = 0;
-											pBody->GetPhysicsData().vVelocity.y = 0;
+											pBody->GetTempPhysicsData().vVelocity.y = 0.f;
+											pBody->GetPhysicsData().vVelocity.y = 0.f;
 											pBody->GetPhysicsData().bOnGround = true;
 										}
 
@@ -1107,10 +1107,10 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 									{
 										pBody->GetTempPhysicsData().vPos.y += fDeltaY;
 										pBody->GetPhysicsData().vPos.y += fDeltaY;
-										if (pBody->GetTempPhysicsData().vVelocity.y < 0)
+										if (pBody->GetTempPhysicsData().vVelocity.y < 0.f)
 										{
-											pBody->GetTempPhysicsData().vVelocity.y = 0;
-											pBody->GetPhysicsData().vVelocity.y = 0;
+											pBody->GetTempPhysicsData().vVelocity.y = 0.f;
+											pBody->GetPhysicsData().vVelocity.y = 0.f;
 											pBody->GetPhysicsData().bOnGround = true;
 										}
 										
