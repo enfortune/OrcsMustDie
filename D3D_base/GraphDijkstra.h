@@ -23,7 +23,7 @@ public:
 		OUT std::vector<T> * pPathList = nullptr, OUT float * pTotalCost = nullptr);
 };
 
-#include "GraphDijkstra.hpp"
+#include "GraphDijkstra.tpp"
 
 // === revision ==================================================================================================
 

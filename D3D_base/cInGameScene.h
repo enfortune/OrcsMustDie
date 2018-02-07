@@ -16,6 +16,7 @@ class cRay;
 class cSky;
 
 class QuickSlot;
+class GraphFindPath;
 
 class cInGameScene : public cGameScene
 {
@@ -37,7 +38,8 @@ class cInGameScene : public cGameScene
 	bool				m_bRound1, m_bRound2, m_bRound3;
 
 	QuickSlot * pQuickSlot_ {};
-	
+	GraphFindPath * pGraphFindPath_ {};
+
 public:
 	cInGameScene();
 	~cInGameScene();

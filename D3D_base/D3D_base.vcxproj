@@ -199,7 +199,7 @@
     <ClInclude Include="Graph.h" />
     <ClInclude Include="Graph.hpp" />
     <ClInclude Include="GraphDijkstra.h" />
-    <ClInclude Include="GraphDijkstra.hpp" />
+    <ClInclude Include="GraphDijkstra.tpp" />
     <ClInclude Include="GraphFindPath.h" />
     <ClInclude Include="Loading.h" />
     <ClInclude Include="MapDataEnumList.h" />

@@ -442,10 +442,10 @@
     <ClInclude Include="cXFileManager.h">
       <Filter>Global\Manager\D3D</Filter>
     </ClInclude>
-    <ClInclude Include="GraphDijkstra.hpp">
+    <ClInclude Include="GraphFindPath.h">
       <Filter>엄윤호\Graph</Filter>
     </ClInclude>
-    <ClInclude Include="GraphFindPath.h">
+    <ClInclude Include="GraphDijkstra.tpp">
       <Filter>엄윤호\Graph</Filter>
     </ClInclude>
   </ItemGroup>

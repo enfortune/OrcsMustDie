@@ -18,6 +18,7 @@
 #include "cSky.h"
 
 #include "QuickSlot.h"
+#include "GraphFindPath.h"
 
 #define SCREEN_WIDTH GetRectWidth(GetScreenRect())
 #define SCREEN_HEIGHT GetRectHeight(GetScreenRect())
@@ -129,6 +130,9 @@ void cInGameScene::Setup()
 
 	pQuickSlot_ = new QuickSlot;
 	pQuickSlot_->init();
+
+	pGraphFindPath_ = new GraphFindPath;
+	pGraphFindPath_->init();
 }
 void cInGameScene::Update(float fDelta)
 {
@@ -252,10 +256,8 @@ void cInGameScene::Update(float fDelta)
 	//	m_pPlayer_S->SetIsBattle(false);
 	//}
 
-	m_vTrap[0].getFrustum();
-
 	std::vector<D3DXVECTOR3> test;
-	//pGraphFindPath_.findPath(0, 4, &test);
+	pGraphFindPath_->findPath(0, 4, &test);
 
 	pQuickSlot_->update();
 
