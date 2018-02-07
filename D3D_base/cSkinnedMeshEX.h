@@ -19,6 +19,7 @@ protected:
 	float		m_fCurPosition;
 
 	float		m_fDelta;
+	float		m_fDeltaSigma;
 
 protected:
 	void SetupBoneMatrixPtrs(LPD3DXFRAME pFrame); // 메시에 영향주는것들 연결

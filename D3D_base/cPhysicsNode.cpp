@@ -4,13 +4,13 @@
 #include "iGameMap.h"
 
 #define PHYSICSNODE_DELTATIME_MAX 0.1f
-#define PHYSICSNODE_DELTATIME_SKIP 0.5f
+#define PHYSICSNODE_DELTATIME_SKIP 0.2f
 
 cPhysicsNode::cPhysicsNode()
-{
+{/*
 	long long currentTick {};
 
-	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER *> (&currentTick));
+	QueryPerformanceCounter(reinterpret_cast<LARGE_INTEGER *> (&currentTick));*/
 }
 
 
@@ -61,22 +61,16 @@ void cPhysicsNode::Update(float fDelta)
 		for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
 		{
 			this->CollisionWithMap((*itSour), fCurrDelta);
-
 			(*itSour)->UpdatePhysics(fCurrDelta);
 		}
 	}
 
-
 	fCurrDelta = fTotalDelta;
-
 	for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
 	{
 		(*itSour)->Update(fCurrDelta);
-
 		(*itSour)->GetPhysicsBody()->GetPhysicsData().vVelocity += m_stSpaceData.vGravity * fCurrDelta;
-
 		(*itSour)->GetPhysicsBody()->GetPhysicsData().bOnGround = false;
-
 		(*itSour)->UpdateTempPhysics(fCurrDelta);
 	}
 
@@ -89,24 +83,19 @@ void cPhysicsNode::Update(float fDelta)
 			(*itSour)->CollisionWithNode(*itDest);
 		}
 	}
-
 	for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
 	{
 		this->CollisionWithMap((*itSour), fCurrDelta);
-
 		(*itSour)->UpdatePhysics(fCurrDelta);
 	}
 }
 void cPhysicsNode::Render()
 {
-
-
 	cGameNode::Render();
 }
 
 void cPhysicsNode::Delete()
 {
-
 }
 
 void cPhysicsNode::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -125,5 +114,4 @@ void cPhysicsNode::CollisionWithMap(cGameNode* pNode, float fDelta)
 {
 	// TODO: 맵 충돌 코드 추가 필요
 	if (m_pMap) m_pMap->MapCollisionCheck(pNode, fDelta);
-
 }

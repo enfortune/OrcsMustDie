@@ -6,7 +6,7 @@
 #include "iGameMap.h"
 
 #define PHYSICSNODE_DELTATIME_MAX 0.1f
-#define PHYSICSNODE_DELTATIME_SKIP 0.5f
+#define PHYSICSNODE_DELTATIME_SKIP 0.2f
 
 cPhysicsSpace::cPhysicsSpace()
 	: m_pVecTrap(nullptr)
@@ -59,7 +59,6 @@ void cPhysicsSpace::Update(float fDelta)
 
 		for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
 		{
-
 			if (m_pVecTrap) this->CollisionWithTrap((*itSour));
 			this->CollisionWithMap((*itSour), fCurrDelta);
 			(*itSour)->UpdatePhysics(fCurrDelta);
@@ -71,11 +70,8 @@ void cPhysicsSpace::Update(float fDelta)
 	for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
 	{
 		(*itSour)->Update(fCurrDelta);
-
 		(*itSour)->GetPhysicsBody()->GetPhysicsData().vVelocity += m_stSpaceData.vGravity * fCurrDelta;
-
 		(*itSour)->GetPhysicsBody()->GetPhysicsData().bOnGround = false;
-
 		(*itSour)->UpdateTempPhysics(fCurrDelta);
 	}
 
@@ -88,11 +84,10 @@ void cPhysicsSpace::Update(float fDelta)
 			(*itSour)->CollisionWithNode(*itDest);
 		}
 	}
-
 	for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
 	{
+		if (m_pVecTrap) this->CollisionWithTrap((*itSour));
 		this->CollisionWithMap((*itSour), fCurrDelta);
-
 		(*itSour)->UpdatePhysics(fCurrDelta);
 	}
 }
@@ -120,8 +115,8 @@ void cPhysicsSpace::CollisionWithTrap(cGameNode* pNode)
 	D3DXVECTOR3 vGroundCheckNorm;
 	float fDot;
 	bool bIsCollision = false;
-	float fVelocityIntervalDot;
-	float fCrushVelocityDot;
+	/*float fVelocityIntervalDot;
+	float fCrushVelocityDot;*/
 
 	pBody = pNode->GetPhysicsBody();
 	if (pBody == nullptr) return;

@@ -53,6 +53,7 @@ void cPlayer::Setup()
 	m_pPlayerMesh->Setup("Resource/XFile/Player","Resource/XFile/Player/True_King.X");
 	m_pPlayerState = PLAYERSTATE_STAND;
 	IsPlayerState();
+	//m_pPlayerMesh->SetAnimationSet(0, 11, true);
 	m_vPlayerPos = GetTransformData()->GetPosition();
 	m_vPlayerDir = D3DXVECTOR3(0, 0, 1);
 
@@ -673,9 +674,8 @@ void cPlayer::PlayerParticleUpdate()
 		case PLAYERSTATE_SKILL_SHILEDBASH:
 			if (m_pPlayerMesh->getCurPosition() >= 0.2f && m_pPlayerMesh->getCurPosition() <= 0.4f)
 			{
-				D3DXVECTOR3 vMakePos(-0., 0.5, 0);
-				D3DXVec3TransformCoord(&vMakePos, &vMakePos, &this->GetMatrixToWorld());
-				 m_pPlaterParticleEruption->MakeEruption(vMakePos, m_pTransformData->GetAxis(), m_pTransformData->GetRotAngle(), 200);
+				D3DXVECTOR3 vMakePos(0, 0.5, 0);
+				 m_pPlaterParticleEruption->MakeEruption(vMakePos, this->GetMatrixToWorld(),200);
 			}
 		break;
 		case PLAYERSTATE_SKILL_WHIRLWIND:

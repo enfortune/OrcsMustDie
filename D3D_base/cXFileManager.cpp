@@ -94,7 +94,7 @@ void cXFileManager::DestroyAllXFile()
 	for (iter = m_mapXFile.begin(); iter != m_mapXFile.end(); )
 	{
 		cAllocateHierarchyEX boneHierarchy;
-		iter->second.pAniCtrl->Release();
+		if (iter->second.pAniCtrl) iter->second.pAniCtrl->Release();
 		D3DXFrameDestroy(iter->second.pRoot, &boneHierarchy);
 		iter = m_mapXFile.erase(iter);
 	}

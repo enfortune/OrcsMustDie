@@ -12,6 +12,7 @@ cSkinnedMeshEX::cSkinnedMeshEX()
 	, m_startAniId(NULL)
 	, m_bAniStart(false)
 	, m_fDelta(0.f)
+	, m_fDeltaSigma(0.f)
 {
 }
 
@@ -36,10 +37,11 @@ void cSkinnedMeshEX::Setup(IN char* szFolder, IN char* szFile)
 	m_pRoot = stTemp.pRoot;
 	m_pAniCtrl = stTemp.pAniCtrl;
 
+	if (m_pAniCtrl) m_pAniCtrl->ResetTime();
 	SetupBoneMatrixPtrs(m_pRoot);
 	UpdateFrames(nullptr, nullptr); // 로드 후 한번 업데이트를 돌려준다.
 
-	SetupAnimationSet(m_pAniCtrl);
+	if (m_pAniCtrl) SetupAnimationSet(m_pAniCtrl);
 }
 
 void cSkinnedMeshEX::UpdateFrames(LPD3DXFRAME pFrame, LPD3DXFRAME pParent)
@@ -71,9 +73,12 @@ void cSkinnedMeshEX::UpdateFrames(LPD3DXFRAME pFrame, LPD3DXFRAME pParent)
 void cSkinnedMeshEX::Update(float fDelta)
 {
 	m_fDelta = fDelta;
+	m_fDeltaSigma += fDelta;
 
 	if (m_pAniCtrl)
 	{
+
+
 		LPD3DXANIMATIONSET		tempPeriod;
 
 		m_pAniCtrl->GetTrackDesc(0, &m_stTrackDesc);
@@ -133,6 +138,8 @@ void cSkinnedMeshEX::Update(float fDelta)
 
 		SAFE_RELEASE(tempPeriod);
 	}
+
+	//m_pAniCtrl->AdvanceTime(0, NULL);
 }
 
 void cSkinnedMeshEX::RenderFrames(LPD3DXFRAME pFrame)
@@ -170,7 +177,8 @@ void cSkinnedMeshEX::Render()
 {
 	if (m_pAniCtrl)
 	{
-		m_pAniCtrl->AdvanceTime(m_fDelta, NULL);
+		m_pAniCtrl->AdvanceTime(m_fDeltaSigma, NULL);
+		m_fDeltaSigma = 0.f;
 		this->UpdateFrames(m_pRoot, nullptr);
 		this->UpdateSkinnedMesh(m_pRoot); // software skinning
 	}
@@ -290,6 +298,7 @@ void cSkinnedMeshEX::SetAnimationSet(UINT nTrack, LPCSTR szAniSetName)
 	if (m_mapAniSet.find(szAniSetName) == m_mapAniSet.end()) return;
 
 	m_pAniCtrl->SetTrackAnimationSet(nTrack, m_mapAniSet[szAniSetName]);
+	//m_pAniCtrl->ResetTime();
 }
 
 void cSkinnedMeshEX::SetAnimationSet(UINT nTrack, int nAniID, bool Loop)
@@ -304,6 +313,7 @@ void cSkinnedMeshEX::SetAnimationSet(UINT nTrack, int nAniID, bool Loop)
 	(m_mapAniSet.find(m_vecAniSetName[nAniID]))->second->GetPeriod();
 	D3DXTRACK_DESC			tempDesc;
 	m_bLoop = Loop;
+	m_pAniCtrl->ResetTime();
 }
 
 void cSkinnedMeshEX::SetAnimationSetBlend(UINT nTrack, int nAniID, bool Loop)

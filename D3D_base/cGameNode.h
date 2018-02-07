@@ -39,6 +39,7 @@ public:
 	
 	virtual void UpdateTempPhysics(float fDelta);
 	virtual void UpdatePhysics(float fDelta);
+	virtual void UpdateTransformData();
 	virtual void CollisionWithNode(cGameNode* pNode);
 	
 	void AddChild(cGameNode* pNode);

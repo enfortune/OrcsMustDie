@@ -81,7 +81,7 @@ public:
 	~cPlayer();
 
 	virtual void Setup();
-	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime()) override;
+	virtual void Update(float fDelta) override;
 	virtual void Render() override;
 	virtual void Delete() override;
 

@@ -6,7 +6,8 @@
 
 #include "cPhysicsBody.h"
 
-#define MAPCOLLISION_Y_EPSILON 3.0f
+#define MAPCOLLISION_Y_DELTAEPSILON 2.0f
+#define MAPCOLLISION_Y_EPSILON 0.15f
 
 cMapData::cMapData()
 	: m_bisVBExist(false)
@@ -139,7 +140,6 @@ void cMapData::Render()
 		{
 			for (int z = 0; z < MAPSIZE_Z; z++)
 			{
-				//m_arrGridBox[x][y][z].RenderBox(nullptr, nullptr);
 				if (m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_NONE) continue;
 				g_pD3DDevice->SetTexture(0, m_arrTex[m_arrGridBox[x][y][z].enKind]);
 				g_pD3DDevice->SetMaterial(&m_arrMtrl[m_arrGridBox[x][y][z].enKind]);
@@ -201,7 +201,6 @@ bool cMapData::GetPickingIndex(OUT int &nX, IN int nY, OUT int &nZ, cRay ray)
 	{
 		for (int z = 0; z < MAPSIZE_Z; z++)
 		{
-			//m_arrGridBox[x][y][nZ].stCube;
 			if (D3DXIntersectTri(
 				&m_arrGridBox[x][nY][z].v[30].p,
 				&m_arrGridBox[x][nY][z].v[31].p,
@@ -909,7 +908,8 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 {
 	cPhysicsBody* pBody = pNode->GetPhysicsBody();
 	bool bRet = false;
-	
+	bool bIsUpdateFrustum;
+
 	if (pBody == nullptr) return false;
 	
 
@@ -949,6 +949,7 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 				{
 					for (int z = 0; z < MAPSIZE_Z; z++)
 					{
+						bIsUpdateFrustum = false;
 						//0. 설치되지 않은 박스는 제낀다
 						if (m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_NONE) continue;
 
@@ -967,7 +968,7 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 							vCrushNorm = m_arrGridBox[x][y][z].stCube.GetNearestSideNormalVec3(&stBodySphere.vCenter);
 							fDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vCrushNorm);
 
-							if (fDot < 0)
+							if (fDot < 0.f)
 							{
 								D3DXVec3Normalize(&vGroundCheckNorm, &vCrushNorm);
 								if (D3DXVec3Dot(&vGroundCheckNorm, &D3DXVECTOR3(0.f, 1.f, 0.f)) > cosf(PI / 4))
@@ -995,10 +996,14 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 								else
 								{//MAPCOLLISION_Y_EPSILON
 									float fDeltaY = m_arrGridBox[x][y][z].stCube.GetHighestPoint() - (stBodySphere.vCenter.y - stBodySphere.fRadius);
-									if (fabs(MAPCOLLISION_Y_EPSILON * fDelta * pBody->GetTempPhysicsData().vVelocity.y) > fabs(fDeltaY) && fDeltaY > 0.f)
+									if (fabs(MAPCOLLISION_Y_DELTAEPSILON * fDelta * pBody->GetTempPhysicsData().vVelocity.y) + MAPCOLLISION_Y_EPSILON > fabs(fDeltaY))
 									{
-										pBody->GetTempPhysicsData().vPos.y += fDeltaY;
-										pBody->GetPhysicsData().vPos.y += fDeltaY;
+										//if (fDeltaY > -0.0001f)
+										//{
+											bIsUpdateFrustum = true;
+											pBody->GetTempPhysicsData().vPos.y += fDeltaY;
+											pBody->GetPhysicsData().vPos.y += fDeltaY;
+										//}
 										if (pBody->GetTempPhysicsData().vVelocity.y < 0.f)
 										{
 											pBody->GetTempPhysicsData().vVelocity.y = 0.f;
@@ -1008,44 +1013,32 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 
 										//pBody->UpdateTempPhysics(fDelta);
 
-										D3DXMatrixRotationAxis(&matR,
-											&pBody->GetTempPhysicsData().vAxis,
-											pBody->GetTempPhysicsData().fRotAngle);
-										D3DXMatrixTranslation(&matT,
-											pBody->GetTempPhysicsData().vPos.x,
-											pBody->GetTempPhysicsData().vPos.y,
-											pBody->GetTempPhysicsData().vPos.z);
-
-										matWorld = matR * matT * matParentWorld;
-
-										stBodyFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
-										stBodySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);
 									}
 									else
 									{
 										pBody->GetTempPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
 										pBody->GetPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
-
-										//pBody->UpdateTempPhysics(fDelta);
-
-										/*D3DXMatrixRotationAxis(&matR,
-											&pBody->GetTempPhysicsData().vAxis,
-											pBody->GetTempPhysicsData().fRotAngle);
-										D3DXMatrixTranslation(&matT,
-											pBody->GetTempPhysicsData().vPos.x,
-											pBody->GetTempPhysicsData().vPos.y,
-											pBody->GetTempPhysicsData().vPos.z);
-
-										matWorld = matR * matT * matParentWorld;
-
-										stBodyFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
-										stBodySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);*/
 									}
 								}
 							}
 							bRet =  true;
 						}
-						
+						if (bIsUpdateFrustum)
+						{
+							pNode->UpdateTransformData();
+							D3DXMatrixRotationAxis(&matR,
+								&pBody->GetTempPhysicsData().vAxis,
+								pBody->GetTempPhysicsData().fRotAngle);
+							D3DXMatrixTranslation(&matT,
+								pBody->GetTempPhysicsData().vPos.x,
+								pBody->GetTempPhysicsData().vPos.y,
+								pBody->GetTempPhysicsData().vPos.z);
+
+							matWorld = matR * matT * matParentWorld;
+
+							stBodyFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
+							stBodySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);
+						}
 					}
 				}
 			}
@@ -1059,6 +1052,7 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 				{
 					for (int z = 0; z < MAPSIZE_Z; z++)
 					{
+						bIsUpdateFrustum = false;
 						//0. 설치되지 않은 박스는 제낀다
 						if (m_arrGridBox[x][y][z].enKind == GRIDBOXKIND_NONE) continue;
 
@@ -1085,74 +1079,49 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 									pBody->GetPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
 									pBody->GetPhysicsData().bOnGround = true;
 
-									//pBody->UpdateTempPhysics(fDelta);
-
-									/*D3DXMatrixRotationAxis(&matR,
-										&pBody->GetTempPhysicsData().vAxis,
-										pBody->GetTempPhysicsData().fRotAngle);
-									D3DXMatrixTranslation(&matT,
-										pBody->GetTempPhysicsData().vPos.x,
-										pBody->GetTempPhysicsData().vPos.y,
-										pBody->GetTempPhysicsData().vPos.z);
-
-									matWorld = matR * matT * matParentWorld;
-
-									stBodyFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
-									stBodySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);*/
 								}
 								else
 								{
 									float fDeltaY = m_arrGridBox[x][y][z].stCube.GetHighestPoint() - stBodyFrustum.GetLowestPoint();
-									if (fabs(MAPCOLLISION_Y_EPSILON * fDelta * pBody->GetTempPhysicsData().vVelocity.y) > fabs(fDeltaY) && fDeltaY > 0.f)
+									if (fabs(MAPCOLLISION_Y_DELTAEPSILON * fDelta * pBody->GetTempPhysicsData().vVelocity.y) + MAPCOLLISION_Y_EPSILON > fabs(fDeltaY))
 									{
-										pBody->GetTempPhysicsData().vPos.y += fDeltaY;
-										pBody->GetPhysicsData().vPos.y += fDeltaY;
+										//if (fDeltaY > 0.f)
+										//{
+											bIsUpdateFrustum = true;
+											pBody->GetTempPhysicsData().vPos.y += fDeltaY;
+											pBody->GetPhysicsData().vPos.y += fDeltaY;
+										//}
 										if (pBody->GetTempPhysicsData().vVelocity.y < 0.f)
 										{
 											pBody->GetTempPhysicsData().vVelocity.y = 0.f;
 											pBody->GetPhysicsData().vVelocity.y = 0.f;
 											pBody->GetPhysicsData().bOnGround = true;
 										}
-										
-										//pBody->UpdateTempPhysics(fDelta);
-
-										/*D3DXMatrixRotationAxis(&matR,
-											&pBody->GetTempPhysicsData().vAxis,
-											pBody->GetTempPhysicsData().fRotAngle);
-										D3DXMatrixTranslation(&matT,
-											pBody->GetTempPhysicsData().vPos.x,
-											pBody->GetTempPhysicsData().vPos.y,
-											pBody->GetTempPhysicsData().vPos.z);
-
-										matWorld = matR * matT * matParentWorld;
-
-										stBodyFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
-										stBodySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);*/
 									}
 									else // 벽에 부딪힌 경우 아님?
 									{
-										pBody->GetTempPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
+ 										pBody->GetTempPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
 										pBody->GetPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
-
-										//pBody->UpdateTempPhysics(fDelta);
-
-										//D3DXMatrixRotationAxis(&matR,
-										//	&pBody->GetTempPhysicsData().vAxis,
-										//	pBody->GetTempPhysicsData().fRotAngle);
-										//D3DXMatrixTranslation(&matT,
-										//	pBody->GetTempPhysicsData().vPos.x,
-										//	pBody->GetTempPhysicsData().vPos.y,
-										//	pBody->GetTempPhysicsData().vPos.z);
-
-										//matWorld = matR * matT * matParentWorld;
-
-										//stBodyFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
-										//stBodySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);
 									}
-								}		
-								// 가속도와 힘도 제거할지는 조금 더 지켜보자.
+								} // 가속도와 힘도 제거할지는 조금 더 지켜보자.
 							}
 							bRet = true;
+						}
+						if (bIsUpdateFrustum)
+						{
+							pNode->UpdateTransformData();
+							D3DXMatrixRotationAxis(&matR,
+								&pBody->GetTempPhysicsData().vAxis,
+								pBody->GetTempPhysicsData().fRotAngle);
+							D3DXMatrixTranslation(&matT,
+								pBody->GetTempPhysicsData().vPos.x,
+								pBody->GetTempPhysicsData().vPos.y,
+								pBody->GetTempPhysicsData().vPos.z);
+
+							matWorld = matR * matT * matParentWorld;
+
+							stBodyFrustum = pBody->GetShapeData().stCuboid.TransformCoord(&matWorld);
+							stBodySphere = pBody->GetShapeData().stSphere.TransformCoord(&matWorld);
 						}
 					}
 				}

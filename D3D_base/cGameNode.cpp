@@ -96,6 +96,16 @@ void cGameNode::UpdatePhysics(float fDelta)
 	}
 }
 
+void cGameNode::UpdateTransformData()
+{
+	if (m_pTransformData && m_pPhysicsBody)
+	{
+		m_pTransformData->SetAxis(m_pPhysicsBody->GetPhysicsData().vAxis);
+		m_pTransformData->SetRotAngle(m_pPhysicsBody->GetPhysicsData().fRotAngle);
+		m_pTransformData->SetPosition(m_pPhysicsBody->GetPhysicsData().vPos);
+	}
+}
+
 void cGameNode::CollisionWithNode(cGameNode* pNode)
 {
 	cPhysicsBody* pBody = pNode->GetPhysicsBody();
@@ -242,6 +252,8 @@ void cGameNode::CollisionWithNode(cGameNode* pNode)
 					m_pPhysicsBody->GetPhysicsData().vVelocity += (vOpponentCrushNorm * fVelocityIntervalDot) * ((1.f + pBody->GetTempPhysicsData().fElasticity) );
 				}
 
+				fMyDot = D3DXVec3Dot(&m_pPhysicsBody->GetTempPhysicsData().vVelocity, &vMyCrushNorm);
+
 				m_pPhysicsBody->GetTempPhysicsData().vVelocity += -(vMyCrushNorm * fMyDot) * (1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity);
 				//m_pPhysicsBody->GetTempPhysicsData().vVelocity += -(vMyCrushNorm * fOpponentDot);
 
@@ -262,6 +274,7 @@ void cGameNode::CollisionWithNode(cGameNode* pNode)
 					pBody->GetPhysicsData().vVelocity += (vMyCrushNorm * fVelocityIntervalDot) * ((1.f + m_pPhysicsBody->GetTempPhysicsData().fElasticity) * m_pPhysicsBody->GetPhysicsData().fMass / pBody->GetPhysicsData().fMass);
 				}
 
+				fOpponentDot = D3DXVec3Dot(&pBody->GetTempPhysicsData().vVelocity, &vOpponentCrushNorm);
 
 				pBody->GetTempPhysicsData().vVelocity += -(vOpponentCrushNorm * fOpponentDot) * (1.f + pBody->GetTempPhysicsData().fElasticity);
 				//pBody->GetTempPhysicsData().vVelocity += (vOpponentCrushNorm * fMyDot);

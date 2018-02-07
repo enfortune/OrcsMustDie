@@ -27,7 +27,7 @@ void cGameParticleEruption::ResetParticle(ST_PARTICLEATTRIBUTE* pAttr)
 		-D3DXToRadian(rand() % 3 * 30.f + 10.f),
 		D3DXToRadian(rand() % 3600 / 10.0f) );
 
-	D3DXMATRIX matRX, matRY, matRZ, matWorld;
+	D3DXMATRIXA16 matRX, matRY, matRZ, matWorld;
 	D3DXMatrixRotationX(&matRX, vAngle.x);
 	D3DXMatrixRotationY(&matRY, vAngle.y);
 	D3DXMatrixRotationZ(&matRZ, vAngle.z);
@@ -44,7 +44,7 @@ void cGameParticleEruption::ResetParticle(ST_PARTICLEATTRIBUTE* pAttr)
 	pAttr->vVelocity *= fVelocity;
 
 	D3DXVec3TransformCoord(&pAttr->vPosition, &pAttr->vPosition, &m_matTrans);
-	D3DXVec3TransformCoord(&pAttr->vVelocity, &pAttr->vVelocity, &m_matTrans);
+	D3DXVec3TransformNormal(&pAttr->vVelocity, &pAttr->vVelocity, &m_matTrans);
 
 	pAttr->stColor = pAttr->stColorOrigin = D3DXCOLOR(
 		GetRandomFloat(0.5f, 0.8f),
@@ -108,7 +108,7 @@ void cGameParticleEruption::PostRender()
 	g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
 }
 
-void cGameParticleEruption::MakeEruption(D3DXVECTOR3 vOriginPos, D3DXMATRIX matTrans, int nMount)
+void cGameParticleEruption::MakeEruption(D3DXVECTOR3 vOriginPos, D3DXMATRIXA16& matTrans, int nMount)
 {
 	m_vOrigin = vOriginPos;
 	m_matTrans = matTrans;
