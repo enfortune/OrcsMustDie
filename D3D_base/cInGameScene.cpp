@@ -17,6 +17,7 @@
 #include "TrapType.h"
 #include "cSky.h"
 
+#include "GraphFindPath.h"
 #include "QuickSlot.h"
 
 #define SCREEN_WIDTH GetRectWidth(GetScreenRect())
@@ -127,9 +128,10 @@ void cInGameScene::Setup()
 	g_pSoundManager->AddSound("MainBGM", "Resource/Sound/Map/WrathGate.mp3", true, false);
 	g_pSoundManager->Play("MainBGM",0.3f);
 
+	pGraphFindPath_.init();
+
 	pQuickSlot_ = new QuickSlot;
 	pQuickSlot_->init();
-
 }
 void cInGameScene::Update(float fDelta)
 {
@@ -252,6 +254,11 @@ void cInGameScene::Update(float fDelta)
 	//{
 	//	m_pPlayer_S->SetIsBattle(false);
 	//}
+
+	m_vTrap[0].getFrustum();
+
+	std::vector<D3DXVECTOR3> test;
+	//pGraphFindPath_.findPath(0, 4, &test);
 
 	pQuickSlot_->update();
 

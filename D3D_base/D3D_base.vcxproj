@@ -200,6 +200,7 @@
     <ClInclude Include="Graph.hpp" />
     <ClInclude Include="GraphDijkstra.h" />
     <ClInclude Include="GraphDijkstra.hpp" />
+    <ClInclude Include="GraphFindPath.h" />
     <ClInclude Include="Loading.h" />
     <ClInclude Include="MapDataEnumList.h" />
     <ClInclude Include="cMapMaker.h" />
@@ -341,6 +342,7 @@
     <ClCompile Include="D3D_base.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="GraphDijkstra.cpp" />
+    <ClCompile Include="GraphFindPath.cpp" />
     <ClCompile Include="iGameMap.cpp" />
     <ClCompile Include="iGameUIDelegate.cpp" />
     <ClCompile Include="iMap.cpp" />

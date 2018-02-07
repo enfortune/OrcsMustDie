@@ -1,5 +1,7 @@
 #pragma once
 
+//#include "nMath.h"
+
 template<typename T> bool GraphDijkstra<T>::addLink(const T & start, const T & end, float cost, bool isBiDirection)
 {
 	if (cost <= 0.0f)
@@ -61,7 +63,7 @@ template<typename T> bool GraphDijkstra<T>::findPath(const T & start, const T & 
 			priorityQueueMin.emplace(std::make_pair(iterEnd->second, iterEnd->first));
 
 			calcTable_.emplace(std::make_pair(iterStart->first, iterEnd->first),
-				std::make_pair(std::vector<T>({iterStart->first, iterEnd->first}), iterEnd->second));
+				std::make_pair(std::vector<T>({iterEnd->first}), iterEnd->second));
 		}
 	}
 
@@ -72,8 +74,7 @@ template<typename T> bool GraphDijkstra<T>::findPath(const T & start, const T & 
 		isCheckedMap[iterCheck->first] = iterCheck->first == start ? true : false;
 
 		if(start != iterCheck->first)
-			calcTable_.emplace(std::make_pair(start, iterCheck->first),
-				std::make_pair(std::vector<T>({iterStart->first}), INFINITY_FLOAT));
+			calcTable_.emplace(std::make_pair(start, iterCheck->first), std::make_pair(std::vector<T>(), INFINITY_FLOAT));
 	}
 
 	// --- calculate -------------------------------------------------------------------------------------------------------

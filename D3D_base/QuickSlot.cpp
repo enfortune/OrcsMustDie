@@ -27,7 +27,7 @@ void QuickSlot::changeButton(IconType iconType, int indexButton)
 	
 	pButtonArray_[indexButton] = new cGameUIButton;
 	pButtonArray_[indexButton]->Setup("QuickSlotButton" + std::to_string(indexButton), nullptr, imagePath);
-	pButtonArray_[indexButton]->SetPosition({(indexButton - 5.5f) * 99 * 0.5f, 0.0f});
+	pButtonArray_[indexButton]->SetPosition({(indexButton - 5) * 99 * 0.5f, 0.0f});
 
 	pSpriteBar_->AddChild(pButtonArray_[indexButton]);
 }

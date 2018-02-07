@@ -415,9 +415,6 @@
     <ClInclude Include="GraphDijkstra.h">
       <Filter>엄윤호\Graph</Filter>
     </ClInclude>
-    <ClInclude Include="GraphDijkstra.hpp">
-      <Filter>엄윤호\Graph</Filter>
-    </ClInclude>
     <ClInclude Include="Loading.h">
       <Filter>엄윤호</Filter>
     </ClInclude>
@@ -444,6 +441,12 @@
     </ClInclude>
     <ClInclude Include="cXFileManager.h">
       <Filter>Global\Manager\D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphDijkstra.hpp">
+      <Filter>엄윤호\Graph</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphFindPath.h">
+      <Filter>엄윤호\Graph</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -702,12 +705,6 @@
     <ClCompile Include="nCommon.cpp">
       <Filter>엄윤호</Filter>
     </ClCompile>
-    <ClCompile Include="Graph.cpp">
-      <Filter>엄윤호\Graph</Filter>
-    </ClCompile>
-    <ClCompile Include="GraphDijkstra.cpp">
-      <Filter>엄윤호\Graph</Filter>
-    </ClCompile>
     <ClCompile Include="Loading.cpp">
       <Filter>엄윤호</Filter>
     </ClCompile>
@@ -731,6 +728,15 @@
     </ClCompile>
     <ClCompile Include="cXFileManager.cpp">
       <Filter>Global\Manager\D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphFindPath.cpp">
+      <Filter>엄윤호\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph.cpp">
+      <Filter>엄윤호\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphDijkstra.cpp">
+      <Filter>엄윤호\Graph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
