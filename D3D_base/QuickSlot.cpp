@@ -4,6 +4,8 @@
 #include "cGameUIButton.h"
 #include "cGameUISprite.h"
 
+#include "cTransformData.h"
+
 void QuickSlot::changeButton(IconType iconType, int indexButton)
 {
 	assert(indexButton >= 0 && indexButton < QUICKSLOT_COUNT);
@@ -12,7 +14,7 @@ void QuickSlot::changeButton(IconType iconType, int indexButton)
 
 	switch (iconType)
 	{
-	case QuickSlot::IconType::NONE: SAFE_DELETE(pButtonArray_[indexButton]); return;
+	case QuickSlot::IconType::NONE: removeButton(indexButton); break;
 	case QuickSlot::IconType::ATTACK: imagePath = "Resource/Image/UI/IconBash.png"; break;
 	case QuickSlot::IconType::BASH: imagePath = "Resource/Image/UI/IconBash.png"; break;
 	case QuickSlot::IconType::WHIRLWIND: imagePath = "Resource/Image/UI/IconWhirlwind.png"; break;
@@ -22,7 +24,7 @@ void QuickSlot::changeButton(IconType iconType, int indexButton)
 	default: assert(false);
 	}
 
-	delete pButtonArray_[indexButton];
+	removeButton(indexButton);
 	
 	pButtonArray_[indexButton] = new cGameUIButton;
 	pButtonArray_[indexButton]->Setup("QuickSlotButton" + std::to_string(indexButton), nullptr, imagePath);
@@ -30,12 +32,26 @@ void QuickSlot::changeButton(IconType iconType, int indexButton)
 	pSpriteBar_->AddChild(pButtonArray_[indexButton]);
 }
 
+void QuickSlot::removeButton(int indexButton)
+{
+	if (pButtonArray_[indexButton])
+	{
+		pButtonArray_[indexButton]->RemoveFromParent();
+		SAFE_RELEASE(pButtonArray_[indexButton]);
+		pButtonArray_[indexButton] = nullptr;
+	}
+}
+
+QuickSlot::~QuickSlot() { Delete(); }
+
 void QuickSlot::init()
 {
 	cGameNode::Setup();
 
 	pSpriteBar_ = new cGameUISprite;
 	pSpriteBar_->Setup("Resource/Image/UI/QuickSlot.bmp");
+	pSpriteBar_->SetPosition({/*-WINSIZEX * 0.5f*/ 0.0f, WINSIZEY * 0.8f});
+
 	AddChild(pSpriteBar_);
 
 	changeButton(IconType::ATTACK, 0);
@@ -57,10 +73,13 @@ void QuickSlot::render()
 void QuickSlot::resetButton()
 {
 	for (int i = 0; i < QUICKSLOT_COUNT; ++i)
-	{
-		pButtonArray_[i]->RemoveFromParent();
-		SAFE_DELETE(pButtonArray_[i]);
-	}
+		removeButton(i);
 }
 
-void QuickSlot::Delete() { resetButton(); SAFE_DELETE(pSpriteBar_); }
+void QuickSlot::Delete() 
+{
+	resetButton();
+
+	SAFE_DELETE(pSpriteBar_);
+	SAFE_DELETE(pSpriteSelect_);
+}

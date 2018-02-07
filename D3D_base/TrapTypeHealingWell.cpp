@@ -8,8 +8,8 @@ TrapTypeHealingWell::TrapTypeHealingWell()
 	frustumLocal_;
 	isBlockable_ = false;
 
-	width_ = 2;
-	height_ = 3;
+	width_ = 1;
+	height_ = 2;
 
 	frustumInteractionLocal_;
 

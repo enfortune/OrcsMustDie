@@ -12,16 +12,20 @@ private:
 	enum class IconType { NONE, ATTACK, BASH, WHIRLWIND, BARRICADE, SPIKE, HEALING_WELL };
 
 	cGameUISprite * pSpriteBar_ {};
+	cGameUISprite * pSpriteSelect_ {};
+
+	D3DXMATRIXA16 matrixWorld_ {};
 
 private:
 	cGameUIButton * pButtonArray_[QUICKSLOT_COUNT] {};
 
 private:
 	void changeButton(IconType iconType, int indexButton);
+	void removeButton(int indexButton);
 
 public:
 	QuickSlot() = default;
-	virtual ~QuickSlot() = default;
+	virtual ~QuickSlot();
 
 public:
 	void init();

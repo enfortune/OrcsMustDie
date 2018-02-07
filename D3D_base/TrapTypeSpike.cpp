@@ -38,8 +38,8 @@ TrapTypeSpike::TrapTypeSpike()
 	frustumLocal_ = frustumLocal_.TransformCoord(&matrixInverse);*/
 	isBlockable_ = false;
 
-	width_ = 2;
-	height_ = 2;
+	width_ = 1;
+	height_ = 1;
 
 	frustumInteractionLocal_ = frustumLocal_;
 
