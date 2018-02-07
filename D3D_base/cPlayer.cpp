@@ -5,6 +5,7 @@
 #include "cPhysicsBody.h"
 #include "cEnemyBase.h"
 #include "cGameParticleSpark.h"
+#include "cGameParticleEruption.h"
 
 cPlayer::cPlayer()
 	: m_pRotationY(0.0f)
@@ -83,6 +84,10 @@ void cPlayer::Setup()
 	m_pPlayerShield->Setup("Resource/XFile/Player", "Resource/XFile/Player/Shiled.X");
 	m_pPlayerShield->SetAnimationSet(0, 0);
 
+	m_pPlaterParticleEruption = new cGameParticleEruption;
+	m_pPlaterParticleEruption->Setup("");
+	g_pParticleManager->AddParticle(m_pPlaterParticleEruption);
+
 	g_pSoundManager->AddSound("PlayerAttackHit", "Resource/Sound/Player/2HSwordHitFlesh03.ogg", false, false);
 	g_pSoundManager->AddSound("PlayerWhirlwind", "Resource/Sound/Player/PlayerWhirlwind.ogg", false, true);
 	g_pSoundManager->AddSound("PlayerAttack", "Resource/Sound/Player/HumanMaleAttackA.ogg", false, false);
@@ -129,7 +134,8 @@ void cPlayer::Update(float fDelta)
 	m_bIs_D = false;
 	m_fPlayerTargetRot = 0.0f;
 
-	if (g_pKeyManager->IsStayKeyDown('W') && m_pPlayerState != PLAYERSTATE_ATTACK && m_pPlayerState != PLAYERSTATE_JUMPEND)
+	if (g_pKeyManager->IsStayKeyDown('W') && m_pPlayerState != PLAYERSTATE_ATTACK 
+		&& m_pPlayerState != PLAYERSTATE_JUMPEND && m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
 	{
 		speedX += 5.f * m_vPlayerDir.x;
 		speedZ += 5.f * m_vPlayerDir.z;
@@ -151,7 +157,8 @@ void cPlayer::Update(float fDelta)
 		}
 	}
 
-	if (g_pKeyManager->IsStayKeyDown('S') && m_pPlayerState != PLAYERSTATE_ATTACK && m_pPlayerState != PLAYERSTATE_JUMPEND)
+	if (g_pKeyManager->IsStayKeyDown('S') && m_pPlayerState != PLAYERSTATE_ATTACK 
+		&& m_pPlayerState != PLAYERSTATE_JUMPEND && m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
 	{
 		speedX -= 5.f *  m_vPlayerDir.x;
 		speedZ -= 5.f * m_vPlayerDir.z;
@@ -172,7 +179,8 @@ void cPlayer::Update(float fDelta)
 			IsPlayerState();
 		}
 	}
-	if (g_pKeyManager->IsStayKeyDown('A') && m_pPlayerState != PLAYERSTATE_ATTACK && m_pPlayerState != PLAYERSTATE_JUMPEND)
+	if (g_pKeyManager->IsStayKeyDown('A') && m_pPlayerState != PLAYERSTATE_ATTACK 
+		&& m_pPlayerState != PLAYERSTATE_JUMPEND && m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
 	{
 		speedX += 5.f *  vLeft.x;
 		speedZ += 5.f * vLeft.z;
@@ -194,7 +202,8 @@ void cPlayer::Update(float fDelta)
 		}
 	}
 
-	if (g_pKeyManager->IsStayKeyDown('D') && m_pPlayerState != PLAYERSTATE_ATTACK && m_pPlayerState != PLAYERSTATE_JUMPEND)
+	if (g_pKeyManager->IsStayKeyDown('D') && m_pPlayerState != PLAYERSTATE_ATTACK 
+		&& m_pPlayerState != PLAYERSTATE_JUMPEND && m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
 	{
 		speedX -= 5.f *  vLeft.x;
 		speedZ -= 5.f * vLeft.z;
@@ -231,7 +240,8 @@ void cPlayer::Update(float fDelta)
 			IsPlayerState();
 		}
 
-		if (g_pKeyManager->IsOnceKeyDown(VK_RBUTTON) && nPlayerCurMp > 100 && m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
+		if (g_pKeyManager->IsOnceKeyDown(VK_RBUTTON) && nPlayerCurMp > 100 
+			&& m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
 		{
 			m_pPlayerState = PLAYERSTATE_SKILL_SHILEDBASH;
 			IsPlayerState();
@@ -387,6 +397,8 @@ void cPlayer::Delete()
 	SAFE_DELETE(m_pPlayerParticle);
 	SAFE_DELETE(m_pPlayerSword);
 	SAFE_DELETE(m_pPlayerShield);
+	g_pParticleManager->DeleteParticle(m_pPlaterParticleEruption);
+	SAFE_DELETE(m_pPlaterParticleEruption);
 }			   
 
 void cPlayer::PlayerDamaged(int damage)
@@ -650,11 +662,12 @@ void cPlayer::PlayerParticleUpdate()
 		case PLAYERSTATE_DEATH:
 		break;
 		case PLAYERSTATE_SKILL_SHILEDBASH:
-			if (m_pPlayerMesh->getCurPosition() >= 0.4f)
+			if (m_pPlayerMesh->getCurPosition() >= 0.2f)
 			{
+				D3DXVECTOR3 vMakePos(-0., 0.5, 0);
+				D3DXVec3TransformCoord(&vMakePos, &vMakePos, &this->GetMatrixToWorld());
 
-				//D3DXVec3TransformCoord(&vPos, &vPos, &this->GetMatrixToWorld());
-				m_pPlayerParticle->
+				m_pPlaterParticleEruption->MakeEruption(vMakePos, 200);
 			}
 		break;
 		case PLAYERSTATE_SKILL_WHIRLWIND:
