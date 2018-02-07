@@ -5,10 +5,10 @@
 
 
 cGameParticleArrow::cGameParticleArrow()
-	: m_vDir(0.f, 0.f, 0.f)
+	: m_vDir(0.f, 0.f, 1.f)
 	, m_fRange(1.f)
 {
-	m_fSize = 0.2f;
+	m_fSize = 0.3f;
 	m_dwVBSize = 4096;
 	m_dwVBOffset = 0;
 	m_dwVBBatchSize = 512;
@@ -22,15 +22,16 @@ void cGameParticleArrow::ResetParticle(ST_PARTICLEATTRIBUTE* pAttr)
 {
 	pAttr->bIsAlive = true;
 
-	float fMainRadius = 1.f;
 	float fSubRadius = GetRandomFloat(0.0f, 0.1f);
+	float fRangeRoot = sqrtf(m_fRange);
 
-	D3DXVECTOR3 vTemp = D3DXVECTOR3(0, 0, fMainRadius);
+	D3DXVECTOR3 vTemp = D3DXVECTOR3(0, 0, fSubRadius);
+
 
 	D3DXVECTOR3 vAngle = D3DXVECTOR3(
-		m_vDir.x,
-		m_vDir.y,
-		m_vDir.z);
+		D3DXToRadian(rand() % 3600 / 10.0f),
+		D3DXToRadian(rand() % 3600 / 10.0f),
+		D3DXToRadian(rand() % 3600 / 10.0f));
 
 	D3DXMATRIX matRX, matRY, matRZ, matWorld;
 	D3DXMatrixRotationX(&matRX, vAngle.x);
@@ -42,23 +43,25 @@ void cGameParticleArrow::ResetParticle(ST_PARTICLEATTRIBUTE* pAttr)
 		&vTemp,
 		&matWorld);
 
-	pAttr->vPosition = m_vOrigin + vTemp * GetRandomFloat(0.0f, 0.1f);
-	pAttr->vVelocity = vTemp;
-	pAttr->vVelocity *= 5.0f;
+	pAttr->vPosition = m_vOrigin;
+	pAttr->vVelocity = m_vDir * 0.9f + vTemp;
+	pAttr->vVelocity *= fRangeRoot;
+	pAttr->vAcceleration = D3DXVECTOR3(0, 0.1, 0);
+	pAttr->vAcceleration *= fRangeRoot;
 
 	pAttr->stColor = pAttr->stColorOrigin = D3DXCOLOR(
-		GetRandomFloat(0.0f, 0.3f),
-		GetRandomFloat(0.0f, 0.3f),
+		GetRandomFloat(1.0f, 1.0f),
+		GetRandomFloat(0.8f, 1.0f),
 		GetRandomFloat(0.8f, 1.0f),
 		GetRandomFloat(1.0f, 1.0f));
 	pAttr->stColorFade = D3DXCOLOR(
-		GetRandomFloat(0.0f, 0.01f),
-		GetRandomFloat(0.0f, 0.01f),
-		GetRandomFloat(0.0f, 0.05f),
+		GetRandomFloat(0.6f, 0.7f),
+		GetRandomFloat(0.4f, 0.6f),
+		GetRandomFloat(0.4f, 0.6f),
 		GetRandomFloat(1.0f, 1.0f));
 
 	pAttr->fAge = 0.0f;
-	pAttr->fLifeTime = GetRandomFloat(0.0f, 0.2f) + 0.3f;
+	pAttr->fLifeTime = (GetRandomFloat(0.35f, 0.5f) + 0.5f) * fRangeRoot;
 }
 void cGameParticleArrow::Update(float fDelta)
 {
@@ -70,6 +73,7 @@ void cGameParticleArrow::Update(float fDelta)
 			iter = m_listParticles.erase(iter);
 		else
 		{
+			iter->vVelocity += iter->vAcceleration * fDelta;
 			iter->vPosition += iter->vVelocity * fDelta;
 			iter->fAge += fDelta;
 
