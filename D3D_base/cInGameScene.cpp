@@ -17,6 +17,8 @@
 #include "TrapType.h"
 #include "cSky.h"
 
+#include "QuickSlot.h"
+
 #define SCREEN_WIDTH GetRectWidth(GetScreenRect())
 #define SCREEN_HEIGHT GetRectHeight(GetScreenRect())
 
@@ -124,6 +126,9 @@ void cInGameScene::Setup()
 
 	g_pSoundManager->AddSound("MainBGM", "Resource/Sound/Map/WrathGate.mp3", true, false);
 	g_pSoundManager->Play("MainBGM",0.3f);
+
+	pQuickSlot_ = new QuickSlot;
+	pQuickSlot_->init();
 
 }
 void cInGameScene::Update(float fDelta)
@@ -248,9 +253,9 @@ void cInGameScene::Update(float fDelta)
 	//	m_pPlayer_S->SetIsBattle(false);
 	//}
 
-	cGameScene::Update(fDelta);
+	pQuickSlot_->update();
 
-	
+	cGameScene::Update(fDelta);
 }
 void cInGameScene::Render()
 {
@@ -379,6 +384,8 @@ void cInGameScene::Render()
 		
 	}
 
+	pQuickSlot_->render();
+
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 
 	cGameScene::Render();
@@ -392,6 +399,7 @@ void cInGameScene::Delete()
 	SAFE_RELEASE(m_pMap);
 	SAFE_DELETE(m_pTrapTypeManager);
 	SAFE_DELETE(m_pSkyMap);
+	SAFE_DELETE(pQuickSlot_);
 
 	for (int i = 0; i < m_vEnemyBase.size(); i++)
 	{

@@ -600,6 +600,6 @@ void cBoss::shockwave()
 	D3DXVECTOR3 vMakePos(0, 0, 0);
 	D3DXVec3TransformCoord(&vMakePos, &vMakePos, &this->GetMatrixToWorld());
 
-	m_pParticle->MakeShockWave(vMakePos, 200);
+	m_pParticle->MakeShockWave(vMakePos, 200, 1);
 }
 
