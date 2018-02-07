@@ -3,18 +3,29 @@
 #include "cGameNode.h"
 
 class cGameUIButton;
+class cGameUISprite;
 
 class QuickSlot : public cGameNode
 {
 private:
 	enum { QUICKSLOT_COUNT = 10 };
+	enum class IconType { NONE, ATTACK, BASH, WHIRLWIND, BARRICADE, SPIKE, HEALING_WELL };
+
+	cGameUISprite * pSpriteBar_ {};
+	cGameUISprite * pSpriteSelect_ {};
+
+	D3DXMATRIXA16 matrixWorld_ {};
 
 private:
 	cGameUIButton * pButtonArray_[QUICKSLOT_COUNT] {};
 
+private:
+	void changeButton(IconType iconType, int indexButton);
+	void removeButton(int indexButton);
+
 public:
-	QuickSlot();
-	~QuickSlot();
+	QuickSlot() = default;
+	virtual ~QuickSlot();
 
 public:
 	void init();
@@ -22,6 +33,8 @@ public:
 	void render();
 
 	void resetButton();
+
+	virtual void Delete();
 };
 
 //#include "cGameNode.h"

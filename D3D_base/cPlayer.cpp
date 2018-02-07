@@ -69,7 +69,7 @@ void cPlayer::Setup()
 	nPlayerCurHp = 500;
 	nPlayerMaxMp = 500;
 	nPlayerCurMp = 500;
-	m_nPlayerGold = 1000;
+	m_nPlayerGold = 3000;
 	m_nPlayerAtkDamage = 10;
 
 	m_vAtkParticleStart = D3DXVECTOR3(0.5f, 1.f, 1.f);

@@ -32,14 +32,14 @@ TrapTypeSpike::TrapTypeSpike()
 	frustumLocal_.vFar_10 = {1.0f, 0.0f, +1.0f};
 	frustumLocal_.vFar_11 = {1.0f, 0.6f, +1.0f};
 
-	D3DXMATRIXA16 matrixInverse {};
+	/*D3DXMATRIXA16 matrixInverse {};
 	D3DXMatrixInverse(&matrixInverse, nullptr, &(matrixLocalList_[0]));
 
-	frustumLocal_ = frustumLocal_.TransformCoord(&matrixInverse);
+	frustumLocal_ = frustumLocal_.TransformCoord(&matrixInverse);*/
 	isBlockable_ = false;
 
-	width_ = 2;
-	height_ = 2;
+	width_ = 1;
+	height_ = 1;
 
 	frustumInteractionLocal_ = frustumLocal_;
 
@@ -58,9 +58,9 @@ TrapTypeSpike::TrapTypeSpike()
 	moneyCost_ = 300;
 }
 
-TrapComponentAttackable * TrapTypeComponentAttackableSpike::newComponentObject() const
+std::unique_ptr<TrapComponentAttackable> TrapTypeComponentAttackableSpike::newComponentObject() const
 {
-	TrapComponentAttackable * temp = new TrapComponentAttackableSpike(const_cast<TrapTypeComponentAttackableSpike *>(this));
+	std::unique_ptr<TrapComponentAttackable> temp = std::make_unique<TrapComponentAttackableSpike>(const_cast<TrapTypeComponentAttackableSpike *> (this));
 
 	temp->pParent_ = const_cast<TrapTypeComponentAttackableSpike *>(this);
 	temp->frustumAttackWorld_ = frustumAttackLocal_;
@@ -72,7 +72,7 @@ TrapComponentAttackable * TrapTypeComponentAttackableSpike::newComponentObject()
 TrapComponentAttackableSpike::TrapComponentAttackableSpike(TrapTypeComponentAttackable * pParent)
 { TrapComponentAttackable::TrapComponentAttackable(pParent); }
 
-void TrapComponentAttackableSpike::attack(std::vector<cEnemyBase*> & enemyList)
+void TrapComponentAttackableSpike::attack(Trap & trap, std::vector<cEnemyBase*> & enemyList)
 {
 	if (cooldown_ <= 0.0f)
 	{
@@ -83,7 +83,7 @@ void TrapComponentAttackableSpike::attack(std::vector<cEnemyBase*> & enemyList)
 				enemyList[i]->getDamage(pParent_->damage_);
 			
 				cooldown_ = pParent_->cooldownMax_;
-				pTrap_->setRenderModelIndex(0);
+				trap.setRenderModelIndex(0);
 			}
 		}
 	}

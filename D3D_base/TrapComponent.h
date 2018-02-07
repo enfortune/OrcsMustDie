@@ -13,7 +13,6 @@ class cEnemyBase;
 struct TrapComponentAttackable
 {
 public:
-	Trap * pTrap_ {};
 	TrapTypeComponentAttackable * pParent_ {};
 
 	FRUSTUM frustumAttackWorld_ {};
@@ -27,8 +26,8 @@ public:
 	//UNCOPYABLE(TrapComponentAttackable);
 
 public:
-	virtual void attack(cPlayer & player);
-	virtual void attack(std::vector<cEnemyBase *> & enemyList);
+	virtual void attack(Trap & trap, cPlayer & player);
+	virtual void attack(Trap & trap, std::vector<cEnemyBase *> & enemyList);
 
 public:
 	virtual void update(Trap & trap, float fDelta = g_pTimeManager->GetEllapsedTime());
@@ -39,7 +38,6 @@ struct TrapTypeComponentBlockable;
 struct TrapComponentBlockable
 {
 public:
-	Trap * pTrap_ {};
 	TrapTypeComponentBlockable * pParent_ {};
 
 	int hp_ {};
@@ -51,7 +49,7 @@ public:
 	//UNCOPYABLE(TrapComponentBlockable);
 
 public:
-	virtual void hit(std::vector<cEnemyBase *> & enemyList);
+	virtual void hit(Trap & trap, std::vector<cEnemyBase *> & enemyList);
 
 public:
 	virtual void update(Trap & trap, float fDelta = g_pTimeManager->GetEllapsedTime());
@@ -62,7 +60,6 @@ struct TrapTypeComponentTriggerable;
 struct TrapComponentTriggerable
 {
 public:
-	Trap * pTrap_ {};
 	TrapTypeComponentTriggerable * pParent_ {};
 
 public:

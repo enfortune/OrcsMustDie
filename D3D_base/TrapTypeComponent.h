@@ -18,7 +18,7 @@ public:
 	virtual ~TrapTypeComponentAttackable() = default;
 
 public:
-	virtual TrapComponentAttackable * newComponentObject() const;
+	virtual std::unique_ptr<TrapComponentAttackable> newComponentObject() const;
 };
 
 struct TrapComponentBlockable;
@@ -37,7 +37,7 @@ public:
 	virtual ~TrapTypeComponentBlockable() = default;
 
 public:
-	virtual TrapComponentBlockable * newComponentObject() const;
+	virtual std::unique_ptr<TrapComponentBlockable> newComponentObject() const;
 };
 
 struct TrapComponentTriggerable;
@@ -49,5 +49,5 @@ public:
 	virtual ~TrapTypeComponentTriggerable() = default;
 
 public:
-	virtual TrapComponentTriggerable * newComponentObject() const = 0;
+	virtual std::unique_ptr<TrapComponentTriggerable> newComponentObject() const = 0;
 };

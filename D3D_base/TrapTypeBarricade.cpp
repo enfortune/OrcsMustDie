@@ -30,8 +30,8 @@ TrapTypeBarricade::TrapTypeBarricade()
 
 	isBlockable_ = true;
 
-	width_ = 2;
-	height_ = 2;
+	width_ = 1;
+	height_ = 1;
 
 	isInstallPositionArray_[static_cast<size_t> (TrapType::eInstallPosition::FLOOR)] = true;
 

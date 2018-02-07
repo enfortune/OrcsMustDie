@@ -35,20 +35,20 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
@@ -175,6 +175,7 @@
     <ClInclude Include="cEnemyBase.h" />
     <ClInclude Include="cFontManager.h" />
     <ClInclude Include="cGameParticle.h" />
+    <ClInclude Include="cGameParticleArrow.h" />
     <ClInclude Include="cGameParticleEnumList.h" />
     <ClInclude Include="cGameParticleEruption.h" />
     <ClInclude Include="cGameParticleFirework.h" />
@@ -194,6 +195,7 @@
     <ClInclude Include="cMapData.h" />
     <ClInclude Include="cSkinnedMeshEX.h" />
     <ClInclude Include="cSky.h" />
+    <ClInclude Include="cXFileManager.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="Graph.hpp" />
     <ClInclude Include="GraphDijkstra.h" />
@@ -281,6 +283,7 @@
     <ClCompile Include="cEnemyBase.cpp" />
     <ClCompile Include="cFontManager.cpp" />
     <ClCompile Include="cGameParticle.cpp" />
+    <ClCompile Include="cGameParticleArrow.cpp" />
     <ClCompile Include="cGameParticleEruption.cpp" />
     <ClCompile Include="cGameParticleFirework.cpp" />
     <ClCompile Include="cGameParticleShockwave.cpp" />
@@ -333,6 +336,7 @@
     <ClCompile Include="cTimer_GetTickCount.cpp" />
     <ClCompile Include="cTimer_QueryPerformanceFrequency.cpp" />
     <ClCompile Include="cTransformData.cpp" />
+    <ClCompile Include="cXFileManager.cpp" />
     <ClCompile Include="D3DX_UTIL.cpp" />
     <ClCompile Include="D3D_base.cpp" />
     <ClCompile Include="Graph.cpp" />

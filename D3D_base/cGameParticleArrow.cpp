@@ -1,32 +1,37 @@
 #include "stdafx.h"
-#include "cGameParticleShockwave.h"
+#include "cGameParticleArrow.h"
 
 
-cGameParticleShockwave::cGameParticleShockwave()
-	: m_fRange(1.f)
+
+
+cGameParticleArrow::cGameParticleArrow()
+	: m_vDir(0.f, 0.f, 1.f)
+	, m_fRange(1.f)
 {
-	m_fSize = 0.2f;
+	m_fSize = 0.3f;
 	m_dwVBSize = 4096;
 	m_dwVBOffset = 0;
 	m_dwVBBatchSize = 512;
 }
 
-
-cGameParticleShockwave::~cGameParticleShockwave()
+cGameParticleArrow::~cGameParticleArrow()
 {
 }
 
-
-void cGameParticleShockwave::ResetParticle(ST_PARTICLEATTRIBUTE* pAttr)
+void cGameParticleArrow::ResetParticle(ST_PARTICLEATTRIBUTE* pAttr)
 {
 	pAttr->bIsAlive = true;
-	
-	D3DXVECTOR3 vTemp = D3DXVECTOR3(0, 0, 1);
+
+	float fSubRadius = GetRandomFloat(0.0f, 0.1f);
+	float fRangeRoot = sqrtf(m_fRange);
+
+	D3DXVECTOR3 vTemp = D3DXVECTOR3(0, 0, fSubRadius);
+
 
 	D3DXVECTOR3 vAngle = D3DXVECTOR3(
-		-D3DXToRadian(rand() % 100 / 10.0f),
 		D3DXToRadian(rand() % 3600 / 10.0f),
-		0.f);
+		D3DXToRadian(rand() % 3600 / 10.0f),
+		D3DXToRadian(rand() % 3600 / 10.0f));
 
 	D3DXMATRIX matRX, matRY, matRZ, matWorld;
 	D3DXMatrixRotationX(&matRX, vAngle.x);
@@ -38,28 +43,27 @@ void cGameParticleShockwave::ResetParticle(ST_PARTICLEATTRIBUTE* pAttr)
 		&vTemp,
 		&matWorld);
 
-	float fVelocity = (float)((rand() % 2) + 1) * (1.f - powf(GetRandomFloat(0.f, 1.f), 3.f)) + 1.0f;
-	fVelocity /= 4.f;
-
 	pAttr->vPosition = m_vOrigin;
-	pAttr->vVelocity = vTemp;
-	pAttr->vVelocity *= fVelocity * m_fRange;
+	pAttr->vVelocity = m_vDir * 0.9f + vTemp;
+	pAttr->vVelocity *= fRangeRoot;
+	pAttr->vAcceleration = D3DXVECTOR3(0, 0.1, 0);
+	pAttr->vAcceleration *= fRangeRoot;
 
 	pAttr->stColor = pAttr->stColorOrigin = D3DXCOLOR(
-		GetRandomFloat(0.0f, 0.4f),
-		GetRandomFloat(0.6f, 1.0f),
-		GetRandomFloat(0.0f, 0.4f),
-		GetRandomFloat(0.9f, 1.0f));
+		GetRandomFloat(1.0f, 1.0f),
+		GetRandomFloat(0.8f, 1.0f),
+		GetRandomFloat(0.8f, 1.0f),
+		GetRandomFloat(1.0f, 1.0f));
 	pAttr->stColorFade = D3DXCOLOR(
-		GetRandomFloat(0.0f, 0.01f),
-		GetRandomFloat(0.05f, 0.1f),
-		GetRandomFloat(0.0f, 0.01f),
-		GetRandomFloat(0.7f, 0.9f));
+		GetRandomFloat(0.6f, 0.7f),
+		GetRandomFloat(0.4f, 0.6f),
+		GetRandomFloat(0.4f, 0.6f),
+		GetRandomFloat(1.0f, 1.0f));
 
 	pAttr->fAge = 0.0f;
-	pAttr->fLifeTime = GetRandomFloat(0.0f, 0.5f) + 0.5f;
+	pAttr->fLifeTime = (GetRandomFloat(0.35f, 0.5f) + 0.5f) * fRangeRoot;
 }
-void cGameParticleShockwave::Update(float fDelta)
+void cGameParticleArrow::Update(float fDelta)
 {
 	std::list<ST_PARTICLEATTRIBUTE>::iterator iter;
 
@@ -69,6 +73,7 @@ void cGameParticleShockwave::Update(float fDelta)
 			iter = m_listParticles.erase(iter);
 		else
 		{
+			iter->vVelocity += iter->vAcceleration * fDelta;
 			iter->vPosition += iter->vVelocity * fDelta;
 			iter->fAge += fDelta;
 
@@ -92,7 +97,7 @@ void cGameParticleShockwave::Update(float fDelta)
 		}
 	}
 }
-void cGameParticleShockwave::PreRender()
+void cGameParticleArrow::PreRender()
 {
 	cGameParticle::PreRender();
 
@@ -100,19 +105,30 @@ void cGameParticleShockwave::PreRender()
 	g_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
 	g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, false);
+
 }
-void cGameParticleShockwave::PostRender()
+void cGameParticleArrow::PostRender()
 {
 	cGameParticle::PostRender();
 	g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
 }
 
-void cGameParticleShockwave::MakeShockWave(D3DXVECTOR3 vPos, float fRange, int nMount)
+void cGameParticleArrow::MakeArrow(D3DXVECTOR3 vPos, D3DXVECTOR3 vDir, float fRange, int nMount)
 {
 	m_vOrigin = vPos;
+	m_vDir = vDir;
+	D3DXVec3Normalize(&m_vDir, &m_vDir);
 	m_fRange = fRange;
 	for (int i = 0; i < nMount; i++)
 	{
 		AddParticles();
+	}
+}
+
+void cGameParticleArrow::ClearArrow()
+{
+	for (std::list<ST_PARTICLEATTRIBUTE>::iterator iter = m_listParticles.begin(); iter != m_listParticles.end(); )
+	{
+		iter = m_listParticles.erase(iter);
 	}
 }

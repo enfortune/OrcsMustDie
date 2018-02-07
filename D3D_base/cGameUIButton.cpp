@@ -85,7 +85,7 @@ void cGameUIButton::Update(float fDelta)
 
 	if (!m_bEnable) return; //사용중이 아니라면 리턴
 
-	m_pDelegate->UIButtonAction(m_sTag, m_enState); // 현재 상태에 대한 버튼액션 실행 후
+	if (m_pDelegate) m_pDelegate->UIButtonAction(m_sTag, m_enState); // 현재 상태에 대한 버튼액션 실행 후
 	
 
 	switch (m_enState) //다운과 업 함수가 한번만 실행될 수 있도록 상태를 정리한다

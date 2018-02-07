@@ -13,7 +13,7 @@ void Trap::interaction(cPlayer & player)
 	if (pType_->isInteractionToArray_[static_cast<size_t> (TrapType::eInteractionTo::PLAYER)])
 	{
 		if (pComponentAttackable_)
-			pComponentAttackable_->attack(player);
+			pComponentAttackable_->attack(*this, player);
 	}
 }
 
@@ -22,10 +22,10 @@ void Trap::interaction(std::vector<cEnemyBase *> & enemyList)
 	if (pType_->isInteractionToArray_[static_cast<size_t> (TrapType::eInteractionTo::ENEMY)])
 	{
 		if (pComponentAttackable_)
-			pComponentAttackable_->attack(enemyList);
+			pComponentAttackable_->attack(*this, enemyList);
 
 		if (pComponentBlockable_)
-			pComponentBlockable_->hit(enemyList);
+			pComponentBlockable_->hit(*this, enemyList);
 	}
 }
 
@@ -47,22 +47,15 @@ void Trap::init(TrapType & type, D3DXMATRIXA16 & matrixWorld)
 
 	if (type.pTypeComponentAttackable_)
 	{
-		pComponentAttackable_.reset(type.pTypeComponentAttackable_->newComponentObject());
+		pComponentAttackable_ = std::move(type.pTypeComponentAttackable_->newComponentObject());
 		pComponentAttackable_->frustumAttackWorld_ = pComponentAttackable_->frustumAttackWorld_.TransformCoord(&matrixWorld);
-		pComponentAttackable_->pTrap_ = this;
 	}
 
 	if (type.pTypeComponentBlockable_)
-	{
-		pComponentBlockable_.reset(type.pTypeComponentBlockable_->newComponentObject());
-		pComponentAttackable_->pTrap_ = this;
-	}
+		pComponentBlockable_ = std::move(type.pTypeComponentBlockable_->newComponentObject());
 
 	if (type.pTypeComponentTriggerable_)
-	{
-		pComponentTriggerable_.reset(type.pTypeComponentTriggerable_->newComponentObject());
-		pComponentAttackable_->pTrap_ = this;
-	}
+		pComponentTriggerable_ = std::move(type.pTypeComponentTriggerable_->newComponentObject());
 }
 
 void Trap::update(float fDelta)

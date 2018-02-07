@@ -15,6 +15,8 @@ class TrapTypeManager;
 class cRay;
 class cSky;
 
+class QuickSlot;
+
 class cInGameScene : public cGameScene
 {
 	cPlayerCamera* m_pCamera;
@@ -33,6 +35,8 @@ class cInGameScene : public cGameScene
 	cSky*				m_pSkyMap;
 	float				m_fRoundTime;
 	bool				m_bRound1, m_bRound2, m_bRound3;
+
+	QuickSlot * pQuickSlot_ {};
 	
 public:
 	cInGameScene();

@@ -9,11 +9,11 @@
 
 TrapComponentAttackable::TrapComponentAttackable(TrapTypeComponentAttackable * pParent) : pParent_(pParent) {}
 
-void TrapComponentAttackable::attack(cPlayer & player)
+void TrapComponentAttackable::attack(Trap & trap, cPlayer & player)
 {
 }
 
-void TrapComponentAttackable::attack(std::vector<cEnemyBase *> & enemyList)
+void TrapComponentAttackable::attack(Trap & trap, std::vector<cEnemyBase *> & enemyList)
 {
 	if (cooldown_ <= 0.0f)
 	{
@@ -38,7 +38,7 @@ void TrapComponentAttackable::update(Trap & trap, float fDelta)
 
 TrapComponentBlockable::TrapComponentBlockable(TrapTypeComponentBlockable * pParent) : pParent_(pParent) {}
 
-void TrapComponentBlockable::hit(std::vector<cEnemyBase *> & enemyList)
+void TrapComponentBlockable::hit(Trap & trap, std::vector<cEnemyBase *> & enemyList)
 {
 	//hp_ -= damage_ - defense_;
 

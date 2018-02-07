@@ -4,6 +4,7 @@
 
 class cSkinnedMeshEX;
 class cPlayer;
+class cGameParticleShockwave;
 
 class cBoss : public cEnemyBase
 {
@@ -26,6 +27,8 @@ private:
 	tempPoint tp[5];
 	bool bPhase1, bPhase2, bPhase3;
 
+	/* particle */
+	cGameParticleShockwave* m_pParticle;
 
 public:
 	cBoss();
@@ -51,5 +54,6 @@ public:
 	void HpManager();
 	void Hit();
 
+	void shockwave();
 };
 
