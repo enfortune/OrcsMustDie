@@ -27,6 +27,7 @@
 #include <list>
 #include <map>
 #include <set>
+#include <queue>
 
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")

@@ -1,9 +1,10 @@
 #pragma once
 
+#include <cassert>
 #include "nCommon.h"
 
 #ifndef CONSOLE
-//#define CONSOLE
+#define CONSOLE
 #endif
 
 // T : node key, T2 : link cost

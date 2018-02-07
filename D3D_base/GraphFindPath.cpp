@@ -23,7 +23,7 @@ void GraphFindPath::init()
 bool GraphFindPath::findPath(int start, int end, OUT std::vector<D3DXVECTOR3>* pVertexList, OUT float * pTotalCost)
 {
 	std::vector<int> pathList;
-	if (graphDijkstra_.findPath(start, end, &pathList, pTotalCost))
+	//if (graphDijkstra_.findPath(start, end, &pathList, pTotalCost))
 	{
 		if (pVertexList)
 		{

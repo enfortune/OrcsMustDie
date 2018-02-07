@@ -15,7 +15,6 @@ class TrapTypeManager;
 class cRay;
 class cSky;
 
-#include "GraphFindPath.h"
 class QuickSlot;
 
 class cInGameScene : public cGameScene

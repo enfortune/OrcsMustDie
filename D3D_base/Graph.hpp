@@ -1,5 +1,5 @@
-#pragma once
 #include "Graph.h"
+#pragma once
 
 template<typename T, typename T2> std::vector<T> Graph<T, T2>::getNodeList() const noexcept
 {
@@ -16,7 +16,7 @@ template<typename T, typename T2>
 std::vector<typename Graph<T, T2>::LinkData> Graph<T, T2>::getLinkList() const noexcept
 {
 	std::vector<Graph<T, T2>::LinkData> temp;
-
+	
 	FOR_STL_ITERATOR_ALL(iterStart, linkTable_)
 	{
 		FOR_STL_ITERATOR_ALL(iterEnd, iterStart->second)

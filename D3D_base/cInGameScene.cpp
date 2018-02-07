@@ -17,7 +17,6 @@
 #include "TrapType.h"
 #include "cSky.h"
 
-#include "GraphFindPath.h"
 #include "QuickSlot.h"
 
 #define SCREEN_WIDTH GetRectWidth(GetScreenRect())
