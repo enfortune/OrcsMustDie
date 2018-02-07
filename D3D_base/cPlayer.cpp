@@ -95,8 +95,8 @@ void cPlayer::Setup()
 
 void cPlayer::Update(float fDelta)
 {
-	m_pPlayerMesh->Update();
-	m_pPlayerMesh->UpdateAnimation(fDelta);
+	m_pPlayerMesh->Update(fDelta);
+	//m_pPlayerMesh->UpdateAnimation(fDelta);
 
 	int ManaCount = 0;
 	
