@@ -675,7 +675,7 @@ void cPlayer::PlayerParticleUpdate()
 			{
 				D3DXVECTOR3 vMakePos(-0., 0.5, 0);
 				D3DXVec3TransformCoord(&vMakePos, &vMakePos, &this->GetMatrixToWorld());
-				if (isShiledP) m_pPlaterParticleEruption->MakeEruption(vMakePos, 200);
+				 m_pPlaterParticleEruption->MakeEruption(vMakePos, m_pTransformData->GetAxis(), m_pTransformData->GetRotAngle(), 200);
 			}
 		break;
 		case PLAYERSTATE_SKILL_WHIRLWIND:

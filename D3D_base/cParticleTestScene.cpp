@@ -76,13 +76,13 @@ void cParticleTestScene::Update(float fDelta)
 	{
 		if (m_pSpark) m_pSpark->MakeSpark(D3DXVECTOR3(0, 1, 0), 10);
 		if (m_pWave) m_pWave->MakeShockWave(D3DXVECTOR3(0, 0, 0), 400, 1);
-		if (m_pEruption) m_pEruption->MakeEruption(D3DXVECTOR3(0, 0, 0), 200);
+		//if (m_pEruption) m_pEruption->MakeEruption(D3DXVECTOR3(0, 0, 0), 200);
 	}
 	if (g_pKeyManager->IsStayKeyDown('T'))
 	{
 		if (m_pSpark) m_pSpark->MakeSpark(D3DXVECTOR3(0,1,0), 10);
 		if (m_pWave) m_pWave->MakeShockWave(D3DXVECTOR3(0, 0, 0), 400, 1);
-		if (m_pEruption) m_pEruption->MakeEruption(D3DXVECTOR3(0, 0, 0), 50);
+		//if (m_pEruption) m_pEruption->MakeEruption(D3DXVECTOR3(0, 0, 0), 50);
 	}
 
 	if (g_pKeyManager->IsOnceKeyDown('1'))
