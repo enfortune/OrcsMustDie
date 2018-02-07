@@ -3,8 +3,6 @@
 
 
 cGameParticleEruption::cGameParticleEruption()
-	: m_vAxis(0, 1, 0)
-	, m_fRotAngle(0.f)
 {
 	m_fSize = 0.1f;
 	m_dwVBSize = 4096;

@@ -995,7 +995,7 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 								else
 								{//MAPCOLLISION_Y_EPSILON
 									float fDeltaY = m_arrGridBox[x][y][z].stCube.GetHighestPoint() - (stBodySphere.vCenter.y - stBodySphere.fRadius);
-									if (fabs(MAPCOLLISION_Y_EPSILON * fDelta * pBody->GetTempPhysicsData().vVelocity.y) > fabs(fDeltaY))
+									if (fabs(MAPCOLLISION_Y_EPSILON * fDelta * pBody->GetTempPhysicsData().vVelocity.y) > fabs(fDeltaY) && fDeltaY > 0.f)
 									{
 										pBody->GetTempPhysicsData().vPos.y += fDeltaY;
 										pBody->GetPhysicsData().vPos.y += fDeltaY;
@@ -1103,7 +1103,7 @@ bool cMapData::MapCollisionCheck(cGameNode* pNode, float fDelta)
 								else
 								{
 									float fDeltaY = m_arrGridBox[x][y][z].stCube.GetHighestPoint() - stBodyFrustum.GetLowestPoint();
-									if (fabs(MAPCOLLISION_Y_EPSILON * fDelta * pBody->GetTempPhysicsData().vVelocity.y) > fabs(fDeltaY))
+									if (fabs(MAPCOLLISION_Y_EPSILON * fDelta * pBody->GetTempPhysicsData().vVelocity.y) > fabs(fDeltaY) && fDeltaY > 0.f)
 									{
 										pBody->GetTempPhysicsData().vPos.y += fDeltaY;
 										pBody->GetPhysicsData().vPos.y += fDeltaY;
