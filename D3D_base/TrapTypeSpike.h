@@ -23,7 +23,7 @@ public:
 	virtual ~TrapTypeComponentAttackableSpike() = default;
 
 public:
-	virtual TrapComponentAttackable * newComponentObject() const override;
+	virtual std::unique_ptr<TrapComponentAttackable> newComponentObject() const override;
 };
 
 class TrapComponentAttackableSpike : public TrapComponentAttackable
@@ -36,7 +36,7 @@ public:
 	virtual ~TrapComponentAttackableSpike() = default;
 
 public:
-	virtual void attack(std::vector<cEnemyBase *> & enemyList) override;
+	virtual void attack(Trap & trap, std::vector<cEnemyBase *> & enemyList) override;
 
 public:
 	virtual void update(Trap & trap, float fDelta = g_pTimeManager->GetEllapsedTime()) override;
