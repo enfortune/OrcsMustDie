@@ -205,6 +205,7 @@ void cEnemy2::Update(float fDelta)
 		else if (bDeadbody)
 		{
 			fDeadCount += fDelta;
+			m_pSkinnedMesh->Update(0);
 		}
 		cGameNode::Update(fDelta);
 	}
