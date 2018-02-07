@@ -108,7 +108,7 @@ void cGameParticleEruption::PostRender()
 	g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
 }
 
-void cGameParticleEruption::MakeEruption(D3DXVECTOR3 vOriginPos, D3DXMATRIXA16 matTrans, int nMount)
+void cGameParticleEruption::MakeEruption(D3DXVECTOR3 vOriginPos, D3DXMATRIX matTrans, int nMount)
 {
 	m_vOrigin = vOriginPos;
 	m_matTrans = matTrans;

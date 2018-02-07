@@ -3,7 +3,7 @@
 class cGameParticleEruption :
 	public cGameParticle
 {
-	D3DXMATRIXA16 m_matTrans;
+	D3DXMATRIX m_matTrans;
 public:
 	cGameParticleEruption();
 	virtual ~cGameParticleEruption();
@@ -13,7 +13,7 @@ public:
 	virtual void PreRender() override;
 	virtual void PostRender() override;
 
-	void MakeEruption(D3DXVECTOR3 vOriginPos, D3DXMATRIXA16 matTrans, int nMount);
+	void MakeEruption(D3DXVECTOR3 vOriginPos, D3DXMATRIX matTrans, int nMount);
 	void ClearEruption();
 };
 
