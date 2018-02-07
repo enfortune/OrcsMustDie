@@ -2,6 +2,7 @@
 #include "cGameParticle.h"
 class cGameParticleShockwave : public cGameParticle
 {
+	float m_fRange;
 public:
 	cGameParticleShockwave();
 	virtual ~cGameParticleShockwave();
@@ -11,6 +12,6 @@ public:
 	virtual void PreRender() override;
 	virtual void PostRender() override;
 
-	void MakeShockWave(D3DXVECTOR3 vPos, int nMount);
+	void MakeShockWave(D3DXVECTOR3 vPos, float fRange, int nMount);
 };
 

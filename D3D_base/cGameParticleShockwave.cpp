@@ -3,6 +3,7 @@
 
 
 cGameParticleShockwave::cGameParticleShockwave()
+	: m_fRange(1.f)
 {
 	m_fSize = 0.2f;
 	m_dwVBSize = 4096;
@@ -38,10 +39,11 @@ void cGameParticleShockwave::ResetParticle(ST_PARTICLEATTRIBUTE* pAttr)
 		&matWorld);
 
 	float fVelocity = (float)((rand() % 2) + 1) * (1.f - powf(GetRandomFloat(0.f, 1.f), 3.f)) + 1.0f;
-	
+	fVelocity /= 4.f;
+
 	pAttr->vPosition = m_vOrigin;
 	pAttr->vVelocity = vTemp;
-	pAttr->vVelocity *= fVelocity * 0.75f;
+	pAttr->vVelocity *= fVelocity * m_fRange;
 
 	pAttr->stColor = pAttr->stColorOrigin = D3DXCOLOR(
 		GetRandomFloat(0.0f, 0.4f),
@@ -105,9 +107,10 @@ void cGameParticleShockwave::PostRender()
 	g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
 }
 
-void cGameParticleShockwave::MakeShockWave(D3DXVECTOR3 vPos, int nMount)
+void cGameParticleShockwave::MakeShockWave(D3DXVECTOR3 vPos, float fRange, int nMount)
 {
 	m_vOrigin = vPos;
+	m_fRange = fRange;
 	for (int i = 0; i < nMount; i++)
 	{
 		AddParticles();
