@@ -29,13 +29,19 @@ class cEnemyBase;
 class cPlayer : public cGameNode
 {
 protected:
-	cSkinnedMeshEX *			m_pPlayerMesh;
+	cSkinnedMeshEX*				m_pPlayerMesh;
+	cSkinnedMeshEX*				m_pPlayerSword;
+	cSkinnedMeshEX*				m_pPlayerShield;
+
 	std::vector<cEnemyBase *>	*m_vEnemy;
 	PLAYERSTATE					m_pPlayerState;
 	cGameParticleSpark*			m_pPlayerParticle;
 
 	D3DXVECTOR3					m_vAtkParticleStart;
 	D3DXVECTOR3					m_vAtkParticleEnd;
+
+	D3DXMATRIXA16				m_mMatSword;
+	D3DXMATRIXA16				m_mMatShield;
 
 	SYNTHESIZE_REF(bool, m_bIsBattle, IsBattle)
 	SYNTHESIZE_REF(float, m_pRotationY, RotationY);

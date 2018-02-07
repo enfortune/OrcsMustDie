@@ -40,7 +40,8 @@ public:
 	void SetAnimationSetBlend(UINT nTrack, int nAniID, bool Loop);
 
 	void UpdateAnimation(float fDelta);
-
+	
+	D3DXMATRIXA16& FindBone(IN char* szFile);
 	float	getCurPosition();
 };
 

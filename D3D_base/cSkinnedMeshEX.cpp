@@ -265,6 +265,14 @@ void cSkinnedMeshEX::UpdateAnimation(float fDelta)
 	m_pAniCtrl->AdvanceTime(fDelta, NULL);
 }
 
+D3DXMATRIXA16& cSkinnedMeshEX::FindBone(IN char * szFile)
+{
+	std::string sFullPath(szFile);
+
+	ST_BONE* pBone = (ST_BONE*)D3DXFrameFind(m_pRoot, sFullPath.c_str());
+	return pBone->matCombinedTransformMatrix;
+}
+
 float cSkinnedMeshEX::getCurPosition()
 {
 	return m_fCurPosition;
