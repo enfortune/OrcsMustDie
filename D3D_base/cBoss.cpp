@@ -408,18 +408,22 @@ void cBoss::Attack(float fDelta)
 			if (!bPhase2)
 			{
 				m_pSkinnedMesh->SetAnimationSetBlend(0, nAttackAni, false);
+				g_pSoundManager->Play("MountAttack");
 			}
 			else if (!bPhase3 && nCurMp >= 30)
 			{
 				m_pSkinnedMesh->SetAnimationSetBlend(0, nSkillAni, false);
+				g_pSoundManager->Play("MountSkill");
 			}
 			else if (!bPhase3 && nCurMp < 30)
 			{
 				m_pSkinnedMesh->SetAnimationSetBlend(0, nAttackAni, false);
+				g_pSoundManager->Play("MountAttack");
 			}
 			else if (bPhase3)
 			{
 				m_pSkinnedMesh->SetAnimationSetBlend(0, nSkillAni, false);
+				g_pSoundManager->Play("MountSkill");
 			}
 			bAttack = true;
 		}
@@ -471,6 +475,8 @@ void cBoss::Dead()
 	{
 		m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
 		m_pSkinnedMesh->SetAnimationSetBlend(0, nDeadAni, false);
+
+		g_pSoundManager->Play("MountDead");
 
 		m_pPhysicsBody->GetBodyType() = PHYSICSBODYTYPE_NOCHECK;
 		bDead = true;

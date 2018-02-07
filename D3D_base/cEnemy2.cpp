@@ -327,12 +327,16 @@ void cEnemy2::Move(D3DXVECTOR3 vGoal, float fDelta)
 					m_pPhysicsBody->GetPhysicsData().vVelocity.x,
 					m_pPhysicsBody->GetPhysicsData().vVelocity.z), &D3DXVECTOR2(vDir.x, vDir.z));
 
-				if (dot < 2)
+				if (dot < 3)
 					m_pPhysicsBody->GetPhysicsData().vAccel
 					= vDir * (30.f + D3DXVec3Length(&m_pPhysicsBody->GetPhysicsData().vDamping));
+				else
+					m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
 			}
 			else
+			{
 				m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
+			}
 		}
 	}
 }
@@ -387,6 +391,7 @@ void cEnemy2::Attack(float fDelta)
 			if (length <= 1.3 &&  fCos > cosf(D3DX_PI / 4.f))
 			{
 				m_pPlayer->PlayerDamaged(m_nAtkDamage);
+				g_pSoundManager->Play("WolfBite");
 			}
 			bAttack = false;
 		}
