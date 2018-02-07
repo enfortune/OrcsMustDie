@@ -3,8 +3,7 @@
 
 #include "cGameUIButton.h"
 #include "cGameUISprite.h"
-
-#include "cTransformData.h"
+#include "cGameSprite.h"
 
 void QuickSlot::changeButton(IconType iconType, int indexButton)
 {
@@ -18,9 +17,9 @@ void QuickSlot::changeButton(IconType iconType, int indexButton)
 	case QuickSlot::IconType::ATTACK: imagePath = "Resource/Image/UI/IconBash.png"; break;
 	case QuickSlot::IconType::BASH: imagePath = "Resource/Image/UI/IconBash.png"; break;
 	case QuickSlot::IconType::WHIRLWIND: imagePath = "Resource/Image/UI/IconWhirlwind.png"; break;
-	case QuickSlot::IconType::BARRICADE: imagePath = "Resource/Image/UI/IconBarricade.bmp"; break;
-	case QuickSlot::IconType::SPIKE: imagePath = "Resource/Image/UI/IconSpike.bmp"; break;
-	case QuickSlot::IconType::HEALING_WELL: imagePath = "Resource/Image/UI/IconHealingWell.bmp"; break;
+	case QuickSlot::IconType::BARRICADE: imagePath = "Resource/Image/UI/IconBarricade.png"; break;
+	case QuickSlot::IconType::SPIKE: imagePath = "Resource/Image/UI/IconSpike.png"; break;
+	case QuickSlot::IconType::HEALING_WELL: imagePath = "Resource/Image/UI/IconHealingWell.png"; break;
 	default: assert(false);
 	}
 
@@ -28,6 +27,7 @@ void QuickSlot::changeButton(IconType iconType, int indexButton)
 	
 	pButtonArray_[indexButton] = new cGameUIButton;
 	pButtonArray_[indexButton]->Setup("QuickSlotButton" + std::to_string(indexButton), nullptr, imagePath);
+	pButtonArray_[indexButton]->SetPosition({(indexButton - 5.5f) * 99 * 0.5f, 0.0f});
 
 	pSpriteBar_->AddChild(pButtonArray_[indexButton]);
 }
@@ -48,11 +48,19 @@ void QuickSlot::init()
 {
 	cGameNode::Setup();
 
+	RECT rectWindow {};
+	GetWindowRect(g_hWnd, &rectWindow);
+
 	pSpriteBar_ = new cGameUISprite;
-	pSpriteBar_->Setup("Resource/Image/UI/QuickSlot.bmp");
-	pSpriteBar_->SetPosition({/*-WINSIZEX * 0.5f*/ 0.0f, WINSIZEY * 0.8f});
+	pSpriteBar_->Setup("Resource/Image/UI/QuickSlot.png");
+	pSpriteBar_->SetPosition({(rectWindow.right - rectWindow.left) * 0.5f, (rectWindow.bottom - rectWindow.top) * 0.83f});
+	pSpriteBar_->GetSprite()->SetSpriteFlag(D3DXSPRITE_DO_NOT_ADDREF_TEXTURE | D3DXSPRITE_ALPHABLEND);
 
 	AddChild(pSpriteBar_);
+
+	pSpriteSelect_ = new cGameUISprite;
+	pSpriteSelect_->Setup("Resource/Image/UI/IconEffectMouseOver.png");
+	pSpriteSelect_->GetSprite()->SetSpriteFlag(D3DXSPRITE_DO_NOT_ADDREF_TEXTURE | D3DXSPRITE_ALPHABLEND);
 
 	changeButton(IconType::ATTACK, 0);
 	changeButton(IconType::BARRICADE, 1);
