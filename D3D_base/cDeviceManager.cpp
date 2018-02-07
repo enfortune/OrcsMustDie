@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "cDeviceManager.h"
 
-
 cDeviceManager::cDeviceManager()
 	: m_pD3D(NULL)
 	, m_pD3DDevice(NULL)
