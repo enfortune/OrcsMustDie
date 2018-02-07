@@ -469,16 +469,24 @@ bool cInGameScene::IsMakeTrap(OUT D3DXVECTOR3 &center,TrapType* tType, cRay ray)
 
 void cInGameScene::MakeTrap(TrapType* tType, cRay ray)
 {
-	D3DXVECTOR3 vCenter = { 0,0,0 };
-	if (IsMakeTrap(vCenter,tType, ray))
+	int gold = m_pPlayer_S->GetPlayerGold();
+	int cost = tType->getMoneyCost();
+
+	if (gold >= cost)
 	{
-		D3DXMATRIXA16 matT;
-		D3DXMatrixTranslation(&matT, vCenter.x, vCenter.y, vCenter.z);
+		D3DXVECTOR3 vCenter = { 0,0,0 };
+		if (IsMakeTrap(vCenter,tType, ray))
+		{
+			D3DXMATRIXA16 matT;
+			D3DXMatrixTranslation(&matT, vCenter.x, vCenter.y, vCenter.z);
 
-		m_vTrap.emplace_back();
-		m_vTrap[m_vTrap.size() - 1].init(*tType, matT);
+			m_vTrap.emplace_back();
+			m_vTrap[m_vTrap.size() - 1].init(*tType, matT);
 
-		m_pMap->BuildTrap(&m_vTrap[m_vTrap.size() - 1],ray,10, tType->getWidth(), tType->getHeight());
+			m_pMap->BuildTrap(&m_vTrap[m_vTrap.size() - 1],ray,10, tType->getWidth(), tType->getHeight());
+
+			m_pPlayer_S->SetPlayerGold(gold - cost);
+		}
 	}
 
 }
