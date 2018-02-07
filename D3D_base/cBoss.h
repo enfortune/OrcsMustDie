@@ -26,7 +26,7 @@ private:
 
 	tempPoint tp[5];
 	bool bPhase1, bPhase2, bPhase3;
-
+	bool bskillEffect;
 	/* particle */
 	cGameParticleShockwave* m_pParticle;
 
@@ -53,6 +53,7 @@ public:
 	void getDamage(int nDamage);
 	void HpManager();
 	void Hit();
+	void sendGold();
 
 	void shockwave();
 };

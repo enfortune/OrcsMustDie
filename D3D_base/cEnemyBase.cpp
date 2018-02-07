@@ -10,6 +10,7 @@ cEnemyBase::cEnemyBase()
 	g_pSoundManager->AddSound("MountAttack", "Resource/Sound/Enemy/MountainGiantAttackA.ogg", false, false);
 	g_pSoundManager->AddSound("MountSkill", "Resource/Sound/Enemy/MountainGiantAttackB.ogg", false, false);
 	g_pSoundManager->AddSound("MountDead", "Resource/Sound/Enemy/MountainGiantDeath.ogg", false, false);
+	g_pSoundManager->AddSound("ShockWave", "Resource/Sound/Enemy/Cannon01_BlastA.ogg", false, false);
 
 }
 

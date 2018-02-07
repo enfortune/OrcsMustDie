@@ -33,6 +33,7 @@ void cBoss::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 	nJumpEndAni = 6;
 	nHitAni = 4;
 	nSkillAni = 9;
+	m_nGold = 300;
 
 	m_pPhysicsBody = new cPhysicsBody;
 	m_pPhysicsBody->Setup(0.0f);
@@ -105,6 +106,7 @@ void cBoss::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 	bPhase1 = true;
 	bPhase2 = false;
 	bPhase3 = false;
+	bskillEffect = false;
 	EnemyState = IDLE;
 
 	m_pParticle = new cGameParticleShockwave;
@@ -208,8 +210,7 @@ void cBoss::Update(float fDelta)
 		}
 		if (!bDeadbody)
 		{
-			m_pSkinnedMesh->Update();
-			m_pSkinnedMesh->UpdateAnimation(fDelta);
+			m_pSkinnedMesh->Update(fDelta);
 		}
 		else if (bDeadbody)
 		{
@@ -416,21 +417,25 @@ void cBoss::Attack(float fDelta)
 			{
 				m_pSkinnedMesh->SetAnimationSetBlend(0, nAttackAni, false);
 				g_pSoundManager->Play("MountAttack");
+				bskillEffect = true;
 			}
 			else if (!bPhase3 && nCurMp >= 30)
 			{
 				m_pSkinnedMesh->SetAnimationSetBlend(0, nSkillAni, false);
 				g_pSoundManager->Play("MountSkill");
+				bskillEffect = false;
 			}
 			else if (!bPhase3 && nCurMp < 30)
 			{
 				m_pSkinnedMesh->SetAnimationSetBlend(0, nAttackAni, false);
 				g_pSoundManager->Play("MountAttack");
+				bskillEffect = true;
 			}
 			else if (bPhase3)
 			{
 				m_pSkinnedMesh->SetAnimationSetBlend(0, nSkillAni, false);
 				g_pSoundManager->Play("MountSkill");
+				bskillEffect = false;
 			}
 			bAttack = true;
 		}
@@ -454,25 +459,39 @@ void cBoss::Attack(float fDelta)
 					m_pPlayer->PlayerDamaged(m_nAtkDamage);
 				}
 			}
-			else if (!bPhase3 && nCurMp >= 30)
-			{
-				if (length <= 3.f)
-				{
-					m_pPlayer->PlayerDamaged(m_nSkillDamage);
-				}
-
-				nCurMp -= 30;
-			}
-			else if (bPhase3)
-			{
-				if (length <= 3.f)
-				{
-					m_pPlayer->PlayerDamaged(m_nSkillDamage);
-				}
-			}
 			bAttack = false;
 		}
 
+		else if (!bskillEffect)
+		{
+			if (m_pSkinnedMesh->getCurPosition() >= 0.6)
+			{
+				if (!bPhase3 && nCurMp >= 30)
+				{
+					if (length <= 3.f)
+					{
+						m_pPlayer->PlayerDamaged(m_nSkillDamage);
+					}
+
+					nCurMp -= 30;
+					g_pSoundManager->Play("ShockWave");
+					bskillEffect = true;
+					shockwave();
+				}
+
+				else if (bPhase3)
+				{
+					if (length <= 3.f)
+					{
+						m_pPlayer->PlayerDamaged(m_nSkillDamage);
+					}
+					bskillEffect = true;
+					g_pSoundManager->Play("ShockWave");
+					shockwave();
+				}
+			}
+
+		}
 	}
 }
 
@@ -484,7 +503,7 @@ void cBoss::Dead()
 		m_pSkinnedMesh->SetAnimationSetBlend(0, nDeadAni, false);
 
 		g_pSoundManager->Play("MountDead");
-
+		sendGold();
 		m_pPhysicsBody->GetBodyType() = PHYSICSBODYTYPE_NOCHECK;
 		bDead = true;
 	}
@@ -595,11 +614,16 @@ void cBoss::Hit()
 	}
 }
 
+void cBoss::sendGold()
+{
+	m_pPlayer->SetPlayerGold(m_pPlayer->GetPlayerGold() + m_nGold);
+}
+
 void cBoss::shockwave()
 {
 	D3DXVECTOR3 vMakePos(0, 0, 0);
 	D3DXVec3TransformCoord(&vMakePos, &vMakePos, &this->GetMatrixToWorld());
 
-	m_pParticle->MakeShockWave(vMakePos, 200, 1);
+	m_pParticle->MakeShockWave(vMakePos, 5,200);
 }
 
