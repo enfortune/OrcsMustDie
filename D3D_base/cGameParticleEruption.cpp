@@ -41,19 +41,12 @@ void cGameParticleEruption::ResetParticle(ST_PARTICLEATTRIBUTE* pAttr)
 
 	float fVelocity = (float)((rand() % 2) + 1) * (1.f - powf(GetRandomFloat(0.f, 1.f), 3.f)) + 1.0f;
 
-	pAttr->vVelocity = D3DXVECTOR3(0.f, 0.f, 1.f);
-	pAttr->vPosition = D3DXVECTOR3(0.f, 0.f, 1.f);
-	D3DXMATRIXA16 matR, matT;
-	D3DXMatrixRotationAxis(&matR, &m_vAxis, m_fRotAngle);
-	D3DXVec3TransformCoord(&pAttr->vPosition, &pAttr->vPosition, &matR);
-	D3DXVec3TransformCoord(&pAttr->vVelocity, &pAttr->vVelocity, &matR);
-
-	pAttr->vPosition += m_vOrigin;
+	pAttr->vPosition = m_vOrigin;
 	pAttr->vVelocity = vTemp;
-
-	
-
 	pAttr->vVelocity *= fVelocity;
+
+	D3DXVec3TransformCoord(&pAttr->vPosition, &pAttr->vPosition, &m_matTrans);
+	D3DXVec3TransformCoord(&pAttr->vVelocity, &pAttr->vVelocity, &m_matTrans);
 
 	pAttr->stColor = pAttr->stColorOrigin = D3DXCOLOR(
 		GetRandomFloat(0.5f, 0.8f),
@@ -117,12 +110,11 @@ void cGameParticleEruption::PostRender()
 	g_pD3DDevice->SetRenderState(D3DRS_ZWRITEENABLE, true);
 }
 
-void cGameParticleEruption::MakeEruption(D3DXVECTOR3 vPos, D3DXVECTOR3 vAxis, float fRotAngle, int nMount)
+void cGameParticleEruption::MakeEruption(D3DXVECTOR3 vOriginPos, D3DXMATRIXA16 matTrans, int nMount)
 {
-	m_vOrigin = vPos;
-	m_vAxis = vAxis;
-	m_fRotAngle = fRotAngle;
-	D3DXVec3Normalize(&m_vAxis, &m_vAxis);
+	m_vOrigin = vOriginPos;
+	m_matTrans = matTrans;
+
 	for (int i = 0; i < nMount; i++)
 	{
 		AddParticles();
