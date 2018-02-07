@@ -195,6 +195,7 @@
     <ClInclude Include="cMapData.h" />
     <ClInclude Include="cSkinnedMeshEX.h" />
     <ClInclude Include="cSky.h" />
+    <ClInclude Include="cXFileManager.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="Graph.hpp" />
     <ClInclude Include="GraphDijkstra.h" />
@@ -335,6 +336,7 @@
     <ClCompile Include="cTimer_GetTickCount.cpp" />
     <ClCompile Include="cTimer_QueryPerformanceFrequency.cpp" />
     <ClCompile Include="cTransformData.cpp" />
+    <ClCompile Include="cXFileManager.cpp" />
     <ClCompile Include="D3DX_UTIL.cpp" />
     <ClCompile Include="D3D_base.cpp" />
     <ClCompile Include="Graph.cpp" />

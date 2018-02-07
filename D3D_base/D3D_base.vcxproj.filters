@@ -442,6 +442,9 @@
     <ClInclude Include="cGameParticleArrow.h">
       <Filter>Foundation\D3D\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="cXFileManager.h">
+      <Filter>Global\Manager\D3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -725,6 +728,9 @@
     </ClCompile>
     <ClCompile Include="cGameParticleArrow.cpp">
       <Filter>Foundation\D3D\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="cXFileManager.cpp">
+      <Filter>Global\Manager\D3D</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
