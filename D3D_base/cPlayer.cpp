@@ -61,6 +61,7 @@ void cPlayer::Setup()
 
 	m_pPlayerParticle = new cGameParticleSpark;
 	m_pPlayerParticle->Setup("");
+	g_pParticleManager->AddParticle(m_pPlayerParticle);
 
 	nPlayerMaxHp = 500;
 	nPlayerCurHp = 500;
@@ -81,8 +82,6 @@ void cPlayer::Update(float fDelta)
 {
 	m_pPlayerMesh->Update();
 	m_pPlayerMesh->UpdateAnimation(fDelta);
-
-	m_pPlayerParticle->Update(fDelta);
 
 	int ManaCount = 0;
 	
@@ -319,8 +318,6 @@ void cPlayer::Update(float fDelta)
 
 void cPlayer::Render()
 {
-	g_pD3DDevice->SetTransform(D3DTS_WORLD, &this->GetMatrixToWorld());
-	m_pPlayerParticle->Render();
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 
 
@@ -350,6 +347,7 @@ void cPlayer::Render()
 void cPlayer::Delete()
 {
 	SAFE_DELETE(m_pPlayerMesh);
+	g_pParticleManager->DeleteParticle(m_pPlayerParticle);
 	SAFE_DELETE(m_pPlayerParticle);
 }
 
@@ -598,6 +596,7 @@ void cPlayer::PlayerParticleUpdate()
 					m_vAtkParticleStart * (-0.4f + 1.0f -m_pPlayerMesh->getCurPosition())/0.2f +
 					m_vAtkParticleEnd * (-0.4f + m_pPlayerMesh->getCurPosition()) / 0.2f;
 
+				D3DXVec3TransformCoord(&vPos, &vPos, &this->GetMatrixToWorld());
 				m_pPlayerParticle->MakeSpark(vPos, 20);
 			}
 			//else if (m_pPlayerMesh->getCurPosition() > 0.8f) m_pPlayerParticle->ClearSpark();
