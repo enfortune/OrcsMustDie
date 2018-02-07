@@ -180,12 +180,12 @@ void cBoss::Update(float fDelta)
 			}
 			else
 			{
-				if (length > 5.f)
+				if (length > 6.f)
 				{
 					//EnemyState = MOVE;
 					EnemyState = IDLE;
 				}
-				else if (length <= 5.f)
+				else if (length <= 6.f)
 				{
 					EnemyState = ATTACK;
 				}
@@ -341,7 +341,7 @@ void cBoss::Move(D3DXVECTOR3 vGoal, float fDelta)
 					m_pPhysicsBody->GetPhysicsData().vVelocity.z), &D3DXVECTOR2(vDir.x, vDir.z));
 				if (!bPhase3)
 				{
-					if (dot < 1.3)
+					if (dot < 1.7)
 						m_pPhysicsBody->GetPhysicsData().vAccel
 						= vDir * (30.f + D3DXVec3Length(&m_pPhysicsBody->GetPhysicsData().vDamping));
 
@@ -350,7 +350,7 @@ void cBoss::Move(D3DXVECTOR3 vGoal, float fDelta)
 				}
 				else if (bPhase3)
 				{
-					if (dot < 2.3)
+					if (dot < 2.7)
 						m_pPhysicsBody->GetPhysicsData().vAccel
 						= vDir * (30.f + D3DXVec3Length(&m_pPhysicsBody->GetPhysicsData().vDamping));
 
@@ -449,6 +449,8 @@ void cBoss::Attack(float fDelta)
 				{
 					m_pPlayer->PlayerDamaged(m_nSkillDamage);
 				}
+
+				nCurMp -= 30;
 			}
 			else if (bPhase3)
 			{

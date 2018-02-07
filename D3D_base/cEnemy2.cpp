@@ -330,9 +330,9 @@ void cEnemy2::Move(D3DXVECTOR3 vGoal, float fDelta)
 				if (dot < 2)
 					m_pPhysicsBody->GetPhysicsData().vAccel
 					= vDir * (30.f + D3DXVec3Length(&m_pPhysicsBody->GetPhysicsData().vDamping));
-				else
-					m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
 			}
+			else
+				m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
 		}
 	}
 }
