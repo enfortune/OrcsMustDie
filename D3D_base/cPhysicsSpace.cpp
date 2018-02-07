@@ -9,6 +9,7 @@
 #define PHYSICSNODE_DELTATIME_SKIP 0.5f
 
 cPhysicsSpace::cPhysicsSpace()
+	: m_pVecTrap(nullptr)
 {
 }
 cPhysicsSpace::~cPhysicsSpace()
@@ -59,7 +60,7 @@ void cPhysicsSpace::Update(float fDelta)
 		for (itSour = m_setChild.begin(); itSour != m_setChild.end(); itSour++)
 		{
 			this->CollisionWithMap((*itSour), fCurrDelta);
-			this->CollisionWithTrap((*itSour));
+			if (m_pVecTrap) this->CollisionWithTrap((*itSour));
 			(*itSour)->UpdatePhysics(fCurrDelta);
 		}
 	}

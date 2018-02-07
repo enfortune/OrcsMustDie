@@ -14,9 +14,11 @@ public:
 	void AddParticle(cGameParticle* pParticle);
 	void DeleteParticle(cGameParticle* pParticle);
 
-	void UpdateParticles(float fDelta);
-	void RenderParticles();
+	void Update(float fDelta);
+	void Render();
+	void Clear();
 
-	void ClearParticles();
+	void Destroy();
+
 };
 

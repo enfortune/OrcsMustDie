@@ -10,7 +10,6 @@ cParticleManager::cParticleManager()
 
 cParticleManager::~cParticleManager()
 {
-	this->ClearParticles;
 }
 
 void cParticleManager::AddParticle(cGameParticle * pParticle)
@@ -28,7 +27,7 @@ void cParticleManager::DeleteParticle(cGameParticle * pParticle)
 	}
 }
 
-void cParticleManager::UpdateParticles(float fDelta)
+void cParticleManager::Update(float fDelta)
 {
 	std::set<cGameParticle*>::iterator iter;
 	for (iter = m_setParticle.begin(); iter != m_setParticle.end(); iter++)
@@ -37,7 +36,7 @@ void cParticleManager::UpdateParticles(float fDelta)
 	}
 }
 
-void cParticleManager::RenderParticles()
+void cParticleManager::Render()
 {
 	std::set<cGameParticle*>::iterator iter;
 	for (iter = m_setParticle.begin(); iter != m_setParticle.end(); iter++)
@@ -46,7 +45,12 @@ void cParticleManager::RenderParticles()
 	}
 }
 
-void cParticleManager::ClearParticles()
+void cParticleManager::Destroy()
+{
+	this->Clear();
+}
+
+void cParticleManager::Clear()
 {
 	std::set<cGameParticle*>::iterator iter;
 

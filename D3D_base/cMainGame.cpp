@@ -20,6 +20,7 @@ cMainGame::~cMainGame()
 	g_pFontManager->Destroy();
 	g_pSceneManager->Destroy();
 	g_pSoundManager->Destroy();
+	g_pParticleManager->Destroy();
 
 	g_pDeviceManager->Destroy(); // 마지막에 디스트로이할 것
 }
@@ -36,8 +37,9 @@ void cMainGame::Update()
 {
 	g_pSoundManager->Update();
 	g_pKeyManager->Update();
-
-	g_pSceneManager->Update(g_pTimeManager->GetEllapsedTime());
+	float fTime = g_pTimeManager->GetEllapsedTime();
+	g_pSceneManager->Update(fTime);
+	g_pParticleManager->Update(fTime);
 }
 
 void cMainGame::Render()
@@ -52,6 +54,7 @@ void cMainGame::Render()
 	/////////////////////////////////
 
 	g_pSceneManager->Render();
+	g_pParticleManager->Render();
 
 	/////////////////////////////////
 
