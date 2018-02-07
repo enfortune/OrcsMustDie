@@ -21,6 +21,7 @@ cMainGame::~cMainGame()
 	g_pSceneManager->Destroy();
 	g_pSoundManager->Destroy();
 	g_pParticleManager->Destroy();
+	g_pXFileManager->Destroy();
 
 	g_pDeviceManager->Destroy(); // 마지막에 디스트로이할 것
 }

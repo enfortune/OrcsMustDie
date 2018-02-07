@@ -147,6 +147,7 @@ struct ST_ROT_SAMPLE
 #include "cSoundManager.h"
 #include "cFontManager.h"
 #include "cParticleManager.h"
+#include "cXFileManager.h"
 
 /* Utils*/
 #include "commonMacroFunction.h"

@@ -25,6 +25,7 @@ enum PLAYERTRAPTYPE
 
 class cSkinnedMeshEX;
 class cGameParticleSpark;
+class cGameParticleEruption;
 class cEnemyBase;
 class cPlayer : public cGameNode
 {
@@ -36,6 +37,7 @@ protected:
 	std::vector<cEnemyBase *>	*m_vEnemy;
 	PLAYERSTATE					m_pPlayerState;
 	cGameParticleSpark*			m_pPlayerParticle;
+	cGameParticleEruption*		m_pPlaterParticleEruption;
 
 	D3DXVECTOR3					m_vAtkParticleStart;
 	D3DXVECTOR3					m_vAtkParticleEnd;

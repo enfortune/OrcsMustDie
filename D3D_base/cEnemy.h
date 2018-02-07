@@ -49,5 +49,7 @@ public:
 	virtual void getDamage(int nDamage);
 	void HpManager();
 
+	void sendGold();
+
 };
 

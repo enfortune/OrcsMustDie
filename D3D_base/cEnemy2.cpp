@@ -60,6 +60,8 @@ void cEnemy2::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 	bIdle = true;
 	bDeadbody = false;
 	fDeadCount = 0.f;
+
+	m_nGold = 50;
 	//for (int i = 0; i < 5; i++)
 	//{
 	//	tp[i].start = false;
@@ -198,8 +200,7 @@ void cEnemy2::Update(float fDelta)
 		}
 		if (!bDeadbody)
 		{
-			m_pSkinnedMesh->Update();
-			m_pSkinnedMesh->UpdateAnimation(fDelta);
+			m_pSkinnedMesh->Update(fDelta);
 		}
 		else if (bDeadbody)
 		{
@@ -406,6 +407,8 @@ void cEnemy2::Dead()
 		m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
 		m_pSkinnedMesh->SetAnimationSetBlend(0, nDeadAni, false);
 
+		sendGold();
+
 		m_pPhysicsBody->GetBodyType() = PHYSICSBODYTYPE_NOCHECK;
 		bDead = true;
 	}
@@ -492,5 +495,10 @@ void cEnemy2::HpManager()
 		nCurHp = 0;
 		EnemyState = DEAD;
 	}
+}
+
+void cEnemy2::sendGold()
+{
+	m_pPlayer->SetPlayerGold(m_pPlayer->GetPlayerGold() + m_nGold);
 }
 

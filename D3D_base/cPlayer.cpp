@@ -5,6 +5,7 @@
 #include "cPhysicsBody.h"
 #include "cEnemyBase.h"
 #include "cGameParticleSpark.h"
+#include "cGameParticleEruption.h"
 
 cPlayer::cPlayer()
 	: m_pRotationY(0.0f)
@@ -77,11 +78,15 @@ void cPlayer::Setup()
 
 	m_pPlayerSword = new cSkinnedMeshEX;
 	m_pPlayerSword->Setup("Resource/XFile/Player", "Resource/XFile/Player/Sword.X");
-	m_pPlayerSword->SetAnimationSet(0, 0);
+	//m_pPlayerSword->SetAnimationSet(0, 0);
 
 	m_pPlayerShield = new cSkinnedMeshEX;
 	m_pPlayerShield->Setup("Resource/XFile/Player", "Resource/XFile/Player/Shiled.X");
-	m_pPlayerShield->SetAnimationSet(0, 0);
+	//m_pPlayerShield->SetAnimationSet(0, 0);
+
+	m_pPlaterParticleEruption = new cGameParticleEruption;
+	m_pPlaterParticleEruption->Setup("");
+	g_pParticleManager->AddParticle(m_pPlaterParticleEruption);
 
 	g_pSoundManager->AddSound("PlayerAttackHit", "Resource/Sound/Player/2HSwordHitFlesh03.ogg", false, false);
 	g_pSoundManager->AddSound("PlayerWhirlwind", "Resource/Sound/Player/PlayerWhirlwind.ogg", false, true);
@@ -90,8 +95,11 @@ void cPlayer::Setup()
 
 void cPlayer::Update(float fDelta)
 {
-	m_pPlayerMesh->Update();
-	m_pPlayerMesh->UpdateAnimation(fDelta);
+	m_pPlayerMesh->Update(fDelta);
+	m_pPlayerSword->Update(fDelta);
+	m_pPlayerShield->Update(fDelta);
+
+	//m_pPlayerMesh->UpdateAnimation(fDelta);
 
 	int ManaCount = 0;
 	
@@ -129,7 +137,8 @@ void cPlayer::Update(float fDelta)
 	m_bIs_D = false;
 	m_fPlayerTargetRot = 0.0f;
 
-	if (g_pKeyManager->IsStayKeyDown('W') && m_pPlayerState != PLAYERSTATE_ATTACK && m_pPlayerState != PLAYERSTATE_JUMPEND)
+	if (g_pKeyManager->IsStayKeyDown('W') && m_pPlayerState != PLAYERSTATE_ATTACK 
+		&& m_pPlayerState != PLAYERSTATE_JUMPEND && m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
 	{
 		speedX += 5.f * m_vPlayerDir.x;
 		speedZ += 5.f * m_vPlayerDir.z;
@@ -151,7 +160,8 @@ void cPlayer::Update(float fDelta)
 		}
 	}
 
-	if (g_pKeyManager->IsStayKeyDown('S') && m_pPlayerState != PLAYERSTATE_ATTACK && m_pPlayerState != PLAYERSTATE_JUMPEND)
+	if (g_pKeyManager->IsStayKeyDown('S') && m_pPlayerState != PLAYERSTATE_ATTACK 
+		&& m_pPlayerState != PLAYERSTATE_JUMPEND && m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
 	{
 		speedX -= 5.f *  m_vPlayerDir.x;
 		speedZ -= 5.f * m_vPlayerDir.z;
@@ -172,7 +182,8 @@ void cPlayer::Update(float fDelta)
 			IsPlayerState();
 		}
 	}
-	if (g_pKeyManager->IsStayKeyDown('A') && m_pPlayerState != PLAYERSTATE_ATTACK && m_pPlayerState != PLAYERSTATE_JUMPEND)
+	if (g_pKeyManager->IsStayKeyDown('A') && m_pPlayerState != PLAYERSTATE_ATTACK 
+		&& m_pPlayerState != PLAYERSTATE_JUMPEND && m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
 	{
 		speedX += 5.f *  vLeft.x;
 		speedZ += 5.f * vLeft.z;
@@ -194,7 +205,8 @@ void cPlayer::Update(float fDelta)
 		}
 	}
 
-	if (g_pKeyManager->IsStayKeyDown('D') && m_pPlayerState != PLAYERSTATE_ATTACK && m_pPlayerState != PLAYERSTATE_JUMPEND)
+	if (g_pKeyManager->IsStayKeyDown('D') && m_pPlayerState != PLAYERSTATE_ATTACK 
+		&& m_pPlayerState != PLAYERSTATE_JUMPEND && m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
 	{
 		speedX -= 5.f *  vLeft.x;
 		speedZ -= 5.f * vLeft.z;
@@ -231,7 +243,8 @@ void cPlayer::Update(float fDelta)
 			IsPlayerState();
 		}
 
-		if (g_pKeyManager->IsOnceKeyDown(VK_RBUTTON) && nPlayerCurMp > 100 && m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
+		if (g_pKeyManager->IsOnceKeyDown(VK_RBUTTON) && nPlayerCurMp > 100 
+			&& m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
 		{
 			m_pPlayerState = PLAYERSTATE_SKILL_SHILEDBASH;
 			IsPlayerState();
@@ -337,7 +350,6 @@ void cPlayer::Render()
 {
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 
-
 	D3DXMATRIXA16 matMeshWorld;
 
 	D3DXMatrixRotationY(&matMeshWorld, D3DX_PI / 1.f);
@@ -351,17 +363,19 @@ void cPlayer::Render()
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matPlayerMeshWorld);
 	m_pPlayerMesh->Render();
 
-	D3DXMATRIXA16 matR1, matR2, matT;
+	D3DXMATRIXA16 matR1, matR2, matS, matT;
 	D3DXMatrixIdentity(&matR1);
 	D3DXMatrixIdentity(&matR2);
 	D3DXMatrixIdentity(&matT);
+	D3DXMatrixIdentity(&matS);
 
 	D3DXMatrixRotationY(&matR1, -D3DX_PI / 2);
 	D3DXMatrixRotationY(&matR2, -D3DX_PI / 2);
 	D3DXMatrixTranslation(&matT, 0, 0.2f, 0);
+	D3DXMatrixScaling(&matS, 2, 2, 2);
 
-	m_mMatSword = matR1 * m_mMatSword * matPlayerMeshWorld;
-	m_mMatShield = matR2 * matT * m_mMatShield * matPlayerMeshWorld;
+	m_mMatSword = matS * m_mMatSword * matPlayerMeshWorld;
+	m_mMatShield = matS * matT * m_mMatShield * matPlayerMeshWorld;
 
 	if (m_pPlayerSword)
 	{
@@ -387,6 +401,8 @@ void cPlayer::Delete()
 	SAFE_DELETE(m_pPlayerParticle);
 	SAFE_DELETE(m_pPlayerSword);
 	SAFE_DELETE(m_pPlayerShield);
+	g_pParticleManager->DeleteParticle(m_pPlaterParticleEruption);
+	SAFE_DELETE(m_pPlaterParticleEruption);
 }			   
 
 void cPlayer::PlayerDamaged(int damage)
@@ -650,11 +666,12 @@ void cPlayer::PlayerParticleUpdate()
 		case PLAYERSTATE_DEATH:
 		break;
 		case PLAYERSTATE_SKILL_SHILEDBASH:
-			if (m_pPlayerMesh->getCurPosition() >= 0.4f)
+			if (m_pPlayerMesh->getCurPosition() >= 0.2f)
 			{
+				D3DXVECTOR3 vMakePos(-0., 0.5, 0);
+				D3DXVec3TransformCoord(&vMakePos, &vMakePos, &this->GetMatrixToWorld());
 
-				//D3DXVec3TransformCoord(&vPos, &vPos, &this->GetMatrixToWorld());
-				m_pPlayerParticle->
+				m_pPlaterParticleEruption->MakeEruption(vMakePos, 200);
 			}
 		break;
 		case PLAYERSTATE_SKILL_WHIRLWIND:

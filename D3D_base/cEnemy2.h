@@ -49,6 +49,7 @@ public:
 	void setPlayer(cPlayer* pSetPlayer);
 	void getDamage(int nDamage);
 	void HpManager();
+	void sendGold();
 
 };
 
