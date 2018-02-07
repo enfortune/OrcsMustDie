@@ -82,7 +82,7 @@ void QuickSlot::init()
 	changeButton(IconType::ATTACK, 0);
 	changeButton(IconType::BARRICADE, 1);
 	changeButton(IconType::SPIKE, 2);
-	changeButton(IconType::HEALING_WELL, 3);
+	//changeButton(IconType::HEALING_WELL, 3);
 }
 
 void QuickSlot::update()

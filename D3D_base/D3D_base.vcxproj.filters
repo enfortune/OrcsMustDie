@@ -448,6 +448,9 @@
     <ClInclude Include="GraphDijkstra.hpp">
       <Filter>엄윤호\Graph</Filter>
     </ClInclude>
+    <ClInclude Include="SceneMainMenu.h">
+      <Filter>엄윤호</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -737,6 +740,9 @@
     </ClCompile>
     <ClCompile Include="GraphDijkstra.cpp">
       <Filter>엄윤호\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneMainMenu.cpp">
+      <Filter>엄윤호</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
