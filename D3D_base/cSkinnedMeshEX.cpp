@@ -79,7 +79,7 @@ void cSkinnedMeshEX::Update(float fDelta)
 		m_pAniCtrl->GetTrackDesc(0, &m_stTrackDesc);
 		m_pAniCtrl->GetTrackAnimationSet(0, &tempPeriod);
 		float AnimationPlayFactor;
-		AnimationPlayFactor = m_stTrackDesc.Position / tempPeriod->GetPeriod();
+		AnimationPlayFactor = m_stTrackDesc.Position + fDelta / tempPeriod->GetPeriod();
 		AnimationPlayFactor = fmod(AnimationPlayFactor, 1.f);
 
 		m_fCurPosition = AnimationPlayFactor;
@@ -109,7 +109,7 @@ void cSkinnedMeshEX::Update(float fDelta)
 				float fWeight = m_fPassedBlendTime / m_fBlendTime;
 				if (aniSet1 != nullptr)
 				{
-					float fTrack1Time = desc1.Position / aniSet1->GetPeriod();
+					float fTrack1Time = desc1.Position + fDelta / aniSet1->GetPeriod();
 					if (fTrack1Time > 0.95f)
 					{
 						desc1.Position = aniSet1->GetPeriod() * 0.95f;
