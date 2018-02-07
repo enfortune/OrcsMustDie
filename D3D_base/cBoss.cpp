@@ -4,9 +4,10 @@
 #include "cTransformData.h"
 #include "cPlayer.h"
 #include "cPhysicsBody.h"
-
+#include "cGameParticleShockwave.h"
 
 cBoss::cBoss()
+	: m_pParticle(nullptr)
 {
 }
 
@@ -105,6 +106,10 @@ void cBoss::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 	bPhase2 = false;
 	bPhase3 = false;
 	EnemyState = IDLE;
+
+	m_pParticle = new cGameParticleShockwave;
+	m_pParticle->Setup("");
+	g_pParticleManager->AddParticle(m_pParticle);
 }
 
 void cBoss::Update(float fDelta)
@@ -228,6 +233,8 @@ void cBoss::Delete()
 {
 	SAFE_DELETE(m_pSkinnedMesh);
 
+	g_pParticleManager->DeleteParticle(m_pParticle);
+	SAFE_DELETE(m_pParticle);
 }
 
 void cBoss::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -586,5 +593,13 @@ void cBoss::Hit()
 		EnemyState = IDLE;
 		bAttack = false;
 	}
+}
+
+void cBoss::shockwave()
+{
+	D3DXVECTOR3 vMakePos(0, 0, 0);
+	D3DXVec3TransformCoord(&vMakePos, &vMakePos, &this->GetMatrixToWorld());
+
+	m_pParticle->MakeShockWave(vMakePos, 200);
 }
 
