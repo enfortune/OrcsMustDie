@@ -392,6 +392,7 @@ void cEnemy::Attack(float fDelta)
 			if (length <= 0.7 &&  fCos > cosf(D3DX_PI / 4.f))
 			{
 				m_pPlayer->PlayerDamaged(m_nAtkDamage);
+				g_pSoundManager->Play("OrcAttack");
 			}
 			bAttack = false;
 		}
