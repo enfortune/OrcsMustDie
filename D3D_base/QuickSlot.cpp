@@ -29,7 +29,7 @@ void QuickSlot::changeButton(IconType iconType, int indexButton)
 	switch (iconType)
 	{
 	case QuickSlot::IconType::NONE: removeButton(indexButton); break;
-	case QuickSlot::IconType::ATTACK: imagePath = "Resource/Image/UI/IconBash.png"; break;
+	case QuickSlot::IconType::ATTACK: imagePath = "Resource/Image/UI/IconAttack.png"; break;
 	case QuickSlot::IconType::BASH: imagePath = "Resource/Image/UI/IconBash.png"; break;
 	case QuickSlot::IconType::WHIRLWIND: imagePath = "Resource/Image/UI/IconWhirlwind.png"; break;
 	case QuickSlot::IconType::BARRICADE: imagePath = "Resource/Image/UI/IconBarricade.png"; break;
