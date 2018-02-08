@@ -61,7 +61,7 @@ protected:
 	float m_fPlayerCurrRot;
 	float m_fPlayerTargetRot;
 
-	float m_fPlayerRestore;
+	float m_fPlayerRestore, m_fPlayerRestireAttack;
 	float speedX, speedZ;
 
 	bool isShiledP;

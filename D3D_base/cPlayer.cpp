@@ -36,6 +36,7 @@ cPlayer::cPlayer()
 	, m_fPlayerRestore(0.0f)
 	, isShiledP(false)
 	, m_vSwordPos(0, 0, 0)
+	, m_fPlayerRestireAttack(0.0f)
 {
 	D3DXMatrixIdentity(&m_mMatSword);
 	D3DXMatrixIdentity(&m_mMatShield);
@@ -232,7 +233,8 @@ void cPlayer::Update(float fDelta)
 
 		if (m_bIsBattle)
 		{
-			if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON) && m_pPlayerState != PLAYERSTATE_ATTACK)
+			if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON) && m_pPlayerState != PLAYERSTATE_ATTACK
+				&& m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH && m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
 			{
 				m_pPlayerState = PLAYERSTATE_ATTACK;
 				IsPlayerState();
@@ -247,7 +249,7 @@ void cPlayer::Update(float fDelta)
 			isShiledP = false;
 
 			if (g_pKeyManager->IsOnceKeyDown('2') && nPlayerCurMp > 100
-				&& m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
+				&& m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH && m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
 			{
 				m_pPlayerState = PLAYERSTATE_SKILL_SHILEDBASH;
 				IsPlayerState();
@@ -267,19 +269,18 @@ void cPlayer::Update(float fDelta)
 				IsPlayerState();
 			}
 
-			if (g_pKeyManager->IsOnceKeyDown('3') && nPlayerCurMp > 50)
+			if (g_pKeyManager->IsOnceKeyDown('3') && nPlayerCurMp > 50 
+				&& m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH && m_pPlayerState != PLAYERSTATE_ATTACK)
 			{
 				if (m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
 				{
 					m_pPlayerState = PLAYERSTATE_SKILL_WHIRLWIND;
+					m_fPlayerRestore = 0;
 					IsPlayerState();
 				}
-				PlayerWhirlWind();
 			}
 			if (m_pPlayerState == PLAYERSTATE_SKILL_WHIRLWIND)
 			{
-
-				nPlayerCurMp - 50;
 				ManaCount += 2;
 				nPlayerCurMp = nPlayerCurMp - ManaCount;
 
@@ -316,10 +317,16 @@ void cPlayer::Update(float fDelta)
 	PlayerJumpBlend();
 	PlayerParticleUpdate();
 
+	m_fPlayerRestireAttack += fDelta;
+	if(m_fPlayerRestireAttack >= 0.25f)
+	{
+		if (m_pPlayerState == PLAYERSTATE_SKILL_WHIRLWIND) PlayerWhirlWind();
+		m_fPlayerRestireAttack = 0;
+	}
+
 	m_fPlayerRestore += fDelta;
 	if (m_fPlayerRestore >= 1.0f)
 	{
-		if(m_pPlayerState == PLAYERSTATE_SKILL_WHIRLWIND) PlayerWhirlWind();
 		if (nPlayerMaxHp != nPlayerCurHp) nPlayerCurHp += 5;
 		if (nPlayerMaxMp != nPlayerCurMp) nPlayerCurMp += 5;
 		m_fPlayerRestore = 0;
@@ -462,7 +469,7 @@ void cPlayer::PlayerWhirlWind()
 		
 		if (PlayerLength < 1.5f)
 		{
-			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage * 2);
+			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage);
 		}
 	}
 }
