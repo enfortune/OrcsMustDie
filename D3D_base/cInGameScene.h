@@ -15,6 +15,7 @@ class TrapTypeManager;
 class cRay;
 class cSky;
 class cSubject;
+class cGameSprite;
 
 class QuickSlot;
 class GraphFindPath;
@@ -42,6 +43,9 @@ class cInGameScene : public cGameScene
 	QuickSlot * pQuickSlot_ {};
 	GraphFindPath * pGraphFindPath_ {};
 
+	cGameSprite* m_pMouse;
+	cGameSprite* m_pAim;
+
 public:
 	cInGameScene();
 	~cInGameScene();
@@ -50,6 +54,11 @@ public:
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime()) override;
 	virtual void Render() override;
 	virtual void Delete() override;
+
+	void CursorSetup();
+	void CursorUpdate();
+	void CursorRender();
+	void CursorDelete();
 
 	bool IsMakeTrap(OUT D3DXVECTOR3 &center, OUT DIRECTION_6 & direction, TrapType* tType, cRay ray);
 	void MakeTrap(TrapType* tType, cRay ray);

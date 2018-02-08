@@ -17,6 +17,7 @@
 #include "TrapType.h"
 #include "cSky.h"
 #include "cSubject.h"
+#include "cGameSprite.h"
 
 #include "QuickSlot.h"
 #include "GraphFindPath.h"
@@ -26,6 +27,8 @@
 
 cInGameScene::cInGameScene()
 	: m_pUILayer(NULL)
+	, m_pMouse(nullptr)
+	, m_pAim(nullptr)
 {
 }
 
@@ -144,6 +147,8 @@ void cInGameScene::Setup()
 
 	pQuickSlot_ = new QuickSlot;
 	pQuickSlot_->init();
+
+	CursorSetup();
 }
 void cInGameScene::Update(float fDelta)
 {
@@ -290,11 +295,14 @@ void cInGameScene::Update(float fDelta)
 
 	pQuickSlot_->update();
 
+	CursorUpdate();
+
 	cGameScene::Update(fDelta);
 }
 void cInGameScene::Render()
 {
 	m_pMap->Render();
+	CursorRender();
 
 	for (int i = 0; i < m_vTrap.size(); i++)
 	{
@@ -362,6 +370,7 @@ void cInGameScene::Render()
 }
 void cInGameScene::Delete()
 {
+	CursorDelete();
 	SAFE_DELETE(m_pCamera);
 
 	SAFE_RELEASE(m_pUILayer);
@@ -377,6 +386,42 @@ void cInGameScene::Delete()
 		SAFE_RELEASE(m_vEnemyBase[i]);
 	}
 	m_vEnemyBase.clear();
+}
+
+void cInGameScene::CursorSetup()
+{
+	m_pMouse = new cGameSprite;
+	m_pMouse->Setup("Resource/Image/Cursor/mouse.png");
+	m_pAim = new cGameSprite;
+	m_pAim->Setup("Resource/Image/Cursor/aim.png");
+}
+
+void cInGameScene::CursorUpdate()
+{
+	RECT rc;
+	GetClientRect(g_hWnd, &rc);
+	m_pMouse->SetPosition(D3DXVECTOR2(g_ptMouse.x + 15, g_ptMouse.y + 28));
+	m_pAim->SetPosition(D3DXVECTOR2(GetRectCenter(rc).x , GetRectCenter(rc).y));
+	ShowCursor(false);
+}
+
+void cInGameScene::CursorRender()
+{
+	if (g_pKeyManager->IsToggleKey(VK_CONTROL))
+	{
+		m_pAim->Render();
+	}
+	else
+	{
+		m_pMouse->Render();
+	}
+}
+
+void cInGameScene::CursorDelete()
+{
+	SAFE_DELETE(m_pMouse);
+	SAFE_DELETE(m_pAim);
+	ShowCursor(true);
 }
 
 bool cInGameScene::IsMakeTrap(OUT D3DXVECTOR3 &center, OUT DIRECTION_6 & direction, TrapType* tType, cRay ray)
