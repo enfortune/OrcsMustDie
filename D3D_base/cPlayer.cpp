@@ -102,8 +102,6 @@ void cPlayer::Update(float fDelta)
 	m_pPlayerSword->Update(fDelta);
 	m_pPlayerShield->Update(fDelta);
 
-	//m_pPlayerMesh->UpdateAnimation(fDelta);
-
 	int ManaCount = 0;
 	
 	speedX = 0;

@@ -43,6 +43,9 @@ void SceneMainMenu::Setup()
 		pSpriteArray_[i]->SetPosition({
 			(rectWindow.right - rectWindow.left) * 0.5f, (rectWindow.bottom - rectWindow.top) * 0.5f});
 	}
+
+	g_pSoundManager->AddSound("NAXBGM", "Resource/Sound/Map/Naxxramas.mp3", true, false);
+	g_pSoundManager->Play("NAXBGM", 0.3f);
 }
 
 void SceneMainMenu::Update(float fDelta)
