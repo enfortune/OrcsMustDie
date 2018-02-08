@@ -89,4 +89,3 @@ void TrapComponentBlockable::update(Trap & trap, float fDelta)
 
 // === triggerable ================================================================================================
 
-TrapComponentTriggerable::TrapComponentTriggerable(TrapTypeComponentTriggerable * pParent) : pParent_(pParent) {}

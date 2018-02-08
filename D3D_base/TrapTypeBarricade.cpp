@@ -66,9 +66,4 @@ void TrapComponentBlockableBarricade::onHit(Trap & trap, int damage)
 }
 
 std::unique_ptr<TrapComponentBlockable> TrapTypeComponentBlockableBarricade::newComponentObject() const
-{
-	std::unique_ptr<TrapComponentBlockable> temp = std::make_unique<TrapComponentBlockableBarricade> (
-		const_cast<TrapTypeComponentBlockableBarricade *> (this));
-
-	return temp;
-}
+{ return std::make_unique<TrapComponentBlockableBarricade> (const_cast<TrapTypeComponentBlockableBarricade *> (this)); }

@@ -40,6 +40,9 @@ void Trap::interaction(cPlayer & player)
 	{
 		if (pComponentAttackable_)
 			pComponentAttackable_->attack(*this, player);
+
+		if (pComponentTriggerable_)
+			pComponentTriggerable_->interaction(*this, player);
 	}
 }
 
@@ -49,6 +52,9 @@ void Trap::interaction(std::vector<cEnemyBase *> & enemyList)
 	{
 		if (pComponentAttackable_)
 			pComponentAttackable_->attack(*this, enemyList);
+
+		if (pComponentTriggerable_)
+			pComponentTriggerable_->interaction(*this, enemyList);
 	}
 }
 

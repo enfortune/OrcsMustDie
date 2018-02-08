@@ -72,11 +72,12 @@ struct TrapTypeComponentTriggerable;
 struct TrapComponentTriggerable
 {
 public:
-	TrapTypeComponentTriggerable * pParent_ {};
+	TrapComponentTriggerable() = default;
+	virtual ~TrapComponentTriggerable() = default;
 
 public:
-	TrapComponentTriggerable(TrapTypeComponentTriggerable * pParent = nullptr);
-	virtual ~TrapComponentTriggerable() = default;
+	virtual void interaction(Trap & trap, cPlayer & player) {}
+	virtual void interaction(Trap & trap, std::vector<cEnemyBase *> & enemyList) {}
 
 public:
 	virtual void update(Trap & trap, float fDelta = g_pTimeManager->GetEllapsedTime()) = 0;

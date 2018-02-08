@@ -7,6 +7,7 @@
 
 void TrapType::render(D3DXMATRIXA16 & matrixWorld, int modelIndex)
 {
+	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matrixWorld);
 	modelList_[modelIndex].Render();
 	
@@ -35,6 +36,7 @@ float TrapType::getFrustumMaxLength() const
 
 void TrapType::render(D3DXMATRIXA16 & matrixWorld)
 {
+	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 	D3DXMATRIXA16 matrixTotal = matrixLocalList_[0] * matrixWorld;
 	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matrixTotal);
 
