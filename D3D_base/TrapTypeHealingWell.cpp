@@ -66,7 +66,7 @@ TrapComponentTriggerableHealingWell::TrapComponentTriggerableHealingWell(TrapTyp
 
 void TrapComponentTriggerableHealingWell::interaction(Trap & trap, cPlayer & player)
 {
-	if (timerCreateHealingPotion_ <= 0.0f && isPotionExist_)
+	if (timerCreateHealingPotion_ <= 0.0f && isPotionExist_ && player.GetPlayerCurHp() < player.GetPlayerMaxHp())
 	{
 		if (CheckOBBCollision(&(player.GetFrustumInWorld()), &(trap.getInteractionArea())))
 		{
