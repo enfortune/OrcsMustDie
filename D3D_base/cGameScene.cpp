@@ -25,7 +25,6 @@ void cGameScene::Update(float fDelta)
 void cGameScene::Render()
 {
 	cGameNode::Render();
-
 }
 void cGameScene::Delete()
 {

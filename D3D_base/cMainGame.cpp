@@ -40,7 +40,10 @@ void cMainGame::Update()
 	g_pSoundManager->Update();
 	g_pKeyManager->Update();
 	float fTime = g_pTimeManager->GetEllapsedTime();
+
+	g_pSceneManager->PreUpdate();
 	g_pSceneManager->Update(fTime);
+
 	g_pParticleManager->Update(fTime);
 }
 

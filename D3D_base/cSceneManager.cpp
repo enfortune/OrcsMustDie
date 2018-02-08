@@ -4,6 +4,7 @@
 
 cSceneManager::cSceneManager()
 	: m_pRunningScene(nullptr)
+	, m_bSceneChangeInterrupt(false)
 {
 }
 
@@ -25,6 +26,41 @@ void cSceneManager::Setup(cGameScene* startScene)
 
 	startScene->Setup();
 	m_pRunningScene = startScene; // ref cnt = 1; (할당한 순간 만들어지므로)
+}
+void cSceneManager::PreUpdate()
+{
+	m_bSceneChangeInterrupt = true;
+	//1. 푸쉬 큐 처리
+	if (m_quePushScene.size() > 0)
+	{
+		while (m_quePushScene.size() > 0)
+		{
+			m_stackScene.push_back(m_quePushScene.front());
+			m_quePushScene.pop();
+		}
+	}
+	
+	//2. 다음씬 큐 처리
+	if (m_quePostScene.size() > 0)
+	{
+		while (m_quePostScene.size() > 1)
+		{
+			m_quePreScene.push(m_quePostScene.front());
+			m_quePostScene.pop();
+		}
+		m_pRunningScene = m_quePostScene.front();
+		m_quePostScene.pop();
+	}
+
+	//3. 지난 씬 삭제처리
+	while (m_quePreScene.size() > 0)
+	{
+		if (m_pRunningScene == m_quePreScene.front()) m_pRunningScene = nullptr;
+		SAFE_RELEASE(m_quePreScene.front());
+		m_quePreScene.pop();
+	}
+
+	m_bSceneChangeInterrupt = false;
 }
 void cSceneManager::Update(float fDelta)
 {
@@ -53,10 +89,11 @@ void cSceneManager::Render(void)
 void cSceneManager::Destroy()
 {
 	this->ClearScene();
+	this->PreUpdate();
 }
 void cSceneManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	if (m_pRunningScene != nullptr)
+	if (m_pRunningScene != nullptr && m_bSceneChangeInterrupt == false)
 		m_pRunningScene->WndProc(hWnd, message, wParam, lParam);
 }
 
@@ -69,14 +106,18 @@ cGameScene* cSceneManager::GetRunningScene(bool isAddRef)
 
 void cSceneManager::PopScene()
 {
-	//1. 현재 실행중인 씬을 삭제
-	SAFE_RELEASE(m_pRunningScene);
+	//1. 현재 실행중인 씬을 삭제 대기씬에 등록
+	m_quePreScene.push(m_pRunningScene);
 	
-	//2. 씬스택에 씬이 남아있다면, 스택의 Top에 있는 씬을 현재 씬으로 변경
+	//2. 씬스택에 씬이 남아있다면, 스택의 Top에 있는 씬을 다음 씬으로 등록
 	if (m_stackScene.size() > 0)
 	{
-		m_pRunningScene = m_stackScene[m_stackScene.size() - 1];
+		m_quePostScene.push(m_stackScene[m_stackScene.size() - 1]);
 		m_stackScene.pop_back();
+	}
+	else
+	{
+		m_quePostScene.push(nullptr);
 	}
 		
 }
@@ -88,25 +129,27 @@ void cSceneManager::PushScene(cGameScene* sceneToPush, bool isUpdateInStack) // 
 	else
 	{
 		m_pRunningScene->SetUpdateEnable(isUpdateInStack);
-		m_stackScene.push_back(m_pRunningScene);
+		m_quePushScene.push(m_pRunningScene);
 
 		sceneToPush->Setup();
-		m_pRunningScene = sceneToPush;
+		m_quePostScene.push(sceneToPush);
 	}
 }
 void cSceneManager::ReplaceScene(cGameScene* sceneToReplace)
 {
 	//if (sceneToReplace == nullptr) return;
 
-	cGameScene* buff = m_pRunningScene;
-	m_pRunningScene = sceneToReplace;
-	SAFE_RELEASE(buff);
+	m_quePreScene.push(m_pRunningScene);
+
+	sceneToReplace->Setup();
+	m_quePostScene.push(sceneToReplace);
 }
 
 void cSceneManager::ClearScene()
 {
 	//m_pRunningScene->RemoveAllChildren();
-	SAFE_RELEASE(m_pRunningScene);
+	m_quePreScene.push(m_pRunningScene);
+	m_quePostScene.push(nullptr);
 
 	this->ClearSceneStack();
 }
