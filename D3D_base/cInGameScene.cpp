@@ -231,7 +231,10 @@ void cInGameScene::Update(float fDelta)
 	for (auto iter = m_vTrap.begin(); iter != m_vTrap.end();)
 	{
 		if (iter->isRemovable())
+		{
+			m_pMap->ClearTrap(&*iter);
 			iter = m_vTrap.erase(iter);
+		}
 		else
 			++iter;
 	}
