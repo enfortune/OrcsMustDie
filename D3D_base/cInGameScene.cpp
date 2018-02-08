@@ -209,6 +209,7 @@ void cInGameScene::Update(float fDelta)
 			iter = m_vTrap.erase(iter);
 		else
 			++iter;
+	}
 
 	for (std::vector<cEnemyBase*>::iterator i = m_vEnemyBase.begin(); i != m_vEnemyBase.end();)
 	{
