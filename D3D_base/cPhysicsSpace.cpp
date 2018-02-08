@@ -154,6 +154,10 @@ void cPhysicsSpace::CollisionWithTrap(cGameNode* pNode)
 			{
 				pBody->GetTempPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f);
 				pBody->GetPhysicsData().vVelocity += -(vCrushNorm * fDot) * (1.f);
+
+				D3DXVec3Normalize(&vGroundCheckNorm, &vCrushNorm);
+				if (D3DXVec3Dot(&vGroundCheckNorm, &D3DXVECTOR3(0.f, 1.f, 0.f)) > cosf(PI / 4) && fDot < 0)
+					pBody->GetPhysicsData().bOnGround = true;
 			}
 		}
 	}
