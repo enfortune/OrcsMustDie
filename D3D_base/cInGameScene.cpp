@@ -18,6 +18,7 @@
 #include "cSky.h"
 #include "cSubject.h"
 #include "cGameSprite.h"
+#include "SceneMainMenu.h"
 
 #include "QuickSlot.h"
 #include "GraphFindPath.h"
@@ -29,6 +30,10 @@ cInGameScene::cInGameScene()
 	: m_pUILayer(NULL)
 	, m_pMouse(nullptr)
 	, m_pAim(nullptr)
+	, m_enGameState(INPLAY)
+	, m_fGameOverCount(0.f)
+	, m_pVictory(nullptr)
+	, m_pDefeat(nullptr)
 {
 }
 
@@ -150,6 +155,7 @@ void cInGameScene::Setup()
 	pQuickSlot_->init();
 
 	CursorSetup();
+	GameStateSetup();
 }
 void cInGameScene::Update(float fDelta)
 {
@@ -297,13 +303,14 @@ void cInGameScene::Update(float fDelta)
 	pQuickSlot_->update();
 
 	CursorUpdate();
+	GameStateUpdate(fDelta);
 
 	cGameScene::Update(fDelta);
 }
 void cInGameScene::Render()
 {
 	m_pMap->Render();
-	CursorRender();
+
 
 	for (int i = 0; i < m_vTrap.size(); i++)
 	{
@@ -368,9 +375,13 @@ void cInGameScene::Render()
 	g_pD3DDevice->SetRenderState(D3DRS_LIGHTING, false);
 
 	cGameScene::Render();
+
+	CursorRender();
+	GameStateRender();
 }
 void cInGameScene::Delete()
 {
+	GameStateDelete();
 	CursorDelete();
 	SAFE_DELETE(m_pCamera);
 
@@ -395,6 +406,7 @@ void cInGameScene::CursorSetup()
 	m_pMouse->Setup("Resource/Image/Cursor/mouse.png");
 	m_pAim = new cGameSprite;
 	m_pAim->Setup("Resource/Image/Cursor/aim.png");
+	ShowCursor(false);
 }
 
 void cInGameScene::CursorUpdate()
@@ -402,8 +414,7 @@ void cInGameScene::CursorUpdate()
 	RECT rc;
 	GetClientRect(g_hWnd, &rc);
 	m_pMouse->SetPosition(D3DXVECTOR2(g_ptMouse.x + 15, g_ptMouse.y + 28));
-	m_pAim->SetPosition(D3DXVECTOR2(GetRectCenter(rc).x , GetRectCenter(rc).y));
-	ShowCursor(false);
+	m_pAim->SetPosition(D3DXVECTOR2(GetRectCenter(rc).x , GetRectCenter(rc).y));	
 }
 
 void cInGameScene::CursorRender()
@@ -423,6 +434,68 @@ void cInGameScene::CursorDelete()
 	SAFE_DELETE(m_pMouse);
 	SAFE_DELETE(m_pAim);
 	ShowCursor(true);
+}
+
+void cInGameScene::GameStateSetup()
+{
+	RECT rc;
+	GetClientRect(g_hWnd, &rc);
+	m_enGameState = INPLAY;
+	m_fGameOverCount = 0.f;
+	m_pVictory = new cGameSprite;
+	m_pVictory->Setup("Resource/Image/UI/victory.png");
+	m_pVictory->SetColor(D3DXCOLOR(1.f, 1.f, 1.f, 0.f));
+	m_pVictory->SetPosition(D3DXVECTOR2(GetRectCenter(rc).x, GetRectCenter(rc).y));
+	m_pDefeat = new cGameSprite;
+	m_pDefeat->Setup("Resource/Image/UI/defeat.png");
+	m_pDefeat->SetColor(D3DXCOLOR(1.f, 1.f, 1.f, 0.f));
+	m_pDefeat->SetPosition(D3DXVECTOR2(GetRectCenter(rc).x, GetRectCenter(rc).y));
+}
+
+void cInGameScene::GameStateUpdate(float fDelta)
+{
+	if (m_vEnemyBase.size() == 0) m_enGameState = VICTORY;
+	else if (m_pSubject->GetAnduinHp() == 0 || m_pPlayer_S->GetPlayerCurHp() == 0) m_enGameState = DEFEAT;
+
+	switch (m_enGameState)
+	{
+		case INPLAY:
+		break;
+		case VICTORY:
+			m_fGameOverCount += fDelta;
+			m_pVictory->SetColor(D3DXCOLOR(1.f, 1.f, 1.f, (m_fGameOverCount < 1.f)? (m_fGameOverCount):(1.f)));
+		break;
+		case DEFEAT:
+			m_fGameOverCount += fDelta;
+			m_pDefeat->SetColor(D3DXCOLOR(1.f, 1.f, 1.f, (m_fGameOverCount < 1.f) ? (m_fGameOverCount) : (1.f)));
+		break;
+	}
+
+	if (m_fGameOverCount > 4.f) g_pSceneManager->ReplaceScene(new SceneMainMenu);
+}
+
+void cInGameScene::GameStateRender()
+{
+	switch (m_enGameState)
+	{
+		case INPLAY:
+		break;
+		case VICTORY:
+			m_pVictory->Render();
+		break;
+		case DEFEAT:
+			m_pDefeat->Render();
+		break;
+		default:
+		break;
+	}
+
+}
+
+void cInGameScene::GameStateDelete()
+{
+	SAFE_DELETE(m_pVictory);
+	SAFE_DELETE(m_pDefeat);
 }
 
 bool cInGameScene::IsMakeTrap(OUT D3DXVECTOR3 &center, OUT DIRECTION_6 & direction, TrapType* tType, cRay ray)

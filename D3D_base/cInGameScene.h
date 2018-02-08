@@ -20,6 +20,13 @@ class cGameSprite;
 class QuickSlot;
 class GraphFindPath;
 
+typedef enum EN_INGAMESTATE
+{
+	INPLAY,
+	VICTORY,
+	DEFEAT
+}INGAMESTATE;
+
 class cInGameScene : public cGameScene
 {
 	cPlayerCamera* m_pCamera;
@@ -46,6 +53,11 @@ class cInGameScene : public cGameScene
 	cGameSprite* m_pMouse;
 	cGameSprite* m_pAim;
 
+	EN_INGAMESTATE	m_enGameState;
+	float			m_fGameOverCount;
+	cGameSprite*	m_pVictory;
+	cGameSprite*	m_pDefeat;
+
 public:
 	cInGameScene();
 	~cInGameScene();
@@ -59,6 +71,11 @@ public:
 	void CursorUpdate();
 	void CursorRender();
 	void CursorDelete();
+
+	void GameStateSetup();
+	void GameStateUpdate(float fDelta);
+	void GameStateRender();
+	void GameStateDelete();
 
 	bool IsMakeTrap(OUT D3DXVECTOR3 &center, OUT DIRECTION_6 & direction, TrapType* tType, cRay ray);
 	void MakeTrap(TrapType* tType, cRay ray);

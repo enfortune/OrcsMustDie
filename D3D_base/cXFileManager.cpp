@@ -28,6 +28,7 @@ ST_XFILE cXFileManager::LoadXFile(std::string sKey, IN char * szFolder, IN char 
 				iter->second.pAniCtrl->GetMaxNumEvents(),
 				&stRet.pAniCtrl
 				);
+		stRet.vecAniSet = iter->second.vecAniSet;
 	}
 	else
 	{
