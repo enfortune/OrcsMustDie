@@ -2,17 +2,20 @@
 #include "cGameNode.h"
 
 class cSkinnedMeshEX;
-class cSky : public cGameNode
+class cSubject : public cGameNode
 {
-	cSkinnedMeshEX* m_pskyUp;
-	cSkinnedMeshEX* m_pskyDown;
+private:
+	cSkinnedMeshEX* m_pZeppelin;
+	cSkinnedMeshEX* m_pAnduin;
 
-	SYNTHESIZE_REF(D3DXVECTOR3, m_vPos, Pos);
-	SYNTHESIZE_REF(D3DXVECTOR3, m_vScl, Scl);
+	SYNTHESIZE_REF(D3DXVECTOR3, m_vZPos, ZPos);
+	SYNTHESIZE_REF(D3DXVECTOR3, m_vZScl, ZScl);
+
+	SYNTHESIZE_REF(D3DXVECTOR3, m_vAPos, APos);
 
 public:
-	cSky();
-	~cSky();
+	cSubject();
+	~cSubject();
 
 	virtual void Setup();
 	virtual void Update(float fDelta = g_pTimeManager->GetEllapsedTime());

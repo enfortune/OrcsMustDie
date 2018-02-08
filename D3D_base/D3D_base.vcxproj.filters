@@ -451,6 +451,9 @@
     <ClInclude Include="SceneMainMenu.h">
       <Filter>엄윤호</Filter>
     </ClInclude>
+    <ClInclude Include="cSubject.h">
+      <Filter>차종서</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -743,6 +746,9 @@
     </ClCompile>
     <ClCompile Include="SceneMainMenu.cpp">
       <Filter>엄윤호</Filter>
+    </ClCompile>
+    <ClCompile Include="cSubject.cpp">
+      <Filter>차종서</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
