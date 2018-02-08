@@ -39,6 +39,9 @@ public:
 	inline FRUSTUM getFrustum() const { return frustumWorld_; }
 	inline FRUSTUM getInteractionArea() const { return frustumInteractionWorld_; }
 
+	inline float getFrustumMaxLength() const { return pType_->getFrustumMaxLength(); }
+	D3DXVECTOR3 getFrustumCenter() const;
+
 public:		// for component
 	inline void setRenderModelIndex(int index) { renderModelIndex_ = index; }
 
@@ -46,6 +49,8 @@ public:
 	void interaction(cPlayer & player);
 	void interaction(std::vector<cEnemyBase *> & enemyList);
 	void interaction(std::vector<ItemDummy> & itemList);
+
+	void onHit(int damage);
 
 public:
 	void init(TrapType & type, D3DXMATRIXA16 & matrixWorld);
