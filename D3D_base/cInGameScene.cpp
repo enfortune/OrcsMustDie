@@ -16,6 +16,7 @@
 #include "cRay.h"
 #include "TrapType.h"
 #include "cSky.h"
+#include "cSubject.h"
 
 #include "QuickSlot.h"
 #include "GraphFindPath.h"
@@ -42,6 +43,13 @@ void cInGameScene::Setup()
 	m_pSkyMap->SetPos(D3DXVECTOR3(47, 0, 29));
 	m_pSkyMap->SetScl(D3DXVECTOR3(10, 10, 10));
 	this->AddChild(m_pSkyMap);
+
+	m_pSubject = new cSubject;
+	m_pSubject->Setup();
+	m_pSubject->SetZPos(D3DXVECTOR3(30, 5, 53));
+	m_pSubject->SetZScl(D3DXVECTOR3(15, 15, 15));
+	m_pSubject->SetAPos(D3DXVECTOR3(30, 0, 7));
+	this->AddChild(m_pSubject);
 
 	m_pMap = new cMapData;
 	m_pMap->Setup();
@@ -409,6 +417,7 @@ void cInGameScene::Delete()
 	SAFE_RELEASE(m_pMap);
 	SAFE_DELETE(m_pTrapTypeManager);
 	SAFE_DELETE(m_pSkyMap);
+	SAFE_DELETE(m_pSubject);
 	SAFE_DELETE(pQuickSlot_);
 
 	for (int i = 0; i < m_vEnemyBase.size(); i++)

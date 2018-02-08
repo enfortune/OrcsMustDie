@@ -52,10 +52,10 @@ void cSubject::Render()
 
 	if (m_pAnduin)
 	{
-		D3DXMATRIXA16 matT, matWorld;
+		D3DXMATRIXA16 matT, matR, matWorld;
 		D3DXMatrixTranslation(&matT, m_vAPos.x, m_vAPos.y, m_vAPos.z);
-
-		matWorld = matT;
+		D3DXMatrixRotationY(&matR, D3DX_PI);
+		matWorld = matR * matT;
 
 		g_pD3DDevice->SetTransform(D3DTS_WORLD, &matWorld);
 		m_pAnduin->Render();

@@ -14,6 +14,7 @@ class cMapData;
 class TrapTypeManager;
 class cRay;
 class cSky;
+class cSubject;
 
 class QuickSlot;
 class GraphFindPath;
@@ -34,6 +35,7 @@ class cInGameScene : public cGameScene
 	TrapTypeManager*	m_pTrapTypeManager;
 	cMapData*			m_pMap;
 	cSky*				m_pSkyMap;
+	cSubject*			m_pSubject;
 	float				m_fRoundTime;
 	bool				m_bRound1, m_bRound2, m_bRound3;
 

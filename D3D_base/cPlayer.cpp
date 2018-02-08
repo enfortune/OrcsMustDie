@@ -598,7 +598,7 @@ void cPlayer::IsPlayerState()
 		g_pSoundManager->Stop("PlayerWhirlwind");
 		break;
 	case PLAYERSTATE_MOVE:
-		m_pPlayerMesh->SetAnimationSetBlend(0, 10, true);
+		m_pPlayerMesh->SetAnimationSet(0, 10, true);
 		g_pSoundManager->Stop("PlayerWhirlwind");
 		break;
 	case PLAYERSTATE_ATTACK:
