@@ -454,6 +454,9 @@
     <ClInclude Include="QuickSlot.h">
       <Filter>엄윤호\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="cSubject.h">
+      <Filter>차종서</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -746,6 +749,9 @@
     </ClCompile>
     <ClCompile Include="QuickSlot.cpp">
       <Filter>엄윤호\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="cSubject.cpp">
+      <Filter>차종서</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
