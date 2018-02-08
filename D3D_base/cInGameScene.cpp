@@ -256,6 +256,12 @@ void cInGameScene::Update(float fDelta)
 		m_pPlayer_S->SetPlayerTrapType(PLAYERTRAPTYPE_SPIKE);
 	}
 
+	if (g_pKeyManager->IsOnceKeyDown('4'))
+	{
+		m_pPlayer_S->SetIsBattle(false);
+		m_pPlayer_S->SetPlayerTrapType(PLAYERTRAPTYPE_HEALINGWELL);
+	}
+
 	if (m_pPlayer_S->GetIsBattle() == false)
 	{
 		if (g_pKeyManager->IsOnceKeyDown(VK_LBUTTON))
