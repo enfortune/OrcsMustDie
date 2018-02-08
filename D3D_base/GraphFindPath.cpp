@@ -28,8 +28,8 @@ bool GraphFindPath::findPath(int start, int end, OUT std::vector<D3DXVECTOR3>* p
 		if (pVertexList)
 		{
 			D3DXVECTOR3 vectorRandomMin {}, vectorRandomMax {};
-			vectorRandomMin = {-5.0f, 0.0f, -5.0f};
-			vectorRandomMax = {5.0f, 0.0f, 5.0f};
+			vectorRandomMin = {-4.0f, 0.0f, -4.0f};
+			vectorRandomMax = {4.0f, 0.0f, 4.0f};
 
 			for (int i = 0; i < static_cast<int> (pathList.size()); ++i)
 			{

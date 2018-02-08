@@ -36,6 +36,14 @@ void TrapComponentAttackable::update(Trap & trap, float fDelta)
 		cooldown_ = 0.0f;
 }
 
+// === blockable =================================================================================================
+
+void TrapComponentBlockable::onDestroy(Trap & trap)
+{
+	isBlockable_ = false;
+	timerRemain_ = pParent_->timerRemainMax_;
+}
+
 TrapComponentBlockable::TrapComponentBlockable(TrapTypeComponentBlockable * pParent) : pParent_(pParent) {}
 
 void TrapComponentBlockable::onHit(Trap & trap, int damage)
@@ -44,10 +52,27 @@ void TrapComponentBlockable::onHit(Trap & trap, int damage)
 
 	if (hp_ < 0)
 		hp_ = 0;
+
+	if (hp_ == 0 && isBlockable_)
+		onDestroy(trap);
 }
 
 void TrapComponentBlockable::update(Trap & trap, float fDelta)
 {
+	if (isBlockable_)
+		hp_ += pParent_->hpRegenerate_ * fDelta;
+	else
+	{
+		timerRemain_ -= fDelta;
+
+		if (timerRemain_ < 0.0f)
+			timerRemain_ = 0.0f;
+
+		if (timerRemain_ == 0.0f)
+			isRemovable_ = true;
+	}
 }
+
+// === triggerable ================================================================================================
 
 TrapComponentTriggerable::TrapComponentTriggerable(TrapTypeComponentTriggerable * pParent) : pParent_(pParent) {}

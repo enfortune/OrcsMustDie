@@ -30,7 +30,7 @@ public:
 	int defense_ {};
 	int hpRegenerate_ {};
 
-	float hitCooldownMax_ {};
+	float timerRemainMax_ {};
 
 public:
 	TrapTypeComponentBlockable() = default;

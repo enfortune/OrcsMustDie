@@ -40,3 +40,8 @@ TrapTypeBarricade::TrapTypeBarricade()
 
 	moneyCost_ = 600;
 }
+
+void TrapComponentBarricade::onDestroy(Trap & trap)
+{
+	
+}

@@ -42,11 +42,23 @@ public:
 
 	int hp_ {};
 
+	bool isBlockable_ {};
+	bool isRemovable_ {};
+
+	float timerRemain_ {};
+
+protected:
+	virtual void onDestroy(Trap & trap);
+
 public:
 	TrapComponentBlockable(TrapTypeComponentBlockable * pParent = nullptr);
 	virtual ~TrapComponentBlockable() = default;
 
 	//UNCOPYABLE(TrapComponentBlockable);
+
+public:
+	inline bool isBlockable() const { return isBlockable_; }
+	inline bool isRemovable() const { return isRemovable_; }
 
 public:
 	virtual void onHit(Trap & trap, int damage);
