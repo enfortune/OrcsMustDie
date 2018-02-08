@@ -80,9 +80,11 @@ void QuickSlot::init()
 	pSpriteSelect_->GetSprite()->SetSpriteFlag(D3DXSPRITE_DO_NOT_ADDREF_TEXTURE | D3DXSPRITE_ALPHABLEND);
 
 	changeButton(IconType::ATTACK, 0);
-	changeButton(IconType::BARRICADE, 1);
-	changeButton(IconType::SPIKE, 2);
-	changeButton(IconType::HEALING_WELL, 3);
+	changeButton(IconType::BASH, 1);
+	changeButton(IconType::WHIRLWIND, 2);
+	changeButton(IconType::BARRICADE, 3);
+	changeButton(IconType::SPIKE, 4);
+	changeButton(IconType::HEALING_WELL, 5);
 }
 
 void QuickSlot::update()
