@@ -5,6 +5,7 @@ struct ST_XFILE
 {
 	LPD3DXFRAME		pRoot;
 	LPD3DXANIMATIONCONTROLLER	pAniCtrl;
+	std::vector<LPD3DXANIMATIONSET> vecAniSet;
 
 	ST_XFILE() : pRoot(nullptr), pAniCtrl(nullptr) {}
 };
@@ -22,5 +23,9 @@ public:
 	void DestroyAllXFile();
 
 	void Destroy();
+
+protected:
+	void SetupBoneMatrixPtrs(LPD3DXFRAME pRoot, LPD3DXFRAME pFrame);
+	void SetupAnimationSet(IN LPD3DXANIMATIONCONTROLLER pAniCtrl, OUT std::vector<LPD3DXANIMATIONSET>& vecAniSet);
 };
 

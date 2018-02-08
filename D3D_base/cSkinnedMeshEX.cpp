@@ -36,12 +36,10 @@ void cSkinnedMeshEX::Setup(IN char* szFolder, IN char* szFile)
 	ST_XFILE stTemp = g_pXFileManager->LoadXFile(std::string(szFile), szFolder, szFile);
 	m_pRoot = stTemp.pRoot;
 	m_pAniCtrl = stTemp.pAniCtrl;
+	m_vecAniSet = stTemp.vecAniSet;
 
 	if (m_pAniCtrl) m_pAniCtrl->ResetTime();
-	SetupBoneMatrixPtrs(m_pRoot);
-	UpdateFrames(nullptr, nullptr); // 로드 후 한번 업데이트를 돌려준다.
-
-	if (m_pAniCtrl) SetupAnimationSet(m_pAniCtrl);
+	//UpdateFrames(nullptr, nullptr); // 로드 후 한번 업데이트를 돌려준다.
 }
 
 void cSkinnedMeshEX::UpdateFrames(LPD3DXFRAME pFrame, LPD3DXFRAME pParent)
@@ -276,42 +274,19 @@ float cSkinnedMeshEX::getCurPosition()
 	return m_fCurPosition;
 }
 
-void cSkinnedMeshEX::SetupAnimationSet(LPD3DXANIMATIONCONTROLLER pAniCtrl)
-{
-	if (pAniCtrl)
-	{
-		UINT nNumSet = pAniCtrl->GetMaxNumAnimationSets();
 
-		for (UINT i = 0; i < nNumSet; i++)
-		{
-			LPD3DXANIMATIONSET aniSet;
-			LPTSTR	szName;
-			pAniCtrl->GetAnimationSet(i, &aniSet);
-			m_mapAniSet[aniSet->GetName()] = aniSet;
-			m_vecAniSetName.push_back(aniSet->GetName());
-		}
-	}
-}
-
-void cSkinnedMeshEX::SetAnimationSet(UINT nTrack, LPCSTR szAniSetName)
-{
-	if (m_mapAniSet.find(szAniSetName) == m_mapAniSet.end()) return;
-
-	m_pAniCtrl->SetTrackAnimationSet(nTrack, m_mapAniSet[szAniSetName]);
-	//m_pAniCtrl->ResetTime();
-}
 
 void cSkinnedMeshEX::SetAnimationSet(UINT nTrack, int nAniID, bool Loop)
 {
-	if (nTrack >= m_vecAniSetName.size()) return;
+	if (nAniID >= m_vecAniSet.size()) return;
 	if (!m_bAniStart)
 	{
 		m_startAniId = nAniID;
 		m_bAniStart = true;
 	}
-	m_pAniCtrl->SetTrackAnimationSet(nTrack, (m_mapAniSet.find(m_vecAniSetName[nAniID]))->second);
-	(m_mapAniSet.find(m_vecAniSetName[nAniID]))->second->GetPeriod();
-	D3DXTRACK_DESC			tempDesc;
+	m_pAniCtrl->SetTrackAnimationSet(nTrack, (m_vecAniSet[nAniID]));
+	m_vecAniSet[nAniID]->GetPeriod();
+	D3DXTRACK_DESC		tempDesc;
 	m_bLoop = Loop;
 	m_pAniCtrl->ResetTime();
 }

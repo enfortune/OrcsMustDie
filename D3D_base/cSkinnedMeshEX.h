@@ -5,10 +5,8 @@ class cSkinnedMeshEX
 protected:
 	LPD3DXFRAME		m_pRoot;
 	LPD3DXANIMATIONCONTROLLER	m_pAniCtrl;
-	//LPD3DXANIMATIONCALLBACKHANDLER m_pACH;
-	std::map<LPCSTR, LPD3DXANIMATIONSET> m_mapAniSet;
+	std::vector<LPD3DXANIMATIONSET> m_vecAniSet;
 	D3DXTRACK_DESC m_stTrackDesc;
-	std::vector<LPCSTR> m_vecAniSetName;
 	bool		m_isBlend;
 	bool		m_bLoop;
 	bool		m_bAniStart;
@@ -37,11 +35,8 @@ public:
 	void Destroy();
 
 
-	void SetupAnimationSet(LPD3DXANIMATIONCONTROLLER pAniCtrl);
-
-	void SetAnimationSet(UINT nTrack, LPCSTR szAniSetName);
-	void SetAnimationSet(UINT nTrack, int nAniID, bool Loop);
-	void SetAnimationSetBlend(UINT nTrack, int nAniID, bool Loop);
+	void SetAnimationSet(UINT nTrack, int nAniID, bool Loop = false);
+	void SetAnimationSetBlend(UINT nTrack, int nAniID, bool Loop = false);
 
 	float	getCurPosition();
 	D3DXMATRIXA16& FindBone(IN char* szFile);
