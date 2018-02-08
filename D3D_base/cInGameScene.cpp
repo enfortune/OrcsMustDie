@@ -244,19 +244,19 @@ void cInGameScene::Update(float fDelta)
 		m_pPlayer_S->SetIsBattle(true);
 	}
 
-	if (g_pKeyManager->IsOnceKeyDown('2'))
+	if (g_pKeyManager->IsOnceKeyDown('4'))
 	{
 		m_pPlayer_S->SetIsBattle(false);
 		m_pPlayer_S->SetPlayerTrapType(PLAYERTRAPTYPE_BARRICADE);
 	}
 
-	if (g_pKeyManager->IsOnceKeyDown('3'))
+	if (g_pKeyManager->IsOnceKeyDown('5'))
 	{
 		m_pPlayer_S->SetIsBattle(false);
 		m_pPlayer_S->SetPlayerTrapType(PLAYERTRAPTYPE_SPIKE);
 	}
 
-	if (g_pKeyManager->IsOnceKeyDown('4'))
+	if (g_pKeyManager->IsOnceKeyDown('6'))
 	{
 		m_pPlayer_S->SetIsBattle(false);
 		m_pPlayer_S->SetPlayerTrapType(PLAYERTRAPTYPE_HEALINGWELL);
