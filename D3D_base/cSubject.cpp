@@ -6,6 +6,7 @@ cSubject::cSubject()
 	: m_vZPos(0, 0, 0)
 	, m_vZScl(0, 0, 0)
 	, m_vAPos(0, 0, 0)
+	, m_nAnduinHp(0)
 {
 }
 
@@ -25,6 +26,8 @@ void cSubject::Setup()
 	m_pAnduin = new cSkinnedMeshEX;
 	m_pAnduin->Setup("Resource/XFile/Object", "Resource/XFile/Object/anduin.X");
 	m_pAnduin->SetAnimationSet(0, 0);
+
+	m_nAnduinHp = 100;
 }
 
 void cSubject::Update(float fDelta)

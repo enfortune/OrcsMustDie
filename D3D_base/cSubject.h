@@ -12,6 +12,7 @@ private:
 	SYNTHESIZE_REF(D3DXVECTOR3, m_vZScl, ZScl);
 
 	SYNTHESIZE_REF(D3DXVECTOR3, m_vAPos, APos);
+	SYNTHESIZE_REF(int, m_nAnduinHp, AnduinHp);
 
 public:
 	cSubject();
