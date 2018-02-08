@@ -61,8 +61,7 @@ TrapTypeSpike::TrapTypeSpike()
 std::unique_ptr<TrapComponentAttackable> TrapTypeComponentAttackableSpike::newComponentObject() const
 { return std::make_unique<TrapComponentAttackableSpike>(const_cast<TrapTypeComponentAttackableSpike *> (this)); }
 
-TrapComponentAttackableSpike::TrapComponentAttackableSpike(TrapTypeComponentAttackable * pParent)
-{ TrapComponentAttackable::TrapComponentAttackable(pParent); }
+TrapComponentAttackableSpike::TrapComponentAttackableSpike(TrapTypeComponentAttackable * pParent) { pParent_ = pParent; }
 
 void TrapComponentAttackableSpike::attack(Trap & trap, std::vector<cEnemyBase*> & enemyList)
 {

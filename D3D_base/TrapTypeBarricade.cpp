@@ -18,8 +18,11 @@ TrapTypeBarricade::TrapTypeBarricade()
 	D3DXMatrixScaling(&matrixScale, 0.005f, 0.005f, 0.005f);
 	D3DXMatrixRotationX(&matrixRotation, D3DX_PI * 0.5f);
 
-	matrixLocalList_.resize(1);
+	matrixLocalList_.resize(4);
 	matrixLocalList_[0] = matrixScale * matrixRotation;
+	matrixLocalList_[1] = matrixScale * matrixRotation;
+	matrixLocalList_[2] = matrixScale * matrixRotation;
+	matrixLocalList_[3] = matrixScale * matrixRotation;
 
 	frustumLocal_.vNear_00 = {-1.0f, 0.0f, -1.0f};
 	frustumLocal_.vNear_01 = {-1.0f, 0.6f, -1.0f};
@@ -47,7 +50,7 @@ TrapTypeBarricade::TrapTypeBarricade()
 }
 
 TrapComponentBlockableBarricade::TrapComponentBlockableBarricade(TrapTypeComponentBlockable * pParent)
-{ TrapComponentBlockable::TrapComponentBlockable(pParent); }
+{ pParent_ = pParent; }
 
 void TrapComponentBlockableBarricade::onDestroy(Trap & trap)
 {

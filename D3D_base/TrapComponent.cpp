@@ -62,6 +62,7 @@ TrapComponentBlockable::TrapComponentBlockable(TrapTypeComponentBlockable * pPar
 
 void TrapComponentBlockable::onHit(Trap & trap, int damage)
 {
+	assert(damage >= 0);
 	hp_ -= damage;
 
 	if (hp_ < 0)
