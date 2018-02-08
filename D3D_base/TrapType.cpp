@@ -42,6 +42,10 @@ void TrapType::render(D3DXMATRIXA16 & matrixWorld)
 
 	modelList_[0].Render();
 	
+	D3DXMATRIXA16 matrixIdentity;
+	D3DXMatrixIdentity(&matrixIdentity);
+	g_pD3DDevice->SetTransform(D3DTS_WORLD, &matrixIdentity);
+
 	FRUSTUM frustum = frustumInteractionLocal_.TransformCoord(&matrixWorld);
 	frustum.Render(g_pD3DDevice);
 }

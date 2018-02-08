@@ -315,108 +315,30 @@ void cInGameScene::Render()
 		DIRECTION_6 direction {};
 		D3DXVECTOR3 vertexCenter {};
 
-		bool check = true;
+		bool check = false;
 
-		if (pTrapType->isConstructible(TrapType::eInstallPosition::WALL) && check)
+		if (m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
+			100, pTrapType->getWidth(), pTrapType->getHeight()))
 		{
-			bool check2 = true;
-			
-			if (check2)
+			switch (direction)
 			{
-				direction = DIRECTION_6::LEFT;
-
-				if (m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
-					100, pTrapType->getWidth(), pTrapType->getHeight()))
-				{
-					D3DXMATRIXA16 matrixRender {};
-					D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
-
-					pTrapType->render(matrixRender);
-					check = false;
-					check2 = false;
-				}
+			case DIRECTION_6::FRONT:
+			case DIRECTION_6::REAR:
+			case DIRECTION_6::LEFT:
+			case DIRECTION_6::RIGHT: if (pTrapType->isConstructible(TrapType::eInstallPosition::WALL)) check = true; break;
+			case DIRECTION_6::TOP: if (pTrapType->isConstructible(TrapType::eInstallPosition::FLOOR)) check = true; break;
+			case DIRECTION_6::BOTTOM:
+				if (pTrapType->isConstructible(TrapType::eInstallPosition::CEILING)) check = true; break;
 			}
 
-			if (check2)
-			{
-				direction = DIRECTION_6::RIGHT;
-
-				if (m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
-					100, pTrapType->getWidth(), pTrapType->getHeight()))
-				{
-					D3DXMATRIXA16 matrixRender {};
-					D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
-
-					pTrapType->render(matrixRender);
-					check = false;
-					check2 = false;
-				}
-			}
-
-			if (check2)
-			{
-				direction = DIRECTION_6::FRONT;
-
-				if (m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
-					100, pTrapType->getWidth(), pTrapType->getHeight()))
-				{
-					D3DXMATRIXA16 matrixRender {};
-					D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
-
-					pTrapType->render(matrixRender);
-					check = false;
-					check2 = false;
-				}
-			}
-
-			if (check2)
-			{
-				direction = DIRECTION_6::REAR;
-
-				if (m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
-					100, pTrapType->getWidth(), pTrapType->getHeight()))
-				{
-					D3DXMATRIXA16 matrixRender {};
-					D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
-
-					pTrapType->render(matrixRender);
-					check = false;
-					check2 = false;
-				}
-			}
-		}
-
-		if (pTrapType->isConstructible(TrapType::eInstallPosition::CEILING) && check)
-		{
-			direction = DIRECTION_6::TOP;
-
-			if (m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
-				100, pTrapType->getWidth(), pTrapType->getHeight()))
+			if (check)
 			{
 				D3DXMATRIXA16 matrixRender {};
 				D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
 
 				pTrapType->render(matrixRender);
-				check = false;
 			}
 		}
-
-		if (pTrapType->isConstructible(TrapType::eInstallPosition::FLOOR) && check)
-		{
-			direction = DIRECTION_6::TOP;
-
-			if (m_pMap->GetBuildPostion(vertexCenter, direction, cRay::RayAtWorldSpace(g_ptMouse.x, g_ptMouse.y),
-				100, pTrapType->getWidth(), pTrapType->getHeight()))
-			{
-				D3DXMATRIXA16 matrixRender {};
-				D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
-
-				pTrapType->render(matrixRender);
-				check = false;
-			}
-		}
-		
-		
 	}
 
 	pQuickSlot_->render();
@@ -447,65 +369,24 @@ void cInGameScene::Delete()
 bool cInGameScene::IsMakeTrap(OUT D3DXVECTOR3 &center,TrapType* tType, cRay ray)
 {
 	D3DXVECTOR3 vCenterPos = { 0,0,0 };
-	if (tType->isConstructible(TrapType::eInstallPosition::FLOOR))
+	DIRECTION_6 Dir_6 {};
+
+	if (m_pMap->GetBuildPostion(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight()))
 	{
-		DIRECTION_6 Dir_6;
-		Dir_6 = DIRECTION_6::TOP;
-		if (m_pMap->IsEnableToBuild(ray, 100, tType->getWidth(), tType->getHeight()))
-		{
-			m_pMap->GetBuildPostion(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight());
+		bool check = false;
 
-			center = vCenterPos;
-			return true;
-		}
-	}
-	if (tType->isConstructible(TrapType::eInstallPosition::CEILING))
-	{
-		DIRECTION_6 Dir_6;
-		Dir_6 = DIRECTION_6::BOTTOM;
-		if (m_pMap->IsEnableToBuild(ray, 100, tType->getWidth(), tType->getHeight()))
+		switch (Dir_6)
 		{
-			m_pMap->GetBuildPostion(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight());
-
-			center = vCenterPos;
-			return true;
+		case DIRECTION_6::FRONT:
+		case DIRECTION_6::REAR:
+		case DIRECTION_6::LEFT:
+		case DIRECTION_6::RIGHT: if (tType->isConstructible(TrapType::eInstallPosition::WALL)) check = true; break;
+		case DIRECTION_6::TOP: if (tType->isConstructible(TrapType::eInstallPosition::FLOOR)) check = true; break;
+		case DIRECTION_6::BOTTOM: if (tType->isConstructible(TrapType::eInstallPosition::CEILING)) check = true; break;
 		}
-	}
-	if (tType->isConstructible(TrapType::eInstallPosition::WALL))
-	{
-		DIRECTION_6 Dir_6;
-		Dir_6 = DIRECTION_6::LEFT;
-		if (m_pMap->IsEnableToBuild(ray, 100, tType->getWidth(), tType->getHeight()))
-		{
-			m_pMap->GetBuildPostion(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight());
 
-			center = vCenterPos;
+		if (check && m_pMap->IsEnableToBuild(ray, 100, tType->getWidth(), tType->getHeight()))
 			return true;
-		}
-		Dir_6 = DIRECTION_6::RIGHT;
-		if (m_pMap->IsEnableToBuild(ray, 100, tType->getWidth(), tType->getHeight()))
-		{
-			m_pMap->GetBuildPostion(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight());
-
-			center = vCenterPos;
-			return true;
-		}
-		Dir_6 = DIRECTION_6::FRONT;
-		if (m_pMap->IsEnableToBuild(ray, 100, tType->getWidth(), tType->getHeight()))
-		{
-			m_pMap->GetBuildPostion(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight());
-
-			center = vCenterPos;
-			return true;
-		}
-		Dir_6 = DIRECTION_6::REAR;
-		if (m_pMap->IsEnableToBuild(ray, 100, tType->getWidth(), tType->getHeight()))
-		{
-			m_pMap->GetBuildPostion(vCenterPos, Dir_6, ray, 100, tType->getWidth(), tType->getHeight());
-
-			center = vCenterPos;
-			return true;
-		}
 	}
 
 	return false;
