@@ -9,7 +9,6 @@ cSky::cSky()
 {
 }
 
-
 cSky::~cSky()
 {
 	Delete();
@@ -26,18 +25,18 @@ void cSky::Setup()
 	m_pskyDown = new cSkinnedMeshEX;
 	m_pskyDown->Setup("Resource/XFile/Map", "Resource/XFile/Map/SkyWorld.X");
 	m_pskyDown->SetAnimationSet(0, 0);
+
 }
 
 void cSky::Update(float fDelta)
 {
-	//m_pskyUp->Update();
-	//m_pskyUp->UpdateAnimation(fDelta);
 
 	cGameNode::Update(fDelta);
 }
 
 void cSky::Render()
 {
+
 	if (m_pskyUp)
 	{
 		D3DXMATRIXA16 matT, matS, matWorld;
@@ -62,7 +61,6 @@ void cSky::Render()
 		m_pskyDown->Render();
 	}
 
-
 	cGameNode::Render();
 }
 
@@ -70,8 +68,10 @@ void cSky::Delete()
 {
 	SAFE_DELETE(m_pskyUp);
 	SAFE_DELETE(m_pskyDown);
+
 }
 
 void cSky::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+
 }
