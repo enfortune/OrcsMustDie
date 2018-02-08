@@ -81,6 +81,7 @@ void cInGameScene::Setup()
 		cEnemy* tempEnemy;
 		tempEnemy = new cEnemy;
 		tempEnemy->setPlayer(m_pPlayer_S);
+		tempEnemy->setPath(pGraphFindPath_);
 
 		tempEnemy->Setup(true, D3DXVECTOR3(0, 0, 0));
 
@@ -91,6 +92,7 @@ void cInGameScene::Setup()
 		cEnemy2* tempEnemy;
 		tempEnemy = new cEnemy2;
 		tempEnemy->setPlayer(m_pPlayer_S);
+		tempEnemy->setPath(pGraphFindPath_);
 
 		tempEnemy->Setup(true, D3DXVECTOR3(0, 0, 0));
 		m_vEnemyBase.push_back(tempEnemy);
@@ -114,6 +116,7 @@ void cInGameScene::Setup()
 	cBoss* tempEnemy;
 	tempEnemy = new cBoss;
 	tempEnemy->setPlayer(m_pPlayer_S);
+	tempEnemy->setPath(pGraphFindPath_);
 
 	tempEnemy->Setup(true, D3DXVECTOR3(0, 0, 0));
 

@@ -5,6 +5,7 @@
 #include "cPlayer.h"
 #include "cPhysicsBody.h"
 #include "cGameParticleShockwave.h"
+#include "GraphFindPath.h"
 
 cBoss::cBoss()
 	: m_pParticle(nullptr)
@@ -618,6 +619,10 @@ void cBoss::Hit()
 void cBoss::sendGold()
 {
 	m_pPlayer->SetPlayerGold(m_pPlayer->GetPlayerGold() + m_nGold);
+}
+
+void cBoss::setPath(GraphFindPath * pFindPath)
+{
 }
 
 void cBoss::shockwave()
