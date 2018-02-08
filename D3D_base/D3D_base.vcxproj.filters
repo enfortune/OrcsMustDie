@@ -109,24 +109,18 @@
     <Filter Include="Foundation\D3D\Particle">
       <UniqueIdentifier>{7a90039a-0600-42d4-b1bb-f5f479a4ea98}</UniqueIdentifier>
     </Filter>
-    <Filter Include="엄윤호\Graph">
-      <UniqueIdentifier>{5556ef56-cd51-437c-81f2-489e4e677432}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="엄윤호\Graph\Trap">
+    <Filter Include="엄윤호\Trap">
       <UniqueIdentifier>{945c4f2a-505c-43e1-8520-5bd76e7f0d0f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="엄윤호\Graph\Trap\Specific">
+    <Filter Include="엄윤호\Trap\Specific">
       <UniqueIdentifier>{ae616338-db27-4000-b853-0c1b37479d78}</UniqueIdentifier>
     </Filter>
-<<<<<<< HEAD
-=======
     <Filter Include="엄윤호\Graph">
       <UniqueIdentifier>{5556ef56-cd51-437c-81f2-489e4e677432}</UniqueIdentifier>
     </Filter>
     <Filter Include="엄윤호\Scene">
       <UniqueIdentifier>{f5f00c76-817c-4f7c-bedc-ecd690465a2a}</UniqueIdentifier>
     </Filter>
->>>>>>> 668bd41bab923b0f3c53a340540d7f239dd33dcb
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -383,34 +377,28 @@
       <Filter>Foundation\D3D\Particle</Filter>
     </ClInclude>
     <ClInclude Include="TrapTypeSpike.h">
-      <Filter>엄윤호\Graph\Trap\Specific</Filter>
+      <Filter>엄윤호\Trap\Specific</Filter>
     </ClInclude>
     <ClInclude Include="TrapTypeHealingWell.h">
-      <Filter>엄윤호\Graph\Trap\Specific</Filter>
+      <Filter>엄윤호\Trap\Specific</Filter>
     </ClInclude>
     <ClInclude Include="TrapTypeBarricade.h">
-      <Filter>엄윤호\Graph\Trap\Specific</Filter>
+      <Filter>엄윤호\Trap\Specific</Filter>
     </ClInclude>
     <ClInclude Include="Trap.h">
-      <Filter>엄윤호\Graph\Trap</Filter>
+      <Filter>엄윤호\Trap</Filter>
     </ClInclude>
     <ClInclude Include="TrapComponent.h">
-      <Filter>엄윤호\Graph\Trap</Filter>
+      <Filter>엄윤호\Trap</Filter>
     </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="TrapTestScene.h">
-      <Filter>엄윤호\Graph\Trap</Filter>
-    </ClInclude>
-=======
->>>>>>> 668bd41bab923b0f3c53a340540d7f239dd33dcb
     <ClInclude Include="TrapType.h">
-      <Filter>엄윤호\Graph\Trap</Filter>
+      <Filter>엄윤호\Trap</Filter>
     </ClInclude>
     <ClInclude Include="TrapTypeComponent.h">
-      <Filter>엄윤호\Graph\Trap</Filter>
+      <Filter>엄윤호\Trap</Filter>
     </ClInclude>
     <ClInclude Include="TrapTypeManager.h">
-      <Filter>엄윤호\Graph\Trap</Filter>
+      <Filter>엄윤호\Trap</Filter>
     </ClInclude>
     <ClInclude Include="nCommon.h">
       <Filter>엄윤호</Filter>
@@ -691,34 +679,28 @@
       <Filter>Foundation\D3D\Particle</Filter>
     </ClCompile>
     <ClCompile Include="TrapTypeSpike.cpp">
-      <Filter>엄윤호\Graph\Trap\Specific</Filter>
+      <Filter>엄윤호\Trap\Specific</Filter>
     </ClCompile>
     <ClCompile Include="TrapTypeHealingWell.cpp">
-      <Filter>엄윤호\Graph\Trap\Specific</Filter>
+      <Filter>엄윤호\Trap\Specific</Filter>
     </ClCompile>
     <ClCompile Include="TrapTypeBarricade.cpp">
-      <Filter>엄윤호\Graph\Trap\Specific</Filter>
+      <Filter>엄윤호\Trap\Specific</Filter>
     </ClCompile>
     <ClCompile Include="Trap.cpp">
-      <Filter>엄윤호\Graph\Trap</Filter>
+      <Filter>엄윤호\Trap</Filter>
     </ClCompile>
     <ClCompile Include="TrapComponent.cpp">
-      <Filter>엄윤호\Graph\Trap</Filter>
+      <Filter>엄윤호\Trap</Filter>
     </ClCompile>
-<<<<<<< HEAD
-    <ClCompile Include="TrapTestScene.cpp">
-      <Filter>엄윤호\Graph\Trap</Filter>
-    </ClCompile>
-=======
->>>>>>> 668bd41bab923b0f3c53a340540d7f239dd33dcb
     <ClCompile Include="TrapType.cpp">
-      <Filter>엄윤호\Graph\Trap</Filter>
+      <Filter>엄윤호\Trap</Filter>
     </ClCompile>
     <ClCompile Include="TrapTypeComponent.cpp">
-      <Filter>엄윤호\Graph\Trap</Filter>
+      <Filter>엄윤호\Trap</Filter>
     </ClCompile>
     <ClCompile Include="TrapTypeManager.cpp">
-      <Filter>엄윤호\Graph\Trap</Filter>
+      <Filter>엄윤호\Trap</Filter>
     </ClCompile>
     <ClCompile Include="nCommon.cpp">
       <Filter>엄윤호</Filter>

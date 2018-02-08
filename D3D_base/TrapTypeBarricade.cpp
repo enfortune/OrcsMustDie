@@ -40,7 +40,7 @@ TrapTypeBarricade::TrapTypeBarricade()
 	isInstallPositionArray_[static_cast<size_t> (TrapType::eInstallPosition::FLOOR)] = true;
 
 	pTypeComponentBlockable_ = new TrapTypeComponentBlockable;
-	pTypeComponentBlockable_->hpMax_ = 80;
+	pTypeComponentBlockable_->hpMax_ = 240;
 
 	moneyCost_ = 600;
 }
