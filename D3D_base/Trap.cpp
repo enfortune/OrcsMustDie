@@ -34,10 +34,12 @@ D3DXVECTOR3 Trap::getFrustumCenter() const
 	return vertexCenter;
 }
 
-void Trap::setRenderIndex(int index)
+void Trap::setRenderModel(int index)
 {
-	renderIndexList_.resize(1);
-	renderIndexList_[0] = index;
+	for (int i = 0; i < static_cast<int> (renderIndexList_.size()); ++i)
+		renderIndexList_[i] = false;
+
+	renderIndexList_[index] = true;
 }
 
 void Trap::interaction(cPlayer & player)
@@ -79,7 +81,9 @@ void Trap::init(TrapType & type, D3DXMATRIXA16 & matrixWorld)
 	pType_ = &type;
 
 	matrixWorldList_.resize(type.matrixLocalList_.size());
-	setRenderIndex(0);
+	renderIndexList_.resize(type.modelList_.size());
+	
+	renderIndexList_[0] = true;
 
 	for(int i = 0; i < static_cast<int> (matrixWorldList_.size()); ++i)
 		matrixWorldList_[i] = type.matrixLocalList_[i] * matrixWorld;
@@ -114,6 +118,9 @@ void Trap::update(float fDelta)
 
 void Trap::render()
 {
-	for(int i = 0; i < static_cast<int> (renderIndexList_.size()); ++i)
-		pType_->render(matrixWorldList_[renderIndexList_[i]], renderIndexList_[i]);
+	for (int i = 0; i < static_cast<int> (renderIndexList_.size()); ++i)
+	{
+		if (renderIndexList_[i])
+			pType_->render(matrixWorldList_[i], i);
+	}
 }

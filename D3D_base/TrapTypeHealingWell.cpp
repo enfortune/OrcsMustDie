@@ -11,15 +11,21 @@ TrapTypeHealingWell::TrapTypeHealingWell()
 	modelList_[0].Setup("Resource/Trap/HealingWell", "Resource/Trap/HealingWell/HealingWell.X");
 	modelList_[1].Setup("Resource/Trap/HealingWell", "Resource/Trap/HealingWell/HealthPotionDrop.X");
 
-	D3DXMATRIXA16 matrixScale {}, matrixRotationX {}, matrixRotationY {}, matrixTranslation {};
+	D3DXMATRIXA16 matrixScale {}, matrixRotationX {}, matrixRotationY {};
+	D3DXMATRIXA16 matrixScalePotion {}, matrixTranslation {};
+
 	D3DXMatrixScaling(&matrixScale, 0.005f, 0.005f, 0.005f);
+	D3DXMatrixScaling(&matrixScalePotion, 0.013f, 0.013f, 0.013f);
 	D3DXMatrixRotationX(&matrixRotationX, D3DX_PI * 0.5f);
 	D3DXMatrixRotationY(&matrixRotationY, D3DX_PI * 0.5f);
-	D3DXMatrixTranslation(&matrixTranslation, 0.6f, 0.0f, 0.0f);
+	D3DXMatrixTranslation(&matrixTranslation, 0.0f, -1.9f, -1.0f);
+
+	D3DXMATRIXA16 matrixIdentity {};
+	D3DXMatrixIdentity(&matrixIdentity);
 
 	matrixLocalList_.resize(2);
 	matrixLocalList_[0] = matrixScale * matrixRotationX * matrixRotationY;
-	matrixLocalList_[1] = matrixScale * matrixRotationX * matrixRotationY;
+	matrixLocalList_[1] = matrixScalePotion * matrixRotationX * matrixRotationY * matrixTranslation;
 
 	frustumLocal_.vNear_00 = {-1.0f, -1.0f, -0.3f};
 	frustumLocal_.vNear_01 = {-1.0f, 1.0f, -0.3f};
@@ -44,7 +50,7 @@ TrapTypeHealingWell::TrapTypeHealingWell()
 
 	pTypeComponentTriggerable_ = new TrapTypeComponentTriggerableHealingWell;
 	static_cast<TrapTypeComponentTriggerableHealingWell *> (
-		pTypeComponentTriggerable_)->timerCreateHealingPotionMax_ = 20.0f;
+		pTypeComponentTriggerable_)->timerCreateHealingPotionMax_ = 15.0f;
 
 	moneyCost_ = 800;
 }
@@ -60,7 +66,7 @@ TrapComponentTriggerableHealingWell::TrapComponentTriggerableHealingWell(TrapTyp
 
 void TrapComponentTriggerableHealingWell::interaction(Trap & trap, cPlayer & player)
 {
-	if (timerCreateHealingPotion_ <= 0.0f)
+	if (timerCreateHealingPotion_ <= 0.0f && isPotionExist_)
 	{
 		if (CheckOBBCollision(&(player.GetFrustumInWorld()), &(trap.getInteractionArea())))
 		{
@@ -70,7 +76,7 @@ void TrapComponentTriggerableHealingWell::interaction(Trap & trap, cPlayer & pla
 				pParent_)->timerCreateHealingPotionMax_;
 
 			isPotionExist_ = false;
-			trap.setRenderIndex(0);
+			trap.setRenderModel(1, false);
 		}
 	}
 }
@@ -82,9 +88,9 @@ void TrapComponentTriggerableHealingWell::update(Trap & trap, float fDelta)
 	if (timerCreateHealingPotion_ < 0.0f)
 		timerCreateHealingPotion_ = 0.0f;
 
-	if (isPotionExist_ == false && timerCreateHealingPotion_ == 0.0f)
+	if (timerCreateHealingPotion_ == 0.0f)
 	{
 		isPotionExist_ = true;
-		trap.addRenderIndex(1);
+		trap.setRenderModel(1, true);
 	}
 }
