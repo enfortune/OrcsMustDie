@@ -16,6 +16,7 @@ protected:
 		ATTACK,
 		ATTACK_TRAP,
 		MOVE_TRAP,
+		FINISH,
 		SKILL,
 		HIT,
 		JUMP_START,
@@ -24,7 +25,7 @@ protected:
 		DEAD
 	};
 	state EnemyState;
-	bool bAttack, bAttackAction, bIdle, bDead, bDeadbody;
+	bool bAttack, bAttackAction, bIdle, bDead, bDeadbody, bAttackTrap;
 
 	int nIdleAni, nAttackAni, nDeadAni, nMoveAni, nAttackMoveAni,
 		nJumpStartAni, nJumpAni, nJumpEndAni, nHitAni, nSkillAni;
