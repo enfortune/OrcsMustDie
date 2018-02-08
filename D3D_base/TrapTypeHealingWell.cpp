@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "TrapTypeHealingWell.h"
 
+#include "Trap.h"
+
+#include "cPlayer.h"
+
 TrapTypeHealingWell::TrapTypeHealingWell()
 {
 	modelList_.resize(2);
@@ -31,15 +35,33 @@ TrapTypeHealingWell::TrapTypeHealingWell()
 	isInstallPositionArray_[static_cast<size_t> (TrapType::eInstallPosition::WALL)] = true;
 
 	pTypeComponentTriggerable_ = new TrapTypeComponentTriggerableHealingWell;
+	static_cast<TrapTypeComponentTriggerableHealingWell *> (pTypeComponentTriggerable_)->timerCreateHealingPotionMax_
+		= 20.0f;
 
 	moneyCost_ = 800;
 }
 
 std::unique_ptr<TrapComponentTriggerable> TrapTypeComponentTriggerableHealingWell::newComponentObject() const
-{ return std::make_unique<TrapComponentTriggerableHealingWell>(); }
+{ 
+	return std::make_unique<TrapComponentTriggerableHealingWell>(
+		const_cast<TrapTypeComponentTriggerableHealingWell *> (this));
+}
+
+TrapComponentTriggerableHealingWell::TrapComponentTriggerableHealingWell(TrapTypeComponentTriggerable * pParent)
+{ pParent_ = pParent; }
 
 void TrapComponentTriggerableHealingWell::interaction(Trap & trap, cPlayer & player)
 {
+	if (timerCreateHealingPotion_ <= 0.0f)
+	{
+		if (CheckOBBCollision(&(player.GetFrustumInWorld()), &(trap.getInteractionArea())))
+		{
+			player.PlayerHPHealed(HEALING_AMOUNT);
+
+			timerCreateHealingPotion_ = static_cast<TrapTypeComponentTriggerableHealingWell *> (
+				pParent_)->timerCreateHealingPotionMax_;
+		}
+	}
 }
 
 void TrapComponentTriggerableHealingWell::update(Trap & trap, float fDelta)

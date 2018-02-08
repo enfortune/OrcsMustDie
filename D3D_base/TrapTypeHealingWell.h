@@ -27,10 +27,13 @@ public:
 struct TrapComponentTriggerableHealingWell : public TrapComponentTriggerable
 {
 public:
+	enum { HEALING_AMOUNT = 150 };
+
+public:
 	float timerCreateHealingPotion_ {};
 
 public:
-	TrapComponentTriggerableHealingWell() = default;
+	TrapComponentTriggerableHealingWell(TrapTypeComponentTriggerable * pParent = nullptr);
 	virtual ~TrapComponentTriggerableHealingWell() = default;
 
 public:

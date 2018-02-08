@@ -72,6 +72,9 @@ struct TrapTypeComponentTriggerable;
 struct TrapComponentTriggerable
 {
 public:
+	TrapTypeComponentTriggerable * pParent_ {};
+
+public:
 	TrapComponentTriggerable() = default;
 	virtual ~TrapComponentTriggerable() = default;
 

@@ -209,6 +209,9 @@ void cInGameScene::Update(float fDelta)
 		m_vTrap[i].update();
 
 	for (int i = 0; i < static_cast<int> (m_vTrap.size()); ++i)
+		m_vTrap[i].interaction(*m_pPlayer_S);
+
+	for (int i = 0; i < static_cast<int> (m_vTrap.size()); ++i)
 		m_vTrap[i].interaction(m_vEnemyBase);
 
 	for (auto iter = m_vTrap.begin(); iter != m_vTrap.end();)

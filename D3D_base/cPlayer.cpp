@@ -492,7 +492,7 @@ void cPlayer::PlayerShiledBash()
 
 		PlayerLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vEnemy)[i]->GetTransformData()->GetPosition()));
 
-		if (PlayerLength < 1.5f && fCos > cosf(D3DX_PI / 4.f) && (*m_vEnemy)[i]->GetBoss == false)
+		if (PlayerLength < 1.5f && fCos > cosf(D3DX_PI / 4.f) && (*m_vEnemy)[i]->GetBoss() == false)
 		{
 			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage);
 			(*m_vEnemy)[i]->GetPhysicsBody()->GetPhysicsData().vVelocity = (vDist * 15.f) + D3DXVECTOR3(0.f, 5.f, 0.f);
