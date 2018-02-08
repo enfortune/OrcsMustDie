@@ -46,6 +46,8 @@ void cInGameScene::Setup()
 {
 	cGameScene::Setup();
 
+	g_pSoundManager->Stop("NAXBGM");
+
 	m_pSkyMap = new cSky;
 	m_pSkyMap->Setup();
 	m_pSkyMap->SetPos(D3DXVECTOR3(47, 0, 29));
