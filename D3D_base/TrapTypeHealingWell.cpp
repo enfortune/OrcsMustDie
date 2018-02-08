@@ -15,31 +15,36 @@ TrapTypeHealingWell::TrapTypeHealingWell()
 	D3DXMatrixScaling(&matrixScale, 0.005f, 0.005f, 0.005f);
 	D3DXMatrixRotationX(&matrixRotationX, D3DX_PI * 0.5f);
 	D3DXMatrixRotationY(&matrixRotationY, D3DX_PI * 0.5f);
-	D3DXMatrixTranslation(&matrixTranslation, 0.0f, -1.0f, 0.0f);
+	D3DXMatrixTranslation(&matrixTranslation, 0.6f, 0.0f, 0.0f);
 
 	matrixLocalList_.resize(2);
-	matrixLocalList_[0] = matrixScale * matrixRotationX * matrixRotationY /** matrixTranslation*/;
-	matrixLocalList_[1] = matrixScale * matrixRotationX * matrixRotationY /** matrixTranslation*/;
+	matrixLocalList_[0] = matrixScale * matrixRotationX * matrixRotationY;
+	matrixLocalList_[1] = matrixScale * matrixRotationX * matrixRotationY;
 
-	frustumLocal_.vNear_00 = {-1.0f, -1.0f, -1.0f};
-	frustumLocal_.vNear_01 = {-1.0f, 1.0f, -1.0f};
+	frustumLocal_.vNear_00 = {-1.0f, -1.0f, -0.3f};
+	frustumLocal_.vNear_01 = {-1.0f, 1.0f, -0.3f};
 	frustumLocal_.vNear_10 = {-1.0f, -1.0f, +1.0f};
 	frustumLocal_.vNear_11 = {-1.0f, 1.0f, +1.0f};
-	frustumLocal_.vFar_00 = {1.0f, -1.0f, -1.0f};
-	frustumLocal_.vFar_01 = {1.0f, 1.0f, -1.0f};
+	frustumLocal_.vFar_00 = {1.0f, -1.0f, -0.3f};
+	frustumLocal_.vFar_01 = {1.0f, 1.0f, -0.3f};
 	frustumLocal_.vFar_10 = {1.0f, -1.0f, +1.0f};
 	frustumLocal_.vFar_11 = {1.0f, 1.0f, +1.0f};
 
 	frustumInteractionLocal_ = frustumLocal_;
+	frustumInteractionLocal_.vNear_00.z = -2.0f;
+	frustumInteractionLocal_.vNear_01.z = -2.0f;
+	frustumInteractionLocal_.vFar_00.z = -2.0f;
+	frustumInteractionLocal_.vFar_01.z = -2.0f;
 
 	width_ = 1;
 	height_ = 1;
 
 	isInstallPositionArray_[static_cast<size_t> (TrapType::eInstallPosition::WALL)] = true;
+	isInteractionToArray_[static_cast<size_t> (TrapType::eInteractionTo::PLAYER)] = true;
 
 	pTypeComponentTriggerable_ = new TrapTypeComponentTriggerableHealingWell;
-	static_cast<TrapTypeComponentTriggerableHealingWell *> (pTypeComponentTriggerable_)->timerCreateHealingPotionMax_
-		= 20.0f;
+	static_cast<TrapTypeComponentTriggerableHealingWell *> (
+		pTypeComponentTriggerable_)->timerCreateHealingPotionMax_ = 20.0f;
 
 	moneyCost_ = 800;
 }
@@ -63,6 +68,9 @@ void TrapComponentTriggerableHealingWell::interaction(Trap & trap, cPlayer & pla
 
 			timerCreateHealingPotion_ = static_cast<TrapTypeComponentTriggerableHealingWell *> (
 				pParent_)->timerCreateHealingPotionMax_;
+
+			isPotionExist_ = false;
+			trap.setRenderIndex(0);
 		}
 	}
 }
@@ -73,4 +81,10 @@ void TrapComponentTriggerableHealingWell::update(Trap & trap, float fDelta)
 
 	if (timerCreateHealingPotion_ < 0.0f)
 		timerCreateHealingPotion_ = 0.0f;
+
+	if (isPotionExist_ == false && timerCreateHealingPotion_ == 0.0f)
+	{
+		isPotionExist_ = true;
+		trap.addRenderIndex(1);
+	}
 }

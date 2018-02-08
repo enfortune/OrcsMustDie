@@ -31,6 +31,7 @@ public:
 
 public:
 	float timerCreateHealingPotion_ {};
+	bool isPotionExist_ {true};
 
 public:
 	TrapComponentTriggerableHealingWell(TrapTypeComponentTriggerable * pParent = nullptr);

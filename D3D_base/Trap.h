@@ -18,7 +18,7 @@ private:
 	FRUSTUM frustumWorld_ {};
 	FRUSTUM frustumInteractionWorld_ {};
 
-	int renderModelIndex_ {};
+	std::vector<int> renderIndexList_ {};
 
 	std::unique_ptr<TrapComponentAttackable> pComponentAttackable_ {};
 	std::unique_ptr<TrapComponentBlockable> pComponentBlockable_ {};
@@ -44,7 +44,8 @@ public:
 	D3DXVECTOR3 getFrustumCenter() const;
 
 public:		// for component
-	inline void setRenderModelIndex(int index) { renderModelIndex_ = index; }
+	void setRenderIndex(int index);
+	inline void addRenderIndex(int index) { renderIndexList_.emplace_back(index); }
 
 public:
 	void interaction(cPlayer & player);

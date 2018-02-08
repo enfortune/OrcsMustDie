@@ -75,7 +75,7 @@ void TrapComponentAttackableSpike::attack(Trap & trap, std::vector<cEnemyBase*> 
 				enemyList[i]->getDamage(pParent_->damage_);
 			
 				cooldown_ = pParent_->cooldownMax_;
-				trap.setRenderModelIndex(0);
+				trap.setRenderIndex(0);
 			}
 		}
 	}
@@ -86,5 +86,5 @@ void TrapComponentAttackableSpike::update(Trap & trap, float fDelta)
 	TrapComponentAttackable::update(trap, fDelta);
 
 	if (cooldown_ <= pParent_->cooldownMax_ - pParent_->duration_)
-		trap.setRenderModelIndex(1);
+		trap.setRenderIndex(1);
 }
