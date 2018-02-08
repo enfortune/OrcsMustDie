@@ -234,7 +234,7 @@ void cInGameScene::Update(float fDelta)
 		m_vTrap[i].interaction(m_vEnemyBase);
 
 	// 임시처방
-	/*for (auto iter = m_vTrap.begin(); iter != m_vTrap.end();)
+	for (auto iter = m_vTrap.begin(); iter != m_vTrap.end();)
 	{
 		if (iter->isRemovable())
 		{
@@ -243,7 +243,7 @@ void cInGameScene::Update(float fDelta)
 		}
 		else
 			++iter;
-	}*/
+	}
 
 	for (std::vector<cEnemyBase*>::iterator i = m_vEnemyBase.begin(); i != m_vEnemyBase.end();)
 	{
