@@ -59,6 +59,17 @@ void cGameNode::Render()
 			node->Render();
 	}
 }
+
+void cGameNode::Release()
+{
+	m_ulRefCount--;
+	if (m_ulRefCount == 0)
+	{
+		this->RemoveAllChildren();
+		delete this;
+	}
+}
+
 void cGameNode::Destroy()
 {
 	

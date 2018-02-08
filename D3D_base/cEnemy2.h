@@ -4,6 +4,7 @@
 
 class cSkinnedMeshEX;
 class cPlayer;
+class GraphFindPath;
 
 class cEnemy2 : public cEnemyBase
 {
@@ -48,6 +49,7 @@ public:
 	void find(int tpNum, float fDelta);
 	void setPlayer(cPlayer* pSetPlayer);
 	void getDamage(int nDamage);
+	void setPath(GraphFindPath* pFindPath);
 	void HpManager();
 	void sendGold();
 

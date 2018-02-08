@@ -4,26 +4,31 @@
 
 class cSkinnedMeshEX;
 class cPlayer;
+class GraphFindPath;
 
 class cEnemy : public cEnemyBase
 {
 private:
 	D3DXVECTOR3 vPlayerPos;
 	cPlayer* m_pPlayer;
-	struct tempPoint
-	{
-		D3DXVECTOR3 p;
-		bool start;
-		bool goal;
-		bool check;
-		int prev;
-		int next[3];
-		int cost;
-		int curCost;
-		bool bmove;
-	};
+	GraphFindPath* m_pFindPath;
 
-	tempPoint tp[5];
+	std::vector<D3DXVECTOR3> m_vPath;
+
+	//struct tempPoint
+	//{
+	//	D3DXVECTOR3 p;
+	//	bool start;
+	//	bool goal;
+	//	bool check;
+	//	int prev;
+	//	int next[3];
+	//	int cost;
+	//	int curCost;
+	//	bool bmove;
+	//};
+	//
+	//tempPoint tp[5];
 
 
 public:
@@ -46,6 +51,7 @@ public:
 	void Dijkstra(int tpnum, float fDelta);
 	void find(int tpNum, float fDelta);
 	void setPlayer(cPlayer* pSetPlayer);
+	void setPath(GraphFindPath* pFindPath);
 	virtual void getDamage(int nDamage);
 	void HpManager();
 

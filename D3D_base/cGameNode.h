@@ -35,6 +35,8 @@ public:
 	virtual void Render();
 	virtual void Delete() = 0;
 
+	virtual void Release();
+
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	
 	virtual void UpdateTempPhysics(float fDelta);

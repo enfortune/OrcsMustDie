@@ -5,6 +5,7 @@
 class cSkinnedMeshEX;
 class cPlayer;
 class cGameParticleShockwave;
+class GraphFindPath;
 
 class cBoss : public cEnemyBase
 {
@@ -54,6 +55,7 @@ public:
 	void HpManager();
 	void Hit();
 	void sendGold();
+	void setPath(GraphFindPath* pFindPath);
 
 	void shockwave();
 };

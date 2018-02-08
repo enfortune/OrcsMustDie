@@ -30,8 +30,9 @@ protected:
 	cSkinnedMeshEX * m_pSkinnedMesh;
 	D3DXVECTOR3	vPos;
 	D3DXVECTOR3 vDir;
-	float fRotY;
-	int		nMaxHp, nCurHp, nMaxMp, nCurMp;
+	float fRotY, fFindTime;
+
+	int		nMaxHp, nCurHp, nMaxMp, nCurMp, nDijkNum;
 	BOOL	bStun, bPoison, bMove;
 
 	SYNTHESIZE_REF(int, m_nAtkDamage, AtkDamage);

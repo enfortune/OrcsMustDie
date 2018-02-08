@@ -4,6 +4,7 @@
 #include "cTransformData.h"
 #include "cPlayer.h"
 #include "cPhysicsBody.h"
+#include "GraphFindPath.h"
 
 
 cEnemy2::cEnemy2()
@@ -486,6 +487,10 @@ void cEnemy2::setPlayer(cPlayer* pSetPlayer)
 void cEnemy2::getDamage(int nDamage)
 {
 	nCurHp -= nDamage;
+}
+
+void cEnemy2::setPath(GraphFindPath * pFindPath)
+{
 }
 
 void cEnemy2::HpManager()

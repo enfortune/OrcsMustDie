@@ -11,9 +11,14 @@ private:
 
 	cGameScene* m_pRunningScene;
 
-	//bool _isChangeScene;
+	std::queue<cGameScene*> m_quePreScene;
+	std::queue<cGameScene*> m_quePostScene;
+	std::queue<cGameScene*> m_quePushScene;
+
+	bool m_bSceneChangeInterrupt;
 public:
 	void Setup(cGameScene* startScene);
+	void PreUpdate();
 	void Update(float fDelta = g_pTimeManager->GetEllapsedTime());
 	void Render(void);
 	void Destroy();
