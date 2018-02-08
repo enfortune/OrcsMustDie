@@ -211,6 +211,14 @@ void cInGameScene::Update(float fDelta)
 	for (int i = 0; i < static_cast<int> (m_vTrap.size()); ++i)
 		m_vTrap[i].interaction(m_vEnemyBase);
 
+	for (auto iter = m_vTrap.begin(); iter != m_vTrap.end();)
+	{
+		if (iter->isRemovable())
+			iter = m_vTrap.erase(iter);
+		else
+			++iter;
+	}
+
 	for (std::vector<cEnemyBase*>::iterator i = m_vEnemyBase.begin(); i != m_vEnemyBase.end();)
 	{
 

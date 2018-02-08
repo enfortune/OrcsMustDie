@@ -8,6 +8,22 @@
 #include "cPlayer.h"
 #include "cEnemyBase.h"
 
+bool Trap::isBlockable() const
+{
+	if (pComponentBlockable_)
+		return pComponentBlockable_->isBlockable_;
+
+	return false;
+}
+
+bool Trap::isRemovable() const
+{
+	if (pComponentBlockable_)
+		return pComponentBlockable_->isRemovable_;
+
+	return false;
+}
+
 D3DXVECTOR3 Trap::getFrustumCenter() const
 {
 	D3DXVECTOR3 vertexCenter = frustumWorld_.vFar_00 + frustumWorld_.vNear_11;

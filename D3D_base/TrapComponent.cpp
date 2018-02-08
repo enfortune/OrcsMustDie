@@ -7,7 +7,14 @@
 #include "cPlayer.h"
 #include "cEnemyBase.h"
 
-TrapComponentAttackable::TrapComponentAttackable(TrapTypeComponentAttackable * pParent) : pParent_(pParent) {}
+TrapComponentAttackable::TrapComponentAttackable(TrapTypeComponentAttackable * pParent) : pParent_(pParent)
+{
+	if (pParent)
+	{
+		cooldown_ = pParent->cooldownMax_;
+		frustumAttackWorld_ = pParent->frustumAttackLocal_;
+	}
+}
 
 void TrapComponentAttackable::attack(Trap & trap, cPlayer & player)
 {
@@ -44,7 +51,14 @@ void TrapComponentBlockable::onDestroy(Trap & trap)
 	timerRemain_ = pParent_->timerRemainMax_;
 }
 
-TrapComponentBlockable::TrapComponentBlockable(TrapTypeComponentBlockable * pParent) : pParent_(pParent) {}
+TrapComponentBlockable::TrapComponentBlockable(TrapTypeComponentBlockable * pParent) : pParent_(pParent)
+{
+	if (pParent)
+	{
+		hp_ = pParent->hpMax_;
+		timerRemain_ = pParent->timerRemainMax_;
+	}
+}
 
 void TrapComponentBlockable::onHit(Trap & trap, int damage)
 {

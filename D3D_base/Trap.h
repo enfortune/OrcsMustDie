@@ -31,7 +31,8 @@ public:
 	inline bool isConstructible(TrapType::eInstallPosition installPosition) const
 	{ return pType_->isInstallPositionArray_[static_cast<int> (installPosition)]; }
 
-	inline bool isBlockable() const { return pType_->isBlockable_; }
+	bool isBlockable() const;
+	bool isRemovable() const;
 
 	inline int getWidth() const { return pType_->width_; }
 	inline int getHeight() const { return pType_->height_; }

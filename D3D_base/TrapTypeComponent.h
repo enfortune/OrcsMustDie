@@ -21,6 +21,8 @@ public:
 	virtual std::unique_ptr<TrapComponentAttackable> newComponentObject() const;
 };
 
+// === blockable ========================================================================
+
 struct TrapComponentBlockable;
 
 struct TrapTypeComponentBlockable
@@ -39,6 +41,8 @@ public:
 public:
 	virtual std::unique_ptr<TrapComponentBlockable> newComponentObject() const;
 };
+
+// === triggerable =======================================================================
 
 struct TrapComponentTriggerable;
 

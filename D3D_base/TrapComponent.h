@@ -33,6 +33,8 @@ public:
 	virtual void update(Trap & trap, float fDelta = g_pTimeManager->GetEllapsedTime());
 };
 
+// === blockable ===============================================================================
+
 struct TrapTypeComponentBlockable;
 
 struct TrapComponentBlockable
@@ -42,7 +44,7 @@ public:
 
 	int hp_ {};
 
-	bool isBlockable_ {};
+	bool isBlockable_ {true};
 	bool isRemovable_ {};
 
 	float timerRemain_ {};
@@ -57,15 +59,13 @@ public:
 	//UNCOPYABLE(TrapComponentBlockable);
 
 public:
-	inline bool isBlockable() const { return isBlockable_; }
-	inline bool isRemovable() const { return isRemovable_; }
-
-public:
 	virtual void onHit(Trap & trap, int damage);
 
 public:
 	virtual void update(Trap & trap, float fDelta = g_pTimeManager->GetEllapsedTime());
 };
+
+// === triggerable ===========================================================================
 
 struct TrapTypeComponentTriggerable;
 
