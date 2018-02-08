@@ -114,8 +114,6 @@ void cPlayer::Update(float fDelta)
 	if (nPlayerMaxHp < nPlayerCurHp) nPlayerMaxHp = nPlayerCurHp;
 	if (nPlayerMaxMp < nPlayerCurMp) nPlayerMaxMp = nPlayerCurMp;
 
-	nPlayerCurMp = nPlayerMaxMp;
-
 	if (nPlayerCurHp <= 0 && m_pPlayerState != PLAYERSTATE_DEATH)
 	{
 		nPlayerCurHp = 0;
@@ -466,7 +464,7 @@ void cPlayer::PlayerWhirlWind()
 		
 		if (PlayerLength < 1.5f)
 		{
-			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage);
+			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage * 2);
 		}
 	}
 }
@@ -486,7 +484,7 @@ void cPlayer::PlayerShiledBash()
 
 		if (PlayerLength < 1.5f && fCos > cosf(D3DX_PI / 4.f) && (*m_vEnemy)[i]->GetBoss() == false)
 		{
-			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage);
+			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage * 2);
 			(*m_vEnemy)[i]->GetPhysicsBody()->GetPhysicsData().vVelocity = (vDist * 15.f) + D3DXVECTOR3(0.f, 5.f, 0.f);
 		}
 	}

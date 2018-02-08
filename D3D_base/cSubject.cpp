@@ -27,7 +27,7 @@ void cSubject::Setup()
 	m_pAnduin->Setup("Resource/XFile/Object", "Resource/XFile/Object/anduin.X");
 	m_pAnduin->SetAnimationSet(0, 0);
 
-	m_nAnduinHp = 100;
+	m_nAnduinHp = 300;
 }
 
 void cSubject::Update(float fDelta)
