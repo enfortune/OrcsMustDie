@@ -59,9 +59,9 @@ void TrapComponentBlockableBarricade::onHit(Trap & trap, int damage)
 {
 	TrapComponentBlockable::onHit(trap, damage);
 
-	if (hp_ > 0 && hp_ <= 30)
+	if (hp_ > 0 && hp_ <= 80)
 		trap.setRenderModelIndex(2);
-	else if (hp_ <= 60)
+	else if (hp_ <= 160)
 		trap.setRenderModelIndex(1);
 }
 
