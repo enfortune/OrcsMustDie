@@ -85,5 +85,5 @@ void TrapComponentAttackableSpike::update(Trap & trap, float fDelta)
 	TrapComponentAttackable::update(trap, fDelta);
 
 	if (cooldown_ <= pParent_->cooldownMax_ - pParent_->duration_)
-		trap.setRenderModel(1, true);
+		trap.setRenderModel(1);
 }

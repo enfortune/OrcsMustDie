@@ -27,9 +27,6 @@ public:
 	TrapComponentBlockableBarricade(TrapTypeComponentBlockable * pParent = nullptr);
 	virtual ~TrapComponentBlockableBarricade() = default;
 
-protected:
-	virtual void onDestroy(Trap & trap) override;
-
 public:
 	virtual void onHit(Trap & trap, int damage) override;
 };

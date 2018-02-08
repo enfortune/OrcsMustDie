@@ -42,30 +42,33 @@ TrapTypeBarricade::TrapTypeBarricade()
 
 	isInstallPositionArray_[static_cast<size_t> (TrapType::eInstallPosition::FLOOR)] = true;
 
-	pTypeComponentBlockable_ = new TrapTypeComponentBlockable;
-	pTypeComponentBlockable_->hpMax_ = 240;
+	pTypeComponentBlockable_ = new TrapTypeComponentBlockableBarricade;
+	pTypeComponentBlockable_->hpMax_ = 350;
 	pTypeComponentBlockable_->timerRemainMax_ = 5.0f;
 
 	moneyCost_ = 600;
 }
 
 TrapComponentBlockableBarricade::TrapComponentBlockableBarricade(TrapTypeComponentBlockable * pParent)
-{ pParent_ = pParent; }
-
-void TrapComponentBlockableBarricade::onDestroy(Trap & trap)
 {
-	TrapComponentBlockable::onDestroy(trap);
+	pParent_ = pParent;
 
-	trap.setRenderModel(3);
+	if (pParent)
+	{
+		hp_ = pParent->hpMax_;
+		timerRemain_ = pParent->timerRemainMax_;
+	}
 }
 
 void TrapComponentBlockableBarricade::onHit(Trap & trap, int damage)
 {
 	TrapComponentBlockable::onHit(trap, damage);
 
-	if (hp_ > 0 && hp_ <= 80)
+	if (hp_ <= 0)
+		trap.setRenderModel(3);
+	else if (hp_ <= 150)
 		trap.setRenderModel(2);
-	else if (hp_ <= 160)
+	else if (hp_ <= 300)
 		trap.setRenderModel(1);
 }
 
