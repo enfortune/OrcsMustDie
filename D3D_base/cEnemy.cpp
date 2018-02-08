@@ -6,6 +6,7 @@
 #include "cPhysicsBody.h"
 #include "GraphFindPath.h"
 #include "Trap.h"
+#include "cSubject.h"
 
 
 cEnemy::cEnemy()
@@ -66,8 +67,11 @@ void cEnemy::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 	bDead = false;
 	bIdle = true;
 	bDeadbody = false;
+	bAttackTrap = false;
 	fDeadCount = 0.f;
 	fFindTime = 0;
+	bFinish = false;
+
 	m_pFindPath->findPath(0, 4, &m_vPath);
 	EnemyState = MOVE;
 }
@@ -87,7 +91,6 @@ void cEnemy::Update(float fDelta)
 			case MOVE:
 			{
 				find(nDijkNum, fDelta);
-				Findbarricade(fDelta);
 			}
 			break;
 			case ATTACK:
@@ -98,6 +101,11 @@ void cEnemy::Update(float fDelta)
 			case ATTACK_TRAP:
 			{
 				Attackbarricade(fDelta);
+			}
+			break;
+			case FINISH:
+			{
+				AttackAnduin(fDelta);
 			}
 			break;
 			case DEAD:
@@ -136,17 +144,21 @@ void cEnemy::Update(float fDelta)
 			vPlayerPos = D3DXVECTOR3(m_pPlayer->GetTransformData()->GetPosition());
 			vPos = m_pTransformData->GetPosition();
 			length = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - vPlayerPos));
-			if (bAttack == true)
+			if (bFinish)
+			{
+
+			}
+			else if (bAttack == true)
+			{
+
+			}
+			else if (bAttackTrap == true)
 			{
 
 			}
 			else
 			{
-				if (EnemyState == ATTACK_TRAP)
-				{
-
-				}
-				else if (length <= 3.f)
+				if (length <= 3.f)
 				{
 					EnemyState = ATTACK;
 				}
@@ -210,6 +222,7 @@ void cEnemy::Move(D3DXVECTOR3 vGoal, float fDelta, int dijkNum)
 	{
 		bMove = false;
 		bAttackMove = false;
+		bAttackTrap = false;
 	}
 	if (!bMove)
 	{
@@ -224,6 +237,7 @@ void cEnemy::Move(D3DXVECTOR3 vGoal, float fDelta, int dijkNum)
 	{
 		if (tempLength > 0.3)
 		{
+			Findbarricade(fDelta, false);
 			D3DXVec3Normalize(&vDir, &vTempDir);
 
 			float tempRot;
@@ -259,6 +273,8 @@ void cEnemy::Move(D3DXVECTOR3 vGoal, float fDelta, int dijkNum)
 			if (nDijkNum >= 4)
 			{
 				nDijkNum = 4;
+				bFinish = true;
+				EnemyState = FINISH;
 			}
 			//tp[dijkNum].bmove = false;
 			//tp[dijkNum].check = true;
@@ -286,6 +302,7 @@ void cEnemy::Move(D3DXVECTOR3 vGoal, float fDelta)
 	float tempLength = D3DXVec3Length(&vTempDir);
 	if (bMove)
 	{
+		bAttackTrap = false;
 		bMove = false;
 		bAttackMove = false;
 	}
@@ -377,6 +394,7 @@ void cEnemy::Attack(float fDelta)
 	if (bAttack)
 	{
 
+		m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
 		if (m_pSkinnedMesh->GetAniEnd() == true)
 		{
 			if (length <= 0.7 &&  fCos > cosf(D3DX_PI / 4.f))
@@ -385,6 +403,8 @@ void cEnemy::Attack(float fDelta)
 				g_pSoundManager->Play("OrcAttack");
 			}
 			bAttack = false;
+			bMove = false;
+			bAttackMove = false;
 		}
 
 	}
@@ -392,11 +412,47 @@ void cEnemy::Attack(float fDelta)
 
 void cEnemy::Attackbarricade(float fDelta)
 {
-	D3DXVECTOR3 vDist = (*m_vTrap)[nTrapNum].getFrustumCenter() - m_pTransformData->GetPosition();
+	int tempNum;
+	tempNum = 0;
+	if ((*m_vTrap).size() != 0)
+	{
+		for (int i = 0; i < (*m_vTrap).size(); i++)
+		{
+			if ((*m_vTrap)[i].isBlockable())
+			{
+				float tempLength;
+				tempLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vTrap)[i].getFrustumCenter()));
+				tempLength -= (*m_vTrap)[i].getFrustumMaxLength() / 2;
+				if (tempLength <= 0.7f)
+				{
+					tempNum = i;
+				}
+			}
+		}
+		D3DXVECTOR3 vDist = (*m_vTrap)[tempNum].getFrustumCenter() - m_pTransformData->GetPosition();
 
-	D3DXVec3Normalize(&vDist, &vDist);
-	D3DXVec3Normalize(&vDir, &vDir);
-	float fCos = D3DXVec3Dot(&vDist, &vDir);
+		D3DXVECTOR3 vTempDir = (*m_vTrap)[tempNum].getFrustumCenter() - vPos;
+		D3DXVec3Normalize(&vDir, &vTempDir);
+
+		float tempRot;
+		tempRot = atan((-1 * vTempDir.z) / vTempDir.x);
+		if (vTempDir.x < 0) tempRot -= D3DX_PI;
+
+		tempRot = tempRot - (D3DX_PI / 2);
+		m_pPhysicsBody->GetPhysicsData().vAxis = D3DXVECTOR3(0, 1, 0);
+		m_pPhysicsBody->GetPhysicsData().fRotAngle = tempRot;
+
+		//D3DXVec3Normalize(&vDist, &vDist);
+		//D3DXVec3Normalize(&vDir, &vDir);
+		//float fCos = D3DXVec3Dot(&vDist, &vDir);
+	}
+
+	else if ((*m_vTrap).size() == 0)
+	{
+		bAttack = false;
+		bMove = false;
+		EnemyState = MOVE;
+	}
 
 	if (!bAttack)
 	{
@@ -428,29 +484,144 @@ void cEnemy::Attackbarricade(float fDelta)
 
 		if (m_pSkinnedMesh->GetAniEnd() == true)
 		{
-			(*m_vTrap)[nTrapNum].onHit(m_nAtkDamage);
-			g_pSoundManager->Play("OrcAttack");
-			bAttack = false;
-			EnemyState = MOVE;
+			//if ((*m_vTrap)[tempNum].isBlockable() == true)
+			//{
+			//	(*m_vTrap)[tempNum].onHit(m_nAtkDamage);
+			//	g_pSoundManager->Play("OrcAttack");
+			//	bAttack = false;
+			//	EnemyState = MOVE;
+			//}
+			//else if ((*m_vTrap)[tempNum].isBlockable() == false)
+			//{
+			//	bAttack = false;
+			//	EnemyState = MOVE;
+			//}
+			for (int i = 0; i < (*m_vTrap).size(); i++)
+			{
+				float tempLength;
+				tempLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vTrap)[i].getFrustumCenter()));
+				tempLength -= (*m_vTrap)[i].getFrustumMaxLength() / 2;
+
+				if (tempLength <= 0.7f)
+				{
+					if ((*m_vTrap)[i].isBlockable())
+					{
+						(*m_vTrap)[i].onHit(m_nAtkDamage);
+						g_pSoundManager->Play("OrcAttack");
+						bAttack = false;
+						bMove = false;
+						bAttackTrap = false;
+						EnemyState = MOVE;
+						nTrapNum = 0;
+					}
+					else if ((*m_vTrap)[i].isBlockable())
+					{
+						bAttack = false;
+						bMove = false;
+						bAttackTrap = false;
+						EnemyState = MOVE;
+						nTrapNum = 0;
+					}
+				}
+				else if (tempLength >= 0.7f)
+				{
+					bAttack = false;
+					bMove = false;
+					bAttackTrap = false;
+					EnemyState = MOVE;
+				}
+			}
 		}
 
 	}
 }
 
-void cEnemy::Findbarricade(float fDelta)
+void cEnemy::AttackAnduin(float fDelta)
+{
+	float length;
+	length = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - m_pAnduin->GetAPos()));
+
+	D3DXVECTOR3 vDist = m_pAnduin->GetAPos() - m_pTransformData->GetPosition();
+
+	D3DXVec3Normalize(&vDist, &vDist);
+	D3DXVec3Normalize(&vDir, &vDir);
+	float fCos = D3DXVec3Dot(&vDist, &vDir);
+
+	if (!bAttack)
+	{
+		if (length > 0.7)
+		{
+			Move(m_pAnduin->GetAPos(), fDelta);
+			bAttack = false;
+		}
+
+		else if (length <= 0.7 && m_pPhysicsBody->GetPhysicsData().bOnGround == true)
+		{
+			D3DXVECTOR3 vTempDir;
+			vTempDir = m_pAnduin->GetAPos() - vPos;
+			vTempDir = D3DXVECTOR3(vTempDir.x, 0, vTempDir.z);
+			D3DXVec3Normalize(&vDir, &vTempDir);
+
+			float tempRot;
+			tempRot = atan((-1 * vTempDir.z) / vTempDir.x);
+			if (vTempDir.x < 0) tempRot -= D3DX_PI;
+
+			tempRot = tempRot - (D3DX_PI / 2);
+			GetTransformData()->SetAxis(D3DXVECTOR3(0, 1, 0));
+			GetTransformData()->SetRotAngle(tempRot);
+			bMove = false;
+
+			m_pPhysicsBody->GetPhysicsData().vVelocity.x = 0;
+			m_pPhysicsBody->GetPhysicsData().vVelocity.z = 0;
+			m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
+			m_pSkinnedMesh->SetAnimationSetBlend(0, nAttackAni, false);
+			bAttack = true;
+		}
+	}
+	if (bAttack)
+	{
+
+		m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
+		if (m_pSkinnedMesh->GetAniEnd() == true)
+		{
+			if (length <= 0.7 &&  fCos > cosf(D3DX_PI / 4.f))
+			{
+				m_pAnduin->SetAnduinHp(m_pAnduin->GetAnduinHp() - m_nAtkDamage);
+				g_pSoundManager->Play("OrcAttack");
+				if (m_pAnduin->GetAnduinHp() <= 0)
+				{
+					int a;
+					a = m_pAnduin->GetAnduinHp();
+				}
+			}
+			bAttack = false;
+			bMove = false;
+			bAttackMove = false;
+		}
+
+	}
+}
+
+int cEnemy::Findbarricade(float fDelta, bool bPass)
 {
 	for (int i = 0; i < (*m_vTrap).size(); i++)
 	{
-		if ((*m_vTrap)[i].isBlockable())
+		if (bPass == false)
 		{
-			float tempLength;
-			tempLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vTrap)[i].getFrustumCenter()));
-			tempLength -= (*m_vTrap)[i].getFrustumMaxLength() / 2;
-			if (tempLength < 1.f)
+			if ((*m_vTrap)[i].isBlockable())
 			{
-				nTrapNum = i;
-				EnemyState = ATTACK_TRAP;
-				bAttack = false;
+				float tempLength;
+				tempLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vTrap)[i].getFrustumCenter()));
+				tempLength -= (*m_vTrap)[i].getFrustumMaxLength() / 2;
+				if (tempLength <= 0.7f)
+				{
+					nTrapNum = i;
+					EnemyState = ATTACK_TRAP;
+					bMove = false;
+					bAttack = false;
+					bAttackTrap = true;
+					return 0;
+				}
 			}
 		}
 	}
@@ -515,6 +686,11 @@ void cEnemy::setPath(GraphFindPath * pFindPath)
 void cEnemy::setTrap(std::vector<Trap> & vTrap)
 {
 	m_vTrap = & vTrap;
+}
+
+void cEnemy::setAnduin(cSubject * Anduin)
+{
+	m_pAnduin = Anduin;
 }
 
 void cEnemy::getDamage(int nDamage)

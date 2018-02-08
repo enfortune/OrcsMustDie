@@ -101,6 +101,7 @@ void cInGameScene::Setup()
 		tempEnemy->setPlayer(m_pPlayer_S);
 		tempEnemy->setPath(pGraphFindPath_);
 		tempEnemy->setTrap(m_vTrap);
+		tempEnemy->setAnduin(m_pSubject);
 
 		tempEnemy->Setup(true, D3DXVECTOR3(0, 0, 0));
 
@@ -112,6 +113,8 @@ void cInGameScene::Setup()
 		tempEnemy = new cEnemy2;
 		tempEnemy->setPlayer(m_pPlayer_S);
 		tempEnemy->setPath(pGraphFindPath_);
+		tempEnemy->setTrap(m_vTrap);
+		tempEnemy->setAnduin(m_pSubject);
 
 		tempEnemy->Setup(true, D3DXVECTOR3(0, 0, 0));
 		m_vEnemyBase.push_back(tempEnemy);
@@ -136,6 +139,8 @@ void cInGameScene::Setup()
 	tempEnemy = new cBoss;
 	tempEnemy->setPlayer(m_pPlayer_S);
 	tempEnemy->setPath(pGraphFindPath_);
+	tempEnemy->setTrap(m_vTrap);
+	tempEnemy->setAnduin(m_pSubject);
 
 	tempEnemy->Setup(true, D3DXVECTOR3(0, 0, 0));
 
@@ -167,7 +172,7 @@ void cInGameScene::Update(float fDelta)
 
 	m_fRoundTime += fDelta;
 
-	if (m_fRoundTime >= 10 && m_bRound1 == false)
+	if (m_fRoundTime >= 25 && m_bRound1 == false)
 	{
 		for (int i = 0; i < 15; i++)
 		{
@@ -188,7 +193,7 @@ void cInGameScene::Update(float fDelta)
 
 		m_bRound1 = true;
 	}
-	if (m_fRoundTime >= 20 && m_bRound2 == false)
+	if (m_fRoundTime >= 40 && m_bRound2 == false)
 	{
 		for (int i = 0; i < 5; i++)
 		{
@@ -212,7 +217,7 @@ void cInGameScene::Update(float fDelta)
 
 		m_bRound2 = true;
 	}
-	if (m_fRoundTime >= 30 && m_bRound3 == false)
+	if (m_fRoundTime >= 60 && m_bRound3 == false)
 	{
 		m_vEnemyBase[40 - m_nEnemyDeadCount]->GetPhysicsBody()->GetPhysicsData().vPos = D3DXVECTOR3(32, 2, 55);
 		m_pPhysicsNode->AddChild(m_vEnemyBase[40 - m_nEnemyDeadCount]);
@@ -461,7 +466,7 @@ void cInGameScene::GameStateSetup()
 void cInGameScene::GameStateUpdate(float fDelta)
 {
 	if (m_vEnemyBase.size() == 0) m_enGameState = VICTORY;
-	else if (m_pSubject->GetAnduinHp() == 0 || m_pPlayer_S->GetPlayerCurHp() == 0) m_enGameState = DEFEAT;
+	else if (m_pSubject->GetAnduinHp() <= 0 || m_pPlayer_S->GetPlayerCurHp() == 0) m_enGameState = DEFEAT;
 
 	switch (m_enGameState)
 	{
