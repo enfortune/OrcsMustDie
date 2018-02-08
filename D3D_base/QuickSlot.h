@@ -5,6 +5,8 @@
 class cGameUIButton;
 class cGameUISprite;
 
+class cPlayer;
+
 class QuickSlot : public cGameNode
 {
 private:
@@ -30,7 +32,7 @@ public:
 
 public:
 	void init();
-	void update();
+	void update(cPlayer * pPlayer = nullptr);
 	void render();
 
 	void resetButton();

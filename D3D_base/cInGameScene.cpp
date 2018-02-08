@@ -228,7 +228,8 @@ void cInGameScene::Update(float fDelta)
 	for (int i = 0; i < static_cast<int> (m_vTrap.size()); ++i)
 		m_vTrap[i].interaction(m_vEnemyBase);
 
-	for (auto iter = m_vTrap.begin(); iter != m_vTrap.end();)
+	// 임시처방
+	/*for (auto iter = m_vTrap.begin(); iter != m_vTrap.end();)
 	{
 		if (iter->isRemovable())
 		{
@@ -237,7 +238,7 @@ void cInGameScene::Update(float fDelta)
 		}
 		else
 			++iter;
-	}
+	}*/
 
 	for (std::vector<cEnemyBase*>::iterator i = m_vEnemyBase.begin(); i != m_vEnemyBase.end();)
 	{
@@ -305,7 +306,7 @@ void cInGameScene::Update(float fDelta)
 	//std::vector<D3DXVECTOR3> test;
 	//pGraphFindPath_->findPath(0, 4, &test);
 
-	pQuickSlot_->update();
+	pQuickSlot_->update(m_pPlayer_S);
 
 	CursorUpdate();
 	GameStateUpdate(fDelta);

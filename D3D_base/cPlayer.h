@@ -82,6 +82,9 @@ public:
 	cPlayer();
 	~cPlayer();
 
+public:
+	inline PLAYERSTATE getPlayerState() const { return m_pPlayerState; }
+
 	virtual void Setup();
 	virtual void Update(float fDelta) override;
 	virtual void Render() override;

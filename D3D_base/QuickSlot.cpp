@@ -5,6 +5,8 @@
 #include "cGameUISprite.h"
 #include "cGameSprite.h"
 
+#include "cPlayer.h"
+
 void QuickSlot::selectButton(int indexButton)
 {
 	assert(indexButton >= 0 && indexButton < QUICKSLOT_COUNT);
@@ -87,16 +89,28 @@ void QuickSlot::init()
 	changeButton(IconType::HEALING_WELL, 5);
 }
 
-void QuickSlot::update()
+void QuickSlot::update(cPlayer * pPlayer)
 {
-	for (int i = 0; i < 9; ++i)
+	if (pPlayer && pPlayer->GetIsBattle())
 	{
-		if (g_pKeyManager->IsOnceKeyDown(static_cast<char> ('1' + i)))
-			selectButton(i);
+		switch (pPlayer->getPlayerState())
+		{
+		case PLAYERSTATE_SKILL_SHILEDBASH: selectButton(1); break;
+		case PLAYERSTATE_SKILL_WHIRLWIND: selectButton(2); break;
+		default: selectButton(0); break;
+		}
 	}
+	else
+	{
+		for (int i = 0; i < 9; ++i)
+		{
+			if (g_pKeyManager->IsOnceKeyDown(static_cast<char> ('1' + i)))
+				selectButton(i);
+		}
 
-	if (g_pKeyManager->IsOnceKeyDown('0'))
-		selectButton(9);
+		if (g_pKeyManager->IsOnceKeyDown('0'))
+			selectButton(9);
+	}
 
 	cGameNode::Update(g_pTimeManager->GetEllapsedTime());
 }
