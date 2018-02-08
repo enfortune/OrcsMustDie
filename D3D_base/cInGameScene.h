@@ -51,7 +51,7 @@ public:
 	virtual void Render() override;
 	virtual void Delete() override;
 
-	bool IsMakeTrap(OUT D3DXVECTOR3 &center, TrapType* tType, cRay ray);
+	bool IsMakeTrap(OUT D3DXVECTOR3 &center, OUT DIRECTION_6 & direction, TrapType* tType, cRay ray);
 	void MakeTrap(TrapType* tType, cRay ray);
 	virtual void WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) override;
 };

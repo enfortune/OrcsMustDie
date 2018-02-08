@@ -333,9 +333,22 @@ void cInGameScene::Render()
 
 			if (check)
 			{
-				D3DXMATRIXA16 matrixRender {};
-				D3DXMatrixTranslation(&matrixRender, vertexCenter.x, vertexCenter.y, vertexCenter.z);
+				D3DXMATRIXA16 matrixTranslation {};
+				D3DXMatrixTranslation(&matrixTranslation, vertexCenter.x, vertexCenter.y, vertexCenter.z);
 
+				D3DXMATRIXA16 matrixRotation {};
+				
+				switch (direction)
+				{
+				case DIRECTION_6::FRONT: D3DXMatrixRotationY(&matrixRotation, D3DX_PI); break;
+				case DIRECTION_6::REAR: D3DXMatrixIdentity(&matrixRotation); break;
+				case DIRECTION_6::LEFT: D3DXMatrixRotationY(&matrixRotation, D3DX_PI / 2); break;
+				case DIRECTION_6::RIGHT: D3DXMatrixRotationY(&matrixRotation, -D3DX_PI / 2); break;
+				case DIRECTION_6::TOP: D3DXMatrixIdentity(&matrixRotation); break;
+				case DIRECTION_6::BOTTOM: D3DXMatrixIdentity(&matrixRotation); break;
+				}
+
+				D3DXMATRIXA16 matrixRender = matrixRotation * matrixTranslation;
 				pTrapType->render(matrixRender);
 			}
 		}
@@ -366,7 +379,7 @@ void cInGameScene::Delete()
 	m_vEnemyBase.clear();
 }
 
-bool cInGameScene::IsMakeTrap(OUT D3DXVECTOR3 &center,TrapType* tType, cRay ray)
+bool cInGameScene::IsMakeTrap(OUT D3DXVECTOR3 &center, OUT DIRECTION_6 & direction, TrapType* tType, cRay ray)
 {
 	D3DXVECTOR3 vCenterPos = { 0,0,0 };
 	DIRECTION_6 Dir_6 {};
@@ -386,7 +399,12 @@ bool cInGameScene::IsMakeTrap(OUT D3DXVECTOR3 &center,TrapType* tType, cRay ray)
 		}
 
 		if (check && m_pMap->IsEnableToBuild(ray, 100, tType->getWidth(), tType->getHeight()))
+		{
+			center = vCenterPos;
+			direction = Dir_6;
+
 			return true;
+		}
 	}
 
 	return false;
@@ -400,13 +418,29 @@ void cInGameScene::MakeTrap(TrapType* tType, cRay ray)
 	if (gold >= cost)
 	{
 		D3DXVECTOR3 vCenter = { 0,0,0 };
-		if (IsMakeTrap(vCenter,tType, ray))
+		DIRECTION_6 direction {};
+
+		if (IsMakeTrap(vCenter, direction, tType, ray))
 		{
 			D3DXMATRIXA16 matT;
 			D3DXMatrixTranslation(&matT, vCenter.x, vCenter.y, vCenter.z);
 
+			D3DXMATRIXA16 matrixRotation {};
+
+			switch (direction)
+			{
+			case DIRECTION_6::FRONT: D3DXMatrixRotationY(&matrixRotation, D3DX_PI); break;
+			case DIRECTION_6::REAR: D3DXMatrixIdentity(&matrixRotation); break;
+			case DIRECTION_6::LEFT: D3DXMatrixRotationY(&matrixRotation, D3DX_PI / 2); break;
+			case DIRECTION_6::RIGHT: D3DXMatrixRotationY(&matrixRotation, -D3DX_PI / 2); break;
+			case DIRECTION_6::TOP: D3DXMatrixIdentity(&matrixRotation); break;
+			case DIRECTION_6::BOTTOM: D3DXMatrixIdentity(&matrixRotation); break;
+			}
+
+			D3DXMATRIXA16 matrixTrapWorld = matrixRotation * matT;
+
 			m_vTrap.emplace_back();
-			m_vTrap[m_vTrap.size() - 1].init(*tType, matT);
+			m_vTrap[m_vTrap.size() - 1].init(*tType, matrixTrapWorld);
 
 			m_pMap->BuildTrap(&m_vTrap[m_vTrap.size() - 1],ray,10, tType->getWidth(), tType->getHeight());
 
