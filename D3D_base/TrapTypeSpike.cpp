@@ -62,10 +62,6 @@ std::unique_ptr<TrapComponentAttackable> TrapTypeComponentAttackableSpike::newCo
 {
 	std::unique_ptr<TrapComponentAttackable> temp = std::make_unique<TrapComponentAttackableSpike>(const_cast<TrapTypeComponentAttackableSpike *> (this));
 
-	temp->pParent_ = const_cast<TrapTypeComponentAttackableSpike *>(this);
-	temp->frustumAttackWorld_ = frustumAttackLocal_;
-	temp->cooldown_ = cooldownMax_;
-
 	return temp;
 }
 

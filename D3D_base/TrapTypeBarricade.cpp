@@ -2,13 +2,17 @@
 #include "TrapTypeBarricade.h"
 
 #include "TrapTypeComponent.h"
+#include "Trap.h"
 
 #include "cSkinnedMeshEX.h"
 
 TrapTypeBarricade::TrapTypeBarricade()
 {
-	modelList_.resize(1);
+	modelList_.resize(4);
 	modelList_[0].Setup("Resource/Trap/Barricade", "Resource/Trap/Barricade/Barricade.X");
+	modelList_[1].Setup("Resource/Trap/Barricade", "Resource/Trap/Barricade/BarricadeDamageA.X");
+	modelList_[2].Setup("Resource/Trap/Barricade", "Resource/Trap/Barricade/BarricadeDamageB.X");
+	modelList_[3].Setup("Resource/Trap/Barricade", "Resource/Trap/Barricade/BarricadeDamageC.X");
 
 	D3DXMATRIXA16 matrixScale {}, matrixRotation {};
 	D3DXMatrixScaling(&matrixScale, 0.005f, 0.005f, 0.005f);
@@ -41,7 +45,30 @@ TrapTypeBarricade::TrapTypeBarricade()
 	moneyCost_ = 600;
 }
 
-void TrapComponentBarricade::onDestroy(Trap & trap)
+TrapComponentBlockableBarricade::TrapComponentBlockableBarricade(TrapTypeComponentBlockable * pParent)
+{ TrapComponentBlockable::TrapComponentBlockable(pParent); }
+
+void TrapComponentBlockableBarricade::onDestroy(Trap & trap)
 {
-	
+	TrapComponentBlockable::onDestroy(trap);
+
+	trap.setRenderModelIndex(3);
+}
+
+void TrapComponentBlockableBarricade::onHit(Trap & trap, int damage)
+{
+	TrapComponentBlockable::onHit(trap, damage);
+
+	if (hp_ > 0 && hp_ <= 30)
+		trap.setRenderModelIndex(2);
+	else if (hp_ <= 60)
+		trap.setRenderModelIndex(1);
+}
+
+std::unique_ptr<TrapComponentBlockable> TrapTypeComponentBlockableBarricade::newComponentObject() const
+{
+	std::unique_ptr<TrapComponentBlockable> temp = std::make_unique<TrapComponentBlockableBarricade> (
+		const_cast<TrapTypeComponentBlockableBarricade *> (this));
+
+	return temp;
 }
