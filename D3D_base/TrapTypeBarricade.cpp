@@ -53,7 +53,7 @@ void TrapComponentBlockableBarricade::onDestroy(Trap & trap)
 {
 	TrapComponentBlockable::onDestroy(trap);
 
-	trap.setRenderIndex(3);
+	trap.setRenderModel(3);
 }
 
 void TrapComponentBlockableBarricade::onHit(Trap & trap, int damage)
@@ -61,9 +61,9 @@ void TrapComponentBlockableBarricade::onHit(Trap & trap, int damage)
 	TrapComponentBlockable::onHit(trap, damage);
 
 	if (hp_ > 0 && hp_ <= 80)
-		trap.setRenderIndex(2);
+		trap.setRenderModel(2);
 	else if (hp_ <= 160)
-		trap.setRenderIndex(1);
+		trap.setRenderModel(1);
 }
 
 std::unique_ptr<TrapComponentBlockable> TrapTypeComponentBlockableBarricade::newComponentObject() const

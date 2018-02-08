@@ -73,9 +73,9 @@ void TrapComponentAttackableSpike::attack(Trap & trap, std::vector<cEnemyBase*> 
 			if (CheckOBBCollision(&(enemyList[i]->GetFrustumInWorld()), &frustumAttackWorld_))
 			{
 				enemyList[i]->getDamage(pParent_->damage_);
-			
 				cooldown_ = pParent_->cooldownMax_;
-				trap.setRenderIndex(0);
+
+				trap.setRenderModel(0);
 			}
 		}
 	}
@@ -86,5 +86,5 @@ void TrapComponentAttackableSpike::update(Trap & trap, float fDelta)
 	TrapComponentAttackable::update(trap, fDelta);
 
 	if (cooldown_ <= pParent_->cooldownMax_ - pParent_->duration_)
-		trap.setRenderIndex(1);
+		trap.setRenderModel(1, true);
 }
