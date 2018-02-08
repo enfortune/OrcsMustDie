@@ -38,9 +38,9 @@ void TrapComponentAttackable::update(Trap & trap, float fDelta)
 
 TrapComponentBlockable::TrapComponentBlockable(TrapTypeComponentBlockable * pParent) : pParent_(pParent) {}
 
-void TrapComponentBlockable::hit(Trap & trap, std::vector<cEnemyBase *> & enemyList)
+void TrapComponentBlockable::onHit(Trap & trap, int damage)
 {
-	//hp_ -= damage_ - defense_;
+	hp_ -= damage;
 
 	if (hp_ < 0)
 		hp_ = 0;

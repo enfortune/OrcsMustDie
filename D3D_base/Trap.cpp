@@ -8,6 +8,16 @@
 #include "cPlayer.h"
 #include "cEnemyBase.h"
 
+D3DXVECTOR3 Trap::getFrustumCenter() const
+{
+	D3DXVECTOR3 vertexCenter = frustumWorld_.vFar_00 + frustumWorld_.vNear_11;
+	vertexCenter.x *= 0.5f;
+	vertexCenter.y *= 0.5f;
+	vertexCenter.z *= 0.5f;
+
+	return vertexCenter;
+}
+
 void Trap::interaction(cPlayer & player)
 {
 	if (pType_->isInteractionToArray_[static_cast<size_t> (TrapType::eInteractionTo::PLAYER)])
@@ -23,14 +33,17 @@ void Trap::interaction(std::vector<cEnemyBase *> & enemyList)
 	{
 		if (pComponentAttackable_)
 			pComponentAttackable_->attack(*this, enemyList);
-
-		if (pComponentBlockable_)
-			pComponentBlockable_->hit(*this, enemyList);
 	}
 }
 
 void Trap::interaction(std::vector<ItemDummy>& itemList)
 {
+}
+
+void Trap::onHit(int damage)
+{
+	if (pComponentBlockable_)
+		pComponentBlockable_->onHit(*this, damage);
 }
 
 void Trap::init(TrapType & type, D3DXMATRIXA16 & matrixWorld)

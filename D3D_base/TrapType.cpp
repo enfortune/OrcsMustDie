@@ -21,6 +21,18 @@ TrapType::~TrapType()
 	delete pTypeComponentTriggerable_;
 }
 
+float TrapType::getFrustumMaxLength() const
+{
+	D3DXVECTOR3 vectorLength = frustumLocal_.vFar_00 - frustumLocal_.vNear_11;
+	
+	if (vectorLength.x < 0) vectorLength.x = -vectorLength.x;
+	if (vectorLength.y < 0) vectorLength.y = -vectorLength.y;
+	if (vectorLength.z < 0) vectorLength.z = -vectorLength.z;
+
+	return sqrtf(vectorLength.x * vectorLength.x + vectorLength.y * vectorLength.y
+		+ vectorLength.z * vectorLength.z);
+}
+
 void TrapType::render(D3DXMATRIXA16 & matrixWorld)
 {
 	D3DXMATRIXA16 matrixTotal = matrixLocalList_[0] * matrixWorld;

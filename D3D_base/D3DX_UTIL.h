@@ -245,88 +245,86 @@ namespace D3DX_UTIL
 		D3DXVECTOR3 GetNearestSideNormalVec3(ST_FRUSTUM* pSour)
 		{
 			DIRECTION_6 enDir = DIRECTION_6::END;
-			D3DXVECTOR3 vC;
-			D3DXVECTOR3 vN;
-			D3DXVECTOR3 vTemp;
-			float fCalc[static_cast<int>(DI6::END)];
+
+			float fCalc[3];
+			bool bPositive[3];
 			float fComp = -1.f;
-			float fTemp;
-			for (int i = 0; i < static_cast<int>(DI6::END); i++)
+			float fDotTemp;
+
+			D3DXVECTOR3 vPolygonNorm_1[3]; // 면의 법선벡터이자 그 면의 수직인 모서리의 벡터
+			D3DXVECTOR3 vPolygonNorm_2[3];
+			float vEdgeHalfLength_1[3]; // 각 축 모서리의 절반길이.
+			float vEdgeHalfLength_2[3];
+
+			D3DXVECTOR3 vSA; // Separating Axis(분리축)
+			float fDistMin_1, fDistMax_1, fDistTemp_1; // 직육면체 1의 분리축 거리상수
+			float fDistMin_2, fDistMax_2, fDistTemp_2; // 직육면체 2의 분리축 거리상수
+			D3DXVECTOR3 vCenterInterval; // 두 정육면체의 중심간 차이 벡터
+			float fCenterDist, fRadius_1, fRadius_2; // 중심간 거리, 직육면체1의 분리축반지름, 직육면체2의 분리축반지름
+
+			//1. 필요한 벡터를 준비한다.
+			//1-1 면의 법선벡터
+			vPolygonNorm_1[0] = -GetNormalVec3(DIRECTION_6::RIGHT);	// x축
+			vPolygonNorm_1[1] = -GetNormalVec3(DIRECTION_6::TOP);	// y축
+			vPolygonNorm_1[2] = -GetNormalVec3(DIRECTION_6::FRONT);	// z축
+
+			vPolygonNorm_2[0] = -pSour->GetNormalVec3(DIRECTION_6::RIGHT);
+			vPolygonNorm_2[1] = -pSour->GetNormalVec3(DIRECTION_6::TOP);
+			vPolygonNorm_2[2] = -pSour->GetNormalVec3(DIRECTION_6::FRONT);
+
+			//1-2 엣지의 절반길이
+			vEdgeHalfLength_1[0] = 0.5f * D3DXVec3Length(&(vNear_10 - vNear_00));	// x축
+			vEdgeHalfLength_1[1] = 0.5f * D3DXVec3Length(&(vNear_01 - vNear_00));	// y축
+			vEdgeHalfLength_1[2] = 0.5f * D3DXVec3Length(&(vFar_00 - vNear_00));	// z축
+
+			vEdgeHalfLength_2[0] = 0.5f * D3DXVec3Length(&(pSour->vNear_10 - pSour->vNear_00));	// x축
+			vEdgeHalfLength_2[1] = 0.5f * D3DXVec3Length(&(pSour->vNear_01 - pSour->vNear_00));	// y축
+			vEdgeHalfLength_2[2] = 0.5f * D3DXVec3Length(&(pSour->vFar_00 - pSour->vNear_00));	// z축
+
+			//1-3 중심간 차이
+			vCenterInterval = pSour->GetCenterVec3(DIRECTION_6::END) - GetCenterVec3(DIRECTION_6::END);
+
+			//2. 각 면에 대한 분리축을 테스트한다.
+			//2-1 직육면체 1의 면의 법선벡터 테스트
+			for (int i = 0; i < 3; i++)
 			{
-				fCalc[i] = 0.f;
+				vSA = vPolygonNorm_1[i]; // 축 하나를 선택한 후
 
-				vC = GetCenterVec3(static_cast<DIRECTION_6>(i));
-				vN = GetNormalVec3(static_cast<DIRECTION_6>(i));
+				fDotTemp = D3DXVec3Dot(&vSA, &vCenterInterval);
+				bPositive[i] = (fDotTemp > 0) ? (true) : (false);
 
-				/*fCalc[i] += D3DXVec3Length(&(pSour->vNear_00 - vC));
-				fCalc[i] += D3DXVec3Length(&(pSour->vNear_01 - vC));
-				fCalc[i] += D3DXVec3Length(&(pSour->vNear_10 - vC));
-				fCalc[i] += D3DXVec3Length(&(pSour->vNear_11 - vC));
-				fCalc[i] += D3DXVec3Length(&(pSour->vFar_00 - vC));
-				fCalc[i] += D3DXVec3Length(&(pSour->vFar_01 - vC));
-				fCalc[i] += D3DXVec3Length(&(pSour->vFar_10 - vC));
-				fCalc[i] += D3DXVec3Length(&(pSour->vFar_11 - vC));*/
+				fCenterDist = fabs(fDotTemp);
+				fRadius_1 =
+					fabs(vEdgeHalfLength_1[0] * D3DXVec3Dot(&vSA, &vPolygonNorm_1[0])) +
+					fabs(vEdgeHalfLength_1[1] * D3DXVec3Dot(&vSA, &vPolygonNorm_1[1])) +
+					fabs(vEdgeHalfLength_1[2] * D3DXVec3Dot(&vSA, &vPolygonNorm_1[2]));
 
+				fRadius_2 =
+					fabs(vEdgeHalfLength_2[0] * D3DXVec3Dot(&vSA, &vPolygonNorm_2[0])) +
+					fabs(vEdgeHalfLength_2[1] * D3DXVec3Dot(&vSA, &vPolygonNorm_2[1])) +
+					fabs(vEdgeHalfLength_2[2] * D3DXVec3Dot(&vSA, &vPolygonNorm_2[2]));
 
-				D3DXVec3Normalize(&vTemp, &(pSour->vNear_00 - vC));
-				fTemp = D3DXVec3Dot(&vN, &vTemp);
-				if (fTemp > 0)
-				{
-					fCalc[i] += fTemp;
-				}
-				D3DXVec3Normalize(&vTemp, &(pSour->vNear_01 - vC));
-				fTemp = D3DXVec3Dot(&vN, &vTemp);
-				if (fTemp > 0)
-				{
-					fCalc[i] += fTemp;
-				}
-				D3DXVec3Normalize(&vTemp, &(pSour->vNear_10 - vC));
-				fTemp = D3DXVec3Dot(&vN, &vTemp);
-				if (fTemp > 0)
-				{
-					fCalc[i] += fTemp;
-				}
-				D3DXVec3Normalize(&vTemp, &(pSour->vNear_11 - vC));
-				fTemp = D3DXVec3Dot(&vN, &vTemp);
-				if (fTemp > 0)
-				{
-					fCalc[i] += fTemp;
-				}
-				D3DXVec3Normalize(&vTemp, &(pSour->vFar_00 - vC));
-				fTemp = D3DXVec3Dot(&vN, &vTemp);
-				if (fTemp > 0)
-				{
-					fCalc[i] += fTemp;
-				}
-				D3DXVec3Normalize(&vTemp, &(pSour->vFar_01 - vC));
-				fTemp = D3DXVec3Dot(&vN, &vTemp);
-				if (fTemp > 0)
-				{
-					fCalc[i] += fTemp;
-				}
-				D3DXVec3Normalize(&vTemp, &(pSour->vFar_10 - vC));
-				fTemp = D3DXVec3Dot(&vN, &vTemp);
-				if (fTemp > 0)
-				{
-					fCalc[i] += fTemp;
-				}
-				D3DXVec3Normalize(&vTemp, &(pSour->vFar_11 - vC));
-				fTemp = D3DXVec3Dot(&vN, &vTemp);
-				if (fTemp > 0)
-				{
-					fCalc[i] += fTemp;
-				}
+				//if (fCenterDist > fRadius_1 + fRadius_2) return false;
+				fCalc[i] = fCenterDist - (fRadius_1 + fRadius_2);
 			}
 
-			for (int i = 0; i < static_cast<int>(DI6::END); i++)
-			{
-				if (fComp < 0 || fCalc[i] < fComp)
-				{
-					fComp = fCalc[i];
-					enDir = static_cast<DIRECTION_6>(i);
-				}
-			}
+			// 0 : RIGHT, 1 : TOP, 2 : FRONT
+
 			
+			fComp = fCalc[0];
+			enDir = (bPositive[0])? (DIRECTION_6::RIGHT) : (DIRECTION_6::LEFT);
+			
+			if (fCalc[1] > fComp)
+			{
+				fComp = fCalc[1];
+				enDir = (bPositive[1]) ? (DIRECTION_6::TOP) : (DIRECTION_6::BOTTOM);
+			}
+			if (fCalc[2] > fComp)
+			{
+				fComp = fCalc[2];
+				enDir = (bPositive[2]) ? (DIRECTION_6::FRONT) : (DIRECTION_6::REAR);
+			}
+
 			return -GetNormalVec3(enDir);
 		}
 

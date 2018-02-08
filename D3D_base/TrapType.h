@@ -66,6 +66,8 @@ public:
 	inline FRUSTUM getFrustum() const { return frustumLocal_; }
 	inline FRUSTUM getInteractionArea() const { return frustumInteractionLocal_; }
 
+	float getFrustumMaxLength() const;
+
 	inline int getMoneyCost() const { return moneyCost_; }
 
 public:

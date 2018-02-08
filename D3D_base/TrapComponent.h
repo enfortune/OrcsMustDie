@@ -49,7 +49,7 @@ public:
 	//UNCOPYABLE(TrapComponentBlockable);
 
 public:
-	virtual void hit(Trap & trap, std::vector<cEnemyBase *> & enemyList);
+	virtual void onHit(Trap & trap, int damage);
 
 public:
 	virtual void update(Trap & trap, float fDelta = g_pTimeManager->GetEllapsedTime());

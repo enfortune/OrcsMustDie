@@ -9,7 +9,7 @@ void SceneMainMenu::onButtonClick(int buttonIndex)
 {
 	switch (buttonIndex)
 	{
-	case 0: g_pSceneManager->PushScene(new cInGameScene);  break;
+	case 0: g_pSceneManager->PushScene(new cInGameScene); break;
 	case 1:
 	case 2: PostQuitMessage(0); break;
 	}
