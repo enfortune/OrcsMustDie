@@ -114,7 +114,8 @@ void cPlayer::Update(float fDelta)
 	if (nPlayerMaxMp < nPlayerCurMp) nPlayerMaxMp = nPlayerCurMp;
 
 	nPlayerCurMp = nPlayerMaxMp;
-	if (nPlayerCurHp <= 0)
+
+	if (nPlayerCurHp <= 0 && m_pPlayerState != PLAYERSTATE_DEATH)
 	{
 		nPlayerCurHp = 0;
 		m_pPlayerState = PLAYERSTATE_DEATH;
@@ -256,14 +257,13 @@ void cPlayer::Update(float fDelta)
 
 				ManaCount = 100;
 				nPlayerCurMp = nPlayerCurMp - ManaCount;
-
-				isShiledP = true;
-				PlayerShiledBash();
-
-				//if (m_pPlayerState == PLAYERSTATE_SKILL_SHILEDBASH)
-				//{
-				//}
 			}
+
+			if (m_pPlayerState == PLAYERSTATE_SKILL_SHILEDBASH && m_pPlayerMesh->getCurPosition() >= 0.4f)
+			{
+				PlayerShiledBash();
+			}
+
 			if (m_pPlayerState == PLAYERSTATE_SKILL_SHILEDBASH && m_pPlayerMesh->GetAniEnd() == true)
 			{
 				m_pPlayerState = PLAYERSTATE_STAND;
@@ -675,7 +675,7 @@ void cPlayer::PlayerParticleUpdate()
 		case PLAYERSTATE_DEATH:
 		break;
 		case PLAYERSTATE_SKILL_SHILEDBASH:
-			if (m_pPlayerMesh->getCurPosition() >= 0.2f && m_pPlayerMesh->getCurPosition() <= 0.4f)
+			if (m_pPlayerMesh->getCurPosition() >= 0.4f && m_pPlayerMesh->getCurPosition() <= 0.5f)
 			{
 				D3DXVECTOR3 vMakePos(0, 0.5, 0);
 				 m_pPlaterParticleEruption->MakeEruption(vMakePos, this->GetMatrixToWorld(),200);
