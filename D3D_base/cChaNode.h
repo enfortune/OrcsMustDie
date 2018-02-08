@@ -14,6 +14,8 @@ protected:
 		MOVE,
 		ATTACK_MOVE,
 		ATTACK,
+		ATTACK_TRAP,
+		MOVE_TRAP,
 		SKILL,
 		HIT,
 		JUMP_START,
@@ -32,8 +34,8 @@ protected:
 	D3DXVECTOR3 vDir;
 	float fRotY, fFindTime;
 
-	int		nMaxHp, nCurHp, nMaxMp, nCurMp, nDijkNum;
-	BOOL	bStun, bPoison, bMove;
+	int		nMaxHp, nCurHp, nMaxMp, nCurMp, nDijkNum, nTrapNum;
+	BOOL	bStun, bPoison, bMove, bAttackMove, bFinish;
 
 	SYNTHESIZE_REF(int, m_nAtkDamage, AtkDamage);
 	SYNTHESIZE_REF(int, m_nExp, Exp);

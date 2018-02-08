@@ -93,6 +93,7 @@ void cInGameScene::Setup()
 		tempEnemy = new cEnemy;
 		tempEnemy->setPlayer(m_pPlayer_S);
 		tempEnemy->setPath(pGraphFindPath_);
+		tempEnemy->setTrap(m_vTrap);
 
 		tempEnemy->Setup(true, D3DXVECTOR3(0, 0, 0));
 

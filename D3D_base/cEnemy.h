@@ -5,6 +5,7 @@
 class cSkinnedMeshEX;
 class cPlayer;
 class GraphFindPath;
+class Trap;
 
 class cEnemy : public cEnemyBase
 {
@@ -14,21 +15,7 @@ private:
 	GraphFindPath* m_pFindPath;
 
 	std::vector<D3DXVECTOR3> m_vPath;
-
-	//struct tempPoint
-	//{
-	//	D3DXVECTOR3 p;
-	//	bool start;
-	//	bool goal;
-	//	bool check;
-	//	int prev;
-	//	int next[3];
-	//	int cost;
-	//	int curCost;
-	//	bool bmove;
-	//};
-	//
-	//tempPoint tp[5];
+	std::vector<Trap> * m_vTrap;
 
 
 public:
@@ -46,12 +33,14 @@ public:
 	void Move(D3DXVECTOR3 vGoal, float fDelta);
 	void Move(D3DXVECTOR3 vGoal, float fDelta, int dijkNum);
 	void Attack(float fDelta);
+	void Attackbarricade(float fDelta);
+	void Findbarricade(float fDelta);
 	void Dead();
 	void Jump();
-	void Dijkstra(int tpnum, float fDelta);
 	void find(int tpNum, float fDelta);
 	void setPlayer(cPlayer* pSetPlayer);
 	void setPath(GraphFindPath* pFindPath);
+	void setTrap(std::vector<Trap> & vTrap);
 	virtual void getDamage(int nDamage);
 	void HpManager();
 

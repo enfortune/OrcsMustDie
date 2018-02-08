@@ -11,20 +11,11 @@ class cEnemy2 : public cEnemyBase
 private:
 	D3DXVECTOR3 vPlayerPos;
 	cPlayer* m_pPlayer;
-	struct tempPoint
-	{
-		D3DXVECTOR3 p;
-		bool start;
-		bool goal;
-		bool check;
-		int prev;
-		int next[3];
-		int cost;
-		int curCost;
-		bool bmove;
-	};
 
-	tempPoint tp[5];
+	GraphFindPath* m_pFindPath;
+
+	std::vector<D3DXVECTOR3> m_vPath;
+
 
 
 public:
@@ -45,7 +36,6 @@ public:
 	void Attack(float fDelta);
 	void Dead();
 	void Jump();
-	void Dijkstra(int tpnum, float fDelta);
 	void find(int tpNum, float fDelta);
 	void setPlayer(cPlayer* pSetPlayer);
 	void getDamage(int nDamage);

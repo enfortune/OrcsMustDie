@@ -23,6 +23,8 @@ void cEnemy2::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 
 	m_bBoss = false;
 
+	nDijkNum = 0;
+
 	nIdleAni = 9;
 	nAttackAni = 4;
 	nDeadAni = 7;
@@ -39,14 +41,15 @@ void cEnemy2::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 	m_pPhysicsBody->MakeBodyCuboid(0.6, 0.5, 1.5,D3DXVECTOR3(0, 0.25, 0));
 	m_pPhysicsBody->GetPhysicsData().fElasticity = 0.f;
 	m_pPhysicsBody->GetPhysicsData().vDamping = D3DXVECTOR3(10.f, 0.f, 10.f);
-	m_pPhysicsBody->GetBodyType() = PHYSICSBODYTYPE_STATIC;
+	m_pPhysicsBody->GetBodyType() = PHYSICSBODYTYPE_DINAMIC;
 
-	m_nAtkDamage = 40;
+	m_nAtkDamage = 15;
 	nMaxHp = 30;
 	nCurHp = 30;
 	bAttackAction = false;
 	bAttack = false;
 	bMove = FALSE;
+	bAttackMove = false;
 	vDir = D3DXVECTOR3(0, 0, -1);
 	fRotY = 0.f;
 	m_pSkinnedMesh = new cSkinnedMeshEX;
@@ -63,46 +66,10 @@ void cEnemy2::Setup(bool bUseTransformData, D3DXVECTOR3 vPosSetup)
 	fDeadCount = 0.f;
 
 	m_nGold = 50;
-	//for (int i = 0; i < 5; i++)
-	//{
-	//	tp[i].start = false;
-	//	tp[i].goal= false;
-	//	tp[i].check = false;
-	//	tp[i].prev = 0;
-	//	tp[i].curCost = 100000000;
-	//	tp[i].bmove = false;
-	//	if (i == 0)
-	//	{
-	//		tp[0].start = true;
-	//		tp[i].next[0] = 1;
-	//		tp[i].next[1] = 2;
-	//		tp[i].next[2] = 3;
-	//		tp[0].curCost = 0;
-	//		tp[0].cost = 3;
-	//	}
-	//	else if (i >= 1 && i < 4)
-	//	{
-	//		tp[i].next[0] = 4;
-	//		tp[i].next[1] = 4;
-	//		tp[i].next[2] = 4;
-	//	}
-	//	else if (i == 4)
-	//	{
-	//		tp[4].goal = true;
-	//	}
-	//}
-	//
-	//tp[0].p = vPosSetup;
-	//tp[1].p = D3DXVECTOR3(-2, 0, 2);
-	//tp[2].p = D3DXVECTOR3(2, 0, 2);
-	//tp[3].p = D3DXVECTOR3(-1, 0, 0);
-	//tp[4].p = D3DXVECTOR3(0, 0, 5);
-	//tp[1].cost = 3;
-	//tp[2].cost = 8;
-	//tp[3].cost = 6;
-	//tp[4].cost = 5;
+	fFindTime = 0;
+	m_pFindPath->findPath(0, 4, &m_vPath);
 
-	EnemyState = IDLE;
+	EnemyState = MOVE;
 }
 
 void cEnemy2::Update(float fDelta)
@@ -118,17 +85,7 @@ void cEnemy2::Update(float fDelta)
 		break;
 		case MOVE:
 		{
-			//for (int i = 0; i < 5; i++)
-			//{
-			//	if (tp[i].start)
-			//	{
-			//		Dijkstra(i, fDelta);
-			//	}
-			//	if (tp[i].goal)
-			//	{
-			//		find(i, fDelta);
-			//	}
-			//}
+			find(nDijkNum, fDelta);
 		}
 		break;
 		case ATTACK:
@@ -180,8 +137,8 @@ void cEnemy2::Update(float fDelta)
 			{
 				if (length > 4.f)
 				{
-					//EnemyState = MOVE;
-					EnemyState = IDLE;
+					EnemyState = MOVE;
+					//EnemyState = IDLE;
 				}
 				else if (length <= 4.f)
 				{
@@ -237,17 +194,23 @@ void cEnemy2::Move(D3DXVECTOR3 vGoal, float fDelta, int dijkNum)
 {
 	D3DXVECTOR3 vTempDir = vGoal - vPos;
 	float tempLength = D3DXVec3Length(&vTempDir);
+	if (bAttackMove)
+	{
+		bMove = false;
+		bAttackMove = false;
+	}
 	if (!bMove)
 	{
-		if (tempLength > 0.1)
+		if (tempLength > 0.2)
 		{
 			bMove = TRUE;
+			bIdle = false;
 			m_pSkinnedMesh->SetAnimationSetBlend(0, nMoveAni, true);
 		}
 	}
 	else
 	{
-		if (tempLength > 0.1)
+		if (tempLength > 0.3)
 		{
 			D3DXVec3Normalize(&vDir, &vTempDir);
 
@@ -265,20 +228,25 @@ void cEnemy2::Move(D3DXVECTOR3 vGoal, float fDelta, int dijkNum)
 					m_pPhysicsBody->GetPhysicsData().vVelocity.x,
 					m_pPhysicsBody->GetPhysicsData().vVelocity.z), &D3DXVECTOR2(vDir.x, vDir.z));
 
-				if (dot < 2)
+				if (dot < 1.5)
 					m_pPhysicsBody->GetPhysicsData().vAccel
 					= vDir * (30.f + D3DXVec3Length(&m_pPhysicsBody->GetPhysicsData().vDamping));
 				else
 					m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
 			}
+			else
+			{
+				m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
+			}
 		}
-		else
+		else if (tempLength <= 1.f)
 		{
-			vPos = vGoal;
 			bMove = FALSE;
-			m_pSkinnedMesh->SetAnimationSetBlend(0, nIdleAni, true);
-			tp[dijkNum].bmove = false;
-			tp[dijkNum].check = true;
+			nDijkNum++;
+			if (nDijkNum >= 4)
+			{
+				nDijkNum = 4;
+			}
 		}
 	}
 }
@@ -301,11 +269,17 @@ void cEnemy2::Move(D3DXVECTOR3 vGoal, float fDelta)
 	D3DXVECTOR3 vTempDir = vGoal - vPos;
 	vTempDir = D3DXVECTOR3(vTempDir.x, 0, vTempDir.z);
 	float tempLength = D3DXVec3Length(&vTempDir);
-	if (!bMove)
+
+	if (bMove)
+	{
+		bMove = false;
+		bAttackMove = false;
+	}
+	if (!bAttackMove)
 	{
 		if (tempLength > 0.1)
 		{
-			bMove = TRUE;
+			bAttackMove = TRUE;
 			m_pSkinnedMesh->SetAnimationSetBlend(0, nAttackMoveAni, true);
 			bIdle = false;
 		}
@@ -444,39 +418,10 @@ void cEnemy2::Jump()
 	}
 }
 
-void cEnemy2::Dijkstra(int temp, float fDelta)
-{
-	for (int i = 0; i < 3; i++)
-	{
-		if (tp[tp[temp].next[i]].curCost > tp[temp].curCost + tp[tp[temp].next[i]].cost)
-		{
-			tp[tp[temp].next[i]].curCost = tp[temp].curCost + tp[tp[temp].next[i]].cost;
-			tp[tp[temp].next[i]].prev = temp;
-			if (tp[tp[temp].next[i]].goal == false)
-			{
-				Dijkstra(tp[temp].next[i], fDelta);
-
-			}
-		}
-	}
-}
 
 void cEnemy2::find(int tpNum, float fDelta)
 {
-	if (tp[tp[tpNum].prev].start && !tp[tp[tpNum].prev].check)
-	{
-		tp[tp[tpNum].prev].bmove = true;
-		Move(tp[tpNum].p, fDelta, tpNum);
-	}
-	else if (tp[tp[tpNum].prev].check)
-	{
-		tp[tpNum].bmove = true;
-		Move(tp[tpNum].p, fDelta, tpNum);
-	}
-	else if (!tp[tp[tpNum].prev].check)
-	{
-		find(tp[tpNum].prev, fDelta);
-	}
+	Move(m_vPath[nDijkNum], fDelta, nDijkNum);
 }
 
 void cEnemy2::setPlayer(cPlayer* pSetPlayer)
@@ -491,6 +436,7 @@ void cEnemy2::getDamage(int nDamage)
 
 void cEnemy2::setPath(GraphFindPath * pFindPath)
 {
+	m_pFindPath = pFindPath;
 }
 
 void cEnemy2::HpManager()
