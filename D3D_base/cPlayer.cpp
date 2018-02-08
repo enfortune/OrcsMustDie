@@ -35,6 +35,7 @@ cPlayer::cPlayer()
 	, speedZ(0.f)
 	, m_fPlayerRestore(0.0f)
 	, isShiledP(false)
+	, m_vSwordPos(0, 0, 0)
 {
 	D3DXMatrixIdentity(&m_mMatSword);
 	D3DXMatrixIdentity(&m_mMatShield);
@@ -249,7 +250,7 @@ void cPlayer::Update(float fDelta)
 			}
 			isShiledP = false;
 
-			if (g_pKeyManager->IsOnceKeyDown(VK_RBUTTON) && nPlayerCurMp > 100
+			if (g_pKeyManager->IsOnceKeyDown('2') && nPlayerCurMp > 100
 				&& m_pPlayerState != PLAYERSTATE_SKILL_SHILEDBASH)
 			{
 				m_pPlayerState = PLAYERSTATE_SKILL_SHILEDBASH;
@@ -270,7 +271,7 @@ void cPlayer::Update(float fDelta)
 				IsPlayerState();
 			}
 
-			if (g_pKeyManager->IsOnceKeyDown('R') && nPlayerCurMp > 50)
+			if (g_pKeyManager->IsOnceKeyDown('3') && nPlayerCurMp > 50)
 			{
 				if (m_pPlayerState != PLAYERSTATE_SKILL_WHIRLWIND)
 				{
@@ -293,7 +294,7 @@ void cPlayer::Update(float fDelta)
 				}
 			}
 
-			if (g_pKeyManager->IsOnceKeyUp('R'))
+			if (g_pKeyManager->IsOnceKeyUp('3'))
 			{
 				ManaCount = 0;
 				m_pPlayerState = PLAYERSTATE_STAND;
@@ -330,25 +331,17 @@ void cPlayer::Update(float fDelta)
 
 	m_pPhysicsBody->GetPhysicsData().vVelocity.x = speedX;
 	m_pPhysicsBody->GetPhysicsData().vVelocity.z = speedZ;
-	
 
 	m_pPhysicsBody->GetPhysicsData().fRotAngle = m_pRotationY;
-	//GetTransformData()->SetAxis(D3DXVECTOR3(0, 1, 0));
-	//GetTransformData()->SetPosition(m_vPlayerPos);
-	
+
+
 	D3DXMATRIXA16 matR;
 	D3DXMatrixRotationY(&matR, m_pRotationY);
 	m_vPlayerDir = D3DXVECTOR3(0, 0, 1);
 	D3DXVec3TransformNormal(&m_vPlayerDir, &m_vPlayerDir, &matR);
 
-	//D3DXMATRIXA16 matT1, matT2, matWorld1, matWorld2;
 	m_mMatSword = m_pPlayerMesh->FindBone("kingvarianwrynn_Bone116");
-	//D3DXMatrixTranslation(&matT1, m_pTransformData->GetPosition().x, m_pTransformData->GetPosition().y, m_pTransformData->GetPosition().z);
-	//m_mMatSword = matWorld1 * matT1;
-
 	m_mMatShield = m_pPlayerMesh->FindBone("kingvarianwrynn_Bone115");
-	//D3DXMatrixTranslation(&matT2, m_pPhysicsBody->GetPhysicsData().vPos.x, m_pPhysicsBody->GetPhysicsData().vPos.y, m_pPhysicsBody->GetPhysicsData().vPos.z);
-	//m_mMatShield = matWorld2 * matT2;
 
 	cGameNode::Update(fDelta);
 }
@@ -381,18 +374,19 @@ void cPlayer::Render()
 	D3DXMatrixTranslation(&matT, 0, 0.2f, 0);
 	D3DXMatrixScaling(&matS, 2, 2, 2);
 
-	m_mMatSword = matS * m_mMatSword * matPlayerMeshWorld;
-	m_mMatShield = matS * matT * m_mMatShield * matPlayerMeshWorld;
+	D3DXMATRIXA16 matShield, matSword;
+	matSword = matS * m_mMatSword * matPlayerMeshWorld;
+	matShield = matS * matT * m_mMatShield * matPlayerMeshWorld;
 
 	if (m_pPlayerSword)
 	{
-		g_pD3DDevice->SetTransform(D3DTS_WORLD, &m_mMatSword);
+		g_pD3DDevice->SetTransform(D3DTS_WORLD, &matSword);
 		m_pPlayerSword->Render();
 	}
 
 	if (m_pPlayerShield)
 	{
-		g_pD3DDevice->SetTransform(D3DTS_WORLD, &m_mMatShield);
+		g_pD3DDevice->SetTransform(D3DTS_WORLD, &matShield);
 		m_pPlayerShield->Render();
 	}
 	
@@ -417,6 +411,8 @@ void cPlayer::PlayerDamaged(int damage)
 	if (damage)
 	{
 		nPlayerCurHp = nPlayerCurHp - damage;
+
+		if (0 > nPlayerCurHp) nPlayerCurHp = 0;
 	}
 }
 
@@ -424,11 +420,9 @@ void cPlayer::PlayerHPHealed(int HPheal)
 {
 	if (HPheal)
 	{
-		if (nPlayerMaxHp == nPlayerCurHp) return;
-		else
-		{
-			nPlayerCurHp = nPlayerCurHp + HPheal;
-		}
+		nPlayerCurHp = nPlayerCurHp + HPheal;
+		
+		if (nPlayerMaxHp <= nPlayerCurHp) nPlayerCurHp = nPlayerMaxHp;
 	}
 }
 
@@ -436,11 +430,9 @@ void cPlayer::playerMPHealed(int MPheal)
 {
 	if (MPheal)
 	{
-		if (nPlayerMaxMp == nPlayerCurMp) return;
-		else
-		{
-			nPlayerCurMp = nPlayerCurMp + MPheal;
-		}
+		nPlayerCurMp = nPlayerCurMp + MPheal;
+		
+		if (nPlayerMaxMp <= nPlayerCurMp) nPlayerCurMp = nPlayerMaxMp;
 	}
 }
 
@@ -655,14 +647,13 @@ void cPlayer::PlayerParticleUpdate()
 			// 시작 : 0.4    끝 : 0.6  사잇값 0.2
 			if (m_pPlayerMesh->getCurPosition() >= 0.4f && m_pPlayerMesh->getCurPosition() <= 0.6f)
 			{
-				D3DXVECTOR3 vPos = 
-					m_vAtkParticleStart * (-0.4f + 1.0f -m_pPlayerMesh->getCurPosition())/0.2f +
+				D3DXVECTOR3 vPos =
+					m_vAtkParticleStart * (-0.4f + 1.0f - m_pPlayerMesh->getCurPosition()) / 0.2f +
 					m_vAtkParticleEnd * (-0.4f + m_pPlayerMesh->getCurPosition()) / 0.2f;
 
 				D3DXVec3TransformCoord(&vPos, &vPos, &this->GetMatrixToWorld());
 				m_pPlayerParticle->MakeSpark(vPos, 20);
 			}
-			//else if (m_pPlayerMesh->getCurPosition() > 0.8f) m_pPlayerParticle->ClearSpark();
 		break;
 		case PLAYERSTATE_HIT:
 		break;
@@ -682,6 +673,24 @@ void cPlayer::PlayerParticleUpdate()
 			}
 		break;
 		case PLAYERSTATE_SKILL_WHIRLWIND:
+			{
+				D3DXVECTOR3 vPos = D3DXVECTOR3(1, 0, 0);
+				D3DXVECTOR3 vPosTemp;
+				
+				D3DXMATRIXA16 matR, matWorld;
+				D3DXMatrixRotationY(&matR, D3DX_PI/36.f);
+
+				matWorld = m_mMatSword;
+				D3DXVec3TransformCoord(&vPosTemp, &vPos, &(matWorld * this->GetMatrixToWorld()));
+				m_pPlayerParticle->MakeSpark(vPosTemp, 30);
+				
+				for (int i = 0; i < 3; i++)
+				{
+					matWorld *= matR;
+					D3DXVec3TransformCoord(&vPosTemp, &vPos, &(matWorld * this->GetMatrixToWorld()));
+					m_pPlayerParticle->MakeSpark(vPos, 30);
+				}
+			}
 		break;
 		default:
 		break;

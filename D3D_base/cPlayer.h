@@ -45,6 +45,8 @@ protected:
 	D3DXMATRIXA16				m_mMatSword;
 	D3DXMATRIXA16				m_mMatShield;
 
+	D3DXVECTOR3					m_vSwordPos;
+
 	SYNTHESIZE_REF(bool, m_bIsBattle, IsBattle)
 	SYNTHESIZE_REF(float, m_pRotationY, RotationY);
 	SYNTHESIZE_REF(D3DXVECTOR3, m_vPlayerPos, PlayerPos);

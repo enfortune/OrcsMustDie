@@ -5,7 +5,7 @@
 cGameParticleSpark::cGameParticleSpark()
 {
 	m_fSize = 0.2f;
-	m_dwVBSize = 4096;
+	m_dwVBSize = 4096 * 4;
 	m_dwVBOffset = 0;
 	m_dwVBBatchSize = 512;
 }
