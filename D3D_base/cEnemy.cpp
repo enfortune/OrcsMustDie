@@ -397,7 +397,7 @@ void cEnemy::Attack(float fDelta)
 		m_pPhysicsBody->GetPhysicsData().vAccel = D3DXVECTOR3(0.f, 0.f, 0.f);
 		if (m_pSkinnedMesh->GetAniEnd() == true)
 		{
-			if (length <= 0.7 &&  fCos > cosf(D3DX_PI / 4.f))
+			if (length <= 1.3 &&  fCos > cosf(D3DX_PI / 4.f))
 			{
 				m_pPlayer->PlayerDamaged(m_nAtkDamage);
 				g_pSoundManager->Play("OrcAttack");

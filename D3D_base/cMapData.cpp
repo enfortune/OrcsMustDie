@@ -782,7 +782,7 @@ bool cMapData::ClearTrap(Trap* pTrap)
 		return false;
 
 	int nX, nY, nZ;
-	for (size_t i = 0; i = iter->second.vecXYZ.size(); i++)
+	for (size_t i = 0; i < iter->second.vecXYZ.size(); i++)
 	{
 		nX = iter->second.vecXYZ[i].x;
 		nY = iter->second.vecXYZ[i].y;

@@ -75,7 +75,7 @@ void cPlayer::Setup()
 	nPlayerMaxMp = 500;
 	nPlayerCurMp = 500;
 	m_nPlayerGold = 3000;
-	m_nPlayerAtkDamage = 10;
+	m_nPlayerAtkDamage = 15;
 
 	m_vAtkParticleStart = D3DXVECTOR3(0.5f, 1.f, 1.f);
 	m_vAtkParticleEnd = D3DXVECTOR3(-0.5f, 0.2f, 1.f);
@@ -452,7 +452,7 @@ void cPlayer::PlayerAttacked()
 
 		PlayerLength = D3DXVec3Length(&D3DXVECTOR3(GetTransformData()->GetPosition() - (*m_vEnemy)[i]->GetTransformData()->GetPosition()));
 
-		if (PlayerLength < 0.8 && fCos > cosf(D3DX_PI/4.f))
+		if (PlayerLength < 1.5 && fCos > cosf(D3DX_PI/4.f))
 		{
 			(*m_vEnemy)[i]->getDamage(m_nPlayerAtkDamage * 2);
 			g_pSoundManager->Play("PlayerAttackHit");
